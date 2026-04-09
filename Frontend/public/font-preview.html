@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>폰트 미리보기</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Gowun+Batang:wght@400;700&family=Hahmlet:wght@400;700&family=Jua&family=Nanum+Myeongjo:wght@400;700;800&family=Gaegu:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        background: #07050f;
+        min-height: 100vh;
+        padding: 40px 24px;
+        font-family: sans-serif;
+      }
+      .header {
+        text-align: center;
+        color: rgba(255, 190, 230, 0.5);
+        font-size: 11px;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        margin-bottom: 36px;
+      }
+      .row {
+        display: flex;
+        align-items: center;
+        gap: 32px;
+        padding: 28px 24px;
+        border-bottom: 1px solid rgba(180, 130, 255, 0.12);
+        background: rgba(100, 40, 200, 0.04);
+        transition: background 0.2s;
+      }
+      .row:hover {
+        background: rgba(100, 40, 200, 0.1);
+      }
+      .meta {
+        min-width: 150px;
+        flex-shrink: 0;
+      }
+      .tag {
+        display: inline-block;
+        font-size: 10px;
+        letter-spacing: 0.15em;
+        padding: 2px 10px;
+        border-radius: 99px;
+        border: 1px solid rgba(233, 30, 140, 0.35);
+        color: rgba(255, 170, 220, 0.9);
+        margin-bottom: 8px;
+      }
+      .font-name {
+        color: rgba(180, 130, 255, 0.85);
+        font-size: 12px;
+        font-weight: 600;
+        margin-bottom: 4px;
+      }
+      .font-desc {
+        color: rgba(160, 140, 180, 0.5);
+        font-size: 11px;
+        line-height: 1.4;
+      }
+      .preview-text {
+        font-size: clamp(28px, 3.5vw, 46px);
+        line-height: 1.2;
+        background: linear-gradient(
+          135deg,
+          #e91e8c 0%,
+          #a855f7 50%,
+          #7b2fff 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      .footer {
+        text-align: center;
+        color: rgba(160, 140, 180, 0.3);
+        font-size: 11px;
+        margin-top: 32px;
+        letter-spacing: 0.1em;
+      }
+    </style>
+  </head>
+  <body>
+    <p class="header">
+      Font Preview — 폰트 비교 (자홍+바이올렛 그라데이션 적용)
+    </p>
+
+    <div class="row">
+      <div class="meta">
+        <span class="tag">현재 적용됨</span>
+        <p class="font-name">Black Han Sans</p>
+        <p class="font-desc">강렬하고 대담<br />임팩트 강함</p>
+      </div>
+      <p
+        class="preview-text"
+        style="
+          font-family: &quot;Black Han Sans&quot;, sans-serif;
+          font-weight: 400;
+        "
+      >
+        별이 말하는<br />당신의 이야기
+      </p>
+    </div>
+
+    <div class="row">
+      <div class="meta">
+        <span class="tag">신비</span>
+        <p class="font-name">Gowun Batang</p>
+        <p class="font-desc">전통 바탕체<br />고전적이고 신비로움</p>
+      </div>
+      <p
+        class="preview-text"
+        style="font-family: &quot;Gowun Batang&quot;, serif; font-weight: 700"
+      >
+        별이 말하는<br />당신의 이야기
+      </p>
+    </div>
+
+    <div class="row">
+      <div class="meta">
+        <span class="tag">고급</span>
+        <p class="font-name">Hahmlet</p>
+        <p class="font-desc">세련된 세리프<br />우아하고 럭셔리</p>
+      </div>
+      <p
+        class="preview-text"
+        style="font-family: &quot;Hahmlet&quot;, serif; font-weight: 700"
+      >
+        별이 말하는<br />당신의 이야기
+      </p>
+    </div>
+
+    <div class="row">
+      <div class="meta">
+        <span class="tag">펀</span>
+        <p class="font-name">Jua</p>
+        <p class="font-desc">둥글고 귀여움<br />친근하고 재미있음</p>
+      </div>
+      <p
+        class="preview-text"
+        style="font-family: &quot;Jua&quot;, sans-serif; font-weight: 400"
+      >
+        별이 말하는<br />당신의 이야기
+      </p>
+    </div>
+
+    <div class="row">
+      <div class="meta">
+        <span class="tag">신뢰</span>
+        <p class="font-name">Nanum Myeongjo</p>
+        <p class="font-desc">가독성 높은 명조<br />안정적이고 신뢰감</p>
+      </div>
+      <p
+        class="preview-text"
+        style="font-family: &quot;Nanum Myeongjo&quot;, serif; font-weight: 800"
+      >
+        별이 말하는<br />당신의 이야기
+      </p>
+    </div>
+
+    <div class="row">
+      <div class="meta">
+        <span class="tag">개성</span>
+        <p class="font-name">Gaegu</p>
+        <p class="font-desc">손글씨 감성<br />따뜻하고 개성 있음</p>
+      </div>
+      <p
+        class="preview-text"
+        style="font-family: &quot;Gaegu&quot;, cursive; font-weight: 700"
+      >
+        별이 말하는<br />당신의 이야기
+      </p>
+    </div>
+
+    <p class="footer">마음에 드는 폰트 이름을 알려주세요 🔮</p>
+  </body>
+</html>
