@@ -9,8 +9,17 @@ const optionalUrl = z
   });
 
 const publicEnvSchema = z.object({
-  NEXT_PUBLIC_APP_NAME: z.string().trim().default("Saju Compass"),
+  NEXT_PUBLIC_APP_NAME: z
+    .string()
+    .trim()
+    .default("무료 사주 풀이, 내 사주 보기 | 사주 톡톡"),
   NEXT_PUBLIC_APP_URL: optionalUrl,
+  NEXT_PUBLIC_APP_DES: z
+    .string()
+    .trim()
+    .default(
+      "사주궁합 무료로 확인하고, 오늘의 방향까지 한번에 잡으세요. 내 사주에 맞는 오늘 가볼 곳을 AI가 추천해드립니다. 운세·궁합·장소 추천까지, 지금 시작해보세요",
+    ),
   NEXT_PUBLIC_KAKAO_MAP_APP_KEY: z.string().trim().default(""),
   NEXT_PUBLIC_PORTONE_STORE_ID: z.string().trim().default(""),
   NEXT_PUBLIC_TOSS_CLIENT_KEY: z.string().trim().default(""),
@@ -29,6 +38,7 @@ const serverEnvSchema = z.object({
 export const env = publicEnvSchema.parse({
   NEXT_PUBLIC_APP_NAME: process.env.NEXT_PUBLIC_APP_NAME,
   NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
+  NEXT_PUBLIC_APP_DES: process.env.NEXT_PUBLIC_APP_DES,
   NEXT_PUBLIC_KAKAO_MAP_APP_KEY: process.env.NEXT_PUBLIC_KAKAO_MAP_APP_KEY,
   NEXT_PUBLIC_PORTONE_STORE_ID: process.env.NEXT_PUBLIC_PORTONE_STORE_ID,
   NEXT_PUBLIC_TOSS_CLIENT_KEY: process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY,

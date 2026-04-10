@@ -1,2 +1,2 @@
 export { Button, buttonVariants } from "@/shared/ui/button";
-export { Providers } from "@/shared/ui/providers";
+export { QueryProviders } from "@/shared/app-infra/query-provider/query-providers";

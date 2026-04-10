@@ -6,7 +6,9 @@ import styles from "@/widgets/welcom-section/ui/welcom-section.module.css";
 export const CtaButton = () => {
   return (
     <>
-      <div
+      {/* 주요 서비스 이동 링크를 nav로 묶어 크롤러가 진입점을 이해하게 함 */}
+      <nav
+        aria-label="주요 서비스 바로가기"
         className={`${styles.starAppear4} flex flex-col items-center gap-3 sm:flex-row`}
       >
         <Button
@@ -21,7 +23,7 @@ export const CtaButton = () => {
             backdropFilter: "blur(14px)",
           }}
         >
-          <Link href="/saju">✨ 내 사주 보기</Link>
+          <Link href="/saju">무료 사주 보기</Link>
         </Button>
 
         <Button
@@ -34,14 +36,16 @@ export const CtaButton = () => {
             backdropFilter: "blur(8px)",
           }}
         >
-          <Link href="/compatibility">💞 궁합 확인하기</Link>
+          <Link href="/compatibility">무료 궁합 확인</Link>
         </Button>
-      </div>
+      </nav>
+
+      {/* 보조 키워드를 과하지 않게 보강 */}
       <p
         className={`${styles.starAppear5} mt-5 text-xs tracking-widest`}
         style={{ color: "rgba(255,190,230,0.55)" }}
       >
-        오행 ✦ 천간지지 ✦ 사주 해석
+        AI 사주 해석 · 궁합 풀이 · 오늘의 흐름
       </p>
     </>
   );

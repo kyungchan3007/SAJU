@@ -6,6 +6,7 @@ import { Title } from "@/widgets/welcom-section/ui/title/title";
 export function WelcomSection() {
   return (
     <section
+      aria-labelledby="hero-heading"
       className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden"
       style={{ background: "#07050F" }}
     >
