@@ -3,6 +3,8 @@ import { Jua, Noto_Sans_KR } from "next/font/google";
 import type { ReactNode } from "react";
 import { env } from "@/shared/config";
 import "./globals.css";
+import { Background } from "@/widgets/welcom-section/ui/background/background";
+import { StarBackground } from "@/widgets/welcom-section/ui/star/start";
 
 /**
  * 홈 페이지와 SEO 페이지를 전역 클라이언트 경계 밖으로
@@ -10,7 +12,7 @@ import "./globals.css";
  * */
 
 const appUrl = env.NEXT_PUBLIC_APP_URL || "https://your-domain.com";
-const ogImageUrl = new URL("/og-image.png", appUrl).toString();
+const ogImageUrl = new URL("/image/background.png", appUrl).toString();
 
 const notoSansKr = Noto_Sans_KR({
   subsets: ["latin"],
@@ -32,9 +34,6 @@ export const metadata: Metadata = {
     template: `%s | ${env.NEXT_PUBLIC_APP_NAME}`,
   },
   description: env.NEXT_PUBLIC_APP_DES,
-  alternates: {
-    canonical: "/",
-  },
   robots: {
     index: true,
     follow: true,
@@ -71,9 +70,21 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="ko" suppressHydrationWarning>
       <body
-        className={`${notoSansKr.variable} ${jua.variable} min-h-screen bg-background font-sans text-foreground antialiased`}
+        className={`${notoSansKr.variable} ${jua.variable} relative min-h-dvh bg-none bg-transparent font-sans text-foreground antialiased`}
       >
-        {children}
+        <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden bg-[#07050F]">
+          <Background />
+          <StarBackground />
+          <div
+            className="absolute bottom-0 left-0 right-0 h-32"
+            style={{
+              background:
+                "linear-gradient(to top, rgba(7,5,15,0.85), transparent)",
+            }}
+          />
+        </div>
+
+        <div className="relative z-10 min-h-dvh">{children}</div>
       </body>
     </html>
   );

@@ -1,1 +1,1 @@
-export { SajuResultCard } from "@/widgets/saju-result/ui/saju-result-card";
+export { SajuResult } from "@/widgets/saju-result/ui/saju-result";

@@ -5,6 +5,7 @@ const config: Config = {
   darkMode: ["class"],
   content: [
     "./src/app/**/*.{ts,tsx}",
+    "./src/domain/**/*.{ts,tsx}",
     "./src/features/**/*.{ts,tsx}",
     "./src/widgets/**/*.{ts,tsx}",
     "./src/entities/**/*.{ts,tsx}",
