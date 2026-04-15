@@ -24,6 +24,16 @@
     --input: 24 28% 84%;
     --ring: 176 73% 26%;
     --radius: 1.25rem;
+    --saju-pink: 233 30 140;
+    --saju-blue: 88 120 190;
+    --saju-text: 245 248 255;
+    --saju-secondary-border: 170 132 238;
+    --saju-secondary-bg: 16 11 31;
+    --saju-secondary-hover: 29 20 54;
+    --saju-secondary-text: 236 221 255;
+    --saju-secondary-ring: 178 121 255;
+    --saju-card-bg: 28 19 51;
+    --saju-card-bg-purple: 12 9 24;
   }
 
   * {
@@ -50,4 +60,42 @@
   .hero-panel {
     @apply rounded-[2rem] border border-border/60 bg-card/80 p-8 shadow-glow backdrop-blur;
   }
+
+  .btn-saju {
+    @apply cursor-pointer rounded-full px-6 py-2.5 text-sm transition focus-visible:outline-none;
+  }
+
+  .btn-saju-primary {
+    @apply border-none bg-saju-primary shadow-saju-primary backdrop-blur-md;
+    @apply font-semibold focus-visible:ring-2;
+    color: rgb(var(--saju-text) / 0.95);
+  }
+
+  .btn-saju-primary:hover {
+    @apply bg-saju-primary-hover;
+  }
+
+  .btn-saju-primary:focus-visible {
+    --tw-ring-color: rgb(var(--saju-pink) / 0.3);
+  }
+
+  .btn-saju-secondary {
+    @apply border text-sm font-medium focus-visible:ring-2;
+    border-color: rgb(var(--saju-secondary-border) / 0.38);
+    background-color: rgb(var(--saju-secondary-bg) / 0.6);
+    color: rgb(var(--saju-secondary-text) / 0.92);
+  }
+
+  .btn-saju-secondary:hover {
+    background-color: rgb(var(--saju-secondary-hover) / 0.7);
+  }
+
+  .btn-saju-secondary:focus-visible {
+    --tw-ring-color: rgb(var(--saju-secondary-ring) / 0.35);
+  }
+
+  .card-saju-primary {
+    @apply bg-saju-primary-card;
+  }
+
 }

@@ -29,6 +29,17 @@ const config: Config = {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        saju: {
+          pink: "rgb(var(--saju-pink) / <alpha-value>)",
+          blue: "rgb(var(--saju-blue) / <alpha-value>)",
+          text: "rgb(var(--saju-text) / <alpha-value>)",
+          "secondary-border":
+            "rgb(var(--saju-secondary-border) / <alpha-value>)",
+          "secondary-bg": "rgb(var(--saju-secondary-bg) / <alpha-value>)",
+          "secondary-hover": "rgb(var(--saju-secondary-hover) / <alpha-value>)",
+          "secondary-text": "rgb(var(--saju-secondary-text) / <alpha-value>)",
+          "secondary-ring": "rgb(var(--saju-secondary-ring) / <alpha-value>)",
+        },
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
@@ -61,9 +72,17 @@ const config: Config = {
       },
       boxShadow: {
         glow: "0 18px 80px rgba(15, 23, 42, 0.18)",
+        "saju-primary":
+          "0 10px 22px rgba(0, 0, 0, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.14)",
       },
       backgroundImage: {
         aura: "radial-gradient(circle at top, rgba(15, 118, 110, 0.24), transparent 36%), radial-gradient(circle at bottom right, rgba(251, 146, 60, 0.18), transparent 28%)",
+        "saju-primary":
+          "linear-gradient(135deg, rgb(var(--saju-pink) / 0.1) 0%, rgb(var(--saju-pink) / 0.1) 52%, rgb(var(--saju-blue) / 0) 100%)",
+        "saju-primary-hover":
+          "linear-gradient(135deg, rgb(var(--saju-pink) / 0.14) 0%, rgb(var(--saju-pink) / 0.14) 52%, rgb(var(--saju-blue) / 0.1) 100%)",
+        "saju-primary-card":
+          "linear-gradient(160deg, rgb(var(--saju-card-bg) / 0.8) 0%, rgb(var(--saju-card-bg-purple) / 0.6) 100%)",
       },
     },
   },

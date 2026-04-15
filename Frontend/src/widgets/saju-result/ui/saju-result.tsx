@@ -1,5 +1,5 @@
 import type { SajuProfile } from "@/entities/saju";
-import { SajuResultCard } from "@/domain/saju-card";
+import { GuidCard } from "@/domain/saju";
 import { SajuInputForm } from "@/features/saju-input";
 
 type SajuResultCardProps = {
@@ -10,7 +10,7 @@ export function SajuResult({ profile }: SajuResultCardProps) {
   return (
     <div className="page-grid">
       <SajuInputForm />
-      <SajuResultCard />
+      <GuidCard />
     </div>
   );
 }

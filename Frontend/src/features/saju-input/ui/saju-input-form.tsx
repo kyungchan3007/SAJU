@@ -4,11 +4,9 @@ const fieldClassName =
 export function SajuInputForm() {
   return (
     <section
-      className="rounded-[2rem] border p-7 backdrop-blur-xl"
+      className="card-saju-primary rounded-[2rem] border p-7"
       style={{
         borderColor: "rgba(170,132,238,0.34)",
-        background:
-          "linear-gradient(160deg, rgba(28, 19, 51, 0.82) 0%, rgba(12, 9, 24, 0.78) 100%)",
         boxShadow:
           "0 24px 60px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.08)",
       }}
@@ -46,7 +44,9 @@ export function SajuInputForm() {
           <span className="text-xs font-medium text-[rgba(228,205,255,0.78)]">
             출생시간
           </span>
-          <select className={`${fieldClassName} cursor-pointer appearance-none`}>
+          <select
+            className={`${fieldClassName} cursor-pointer appearance-none`}
+          >
             <option value="">시간 미상</option>
             <option value="00:00">오전 00:00 (자시)</option>
             <option value="01:00">오전 01:00</option>
@@ -81,7 +81,9 @@ export function SajuInputForm() {
           <span className="text-xs font-medium text-[rgba(228,205,255,0.78)]">
             양력 / 음력
           </span>
-          <select className={`${fieldClassName} cursor-pointer appearance-none`}>
+          <select
+            className={`${fieldClassName} cursor-pointer appearance-none`}
+          >
             <option value="solar">양력</option>
             <option value="lunar">음력</option>
             <option value="lunar-leap">음력 (윤달)</option>
@@ -93,7 +95,9 @@ export function SajuInputForm() {
           <span className="text-xs font-medium text-[rgba(228,205,255,0.78)]">
             성별
           </span>
-          <select className={`${fieldClassName} cursor-pointer appearance-none`}>
+          <select
+            className={`${fieldClassName} cursor-pointer appearance-none`}
+          >
             <option value="female">여성</option>
             <option value="male">남성</option>
           </select>
@@ -115,7 +119,8 @@ export function SajuInputForm() {
         <div className="col-span-full flex flex-wrap gap-3 pt-1">
           <button
             type="submit"
-            className="flex-1 rounded-full border border-[rgba(219,179,255,0.55)] bg-[linear-gradient(135deg,rgba(190,96,255,0.95)_0%,rgba(123,80,255,0.92)_52%,rgba(75,116,255,0.9)_100%)] px-6 py-2.5 text-sm font-semibold text-[rgba(250,245,255,0.98)] shadow-[0_12px_28px_rgba(84,42,170,0.5),inset_0_1px_0_rgba(255,255,255,0.25)] transition hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(207,157,255,0.45)]"
+            // className="flex-1 rounded-full border-none bg-[linear-gradient(135deg,rgba(190,96,255,0.1)_0%,rgba(219,179,255,0.1)_52%,rgba(88,120,190,0)_100%)] px-6 py-2.5 text-sm font-semibold text-[rgba(245,248,255,0.96)] shadow-[0_10px_22px_rgba(0,0,0,0.24),inset_0_1px_0_rgba(255,255,255,0.14)] backdrop-blur-md transition hover:bg-[linear-gradient(135deg,rgba(190,96,255,0.14)_0%,rgba(219,179,255,0.14)_52%,rgba(88,120,190,0.1)_100%)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(233,30,140,0.30)]"
+            className="btn-saju btn-saju-primary flex-1"
           >
             입력 완료하고 분석 시작
           </button>
