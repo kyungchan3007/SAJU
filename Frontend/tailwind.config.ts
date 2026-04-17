@@ -78,9 +78,9 @@ const config: Config = {
       backgroundImage: {
         aura: "radial-gradient(circle at top, rgba(15, 118, 110, 0.24), transparent 36%), radial-gradient(circle at bottom right, rgba(251, 146, 60, 0.18), transparent 28%)",
         "saju-primary":
-          "linear-gradient(135deg, rgb(var(--saju-pink) / 0.1) 0%, rgb(var(--saju-pink) / 0.1) 52%, rgb(var(--saju-blue) / 0) 100%)",
+          "linear-gradient(135deg, rgb(var(--saju-pink) / 0.22) 0%, rgb(var(--saju-pink) / 0.14) 52%, rgb(var(--saju-blue) / 0.08) 100%)",
         "saju-primary-hover":
-          "linear-gradient(135deg, rgb(var(--saju-pink) / 0.14) 0%, rgb(var(--saju-pink) / 0.14) 52%, rgb(var(--saju-blue) / 0.1) 100%)",
+          "linear-gradient(135deg, rgb(var(--saju-pink) / 0.32) 0%, rgb(var(--saju-pink) / 0.22) 52%, rgb(var(--saju-blue) / 0.15) 100%)",
         "saju-primary-card":
           "linear-gradient(160deg, rgb(var(--saju-card-bg) / 0.8) 0%, rgb(var(--saju-card-bg-purple) / 0.6) 100%)",
       },

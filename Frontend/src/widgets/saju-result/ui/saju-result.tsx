@@ -1,16 +1,11 @@
-import type { SajuProfile } from "@/entities/saju";
-import { GuidCard } from "@/domain/saju";
 import { SajuInputForm } from "@/features/saju-input";
+import { SajuPreviewCard } from "./saju-preview-card";
 
-type SajuResultCardProps = {
-  profile?: Partial<SajuProfile>;
-};
-
-export function SajuResult({ profile }: SajuResultCardProps) {
+export function SajuResult() {
   return (
-    <div className="page-grid">
+    <div className="grid gap-6">
       <SajuInputForm />
-      <GuidCard />
+      <SajuPreviewCard />
     </div>
   );
 }
