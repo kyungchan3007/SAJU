@@ -46,11 +46,92 @@
       radial-gradient(circle at top, rgba(13, 148, 136, 0.16), transparent 30%),
       linear-gradient(180deg, rgba(255, 247, 237, 0.8), rgba(255, 255, 255, 0));
   }
+
+  /* Global scrollbar theme */
+  ::-webkit-scrollbar {
+    width: 10px;  /* 세로축 스크롤바 폭 너비 */
+    height: 20px;  /* 가로축 스크롤바 폭 너비 */
+  }
+
+  html::-webkit-scrollbar-track {
+    background: #0f1630; /* 스크롤바 뒷 배경 색상 */
+    margin-block: 10px; /* 트랙 유효 길이 축소 */
+  }
+
+  ::-webkit-scrollbar-thumb { /* 스크롤바 막대 색상 */
+    min-height: 36px;
+    background-clip: content-box; /* 실제 색칠 영역 축소 -> 짧아 보임 */
+    border-radius: 12px 12px 12px 12px;
+    background-image: linear-gradient(180deg, rgba(233,30,140,0.40) 20%, #0f1630 50%);
+  }
+  ::-webkit-scrollbar-track {
+    background: #0f1630; /* 스크롤바 뒷 배경 색상 */
+  }
+
+
+  ::-webkit-scrollbar-button:vertical:increment,
+  ::-webkit-scrollbar-button:vertical:decrement {
+    background: black;
+  }
+
+  /* 좌우 방향 스크롤바 화살표 버튼 */
+  ::-webkit-scrollbar-button:horizontal:increment,
+  ::-webkit-scrollbar-button:horizontal:decrement {
+    background: black;
+  }
+
+
+
+
+
+
+
+  /* 스크롤바 막대 꾸미기 */
+  /*body::-webkit-scrollbar-thumb {*/
+  /*  ...*/
+  /*}*/
+
+  /*!* 스크롤바 트랙 꾸미기 *!*/
+  /*body::-webkit-scrollbar-track {*/
+  /*  ...*/
+  /*}*/
+
+
+  /*html::-webkit-scrollbar-thumb,*/
+  /*body::-webkit-scrollbar-thumb,*/
+  /**::-webkit-scrollbar-thumb {*/
+  /*  min-height: 20px;*/
+  /*  border: 3px solid transparent;*/
+  /*  border-radius: 9999px;*/
+  /*  background-clip: content-box;*/
+  /*  background-image: linear-gradient(*/
+  /*    180deg,*/
+  /*    rgba(244, 128, 214, 0.9),*/
+  /*    rgba(162, 133, 255, 0.92)*/
+  /*  ) !important;*/
+  /*  box-shadow: 0 6px 18px rgba(173, 131, 255, 0.35);*/
+  /*}*/
+
+  /*html::-webkit-scrollbar-thumb:hover,*/
+  /*body::-webkit-scrollbar-thumb:hover,*/
+  /**::-webkit-scrollbar-thumb:hover {*/
+  /*  background-image: linear-gradient(*/
+  /*    180deg,*/
+  /*    rgba(255, 152, 224, 0.96),*/
+  /*    rgba(184, 151, 255, 0.98)*/
+  /*  ) !important;*/
+  /*}*/
+
+  html::-webkit-scrollbar-corner,
+  body::-webkit-scrollbar-corner,
+  *::-webkit-scrollbar-corner {
+    background: transparent;
+  }
 }
 
 @layer components {
   .page-shell {
-    @apply container py-10 sm:py-14;
+    @apply container py-10 sm:py-10;
   }
 
   .page-grid {

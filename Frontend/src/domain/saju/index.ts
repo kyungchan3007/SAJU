@@ -1,1 +1,1 @@
-export { GuidCard } from "./guid-card/guid-card";
+export { SajuPreviewCard } from "./guid-card/preview-card/saju-preview-card";

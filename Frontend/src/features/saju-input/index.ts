@@ -1,1 +1,1 @@
-export { SajuInputForm } from "@/features/saju-input/ui/saju-input-form";
+export { SajuInputForm } from "@/features/saju-input/form/saju-input-form";
