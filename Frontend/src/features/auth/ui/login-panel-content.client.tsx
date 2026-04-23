@@ -1,6 +1,5 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "@/shared/lib/utils";
 import { useAuthHooks } from "@/features/auth/hooks/useAuthHooks";
 
@@ -8,183 +7,61 @@ type LoginPanelContentProps = {
   kakaoLoginUrl: string;
 };
 
+function KakaoIcon() {
+  return (
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path
+        d="M12 3C6.477 3 2 6.477 2 10.8c0 2.7 1.6 5.08 4.03 6.53L5.1 20.5a.5.5 0 0 0 .71.55l4.3-2.86A11.6 11.6 0 0 0 12 18.6c5.523 0 10-3.477 10-7.8S17.523 3 12 3Z"
+        fill="rgba(0,0,0,0.85)"
+      />
+    </svg>
+  );
+}
+
 export function LoginPanelContent({ kakaoLoginUrl }: LoginPanelContentProps) {
-  const {
-    viewMode,
-    handleEmailLogin,
-    email,
-    handleBack,
-    password,
-    error,
-    isLoading,
-    setViewMode,
-    setEmail,
-    setPassword,
-    isFormValid,
-  } = useAuthHooks();
+  // const { setViewMode } = useAuthHooks();
 
   return (
-    <AnimatePresence mode="wait">
-      {viewMode === "default" ? (
-        <motion.div
-          key="default"
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -8 }}
-          transition={{ duration: 0.2, ease: "easeInOut" }}
-        >
-          <p className="mb-3 text-xs font-extrabold uppercase tracking-[0.16em] text-white/40">
-            Sign In
-          </p>
+    <div className="flex flex-col items-center text-center">
+      {/* 서비스 로고 */}
+      <div className="mb-6">
+        <p className="font-display text-3xl font-bold tracking-tight text-black">
+          사주이야기
+        </p>
+        <p className="mt-1 text-xs tracking-widest text-black/30">SAJU STORY</p>
+      </div>
 
-          <h1 className="text-[clamp(32px,4.3vw,52px)] font-semibold leading-[1.02] tracking-[-0.04em] text-white">
-            오늘의 기운을
-            <br />
-            열어보는 입구
-          </h1>
+      {/* SEO용 헤딩 + 설명 */}
+      <h1 className="text-base font-bold leading-snug text-black">
+        간편하게 로그인하고
+        <br />
+        오늘의 사주를 확인해보세요
+      </h1>
+      <p className="mt-2 text-xs leading-relaxed text-black/45">
+        생년월일 하나로 오늘의 운세·궁합·사주풀이를
+        <br />
+        무료로 만나볼 수 있어요.
+      </p>
 
-          <p className="mt-4 max-w-[480px] text-[17px] leading-[1.75] text-white/50">
-            밤하늘 무드와 초승달 이미지를 중심으로 진입 감도를 높이고, 첫 행동은
-            단순하게 유지합니다.
-          </p>
-
-          <div className="mt-5 flex flex-wrap gap-3">
-            <a
-              href={kakaoLoginUrl}
-              className="inline-flex min-h-[48px] items-center justify-center rounded-2xl px-5 font-extrabold text-[#170d03] transition hover:brightness-110"
-              style={{
-                background:
-                  "linear-gradient(135deg, #f9dfa4 0%, #dfab4e 55%, #86561b 100%)",
-                boxShadow: "0 18px 34px rgba(216,161,66,.28)",
-              }}
-            >
-              카카오로 3초 시작
-            </a>
-            <button
-              type="button"
-              onClick={() => setViewMode("email")}
-              className="inline-flex min-h-[48px] items-center justify-center rounded-2xl border border-white/[0.06] bg-white/[0.02] px-5 font-extrabold text-white/80 transition hover:bg-white/[0.06]"
-            >
-              이메일 로그인
-            </button>
-          </div>
-
-          <div className="mt-5 grid grid-cols-3 gap-3.5">
-            {[
-              { value: "1분", label: "첫 설정 완료" },
-              { value: "3단계", label: "입력 후 추천 확인" },
-              { value: "즉시", label: "홈으로 이동" },
-            ].map(({ value, label }) => (
-              <div
-                key={label}
-                className="rounded-[20px] border border-white/[0.06] bg-white/[0.03] p-4"
-              >
-                <strong className="block text-[28px] font-semibold leading-none tracking-[-0.04em] text-white">
-                  {value}
-                </strong>
-                <span className="mt-1 block text-sm text-white/40">
-                  {label}
-                </span>
-              </div>
-            ))}
-          </div>
-        </motion.div>
-      ) : (
-        <motion.div
-          key="email"
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -12 }}
-          transition={{ duration: 0.2, ease: "easeInOut" }}
-        >
-          <button
-            type="button"
-            onClick={handleBack}
-            className="mb-5 flex items-center gap-1.5 text-sm text-white/40 transition hover:text-white/70"
-          >
-            ← 돌아가기
-          </button>
-
-          <p className="mb-2 text-xs font-extrabold uppercase tracking-[0.16em] text-white/40">
-            Sign In
-          </p>
-          <h2 className="mb-6 text-2xl font-semibold tracking-[-0.04em] text-white">
-            이메일 로그인
-          </h2>
-
-          <form onSubmit={handleEmailLogin} className="flex flex-col gap-4">
-            <div className="flex flex-col gap-1.5">
-              <label
-                htmlFor="email"
-                className="text-sm font-medium text-white/60"
-              >
-                이메일
-              </label>
-              <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="name@example.com"
-                autoComplete="email"
-                className={cn(
-                  "h-12 rounded-2xl border border-white/[0.08] bg-white/[0.04] px-4 text-sm text-white placeholder:text-white/20",
-                  "outline-none transition",
-                  "focus:border-white/20 focus:ring-2 focus:ring-white/[0.08]",
-                )}
-              />
-            </div>
-
-            <div className="flex flex-col gap-1.5">
-              <label
-                htmlFor="password"
-                className="text-sm font-medium text-white/60"
-              >
-                비밀번호
-              </label>
-              <input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="8~20자 입력"
-                autoComplete="current-password"
-                className={cn(
-                  "h-12 rounded-2xl border border-white/[0.08] bg-white/[0.04] px-4 text-sm text-white placeholder:text-white/20",
-                  "outline-none transition",
-                  "focus:border-white/20 focus:ring-2 focus:ring-white/[0.08]",
-                )}
-              />
-            </div>
-
-            <div className="min-h-[20px]">
-              {error && <p className="text-sm text-red-400">{error}</p>}
-            </div>
-
-            <button
-              type="submit"
-              disabled={!isFormValid || isLoading}
-              className={cn(
-                "inline-flex min-h-[48px] items-center justify-center rounded-2xl px-5 font-extrabold transition",
-                isFormValid && !isLoading
-                  ? "text-[#170d03] hover:brightness-110"
-                  : "cursor-not-allowed bg-white/[0.06] text-white/30 opacity-50",
-              )}
-              style={
-                isFormValid && !isLoading
-                  ? {
-                      background:
-                        "linear-gradient(135deg, #f9dfa4 0%, #dfab4e 55%, #86561b 100%)",
-                      boxShadow: "0 18px 34px rgba(216,161,66,.28)",
-                    }
-                  : undefined
-              }
-            >
-              {isLoading ? "로그인 중..." : "로그인"}
-            </button>
-          </form>
-        </motion.div>
-      )}
-    </AnimatePresence>
+      {/* 카카오 로그인 버튼 — 카카오 공식 가이드라인 색상 */}
+      <a
+        href={kakaoLoginUrl}
+        className="mt-7 flex h-[48px] w-full items-center justify-center gap-2 border-2 border-black font-bold text-[rgba(0,0,0,0.85)] transition hover:brightness-95"
+        style={{
+          backgroundColor: "#FEE500",
+          boxShadow: "3px 3px 0 #000",
+        }}
+        aria-label="카카오 계정으로 사주이야기 로그인"
+      >
+        <KakaoIcon />
+        카카오로 시작하기
+      </a>
+    </div>
   );
 }

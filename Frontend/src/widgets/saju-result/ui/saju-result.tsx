@@ -5,7 +5,7 @@ export function SajuResult() {
   return (
     <div className="grid gap-6">
       <SajuInputForm />
-      {/*<SajuPreviewCard />*/}
+      <SajuPreviewCard />
     </div>
   );
 }

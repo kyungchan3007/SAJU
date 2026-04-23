@@ -2,7 +2,6 @@ import { useState } from "react";
 import { ViewMode } from "@/features/auth/type/type";
 
 export const useAuthHooks = () => {
-  const [viewMode, setViewMode] = useState<ViewMode>("default");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -10,7 +9,6 @@ export const useAuthHooks = () => {
   const isFormValid = email.length > 0 && password.length >= 8;
 
   function handleBack() {
-    setViewMode("default");
     setError(null);
     setEmail("");
     setPassword("");
@@ -35,14 +33,12 @@ export const useAuthHooks = () => {
   }
 
   return {
-    viewMode,
     email,
     password,
     error,
     isLoading,
     handleBack,
     handleEmailLogin,
-    setViewMode,
     setEmail,
     setPassword,
     isFormValid,

@@ -4,6 +4,7 @@ import {
   defaultFormValues,
   defaultTouchedSteps,
 } from "@/features/saju-input/model/constants";
+import { useSajuHooks } from "@/features/saju-input/hooks/useSajuHooks";
 import {
   getHighlightedZodiac,
   getHighlightedZodiacIndex,
@@ -31,6 +32,7 @@ export function SajuInputFieldsContainer({
     useState<SajuFormValues>(defaultFormValues);
   const [touchedSteps, setTouchedSteps] =
     useState<TouchedSteps>(defaultTouchedSteps);
+  const { handleSubmitSaju } = useSajuHooks();
 
   // getHighlightedZodiacIndex, getHighlightedZodiac, getStepStates 는 utils.ts 에서 호출한다.
   // 모두 이 container 함수 안에서 호출된다.
@@ -65,6 +67,7 @@ export function SajuInputFieldsContainer({
       highlightedZodiacIndex={highlightedZodiacIndex}
       onChangeField={updateField}
       onTouchStep={touchStep}
+      onSubmitSaju={() => handleSubmitSaju(formValues)}
     />
   );
 }

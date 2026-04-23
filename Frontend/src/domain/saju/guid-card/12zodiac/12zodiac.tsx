@@ -1,15 +1,18 @@
 "use client";
 
+import { OpenmojiImg } from "@/shared/ui/openmoji-img";
 import { zodiacList } from "@/domain/saju/guid-card/12zodiac/model/model";
 
 type ZodiacListProps = {
   highlightedIndex?: number | null;
 };
 
-export default function ZodiacList({ highlightedIndex = null }: ZodiacListProps) {
+export default function ZodiacList({
+  highlightedIndex = null,
+}: ZodiacListProps) {
   return (
     <div className="mt-6">
-      <p className="mb-3 text-xs font-bold uppercase tracking-[0.16em] text-[rgba(167,181,227,0.7)]">
+      <p className="mb-3 text-xs font-bold uppercase tracking-[0.16em] text-sketch-muted">
         12 간지 동물
       </p>
       <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 lg:grid-cols-6">
@@ -19,53 +22,34 @@ export default function ZodiacList({ highlightedIndex = null }: ZodiacListProps)
           return (
             <div
               key={z.name}
-              className={`relative overflow-hidden rounded-[22px] border p-3 text-center transition-all duration-300 ${
+              className={`relative overflow-hidden border-2 p-3 text-center transition-all duration-200 ${
                 isActive
-                  ? "border-[rgba(255,214,130,0.8)] bg-[linear-gradient(165deg,rgba(255,219,156,0.24),rgba(253,168,102,0.16))] shadow-[0_14px_32px_rgba(255,176,94,0.3)] ring-1 ring-[rgba(255,214,130,0.35)]"
-                  : "border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.03)]"
+                  ? "border-black bg-sketch-paper"
+                  : "border-black/20 bg-white"
               }`}
+              style={
+                isActive
+                  ? { boxShadow: "4px 4px 0 #000" }
+                  : { boxShadow: "2px 2px 0 rgba(0,0,0,0.08)" }
+              }
             >
               <div className="relative z-10 flex flex-col items-center gap-1.5">
-                <div
-                  className={`grid h-[48px] w-[48px] place-items-center rounded-[18px] text-2xl ${
-                    isActive ? "shadow-[0_8px_18px_rgba(255,176,94,0.45)]" : ""
-                  }`}
-                  style={{
-                    background: isActive
-                      ? "linear-gradient(145deg, rgba(255,236,176,0.95), rgba(255,174,96,0.82))"
-                      : "linear-gradient(135deg, rgba(178,121,255,0.18), rgba(88,120,190,0.22))",
-                  }}
-                >
-                  {z.emoji}
+                <div className="grid h-[48px] w-[48px] place-items-center">
+                  <OpenmojiImg emoji={z.emoji} size={40} alt={z.name} />
                 </div>
                 <strong
-                  className={`text-xs font-semibold ${
-                    isActive
-                      ? "text-[rgba(255,248,230,0.98)]"
-                      : "text-[rgba(252,247,255,0.9)]"
-                  }`}
+                  className={`text-xs font-semibold ${isActive ? "text-sketch-ink" : "text-sketch-ink"}`}
                 >
                   {z.name}
                 </strong>
-                <span
-                  className={`text-[11px] ${
-                    isActive
-                      ? "text-[rgba(255,236,198,0.92)]"
-                      : "text-[rgba(167,181,227,0.7)]"
-                  }`}
-                >
-                  {z.hanja}
-                </span>
+                <span className="text-[11px] text-sketch-subtle">{z.hanja}</span>
               </div>
 
-              {isActive ? (
-                <>
-                  <span className="absolute right-2 top-2 rounded-full bg-[rgba(255,226,154,0.28)] px-2 py-0.5 text-[10px] font-semibold text-[rgba(255,244,214,0.95)]">
-                    선택됨
-                  </span>
-                  <span className="pointer-events-none absolute -right-6 -top-8 h-20 w-20 rounded-full bg-[rgba(255,206,123,0.28)] blur-xl" />
-                </>
-              ) : null}
+              {isActive && (
+                <span className="absolute right-1.5 top-1.5 border-2 border-black bg-black px-1.5 py-0.5 text-[10px] font-bold text-white">
+                  선택됨
+                </span>
+              )}
             </div>
           );
         })}

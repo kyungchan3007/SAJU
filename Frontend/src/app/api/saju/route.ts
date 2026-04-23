@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-
 import { createSuccessResponse } from "@/shared/api";
+import { cookies } from "next/headers";
 
 export const revalidate = 60;
 
@@ -15,12 +15,14 @@ export async function GET() {
 }
 
 export async function POST() {
-  return NextResponse.json(
-    createSuccessResponse({
-      feature: "saju",
-      status: "placeholder",
-      message:
-        "Future backend normalization for saju input will be handled here.",
-    }),
-  );
+  const token = (await cookies()).get("saju_access_token")?.value;
+
+  if (!token) {
+    return NextResponse.json(
+      { success: false, message: "LOGIN_REQUIRED" },
+      { status: 401 },
+    );
+  }
+
+  // 백엔드 요청 진행
 }

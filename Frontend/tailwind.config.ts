@@ -29,16 +29,13 @@ const config: Config = {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
-        saju: {
-          pink: "rgb(var(--saju-pink) / <alpha-value>)",
-          blue: "rgb(var(--saju-blue) / <alpha-value>)",
-          text: "rgb(var(--saju-text) / <alpha-value>)",
-          "secondary-border":
-            "rgb(var(--saju-secondary-border) / <alpha-value>)",
-          "secondary-bg": "rgb(var(--saju-secondary-bg) / <alpha-value>)",
-          "secondary-hover": "rgb(var(--saju-secondary-hover) / <alpha-value>)",
-          "secondary-text": "rgb(var(--saju-secondary-text) / <alpha-value>)",
-          "secondary-ring": "rgb(var(--saju-secondary-ring) / <alpha-value>)",
+        sketch: {
+          ink: "rgb(var(--sketch-ink) / <alpha-value>)",       // #000 — 메인 텍스트/테두리
+          paper: "rgb(var(--sketch-paper) / <alpha-value>)",   // #FAF8F2 — 배경
+          muted: "#6B6B6B",   // 보조 텍스트 (black/55 고정값)
+          subtle: "#9A9A9A",  // 3차 텍스트 (black/35 고정값)
+          active: "#0D0D0D",  // 활성 강조 (검정)
+          "active-bg": "#1A1A1A",  // 활성 배경
         },
         primary: {
           DEFAULT: "hsl(var(--primary))",
@@ -71,18 +68,14 @@ const config: Config = {
         sm: "calc(var(--radius) - 4px)",
       },
       boxShadow: {
-        glow: "0 18px 80px rgba(15, 23, 42, 0.18)",
-        "saju-primary":
-          "0 10px 22px rgba(0, 0, 0, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.14)",
+        glow: "0 4px 0 #000",
+        "sketch-sm": "2px 2px 0 #000",
+        "sketch-md": "3px 3px 0 #000",
+        "sketch-lg": "5px 5px 0 #000",
+        "saju-primary": "3px 3px 0 #000",
       },
       backgroundImage: {
-        aura: "radial-gradient(circle at top, rgba(15, 118, 110, 0.24), transparent 36%), radial-gradient(circle at bottom right, rgba(251, 146, 60, 0.18), transparent 28%)",
-        "saju-primary":
-          "linear-gradient(135deg, rgb(var(--saju-pink) / 0.22) 0%, rgb(var(--saju-pink) / 0.14) 52%, rgb(var(--saju-blue) / 0.08) 100%)",
-        "saju-primary-hover":
-          "linear-gradient(135deg, rgb(var(--saju-pink) / 0.32) 0%, rgb(var(--saju-pink) / 0.22) 52%, rgb(var(--saju-blue) / 0.15) 100%)",
-        "saju-primary-card":
-          "linear-gradient(160deg, rgb(var(--saju-card-bg) / 0.8) 0%, rgb(var(--saju-card-bg-purple) / 0.6) 100%)",
+        "sketch-paper": "none",
       },
     },
   },

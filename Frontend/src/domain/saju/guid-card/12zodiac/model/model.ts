@@ -14,8 +14,8 @@ export const zodiacList = [
 ];
 
 export const steps = [
-  { label: "1. 생년월일", active: false },
-  { label: "2. 출생 시간", active: false },
-  { label: "3. 성별", active: false },
-  { label: "4. 완료", active: false },
+  { label: "생년월일", active: false },
+  { label: "출생 시간", active: false },
+  { label: "성별", active: false },
+  { label: "완료", active: false },
 ];
