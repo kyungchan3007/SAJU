@@ -1,8 +1,5 @@
 "use client";
 
-import { cn } from "@/shared/lib/utils";
-import { useAuthHooks } from "@/features/auth/hooks/useAuthHooks";
-
 type LoginPanelContentProps = {
   kakaoLoginUrl: string;
 };
@@ -25,8 +22,6 @@ function KakaoIcon() {
 }
 
 export function LoginPanelContent({ kakaoLoginUrl }: LoginPanelContentProps) {
-  // const { setViewMode } = useAuthHooks();
-
   return (
     <div className="flex flex-col items-center text-center">
       {/* 서비스 로고 */}
