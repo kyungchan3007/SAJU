@@ -11,11 +11,11 @@ export function SajuPreviewCard() {
   return (
     <div className="relative overflow-hidden rounded-sm">
       {/* 잠금 오버레이 */}
-      <div className="pointer-events-none absolute inset-0 z-10 flex items-end bg-white/60 backdrop-blur-[3px]">
-        <div className="absolute bottom-5 left-5 sketch-border rounded-sm px-3.5 py-2.5 text-xs font-bold text-black">
-          사주를 입력하면 열립니다
-        </div>
-      </div>
+      {/*<div className="pointer-events-none absolute inset-0 z-10 flex items-end bg-white/60 backdrop-blur-[3px]">*/}
+      {/*  <div className="absolute bottom-5 left-5 sketch-border rounded-sm px-3.5 py-2.5 text-xs font-bold text-black">*/}
+      {/*    사주를 입력하면 열립니다*/}
+      {/*  </div>*/}
+      {/*</div>*/}
 
       {/* 실제 콘텐츠 */}
       <div className="card-saju-primary h-full space-y-[18px] overflow-y-auto p-6">
@@ -38,8 +38,12 @@ export function SajuPreviewCard() {
               공간을 우선 추천합니다.
             </p>
             <div className="mt-5 flex flex-wrap gap-3">
-              <button className="btn-saju btn-saju-primary">추천 장소 보기</button>
-              <button className="btn-saju btn-saju-secondary">궁합 보러가기</button>
+              <button className="btn-saju btn-saju-primary">
+                추천 장소 보기
+              </button>
+              <button className="btn-saju btn-saju-secondary">
+                궁합 보러가기
+              </button>
             </div>
           </div>
 
@@ -59,7 +63,9 @@ export function SajuPreviewCard() {
               <strong className="block text-xl font-bold tracking-tight text-black">
                 {s.value}
               </strong>
-              <span className="mt-1 block text-xs text-black/50">{s.label}</span>
+              <span className="mt-1 block text-xs text-black/50">
+                {s.label}
+              </span>
             </div>
           ))}
         </div>
@@ -98,7 +104,9 @@ export function SajuPreviewCard() {
                   key={item.label}
                   className="flex items-center justify-between gap-3 border-b border-black/15 px-1 py-2"
                 >
-                  <span className="text-xs font-bold text-black">{item.label}</span>
+                  <span className="text-xs font-bold text-black">
+                    {item.label}
+                  </span>
                   <small className="text-xs text-black/50">{item.value}</small>
                 </div>
               ))}
@@ -116,7 +124,9 @@ export function SajuPreviewCard() {
                   {loc.score}
                 </span>
               </div>
-              <p className="text-xs leading-relaxed text-black/60">{loc.desc}</p>
+              <p className="text-xs leading-relaxed text-black/60">
+                {loc.desc}
+              </p>
               <div className="flex flex-wrap gap-2">
                 {loc.pills.map((p) => (
                   <span

@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { ViewMode } from "@/features/auth/type/type";
 
 export const useAuthHooks = () => {
   const [email, setEmail] = useState("");

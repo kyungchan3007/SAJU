@@ -1,11 +1,5 @@
-import { SajuInputForm } from "@/features/saju-input";
-import { SajuPreviewCard } from "../../../domain/saju/guid-card/preview-card/saju-preview-card";
+import { SajuPreviewCard } from "@/domain/saju";
 
 export function SajuResult() {
-  return (
-    <div className="grid gap-6">
-      <SajuInputForm />
-      <SajuPreviewCard />
-    </div>
-  );
+  return <SajuPreviewCard />;
 }

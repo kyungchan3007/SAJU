@@ -3,8 +3,8 @@
 import { PropsWithChildren, ReactNode } from "react";
 import { AppSessionProvider } from "@/shared/app-infra/session-provider/session-provider";
 
-function QueryProvider(props: { children: ReactNode }) {
-  return null;
+function QueryProvider({ children }: { children: ReactNode }) {
+  return <>{children}</>;
 }
 
 export function MainProvider({ children }: PropsWithChildren) {

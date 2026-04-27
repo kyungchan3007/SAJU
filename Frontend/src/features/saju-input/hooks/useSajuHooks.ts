@@ -1,12 +1,14 @@
 
 "use client";
 
+import type { Route } from "next";
 import { useRouter } from "next/navigation";
 
 import type { SajuFormValues } from "@/features/saju-input/type/type";
 
 export const useSajuHooks = () => {
   const router = useRouter();
+  const resultPath: Route = "/saju/result";
 
   const handleSubmitSaju = async (formValues: SajuFormValues) => {
     const response = await fetch("/api/saju", {
@@ -18,9 +20,15 @@ export const useSajuHooks = () => {
     });
 
     if (response.status === 401) {
-      router.push("/login?next=/saju");
+      router.push("/login");
       return;
     }
+
+    if (!response.ok) {
+      return;
+    }
+
+    router.push(resultPath);
   };
 
   return {

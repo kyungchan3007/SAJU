@@ -1,10 +1,9 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
 import { createErrorResponse } from "@/shared/api";
 import { getServerEnv } from "@/shared/config";
 import { KAKAO_LOGIN_URL } from "@/shared/config/endPoint";
-
-export async function GET(request: NextRequest) {
+export async function GET() {
   const { BACKEND_API_BASE_URL } = getServerEnv();
 
   if (!BACKEND_API_BASE_URL) {
@@ -21,8 +20,6 @@ export async function GET(request: NextRequest) {
 
   let backendResponse: Response;
   try {
-    // This route is only a "login start" proxy.
-    // Backend returns 302 + Location to Kakao, and we pass it through.
     backendResponse = await fetch(backendUrl.toString(), {
       method: "GET",
       headers: { Accept: "application/json" },
@@ -51,9 +48,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Location can be absolute or relative. Resolve relative values against backend base URL.
     const redirectUrl = new URL(locationHeader, BACKEND_API_BASE_URL);
-
     return NextResponse.redirect(redirectUrl);
   }
 

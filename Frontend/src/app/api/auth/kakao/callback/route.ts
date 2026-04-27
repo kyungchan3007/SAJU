@@ -3,13 +3,13 @@ import { exchangeOAuthCodeOnServer } from "@/entities/auth/server/exchangeOAuthC
 
 const ACCESS_TOKEN_COOKIE_KEY = "saju_access_token";
 const REFRESH_TOKEN_COOKIE_KEY = "saju_refresh_token";
+const DEFAULT_POST_LOGIN_PATH = "/saju/result";
 
 export async function GET(req: NextRequest) {
   const code = req.nextUrl.searchParams.get("code");
   if (!code) {
     return NextResponse.redirect(new URL("/login?error=missing_code", req.url));
   }
-
   try {
     const result = await exchangeOAuthCodeOnServer(code);
     if (!result.success) {
@@ -17,8 +17,9 @@ export async function GET(req: NextRequest) {
         new URL("/login?error=oauth_failed", req.url),
       );
     }
-
-    const res = NextResponse.redirect(new URL("/saju", req.url));
+    const res = NextResponse.redirect(
+      new URL(DEFAULT_POST_LOGIN_PATH, req.url),
+    );
     res.cookies.set(ACCESS_TOKEN_COOKIE_KEY, result.data.accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",

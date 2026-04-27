@@ -1,4 +1,4 @@
-import { SajuResult } from "@/widgets/saju-result";
+import { SajuInput } from "@/widgets/saju-input";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 export default function SajuPage() {
   return (
     <main className="page-shell">
-      <SajuResult />
+      <SajuInput />
     </main>
   );
 }

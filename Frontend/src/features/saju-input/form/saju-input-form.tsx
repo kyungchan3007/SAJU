@@ -1,6 +1,5 @@
 import { steps } from "@/domain/saju/guid-card/12zodiac/model/model";
 import { SajuInputFieldsContainer } from "@/features/saju-input/form/client/saju-input-fields.container";
-import { metadata } from "@/app/(main)/saju/page";
 
 export function SajuInputForm() {
   return (

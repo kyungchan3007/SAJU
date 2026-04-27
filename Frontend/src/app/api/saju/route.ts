@@ -24,5 +24,12 @@ export async function POST() {
     );
   }
 
-  // 백엔드 요청 진행
+  return NextResponse.json(
+    createSuccessResponse({
+      feature: "saju",
+      status: "placeholder",
+      previewReady: true,
+      message: "Authenticated request accepted for saju preview flow.",
+    }),
+  );
 }
