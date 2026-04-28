@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
-import { createSuccessResponse } from "@/shared/api";
 import { cookies } from "next/headers";
+
+import { createSuccessResponse } from "@/shared/api";
 
 export const revalidate = 60;
 

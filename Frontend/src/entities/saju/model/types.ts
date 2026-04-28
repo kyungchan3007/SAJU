@@ -2,8 +2,8 @@ export type SajuInput = {
   name: string;
   birthDate: string;
   birthTime?: string;
-  calendarType: "solar" | "lunar";
-  gender?: "male" | "female" | "unknown";
+  calendarType: "SOLAR" | "LUNAR";
+  gender?: "MALE" | "FEMALE" | "unknown";
 };
 
 export type SajuProfile = {

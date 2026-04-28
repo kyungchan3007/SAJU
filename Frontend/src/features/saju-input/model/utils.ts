@@ -4,28 +4,10 @@ import type {
   SajuFormValues,
   TouchedSteps,
 } from "@/features/saju-input/type/type";
-
-// utils.ts 의
-// isValidBirthMonthDay, getHighlightedZodiacIndex 내부에서 호출된다.
-function parseBirthMonthDay(value: string) {
-  const compact = value.replace(/\s/g, "");
-  const match = compact.match(/^(\d{1,2})[\/.-]?(\d{1,2})$/);
-  if (!match) {
-    return null;
-  }
-
-  const month = Number(match[1]);
-  const day = Number(match[2]);
-  if (month < 1 || month > 12 || day < 1 || day > 31) {
-    return null;
-  }
-
-  return { month, day };
-}
-
-export function isValidBirthMonthDay(value: string) {
-  return parseBirthMonthDay(value) !== null;
-}
+import {
+  isValidBirthMonthDay,
+  parseBirthMonthDay,
+} from "@/shared/utils/BirthDate";
 
 // saju-input-fields.container.tsx 의
 // SajuInputFieldsContainer 안에서 직접 호출된다.
@@ -62,11 +44,11 @@ export function getHighlightedZodiac(highlightedZodiacIndex: number | null) {
 export function getStepCompletionState(formValues: SajuFormValues) {
   const isBirthDateStepComplete =
     formValues.birthYear !== "" &&
+    formValues.city !== "" &&
     formValues.calendarType !== "" &&
     isValidBirthMonthDay(formValues.birthDate.trim());
-  const isBirthTimeStepComplete =
-    formValues.timeUnknown === "yes" ||
-    (formValues.timeUnknown === "no" && formValues.birthTime !== "");
+  // 출생 시간은 선택 입력(옵션)으로 처리한다.
+  const isBirthTimeStepComplete = true;
   const isGenderStepComplete = formValues.gender !== "";
 
   return {
@@ -77,6 +59,59 @@ export function getStepCompletionState(formValues: SajuFormValues) {
       isBirthDateStepComplete &&
       isBirthTimeStepComplete &&
       isGenderStepComplete,
+  };
+}
+
+export function getFirstIncompleteFieldMessage(formValues: SajuFormValues): {
+  title: string;
+  description: string;
+} {
+  if (formValues.birthYear.trim() === "") {
+    return {
+      title: "출생 연도를 선택해 주세요",
+      description: "출생 연도 입력란을 먼저 채워 주세요.",
+    };
+  }
+
+  const birthDate = formValues.birthDate.trim();
+  if (birthDate === "") {
+    return {
+      title: "출생 월/일을 입력해 주세요",
+      description: "출생 월/일 입력란을 채워 주세요. 예: 03 / 14",
+    };
+  }
+
+  if (!isValidBirthMonthDay(birthDate)) {
+    return {
+      title: "출생 월/일 형식을 확인해 주세요",
+      description: "예: 03 / 14 또는 3/14 형식으로 입력해 주세요.",
+    };
+  }
+
+  if (formValues.city.trim() === "") {
+    return {
+      title: "출생 도시를 선택해 주세요",
+      description: "사주 계산에 사용할 출생 지역을 선택해 주세요.",
+    };
+  }
+
+  if (formValues.calendarType.trim() === "") {
+    return {
+      title: "양력/음력을 선택해 주세요",
+      description: "출생 월/일 기준인 양력 또는 음력을 선택해 주세요.",
+    };
+  }
+
+  if (formValues.gender.trim() === "") {
+    return {
+      title: "성별을 선택해 주세요",
+      description: "성별 입력란을 선택하면 다음 단계로 진행됩니다.",
+    };
+  }
+
+  return {
+    title: "4단계 입력을 완료해 주세요",
+    description: "모든 항목을 채우면 오늘의 기운 보기가 가능합니다.",
   };
 }
 

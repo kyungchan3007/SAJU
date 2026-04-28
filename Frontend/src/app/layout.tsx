@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Jua, Noto_Sans_KR } from "next/font/google";
 import type { ReactNode } from "react";
 import { env } from "@/shared/config";
+import { Providers } from "@/shared/ui";
 import "./globals.css";
 
 /**
@@ -71,7 +72,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         className={`${notoSansKr.variable} ${jua.variable} min-h-dvh font-sans text-foreground antialiased`}
         style={{ backgroundColor: "rgb(250 248 242)" }}
       >
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

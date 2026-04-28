@@ -1,8 +1,11 @@
 "use client";
 
+import * as Toast from "@radix-ui/react-toast";
 import ZodiacList from "@/domain/saju/guid-card/12zodiac/12zodiac";
+import { useSajuValidationToast } from "@/features/saju-input/hooks/useSajuValidationToast";
 import { OpenmojiImg } from "@/shared/ui/openmoji-img";
 import {
+  cityOptions,
   birthTimeOptions,
   birthYearOptions,
   calendarTypeOptions,
@@ -29,6 +32,7 @@ type SajuInputFieldsProps = {
     value: SajuFormValues[K],
   ) => void;
   onTouchStep: (step: keyof TouchedSteps) => void;
+  isFormComplete: boolean;
   onSubmitSaju: () => void;
 };
 
@@ -39,10 +43,18 @@ export function SajuInputFields({
   highlightedZodiacIndex,
   onChangeField,
   onTouchStep,
+  isFormComplete,
   onSubmitSaju,
 }: SajuInputFieldsProps) {
+  const {
+    isValidationToastOpen,
+    setValidationToastOpen,
+    validationToastMessage,
+    showValidationToast,
+  } = useSajuValidationToast(formValues);
+
   return (
-    <>
+    <Toast.Provider swipeDirection="right" duration={2200}>
       {/* stepStates 는 sagu-input-fields.container.tsx 의 getStepStates 호출 결과다. */}
       <InputStep steps={stepStates} />
 
@@ -50,6 +62,10 @@ export function SajuInputFields({
         className="mt-5"
         onSubmit={(event) => {
           event.preventDefault();
+          if (!isFormComplete) {
+            showValidationToast();
+            return;
+          }
           onSubmitSaju();
         }}
       >
@@ -111,6 +127,22 @@ export function SajuInputFields({
           </label>
 
           <label className="flex flex-col gap-2">
+            <span className="text-xs font-bold text-black/60">출생 도시</span>
+            <select
+              value={formValues.city}
+              onChange={(event) => onChangeField("city", event.target.value)}
+              onBlur={() => onTouchStep("birthDate")}
+              className={fieldClassName}
+            >
+              {cityOptions.map((option) => (
+                <option key={option.value || "empty"} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label className="flex flex-col gap-2">
             <span className="text-xs font-bold text-black/60">출생 시간</span>
             <select
               value={formValues.birthTime}
@@ -140,30 +172,31 @@ export function SajuInputFields({
               {genderOptions.map((option) => (
                 <option key={option.value} value={option.value}>
                   {option.label}
+                  {option.value}
                 </option>
               ))}
             </select>
           </label>
 
-          <label className="flex flex-col gap-2">
-            <span className="text-xs font-bold text-black/60">
-              시간 미상 여부
-            </span>
-            <select
-              value={formValues.timeUnknown}
-              onChange={(event) =>
-                onChangeField("timeUnknown", event.target.value)
-              }
-              onBlur={() => onTouchStep("birthTime")}
-              className={fieldClassName}
-            >
-              {timeUnknownOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </label>
+          {/*<label className="flex flex-col gap-2">*/}
+          {/*  <span className="text-xs font-bold text-black/60">*/}
+          {/*    시간 미상 여부*/}
+          {/*  </span>*/}
+          {/*  <select*/}
+          {/*    value={formValues.timeUnknown}*/}
+          {/*    onChange={(event) =>*/}
+          {/*      onChangeField("timeUnknown", event.target.value)*/}
+          {/*    }*/}
+          {/*    onBlur={() => onTouchStep("birthTime")}*/}
+          {/*    className={fieldClassName}*/}
+          {/*  >*/}
+          {/*    {timeUnknownOptions.map((option) => (*/}
+          {/*      <option key={option.value} value={option.value}>*/}
+          {/*        {option.label}*/}
+          {/*      </option>*/}
+          {/*    ))}*/}
+          {/*  </select>*/}
+          {/*</label>*/}
         </div>
 
         {/* highlightedZodiac 는 sagu-input-fields.container.tsx 의
@@ -203,6 +236,19 @@ export function SajuInputFields({
       </form>
 
       <ZodiacList highlightedIndex={highlightedZodiacIndex} />
-    </>
+      <Toast.Root
+        open={isValidationToastOpen}
+        onOpenChange={setValidationToastOpen}
+        className="fixed left-1/2 top-4 z-50 w-[calc(100%-2rem)] max-w-[28rem] -translate-x-1/2 rounded-sm border-2 border-black bg-white p-4 shadow-[4px_4px_0_0_#000]"
+      >
+        <Toast.Title className="text-sm font-bold text-black">
+          {validationToastMessage.title}
+        </Toast.Title>
+        <Toast.Description className="mt-1 text-xs text-black/65">
+          {validationToastMessage.description}
+        </Toast.Description>
+      </Toast.Root>
+      <Toast.Viewport className="pointer-events-none fixed inset-0 z-50" />
+    </Toast.Provider>
   );
 }

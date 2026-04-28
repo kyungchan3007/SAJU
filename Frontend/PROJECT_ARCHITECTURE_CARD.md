@@ -76,10 +76,19 @@
 - 이메일 로그인(`useAuthHooks`)은 TODO 상태
 - OpenAPI 설정 파일은 존재하나 `src/generated/api` 산출물은 현재 리포에 없음
 
-## 9) Claude 작업 규칙 (전체 작업용)
+## 9) 작업 규칙 (전체 작업용)
 - 전체 구조 질문/리팩터링/신규 기능 설계 요청이면 이 문서를 먼저 읽는다.
 - 이후 해당 도메인 카드 1개만 추가로 읽는다.
 - 문서 요약은 5줄 이내로 제한하고 바로 구현한다.
+- feature 내부의 상태 관리, 파생 계산, 제출/조회 행위는 우선 `hooks/`로 분리한다.
+- `form/client`, `ui` 컴포넌트는 props 기반 렌더에 집중하고, 로컬 state는 UI 표현 전용일 때만 둔다.
+- 폼 상태/검증/제출 흐름은 `features/<feature>/hooks/use...` 형태로 관리한다.
+  - 예: `src/features/saju-input/hooks/useSajuInputForm.ts`
+  - 예: `src/features/saju-input/hooks/useSajuValidationToast.ts`
+- 여러 feature/domain에서 공통으로 재사용될 함수는 `src/shared/utils`에 둔다.
+- 특정 feature에 종속되지 않는 포맷팅, 파싱, 변환, 가드 함수도 우선 `src/shared/utils` 배치를 검토한다.
+- 시간 계산, 날짜 포맷팅, 문자열 파싱처럼 전역 재사용 가능성이 높은 공통 함수가 보이면 바로 추가하지 말고 먼저 사용자에게 `shared/utils`로 올릴지 확인받는다.
+- React Query `useQuery`/`useMutation` 훅은 해당 feature 하위 `hooks/`에 둔다. 예: `src/features/saju-result/hooks/useSajuResult.ts`
 
 ## 10) Claude 시작 프롬프트 (복붙용)
 ```txt

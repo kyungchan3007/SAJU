@@ -7,6 +7,7 @@ export type SajuInputFieldsProps = {
 export type SajuFormValues = {
   birthYear: string;
   birthDate: string;
+  city: string;
   calendarType: string;
   birthTime: string;
   gender: string;
