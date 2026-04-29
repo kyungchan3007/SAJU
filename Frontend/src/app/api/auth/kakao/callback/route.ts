@@ -12,6 +12,7 @@ export async function GET(req: NextRequest) {
   }
   try {
     const result = await exchangeOAuthCodeOnServer(code);
+
     if (!result.success) {
       return NextResponse.redirect(
         new URL("/login?error=oauth_failed", req.url),

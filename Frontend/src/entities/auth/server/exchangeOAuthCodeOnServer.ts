@@ -12,6 +12,7 @@ type ExchangeApiResponse =
 
 type BackendTokenResponse = {
   code?: number;
+  status?: number;
   message?: string;
   data?: {
     accessToken?: string;
@@ -29,6 +30,7 @@ export async function exchangeOAuthCodeOnServer(
   code: string,
 ): Promise<ExchangeApiResponse> {
   const { BACKEND_API_BASE_URL } = getServerEnv();
+
   const url = `${BACKEND_API_BASE_URL}${KAKAO_LOGIN_URL_TOKEN}`;
 
   const resp = await fetch(url, {
@@ -41,6 +43,7 @@ export async function exchangeOAuthCodeOnServer(
   });
 
   let body: BackendTokenResponse;
+
   try {
     body = (await resp.json()) as BackendTokenResponse;
   } catch {
@@ -54,7 +57,8 @@ export async function exchangeOAuthCodeOnServer(
     };
   }
 
-  if (body.code !== 200 || !isValidExchangeData(body.data)) {
+  const isSuccessStatus = body.code === 200 || body.status === 200;
+  if (!isSuccessStatus || !isValidExchangeData(body.data)) {
     return {
       success: false,
       message: body.message ?? "Token exchange response is invalid.",

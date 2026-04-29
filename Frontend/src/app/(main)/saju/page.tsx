@@ -1,5 +1,7 @@
 import { SajuInput } from "@/widgets/saju-input";
 import { Metadata } from "next";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "무료 사주풀이 | 생년월일로 오늘의 운세 확인",
@@ -17,7 +19,13 @@ export const metadata: Metadata = {
   },
 };
 
-export default function SajuPage() {
+export default async function SajuPage() {
+  const accessToken = (await cookies()).get("saju_access_token")?.value;
+
+  if (accessToken) {
+    redirect("/saju/result");
+  }
+
   return (
     <main className="page-shell">
       <SajuInput />

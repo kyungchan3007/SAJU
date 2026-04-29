@@ -1,4 +1,3 @@
-import { SajuResultQueryGate } from "@/features/saju-result";
 import { SajuResult } from "@/widgets/saju-result";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -25,9 +24,7 @@ export default async function SajuResultPage() {
 
   return (
     <main className="page-shell">
-      <SajuResultQueryGate>
-        <SajuResult />
-      </SajuResultQueryGate>
+      <SajuResult />
     </main>
   );
 }

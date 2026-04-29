@@ -164,3 +164,85 @@
     color: rgba(0, 0, 0, 0.35);
   }
 }
+
+/* ── 오행 애니메이션 keyframes ── */
+
+/* wood: 잎 흔들림 */
+@keyframes leaf-sway {
+  0%, 100% { transform: rotate(-12deg) translateX(0); }
+  50%       { transform: rotate(12deg) translateX(2px); }
+}
+
+/* wood: 잎 떨어짐 */
+@keyframes leaf-fall {
+  0%   { transform: translateY(-10px) rotate(0deg);   opacity: 1; }
+  100% { transform: translateY(70px)  rotate(200deg); opacity: 0; }
+}
+
+/* fire: 불꽃 흔들림 */
+@keyframes flicker {
+  0%, 100% { transform: scaleX(1)    scaleY(1)    rotate(0deg); }
+  20%       { transform: scaleX(0.92) scaleY(1.08) rotate(-2deg); }
+  50%       { transform: scaleX(1.06) scaleY(0.94) rotate(2deg); }
+  75%       { transform: scaleX(0.96) scaleY(1.04) rotate(-1deg); }
+}
+
+/* earth: 줄기 자라남 */
+@keyframes grow-stem {
+  0%   { height: 0;    opacity: 0; }
+  100% { height: 36px; opacity: 1; }
+}
+
+/* earth: 꽃잎 피어남 */
+@keyframes bloom {
+  0%   { transform: scale(0) rotate(-60deg); opacity: 0; }
+  60%  { transform: scale(1.15) rotate(5deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0deg);   opacity: 1; }
+}
+
+/* metal: 반짝임 */
+@keyframes sparkle {
+  0%, 100% { transform: scale(0) rotate(0deg);    opacity: 0; }
+  40%       { transform: scale(1.2) rotate(90deg); opacity: 1; }
+  70%       { transform: scale(0.9) rotate(135deg); opacity: 0.7; }
+}
+
+/* water: 파문 퍼짐 */
+@keyframes ripple {
+  0%   { transform: scale(0.3); opacity: 0.7; }
+  100% { transform: scale(1.8); opacity: 0; }
+}
+
+/* water: 물결 흐름 */
+@keyframes wave-flow {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* water: 찰랑찰랑 좌우 기울임 */
+@keyframes water-slosh {
+  0%, 100% { transform: rotate(-2deg) translateY(0); }
+  50%       { transform: rotate(2deg) translateY(-4px); }
+}
+
+/* water: 배 둥실둥실 */
+@keyframes boat-rock {
+  0%, 100% { transform: translateX(-50%) rotate(-3deg) translateY(0); }
+  50%       { transform: translateX(-50%) rotate(3deg) translateY(-5px); }
+}
+
+/* water: 고래 좌우 헤엄 + 방향 전환 */
+/* top: 68% = 136px, 수면 45% = 90px, 고래 높이 52px → Y ±10px 이내 */
+@keyframes fish-swim {
+  0%   { transform: translate(-50px, -26px) scaleX(1); }
+  45%  { transform: translate(10px,  -36px) scaleX(1); }
+  50%  { transform: translate(10px,  -36px) scaleX(-1); }
+  95%  { transform: translate(-50px, -26px) scaleX(-1); }
+  100% { transform: translate(-50px, -26px) scaleX(1); }
+}
+
+/* water: 거품 올라오기 */
+@keyframes bubble-rise {
+  0%   { transform: translateY(0);    opacity: 0.8; }
+  100% { transform: translateY(-40px); opacity: 0; }
+}

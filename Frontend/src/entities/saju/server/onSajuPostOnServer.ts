@@ -57,8 +57,8 @@ export async function onSajuPostOnServer(
     birthDate,
     city: formValues?.city,
   };
-  console.log(payload, "payload");
-  const response = await fetch(`${BACKEND_API_BASE_URL}${SAJU_ENDPOINT_PATH}`, {
+
+  const response = await fetch(url, {
     method: "POST",
     cache: "no-store",
     headers: {
@@ -67,8 +67,7 @@ export async function onSajuPostOnServer(
     },
     body: JSON.stringify(payload),
   });
-  const rawText = await response.text();
-  console.log(response.status, rawText, "saju raw response");
+
   let body: BackendApiResponse | null = null;
 
   try {

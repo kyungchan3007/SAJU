@@ -1,18 +1,21 @@
 import {
   SajuHeroSection,
   SajuInsightsSection,
-  SajuLocationSection,
   SajuStatsSection,
 } from "@/domain/saju/guid-card/preview-card/saju-preview-card.sections";
+import { SajuPreviewCardProps } from "@/domain/saju/guid-card/preview-card/model/type";
 
-export function SajuPreviewCard() {
+export function SajuPreviewCard({ dailyResult }: SajuPreviewCardProps) {
   return (
-    <div className="relative overflow-hidden rounded-sm">
+    <div
+      className="relative overflow-hidden rounded-sm"
+      data-has-result={Boolean(dailyResult)}
+    >
       <div className="card-saju-primary h-full space-y-[18px] overflow-y-auto p-6">
-        <SajuHeroSection />
-        <SajuStatsSection />
-        <SajuInsightsSection />
-        <SajuLocationSection />
+        <SajuHeroSection dailyResult={dailyResult} />
+        <SajuStatsSection dailyResult={dailyResult} />
+        <SajuInsightsSection dailyResult={dailyResult} />
+        {/*<SajuLocationSection dailyResult={dailyResult} />*/}
       </div>
     </div>
   );
