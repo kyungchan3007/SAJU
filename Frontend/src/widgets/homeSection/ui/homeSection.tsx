@@ -1,72 +1,7 @@
 import Link from "next/link";
-import type { Route } from "next";
 import { OpenmojiImg } from "@/shared/ui/openmoji-img";
-
-interface HomeLinkItem {
-  href: Route;
-  label: string;
-}
-
-interface HomeIconLinkItem extends HomeLinkItem {
-  emoji: string;
-  isNew: boolean;
-}
-
-interface HomeServiceCategory {
-  category: string;
-  items: HomeLinkItem[];
-}
-
-const QUICK_MENUS: HomeIconLinkItem[] = [
-  { href: "/saju", emoji: "🏮", label: "신년운세", isNew: false },
-  { href: "/saju", emoji: "🪬", label: "토정비결", isNew: false },
-  { href: "/saju", emoji: "📖", label: "정통사주", isNew: false },
-  { href: "/saju", emoji: "📅", label: "오늘의 운세", isNew: false },
-  { href: "/saju", emoji: "🌙", label: "내일의 운세", isNew: false },
-  { href: "/location", emoji: "📍", label: "지정일 운세", isNew: false },
-  { href: "/saju", emoji: "🪞", label: "관상", isNew: true },
-  { href: "/saju", emoji: "🧠", label: "심리풀이", isNew: true },
-  { href: "/compatibility", emoji: "💑", label: "짝궁합", isNew: false },
-];
-
-const PROMO_CARDS: HomeIconLinkItem[] = [
-  { href: "/saju", emoji: "🔮", label: "사주풀이", isNew: false },
-  { href: "/compatibility", emoji: "💞", label: "궁합", isNew: true },
-  { href: "/saju", emoji: "☯️", label: "오늘의 기운", isNew: false },
-  { href: "/location", emoji: "🗺️", label: "지역운세", isNew: true },
-  { href: "/saju", emoji: "🌟", label: "연간운세", isNew: false },
-  { href: "/saju", emoji: "🎴", label: "타로", isNew: true },
-];
-
-const SERVICE_CATEGORIES: HomeServiceCategory[] = [
-  {
-    category: "사주 & 운명",
-    items: [
-      { label: "무료 사주풀이", href: "/saju" },
-      { label: "오늘의 운세", href: "/saju" },
-      { label: "연간 운세", href: "/saju" },
-      { label: "월간 운세", href: "/saju" },
-    ],
-  },
-  {
-    category: "인연 & 궁합",
-    items: [
-      { label: "연인 궁합", href: "/compatibility" },
-      { label: "부부 궁합", href: "/compatibility" },
-      { label: "친구 궁합", href: "/compatibility" },
-      { label: "비즈니스 궁합", href: "/compatibility" },
-    ],
-  },
-  {
-    category: "지역 & 풍수",
-    items: [
-      { label: "지역 운세", href: "/location" },
-      { label: "이사 풍수", href: "/location" },
-      { label: "사무실 방위", href: "/location" },
-      { label: "여행 운세", href: "/location" },
-    ],
-  },
-];
+import { PROMO_CARDS, QUICK_MENUS } from "@/features/home/model/model";
+import { HomeTodaySajuCard } from "@/features/home/ui/home-today-saju-card.client";
 
 export function HomeSection() {
   return (
@@ -77,7 +12,9 @@ export function HomeSection() {
           <div className="grid gap-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(20rem,0.9fr)]">
             {/* 좌: 카피 */}
             <div className="flex flex-col justify-center gap-6">
-              <p className="text-xs font-semibold text-black/40">소름 돋는 미래 예측</p>
+              <p className="text-xs font-semibold text-black/40">
+                소름 돋는 미래 예측
+              </p>
               <h1 className="font-display text-4xl font-black leading-tight text-black sm:text-5xl lg:text-6xl">
                 오늘의 운명,
                 <br />
@@ -100,28 +37,7 @@ export function HomeSection() {
               </div>
             </div>
             {/* 우: 히어로 카드 */}
-            <div className="hero-panel flex flex-col gap-4">
-              <p className="text-xs font-semibold text-black/40">오늘의 운세</p>
-              <div className="flex items-center gap-3">
-                <span className="text-3xl">☯️</span>
-                <div>
-                  <p className="font-display text-lg font-black text-black">
-                    오늘의 기운
-                  </p>
-                  <p className="text-sm text-black/50">
-                    생년월일을 입력하면 확인할 수 있어요
-                  </p>
-                </div>
-              </div>
-              <div className="mt-2 border-t-2 border-dashed border-black/10 pt-4">
-                <Link
-                  href="/saju"
-                  className="btn-saju btn-saju-primary block w-full text-center"
-                >
-                  시작하기
-                </Link>
-              </div>
-            </div>
+            <HomeTodaySajuCard />
           </div>
         </div>
       </section>
@@ -135,12 +51,12 @@ export function HomeSection() {
               <h2 className="mb-5 font-display text-lg font-black text-black">
                 서비스 바로가기
               </h2>
-              <div className="grid grid-cols-3 gap-y-6">
+              <div className="grid grid-cols-3 gap-y-3">
                 {QUICK_MENUS.map((menu) => (
                   <Link
                     key={menu.label}
                     href={menu.href}
-                    className="relative flex flex-col items-center gap-2 rounded-sm p-2 transition hover:bg-black/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black"
+                    className="relative flex flex-col items-center gap-2 rounded-sm p-1 transition hover:bg-black/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black"
                   >
                     <span className="text-3xl leading-none">
                       <OpenmojiImg emoji={menu?.emoji ?? "🌙"} size={36} />
@@ -158,12 +74,12 @@ export function HomeSection() {
               <h2 className="mb-5 font-display text-lg font-black text-black">
                 추천 서비스
               </h2>
-              <div className="grid grid-cols-2 gap-y-6">
+              <div className="grid grid-cols-2 gap-y-3">
                 {PROMO_CARDS.map((card) => (
                   <Link
                     key={card.label}
                     href={card.href}
-                    className="relative flex flex-col items-center gap-2 rounded-sm p-2 transition hover:bg-black/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black"
+                    className="relative flex flex-col items-center gap-2 rounded-sm p-1 transition hover:bg-black/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black"
                   >
                     <span className="text-3xl leading-none">
                       <OpenmojiImg emoji={card?.emoji ?? "🌙"} size={36} />

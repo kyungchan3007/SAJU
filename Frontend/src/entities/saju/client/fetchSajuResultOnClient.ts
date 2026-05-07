@@ -1,8 +1,8 @@
 import type { ApiEnvelope } from "@/shared/api";
-import type { DailySajuResult } from "@/domain/saju/guid-card/preview-card/model/type";
+import type { DailyEnergyResponse } from "@/generated/api";
 
 export async function fetchSajuResultOnClient(): Promise<
-  ApiEnvelope<DailySajuResult>
+  ApiEnvelope<DailyEnergyResponse | undefined>
 > {
   const response = await fetch("/api/saju/result", {
     method: "POST",
@@ -11,7 +11,9 @@ export async function fetchSajuResultOnClient(): Promise<
     },
   });
 
-  const result = (await response.json()) as ApiEnvelope<DailySajuResult>;
+  const result = (await response.json()) as ApiEnvelope<
+    DailyEnergyResponse | undefined
+  >;
 
   if (!response.ok) {
     throw new Error(

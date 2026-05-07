@@ -1,12 +1,14 @@
 "use client";
-
 import { useQuery } from "@tanstack/react-query";
-
+import { useState } from "react";
 import { SajuPreviewCard } from "@/domain/saju";
 import { fetchSajuResultOnClient } from "@/entities/saju";
+import { useAnalysisProgress } from "@/features/saju-result/hooks/useAnalysisProgress";
 import { SAJU_RESULT_QUERY_KEY } from "@/features/saju-result/model/query";
+import { AnalysisProgressScreen } from "@/features/saju-result/ui/analysis-progress-screen.client";
 
 export function SajuResult() {
+  const [isResultRevealed, setIsResultRevealed] = useState(false);
   const { data, isLoading, error } = useQuery({
     queryKey: SAJU_RESULT_QUERY_KEY,
     queryFn: fetchSajuResultOnClient,
@@ -14,12 +16,16 @@ export function SajuResult() {
     gcTime: 60 * 60 * 1000,
     retry: 1,
   });
+  const { progress, shouldShowPending } = useAnalysisProgress(isLoading);
+  const isResultReady = Boolean(data?.data);
 
-  if (isLoading) {
+  if (shouldShowPending || (isResultReady && !isResultRevealed)) {
     return (
-      <div className="card-saju-primary p-6 text-sm text-black/60">
-        사주 결과를 불러오는 중입니다.
-      </div>
+      <AnalysisProgressScreen
+        progress={isResultReady ? 100 : progress}
+        isComplete={isResultReady}
+        onRevealResult={() => setIsResultRevealed(true)}
+      />
     );
   }
 

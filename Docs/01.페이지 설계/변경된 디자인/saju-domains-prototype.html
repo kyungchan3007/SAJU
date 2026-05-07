@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>도메인 시안 — 정통사주 / 궁합 / 운기</title>
+  <link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #F8F6F1;
+      --bg-card: #FDFCF8;
+      --bg-muted: #F0EDE6;
+      --fg: #0d0d0d;
+      --border: #0d0d0d;
+      --border-light: #d4d0c8;
+      --muted: #7a7570;
+      --shadow: 4px 4px 0 #0d0d0d;
+      --shadow-sm: 2px 2px 0 #0d0d0d;
+      --shadow-lg: 5px 5px 0 #0d0d0d;
+      --yellow: #FFE500;
+      --radius: 3px;
+      --font-display: 'Jua', sans-serif;
+      --font-body: 'Noto Sans KR', sans-serif;
+      /* 오행 컬러 */
+      --wood: #4ade80;
+      --fire: #f87171;
+      --earth: #fbbf24;
+      --metal: #94a3b8;
+      --water: #60a5fa;
+    }
+    body { font-family: var(--font-body); background: var(--bg); color: var(--fg); min-height: 100vh; }
+
+    /* ── 네비 ── */
+    .top-nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 20px;
+      background: var(--bg-card);
+      border-bottom: 2px solid var(--border);
+      box-shadow: 0 2px 0 var(--border);
+    }
+    .page-tabs { display: flex; gap: 6px; }
+    .page-tab {
+      padding: 6px 16px; border: 2px solid var(--border); border-radius: 999px;
+      font-family: var(--font-body); font-size: 13px; font-weight: 700;
+      cursor: pointer; background: var(--bg); transition: all .15s;
+    }
+    .page-tab.active { background: var(--fg); color: #fff; box-shadow: var(--shadow-sm); }
+    .view-toggle { display: flex; gap: 6px; }
+    .view-btn {
+      padding: 5px 14px; border: 2px solid var(--border); border-radius: 999px;
+      font-size: 12px; font-weight: 600; cursor: pointer; background: var(--bg);
+      font-family: var(--font-body);
+    }
+    .view-btn.active { background: var(--fg); color: #fff; }
+
+    /* ── 레이아웃 ── */
+    .page { display: none; padding-top: 64px; min-height: 100vh; }
+    .page.active { display: block; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 32px 20px; }
+
+    /* 웹 2컬럼 */
+    .web-grid { display: grid; grid-template-columns: 340px 1fr; gap: 24px; align-items: start; }
+    .mobile-stack { display: flex; flex-direction: column; gap: 16px; }
+
+    /* ── 공용 카드 ── */
+    .card {
+      background: var(--bg-card); border: 2px solid var(--border);
+      border-radius: var(--radius); box-shadow: var(--shadow);
+    }
+    .card-header {
+      background: var(--bg-muted); border-bottom: 2px solid var(--border);
+      padding: 12px 20px; font-family: var(--font-display); font-size: 15px;
+    }
+    .card-body { padding: 20px; }
+    .sketch-box {
+      border: 2px solid var(--border); border-radius: var(--radius);
+      box-shadow: var(--shadow-sm); background: var(--bg);
+    }
+
+    /* ── 페이지 타이틀 ── */
+    .page-title {
+      font-family: var(--font-display); font-size: 26px; margin-bottom: 24px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .page-title::after { content: ''; flex: 1; height: 2px; background: var(--border); }
+
+    /* ════════════════════════════════
+       정통사주
+    ════════════════════════════════ */
+
+    /* 명식 요약 뱃지 */
+    .summary-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 0; }
+    .badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      border: 2px solid var(--border); border-radius: 999px;
+      padding: 4px 14px; font-size: 12px; font-weight: 700;
+      box-shadow: var(--shadow-sm);
+    }
+    .badge-yellow { background: var(--yellow); }
+    .badge-white { background: var(--bg-card); }
+
+    /* 4기둥 원판 */
+    .pillars-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
+      border: 2px solid var(--border); border-radius: var(--radius);
+      overflow: hidden; box-shadow: var(--shadow);
+    }
+    .pillar-col { display: flex; flex-direction: column; }
+    .pillar-col:not(:last-child) { border-right: 2px solid var(--border); }
+    .pillar-label {
+      background: var(--fg); color: #fff;
+      padding: 6px; text-align: center; font-size: 11px; font-weight: 700;
+      letter-spacing: .05em;
+    }
+    .pillar-stem {
+      padding: 14px 8px; text-align: center;
+      font-family: var(--font-display); font-size: 28px;
+      border-bottom: 1px solid var(--border-light);
+      background: var(--bg-card);
+    }
+    .pillar-branch {
+      padding: 14px 8px; text-align: center;
+      font-family: var(--font-display); font-size: 28px;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border-light);
+    }
+    .pillar-growth {
+      padding: 8px 4px; text-align: center;
+      font-size: 11px; color: var(--muted);
+      background: var(--bg-card);
+    }
+
+    /* 오행 바 */
+    .oheng-list { display: flex; flex-direction: column; gap: 10px; }
+    .oheng-row { display: flex; flex-direction: column; gap: 4px; }
+    .oheng-meta { display: flex; justify-content: space-between; font-size: 12px; }
+    .oheng-name { font-weight: 700; display: flex; align-items: center; gap: 5px; }
+    .oheng-dot { width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid var(--border); display: inline-block; }
+    .oheng-bar-bg {
+      height: 10px; border: 1.5px solid var(--border); border-radius: var(--radius);
+      background: var(--bg); overflow: hidden;
+    }
+    .oheng-bar-fill { height: 100%; border-radius: 1px; }
+
+    /* 용신 */
+    .yongshin-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .yongshin-card {
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      padding: 14px 10px; border: 2px solid var(--border); border-radius: var(--radius);
+      background: var(--bg-card); box-shadow: var(--shadow-sm); text-align: center;
+    }
+    .element-circle {
+      width: 48px; height: 48px; border-radius: 50%; border: 2px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; box-shadow: var(--shadow-sm);
+    }
+    .yongshin-label { font-size: 10px; color: var(--muted); font-weight: 600; letter-spacing: .05em; }
+    .yongshin-name { font-family: var(--font-display); font-size: 18px; }
+
+    /* 대운 타임라인 */
+    .daewoon-list { display: flex; flex-direction: column; gap: 0; }
+    .daewoon-item {
+      display: flex; align-items: center; gap: 14px;
+      padding: 12px 16px; border-bottom: 1px solid var(--border-light);
+      position: relative;
+    }
+    .daewoon-item:last-child { border-bottom: none; }
+    .daewoon-item.current { background: var(--yellow); }
+    .daewoon-dot {
+      width: 12px; height: 12px; border-radius: 50%;
+      border: 2px solid var(--border); background: var(--bg); flex-shrink: 0;
+    }
+    .daewoon-item.current .daewoon-dot { background: var(--fg); }
+    .daewoon-hanja { font-family: var(--font-display); font-size: 18px; min-width: 40px; }
+    .daewoon-kor { font-size: 13px; font-weight: 600; min-width: 36px; }
+    .daewoon-range { font-size: 11px; color: var(--muted); flex: 1; }
+    .daewoon-age { font-size: 11px; font-weight: 700; text-align: right; min-width: 60px; }
+    .now-badge {
+      background: var(--fg); color: #fff;
+      font-size: 9px; font-weight: 700; padding: 2px 7px;
+      border-radius: 999px; margin-left: 4px;
+    }
+
+    /* ════════════════════════════════
+       궁합
+    ════════════════════════════════ */
+    .zodiac-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
+    }
+    .zodiac-card {
+      border: 2px solid var(--border); border-radius: var(--radius);
+      background: var(--bg-card); box-shadow: var(--shadow-sm);
+      padding: 14px 10px; display: flex; flex-direction: column;
+      align-items: center; gap: 6px; cursor: pointer;
+      transition: transform .1s;
+    }
+    .zodiac-card:hover { transform: translate(-1px,-1px); box-shadow: var(--shadow); }
+    .zodiac-animal { font-size: 28px; }
+    .zodiac-name { font-size: 13px; font-weight: 700; }
+    .zodiac-branch { font-size: 11px; color: var(--muted); }
+    .zodiac-score {
+      font-family: var(--font-display); font-size: 20px;
+      margin-top: 2px;
+    }
+    .zodiac-relation { font-size: 10px; font-weight: 600; }
+    .grade-bar {
+      width: 100%; height: 4px; border-radius: 999px;
+      border: 1px solid var(--border);
+    }
+    /* grade 색상 */
+    .g-best  { border-color: #f59e0b; background: #fbbf24; color: #92400e; }
+    .g-good  { border-color: #16a34a; background: #bbf7d0; color: #14532d; }
+    .g-neutral { border-color: var(--border-light); background: var(--bg-muted); color: var(--muted); }
+    .g-caution { border-color: #d97706; background: #fde68a; color: #92400e; }
+    .g-bad   { border-color: #dc2626; background: #fecaca; color: #7f1d1d; }
+    .grade-bar.g-best { background: #fbbf24; }
+    .grade-bar.g-good { background: #4ade80; }
+    .grade-bar.g-neutral { background: var(--border-light); }
+    .grade-bar.g-caution { background: #fb923c; }
+    .grade-bar.g-bad { background: #f87171; }
+
+    /* 범례 */
+    .legend-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+    .legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; }
+    .legend-dot { width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid var(--border); }
+
+    /* 궁합 상세 모달 느낌 */
+    .zodiac-desc { font-size: 11px; color: var(--muted); text-align: center; line-height: 1.4; margin-top: 2px; }
+
+    /* ════════════════════════════════
+       운기
+    ════════════════════════════════ */
+    .ungi-hero {
+      border: 2px solid var(--border); border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      background: linear-gradient(135deg, #DBEAFE 0%, #E0F2FE 50%, #EDE9FE 100%);
+      padding: 28px 24px; margin-bottom: 0;
+    }
+    .ungi-hero-label { font-size: 11px; font-weight: 700; letter-spacing: .1em; color: var(--muted); margin-bottom: 6px; }
+    .ungi-hero-title { font-family: var(--font-display); font-size: 24px; margin-bottom: 4px; }
+    .ungi-hero-sub { font-size: 13px; color: var(--muted); }
+
+    .lucky-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .lucky-card {
+      border: 2px solid var(--border); border-radius: var(--radius);
+      background: var(--bg-card); box-shadow: var(--shadow);
+      padding: 20px 14px; display: flex; flex-direction: column;
+      align-items: center; gap: 8px; text-align: center;
+    }
+    .lucky-icon { font-size: 32px; }
+    .lucky-value { font-family: var(--font-display); font-size: 28px; }
+    .lucky-label { font-size: 11px; color: var(--muted); font-weight: 600; letter-spacing: .05em; }
+
+    .yongshin-big-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .yongshin-big {
+      border: 2px solid var(--border); border-radius: var(--radius);
+      background: var(--bg-card); box-shadow: var(--shadow);
+      padding: 24px; display: flex; flex-direction: column; gap: 12px;
+    }
+    .yongshin-big-top { display: flex; align-items: center; gap: 12px; }
+    .element-big-circle {
+      width: 60px; height: 60px; border-radius: 50%; border: 2px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px; box-shadow: var(--shadow-sm); flex-shrink: 0;
+    }
+    .yongshin-big-name { font-family: var(--font-display); font-size: 22px; }
+    .yongshin-big-sub { font-size: 12px; color: var(--muted); }
+    .yongshin-tip {
+      background: var(--bg-muted); border: 1px solid var(--border-light);
+      border-radius: var(--radius); padding: 10px 12px;
+      font-size: 12px; line-height: 1.6; color: var(--fg);
+    }
+
+    /* 원소별 색상 */
+    .el-water { background: #DBEAFE; }
+    .el-wood  { background: #DCFCE7; }
+    .el-fire  { background: #FEE2E2; }
+    .el-earth { background: #FEF9C3; }
+    .el-metal { background: #F1F5F9; }
+
+    /* 모바일 뷰 */
+    .is-mobile .web-grid { grid-template-columns: 1fr; }
+    .is-mobile .zodiac-grid { grid-template-columns: repeat(3, 1fr); }
+    .is-mobile .lucky-grid { grid-template-columns: repeat(3, 1fr); }
+    .is-mobile .yongshin-big-row { grid-template-columns: 1fr; }
+    .is-mobile .container { padding: 20px 16px; }
+    .is-mobile .pillars-grid .pillar-stem,
+    .is-mobile .pillars-grid .pillar-branch { font-size: 22px; padding: 10px 4px; }
+
+    /* 정통사주 왼쪽 패널 구분선 */
+    .section-gap { margin-top: 16px; }
+  </style>
+</head>
+<body>
+
+<!-- ── 네비 ── -->
+<nav class="top-nav">
+  <div class="page-tabs">
+    <button class="page-tab active" onclick="goPage('jeongtongsaju')">📖 정통사주</button>
+    <button class="page-tab" onclick="goPage('gunghap')">💑 궁합</button>
+    <button class="page-tab" onclick="goPage('ungi')">✨ 운기</button>
+  </div>
+  <div class="view-toggle">
+    <button class="view-btn" onclick="setView('mobile')">📱 모바일</button>
+    <button class="view-btn active" onclick="setView('web')">🖥 웹</button>
+  </div>
+</nav>
+
+<!-- ════════════════════════════════════
+     정통사주
+════════════════════════════════════ -->
+<div id="page-jeongtongsaju" class="page active">
+  <div class="container">
+    <div class="page-title">정통사주</div>
+    <div class="web-grid">
+
+      <!-- 좌 패널 -->
+      <div class="mobile-stack">
+
+        <!-- 명식 요약 -->
+        <div class="card">
+          <div class="card-header">나의 사주 명식</div>
+          <div class="card-body">
+            <div class="summary-row">
+              <span class="badge badge-yellow">🐓 닭띠</span>
+              <span class="badge badge-white">신약(身弱)</span>
+              <span class="badge badge-white">편인격</span>
+            </div>
+            <p style="margin-top:12px; font-size:13px; color:var(--muted); line-height:1.6">
+              계유년 병진월 을유일 신사시<br>
+              오행 중 <strong style="color:var(--fg)">금(金)이 과잉</strong>이며 수(水)가 부족합니다.
+            </p>
+          </div>
+        </div>
+
+        <!-- 4기둥 원판 -->
+        <div class="card">
+          <div class="card-header">사주 4기둥</div>
+          <div class="card-body" style="padding:16px">
+            <div class="pillars-grid">
+              <div class="pillar-col">
+                <div class="pillar-label">시주</div>
+                <div class="pillar-stem">신</div>
+                <div class="pillar-branch">사</div>
+                <div class="pillar-growth">沐浴</div>
+              </div>
+              <div class="pillar-col">
+                <div class="pillar-label">일주</div>
+                <div class="pillar-stem" style="background:#fffbeb">을</div>
+                <div class="pillar-branch" style="background:#fef9c3">유</div>
+                <div class="pillar-growth">絶</div>
+              </div>
+              <div class="pillar-col">
+                <div class="pillar-label">월주</div>
+                <div class="pillar-stem">병</div>
+                <div class="pillar-branch">진</div>
+                <div class="pillar-growth">冠帶</div>
+              </div>
+              <div class="pillar-col">
+                <div class="pillar-label">년주</div>
+                <div class="pillar-stem">계</div>
+                <div class="pillar-branch">유</div>
+                <div class="pillar-growth">絶</div>
+              </div>
+            </div>
+            <p style="margin-top:10px; font-size:10px; color:var(--muted); text-align:center">
+              일주(을유)가 본인의 핵심 기운입니다
+            </p>
+          </div>
+        </div>
+
+        <!-- 오행 밸런스 -->
+        <div class="card">
+          <div class="card-header">오행 밸런스</div>
+          <div class="card-body">
+            <div class="oheng-list">
+              <div class="oheng-row">
+                <div class="oheng-meta">
+                  <span class="oheng-name"><span class="oheng-dot" style="background:var(--metal)"></span>금(金)</span>
+                  <span style="font-size:12px; font-weight:700">33.0%</span>
+                </div>
+                <div class="oheng-bar-bg">
+                  <div class="oheng-bar-fill" style="width:33%;background:var(--metal)"></div>
+                </div>
+              </div>
+              <div class="oheng-row">
+                <div class="oheng-meta">
+                  <span class="oheng-name"><span class="oheng-dot" style="background:var(--wood)"></span>목(木)</span>
+                  <span style="font-size:12px; font-weight:700">21.6%</span>
+                </div>
+                <div class="oheng-bar-bg">
+                  <div class="oheng-bar-fill" style="width:21.6%;background:var(--wood)"></div>
+                </div>
+              </div>
+              <div class="oheng-row">
+                <div class="oheng-meta">
+                  <span class="oheng-name"><span class="oheng-dot" style="background:var(--earth)"></span>토(土)</span>
+                  <span style="font-size:12px; font-weight:700">18.0%</span>
+                </div>
+                <div class="oheng-bar-bg">
+                  <div class="oheng-bar-fill" style="width:18%;background:var(--earth)"></div>
+                </div>
+              </div>
+              <div class="oheng-row">
+                <div class="oheng-meta">
+                  <span class="oheng-name"><span class="oheng-dot" style="background:var(--fire)"></span>화(火)</span>
+                  <span style="font-size:12px; font-weight:700">14.1%</span>
+                </div>
+                <div class="oheng-bar-bg">
+                  <div class="oheng-bar-fill" style="width:14.1%;background:var(--fire)"></div>
+                </div>
+              </div>
+              <div class="oheng-row">
+                <div class="oheng-meta">
+                  <span class="oheng-name"><span class="oheng-dot" style="background:var(--water)"></span>수(水)</span>
+                  <span style="font-size:12px; font-weight:700">13.3%</span>
+                </div>
+                <div class="oheng-bar-bg">
+                  <div class="oheng-bar-fill" style="width:13.3%;background:var(--water)"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 용신 -->
+            <div style="margin-top:16px; padding-top:16px; border-top:1px dashed var(--border-light)">
+              <p style="font-size:11px; font-weight:700; color:var(--muted); letter-spacing:.05em; margin-bottom:10px">보완이 필요한 기운 (용신)</p>
+              <div class="yongshin-row">
+                <div class="yongshin-card">
+                  <div class="element-circle el-water">💧</div>
+                  <div class="yongshin-label">1차 용신</div>
+                  <div class="yongshin-name">수(水)</div>
+                </div>
+                <div class="yongshin-card">
+                  <div class="element-circle el-wood">🌿</div>
+                  <div class="yongshin-label">2차 용신</div>
+                  <div class="yongshin-name">목(木)</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /좌 -->
+
+      <!-- 우 패널 -->
+      <div class="mobile-stack">
+
+        <!-- 12운성 -->
+        <div class="card">
+          <div class="card-header">12운성 — 기둥별 에너지</div>
+          <div class="card-body" style="padding:16px">
+            <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:10px;">
+              <div class="sketch-box" style="padding:14px 8px; text-align:center">
+                <div style="font-size:10px;color:var(--muted);font-weight:700;margin-bottom:6px">시주</div>
+                <div style="font-size:22px; font-family:var(--font-display)">목욕</div>
+                <div style="font-size:10px;color:var(--muted);margin-top:4px">沐浴</div>
+                <div style="margin-top:6px;font-size:10px;line-height:1.5;color:var(--fg)">정화·씻김<br>새 시작 준비</div>
+              </div>
+              <div class="sketch-box" style="padding:14px 8px; text-align:center; background:#fffbeb">
+                <div style="font-size:10px;color:var(--muted);font-weight:700;margin-bottom:6px">일주 ★</div>
+                <div style="font-size:22px; font-family:var(--font-display)">절</div>
+                <div style="font-size:10px;color:var(--muted);margin-top:4px">絶</div>
+                <div style="margin-top:6px;font-size:10px;line-height:1.5;color:var(--fg)">에너지 소멸<br>새로운 시작</div>
+              </div>
+              <div class="sketch-box" style="padding:14px 8px; text-align:center">
+                <div style="font-size:10px;color:var(--muted);font-weight:700;margin-bottom:6px">월주</div>
+                <div style="font-size:22px; font-family:var(--font-display)">관대</div>
+                <div style="font-size:10px;color:var(--muted);margin-top:4px">冠帶</div>
+                <div style="margin-top:6px;font-size:10px;line-height:1.5;color:var(--fg)">성장·확장<br>활발한 기운</div>
+              </div>
+              <div class="sketch-box" style="padding:14px 8px; text-align:center">
+                <div style="font-size:10px;color:var(--muted);font-weight:700;margin-bottom:6px">년주</div>
+                <div style="font-size:22px; font-family:var(--font-display)">절</div>
+                <div style="font-size:10px;color:var(--muted);margin-top:4px">絶</div>
+                <div style="margin-top:6px;font-size:10px;line-height:1.5;color:var(--fg)">에너지 소멸<br>새로운 시작</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 대운 타임라인 -->
+        <div class="card">
+          <div class="card-header">대운 흐름</div>
+          <div class="daewoon-list">
+            <div class="daewoon-item">
+              <div class="daewoon-dot"></div>
+              <div class="daewoon-hanja">乙卯</div>
+              <div class="daewoon-kor">을묘</div>
+              <div class="daewoon-range">2002 – 2011</div>
+              <div class="daewoon-age">9 – 18세</div>
+            </div>
+            <div class="daewoon-item">
+              <div class="daewoon-dot"></div>
+              <div class="daewoon-hanja">甲寅</div>
+              <div class="daewoon-kor">갑인</div>
+              <div class="daewoon-range">2012 – 2021</div>
+              <div class="daewoon-age">19 – 28세</div>
+            </div>
+            <div class="daewoon-item current">
+              <div class="daewoon-dot"></div>
+              <div class="daewoon-hanja">癸丑</div>
+              <div class="daewoon-kor">계축 <span class="now-badge">NOW</span></div>
+              <div class="daewoon-range">2022 – 2031</div>
+              <div class="daewoon-age">29 – 38세</div>
+            </div>
+            <div class="daewoon-item">
+              <div class="daewoon-dot"></div>
+              <div class="daewoon-hanja">壬子</div>
+              <div class="daewoon-kor">임자</div>
+              <div class="daewoon-range">2032 – 2041</div>
+              <div class="daewoon-age">39 – 48세</div>
+            </div>
+            <div class="daewoon-item">
+              <div class="daewoon-dot"></div>
+              <div class="daewoon-hanja">辛亥</div>
+              <div class="daewoon-kor">신해</div>
+              <div class="daewoon-range">2042 – 2051</div>
+              <div class="daewoon-age">49 – 58세</div>
+            </div>
+            <div class="daewoon-item">
+              <div class="daewoon-dot"></div>
+              <div class="daewoon-hanja">庚戌</div>
+              <div class="daewoon-kor">경술</div>
+              <div class="daewoon-range">2052 – 2061</div>
+              <div class="daewoon-age">59 – 68세</div>
+            </div>
+            <div class="daewoon-item">
+              <div class="daewoon-dot"></div>
+              <div class="daewoon-hanja">己酉</div>
+              <div class="daewoon-kor">기유</div>
+              <div class="daewoon-range">2062 – 2071</div>
+              <div class="daewoon-age">69 – 78세</div>
+            </div>
+            <div class="daewoon-item">
+              <div class="daewoon-dot"></div>
+              <div class="daewoon-hanja">戊申</div>
+              <div class="daewoon-kor">무신</div>
+              <div class="daewoon-range">2072 – 2081</div>
+              <div class="daewoon-age">79 – 88세</div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /우 -->
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+     궁합
+════════════════════════════════════ -->
+<div id="page-gunghap" class="page">
+  <div class="container">
+    <div class="page-title">띠별 궁합</div>
+
+    <!-- 내 띠 -->
+    <div class="card" style="margin-bottom:20px">
+      <div class="card-body" style="display:flex;align-items:center;gap:16px">
+        <div class="element-circle" style="background:#fef9c3;width:56px;height:56px;font-size:28px">🐓</div>
+        <div>
+          <p style="font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.05em">나의 띠</p>
+          <p style="font-family:var(--font-display);font-size:22px">닭띠 (酉)</p>
+        </div>
+        <div style="margin-left:auto">
+          <div class="legend-row" style="margin-bottom:0">
+            <div class="legend-item"><span class="legend-dot" style="background:#fbbf24"></span>최고</div>
+            <div class="legend-item"><span class="legend-dot" style="background:#4ade80"></span>좋음</div>
+            <div class="legend-item"><span class="legend-dot" style="background:#d1d5db"></span>무난</div>
+            <div class="legend-item"><span class="legend-dot" style="background:#fb923c"></span>주의</div>
+            <div class="legend-item"><span class="legend-dot" style="background:#f87171"></span>나쁨</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="zodiac-grid">
+      <!-- 쥐 neutral 50 -->
+      <div class="zodiac-card">
+        <div class="zodiac-animal">🐭</div>
+        <div class="zodiac-name">쥐띠</div>
+        <div class="zodiac-branch">子</div>
+        <div class="grade-bar g-neutral" style="width:50%"></div>
+        <div class="zodiac-score">50</div>
+        <div class="badge badge-white g-neutral" style="font-size:10px;padding:2px 8px">평(平)</div>
+        <div class="zodiac-desc">무난한 관계입니다.</div>
+      </div>
+      <!-- 소 best 95 -->
+      <div class="zodiac-card" style="background:#fffbeb">
+        <div class="zodiac-animal">🐮</div>
+        <div class="zodiac-name">소띠</div>
+        <div class="zodiac-branch">丑</div>
+        <div class="grade-bar g-best" style="width:95%"></div>
+        <div class="zodiac-score">95</div>
+        <div class="badge g-best" style="font-size:10px;padding:2px 8px">삼합(三合)</div>
+        <div class="zodiac-desc">서로 부족한 점을 채워주는 최상의 궁합입니다.</div>
+      </div>
+      <!-- 호랑이 caution 40 -->
+      <div class="zodiac-card">
+        <div class="zodiac-animal">🐯</div>
+        <div class="zodiac-name">호랑이띠</div>
+        <div class="zodiac-branch">寅</div>
+        <div class="grade-bar g-caution" style="width:40%"></div>
+        <div class="zodiac-score">40</div>
+        <div class="badge g-caution" style="font-size:10px;padding:2px 8px">원진(怨嗔)</div>
+        <div class="zodiac-desc">이유 없이 서로 미워하거나 오해가 생길 수 있습니다.</div>
+      </div>
+      <!-- 토끼 bad 20 -->
+      <div class="zodiac-card">
+        <div class="zodiac-animal">🐰</div>
+        <div class="zodiac-name">토끼띠</div>
+        <div class="zodiac-branch">卯</div>
+        <div class="grade-bar g-bad" style="width:20%"></div>
+        <div class="zodiac-score">20</div>
+        <div class="badge g-bad" style="font-size:10px;padding:2px 8px">충(沖)</div>
+        <div class="zodiac-desc">서로 부딪히는 기운으로, 갈등에 주의가 필요합니다.</div>
+      </div>
+      <!-- 용 good 85 -->
+      <div class="zodiac-card">
+        <div class="zodiac-animal">🐲</div>
+        <div class="zodiac-name">용띠</div>
+        <div class="zodiac-branch">辰</div>
+        <div class="grade-bar g-good" style="width:85%"></div>
+        <div class="zodiac-score">85</div>
+        <div class="badge g-good" style="font-size:10px;padding:2px 8px">육합(六合)</div>
+        <div class="zodiac-desc">다정하고 합이 잘 맞는 좋은 관계입니다.</div>
+      </div>
+      <!-- 뱀 best 95 -->
+      <div class="zodiac-card" style="background:#fffbeb">
+        <div class="zodiac-animal">🐍</div>
+        <div class="zodiac-name">뱀띠</div>
+        <div class="zodiac-branch">巳</div>
+        <div class="grade-bar g-best" style="width:95%"></div>
+        <div class="zodiac-score">95</div>
+        <div class="badge g-best" style="font-size:10px;padding:2px 8px">삼합(三合)</div>
+        <div class="zodiac-desc">서로 부족한 점을 채워주는 최상의 궁합입니다.</div>
+      </div>
+      <!-- 말 neutral -->
+      <div class="zodiac-card">
+        <div class="zodiac-animal">🐴</div>
+        <div class="zodiac-name">말띠</div>
+        <div class="zodiac-branch">午</div>
+        <div class="grade-bar g-neutral" style="width:50%"></div>
+        <div class="zodiac-score">50</div>
+        <div class="badge badge-white g-neutral" style="font-size:10px;padding:2px 8px">평(平)</div>
+        <div class="zodiac-desc">무난한 관계입니다.</div>
+      </div>
+      <!-- 양 neutral -->
+      <div class="zodiac-card">
+        <div class="zodiac-animal">🐑</div>
+        <div class="zodiac-name">양띠</div>
+        <div class="zodiac-branch">未</div>
+        <div class="grade-bar g-neutral" style="width:50%"></div>
+        <div class="zodiac-score">50</div>
+        <div class="badge badge-white g-neutral" style="font-size:10px;padding:2px 8px">평(平)</div>
+        <div class="zodiac-desc">무난한 관계입니다.</div>
+      </div>
+      <!-- 원숭이 neutral -->
+      <div class="zodiac-card">
+        <div class="zodiac-animal">🐵</div>
+        <div class="zodiac-name">원숭이띠</div>
+        <div class="zodiac-branch">申</div>
+        <div class="grade-bar g-neutral" style="width:50%"></div>
+        <div class="zodiac-score">50</div>
+        <div class="badge badge-white g-neutral" style="font-size:10px;padding:2px 8px">평(平)</div>
+        <div class="zodiac-desc">무난한 관계입니다.</div>
+      </div>
+      <!-- 닭 best (나 자신) -->
+      <div class="zodiac-card" style="background:#fffbeb">
+        <div class="zodiac-animal">🐓</div>
+        <div class="zodiac-name">닭띠</div>
+        <div class="zodiac-branch">酉</div>
+        <div class="grade-bar g-best" style="width:95%"></div>
+        <div class="zodiac-score">95</div>
+        <div class="badge g-best" style="font-size:10px;padding:2px 8px">삼합(三合)</div>
+        <div class="zodiac-desc">서로 부족한 점을 채워주는 최상의 궁합입니다.</div>
+      </div>
+      <!-- 개 neutral -->
+      <div class="zodiac-card">
+        <div class="zodiac-animal">🐶</div>
+        <div class="zodiac-name">개띠</div>
+        <div class="zodiac-branch">戌</div>
+        <div class="grade-bar g-neutral" style="width:50%"></div>
+        <div class="zodiac-score">50</div>
+        <div class="badge badge-white g-neutral" style="font-size:10px;padding:2px 8px">평(平)</div>
+        <div class="zodiac-desc">무난한 관계입니다.</div>
+      </div>
+      <!-- 돼지 neutral -->
+      <div class="zodiac-card">
+        <div class="zodiac-animal">🐷</div>
+        <div class="zodiac-name">돼지띠</div>
+        <div class="zodiac-branch">亥</div>
+        <div class="grade-bar g-neutral" style="width:50%"></div>
+        <div class="zodiac-score">50</div>
+        <div class="badge badge-white g-neutral" style="font-size:10px;padding:2px 8px">평(平)</div>
+        <div class="zodiac-desc">무난한 관계입니다.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+     운기
+════════════════════════════════════ -->
+<div id="page-ungi" class="page">
+  <div class="container">
+    <div class="page-title">운기</div>
+
+    <!-- 히어로 -->
+    <div class="ungi-hero" style="margin-bottom:20px">
+      <div class="ungi-hero-label">내 사주 기반 행운 정보</div>
+      <div class="ungi-hero-title">수(水)의 기운을 가까이 하세요</div>
+      <div class="ungi-hero-sub">용신이 수(水)인 닭띠 — 물과 나무의 에너지가 운을 열어줍니다</div>
+    </div>
+
+    <!-- 행운 3종 -->
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-header">행운 아이템</div>
+      <div class="card-body">
+        <div class="lucky-grid">
+          <div class="lucky-card">
+            <div class="lucky-icon">🔢</div>
+            <div class="lucky-value">1</div>
+            <div class="lucky-label">행운의 숫자</div>
+          </div>
+          <div class="lucky-card">
+            <div class="lucky-icon">🧭</div>
+            <div class="lucky-value" style="font-size:22px">동쪽</div>
+            <div class="lucky-label">행운의 방향</div>
+          </div>
+          <div class="lucky-card">
+            <div class="lucky-icon">💧</div>
+            <div class="lucky-value" style="font-size:20px">수(水)</div>
+            <div class="lucky-label">행운의 원소</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 용신 상세 -->
+    <div class="card">
+      <div class="card-header">나의 용신 — 보완할 기운</div>
+      <div class="card-body">
+        <div class="yongshin-big-row">
+          <div class="yongshin-big">
+            <div class="yongshin-big-top">
+              <div class="element-big-circle el-water">💧</div>
+              <div>
+                <div style="font-size:10px;color:var(--muted);font-weight:700;letter-spacing:.05em">1차 용신</div>
+                <div class="yongshin-big-name">수(水)</div>
+                <div class="yongshin-big-sub">Water — 지혜·유연함</div>
+              </div>
+            </div>
+            <div class="yongshin-tip">
+              💡 물 관련 장소(강, 바다, 수영장)가 운기를 높여줍니다. 파란 계열 옷이나 소품을 가까이 하세요.
+            </div>
+          </div>
+          <div class="yongshin-big">
+            <div class="yongshin-big-top">
+              <div class="element-big-circle el-wood">🌿</div>
+              <div>
+                <div style="font-size:10px;color:var(--muted);font-weight:700;letter-spacing:.05em">2차 용신</div>
+                <div class="yongshin-big-name">목(木)</div>
+                <div class="yongshin-big-sub">Wood — 성장·생명력</div>
+              </div>
+            </div>
+            <div class="yongshin-tip">
+              💡 숲, 공원 등 자연 속 시간이 도움이 됩니다. 초록 식물을 실내에 두는 것도 좋습니다.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  function goPage(name) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.page-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+    event.target.classList.add('active');
+  }
+
+  function setView(mode) {
+    document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+    document.querySelectorAll('.page').forEach(p => {
+      if (mode === 'mobile') p.classList.add('is-mobile');
+      else p.classList.remove('is-mobile');
+    });
+  }
+</script>
+</body>
+</html>

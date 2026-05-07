@@ -13,6 +13,7 @@ const config = [
       "coverage/**",
       "out/**",
       "public/**",
+      "src/generated/**",
     ],
   },
 ];

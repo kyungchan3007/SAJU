@@ -23,6 +23,8 @@ const publicEnvSchema = z.object({
   NEXT_PUBLIC_KAKAO_MAP_APP_KEY: z.string().trim().default(""),
   NEXT_PUBLIC_PORTONE_STORE_ID: z.string().trim().default(""),
   NEXT_PUBLIC_TOSS_CLIENT_KEY: z.string().trim().default(""),
+  NEXT_PUBLIC_ADSENSE_CLIENT_ID: z.string().trim().default(""),
+  NEXT_PUBLIC_ADSENSE_SAJU_LOADING_SLOT: z.string().trim().default(""),
 });
 
 const serverEnvSchema = z.object({
@@ -42,6 +44,9 @@ export const env = publicEnvSchema.parse({
   NEXT_PUBLIC_KAKAO_MAP_APP_KEY: process.env.NEXT_PUBLIC_KAKAO_MAP_APP_KEY,
   NEXT_PUBLIC_PORTONE_STORE_ID: process.env.NEXT_PUBLIC_PORTONE_STORE_ID,
   NEXT_PUBLIC_TOSS_CLIENT_KEY: process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY,
+  NEXT_PUBLIC_ADSENSE_CLIENT_ID: process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID,
+  NEXT_PUBLIC_ADSENSE_SAJU_LOADING_SLOT:
+    process.env.NEXT_PUBLIC_ADSENSE_SAJU_LOADING_SLOT,
 });
 
 export function getServerEnv() {

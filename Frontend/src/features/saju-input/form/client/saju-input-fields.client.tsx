@@ -10,7 +10,6 @@ import {
   birthYearOptions,
   calendarTypeOptions,
   genderOptions,
-  timeUnknownOptions,
 } from "@/features/saju-input/model/constants";
 import InputStep, { type InputStepItem } from "@/features/saju-input/step/step";
 import type {

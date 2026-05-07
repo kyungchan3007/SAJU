@@ -1,28 +1,19 @@
 import { KAKAO_LOGIN_URL_TOKEN } from "@/shared/config/endPoint";
 import { getServerEnv } from "@/shared/config";
+import type { ApiResponseTokenResult, TokenResult } from "@/generated/api";
 
-type ExchangeData = {
+type ValidTokenResult = TokenResult & {
   accessToken: string;
   refreshToken: string;
 };
 
 type ExchangeApiResponse =
-  | { success: true; data: ExchangeData }
+  | { success: true; data: ValidTokenResult }
   | { success: false; message?: string };
 
-type BackendTokenResponse = {
-  code?: number;
-  status?: number;
-  message?: string;
-  data?: {
-    accessToken?: string;
-    refreshToken?: string;
-  };
-};
-
 function isValidExchangeData(
-  data: BackendTokenResponse["data"],
-): data is ExchangeData {
+  data: ApiResponseTokenResult["data"],
+): data is ValidTokenResult {
   return !!(data?.accessToken && data?.refreshToken);
 }
 
@@ -42,10 +33,10 @@ export async function exchangeOAuthCodeOnServer(
     body: JSON.stringify({ code }),
   });
 
-  let body: BackendTokenResponse;
+  let body: ApiResponseTokenResult;
 
   try {
-    body = (await resp.json()) as BackendTokenResponse;
+    body = (await resp.json()) as ApiResponseTokenResult;
   } catch {
     return { success: false, message: "Invalid backend response." };
   }
@@ -57,7 +48,7 @@ export async function exchangeOAuthCodeOnServer(
     };
   }
 
-  const isSuccessStatus = body.code === 200 || body.status === 200;
+  const isSuccessStatus = body.status === 200;
   if (!isSuccessStatus || !isValidExchangeData(body.data)) {
     return {
       success: false,

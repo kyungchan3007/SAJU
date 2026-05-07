@@ -110,7 +110,7 @@ export async function POST() {
   }
 
   // 2) 기본 흐름: 먼저 GET /api/saju/me/daily 조회 시도
-  const dailyResult = await onSajuDailyGetOnServer(token);
+  const dailyResult = await onSajuDailyGetOnServer();
   if (dailyResult.success) {
     const response = NextResponse.json(createSuccessResponse(dailyResult.data));
 
@@ -147,7 +147,7 @@ export async function POST() {
       );
     }
 
-    const postResult = await onSajuPostOnServer(formValues, token);
+    const postResult = await onSajuPostOnServer(formValues);
     if (!postResult.success) {
       return NextResponse.json(
         createErrorResponse("SAJU_POST_FAILED", postResult.message),

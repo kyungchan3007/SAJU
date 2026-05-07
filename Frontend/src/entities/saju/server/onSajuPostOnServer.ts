@@ -1,11 +1,16 @@
 import type { SajuFormValues } from "@/features/saju-input/type/type";
-import { getServerEnv } from "@/shared/config";
+import type {
+  ApiResponseDailyEnergyResponse,
+  DailyEnergyResponse,
+  SajuRequest,
+} from "@/generated/api";
+import { authenticatedBackendFetch } from "@/shared/api/auth/authenticatedBackendFetch";
 import { SAJU_ENDPOINT_PATH } from "@/shared/config/endPoint";
 import { toBackendBirthDate } from "@/shared/utils/BirthDate";
 
 type SajuPostSuccess = {
   success: true;
-  data: unknown;
+  data: DailyEnergyResponse | undefined;
 };
 
 type SajuPostFailure = {
@@ -16,27 +21,9 @@ type SajuPostFailure = {
 
 type SajuPostResult = SajuPostSuccess | SajuPostFailure;
 
-type BackendApiResponse = {
-  message?: string;
-  data?: unknown;
-};
-
 export async function onSajuPostOnServer(
   formValues: SajuFormValues,
-  accessToken: string,
 ): Promise<SajuPostResult> {
-  const { BACKEND_API_BASE_URL } = getServerEnv();
-
-  const url = `${BACKEND_API_BASE_URL}${SAJU_ENDPOINT_PATH}`;
-
-  if (!BACKEND_API_BASE_URL) {
-    return {
-      success: false,
-      status: 500,
-      message: "BACKEND_API_BASE_URL is not configured.",
-    };
-  }
-
   const birthDate = toBackendBirthDate(
     formValues.birthYear,
     formValues.birthDate,
@@ -50,28 +37,38 @@ export async function onSajuPostOnServer(
     };
   }
 
-  const payload = {
-    birthTime: formValues?.birthTime,
-    gender: formValues?.gender,
-    calendarType: formValues?.calendarType,
+  if (
+    !isSajuGender(formValues.gender) ||
+    !isSajuCalendarType(formValues.calendarType)
+  ) {
+    return {
+      success: false,
+      status: 400,
+      message: "Saju request values are invalid.",
+    };
+  }
+
+  const payload: SajuRequest = {
+    birthTime: formValues.birthTime || null,
+    gender: formValues.gender,
+    calendarType: formValues.calendarType,
     birthDate,
-    city: formValues?.city,
+    city: formValues.city || null,
   };
 
-  const response = await fetch(url, {
+  const result = await authenticatedBackendFetch(SAJU_ENDPOINT_PATH, {
     method: "POST",
-    cache: "no-store",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
     },
     body: JSON.stringify(payload),
   });
+  const response = result.response;
 
-  let body: BackendApiResponse | null = null;
+  let body: ApiResponseDailyEnergyResponse | null = null;
 
   try {
-    body = (await response.json()) as BackendApiResponse;
+    body = (await response.json()) as ApiResponseDailyEnergyResponse;
   } catch {
     body = null;
   }
@@ -86,6 +83,16 @@ export async function onSajuPostOnServer(
 
   return {
     success: true,
-    data: body?.data ?? body,
+    data: body?.data,
   };
+}
+
+function isSajuGender(value: string): value is SajuRequest["gender"] {
+  return value === "MALE" || value === "FEMALE";
+}
+
+function isSajuCalendarType(
+  value: string,
+): value is SajuRequest["calendarType"] {
+  return value === "SOLAR" || value === "LUNAR";
 }

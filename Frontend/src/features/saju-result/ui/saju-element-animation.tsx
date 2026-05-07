@@ -1,7 +1,5 @@
-import type { WeakElement } from "@/domain/saju/guid-card/preview-card/model/type";
-
 interface Props {
-  element: WeakElement;
+  element: string;
 }
 
 export function SajuElementAnimation({ element }: Props) {
@@ -363,7 +361,15 @@ function WaterAnimation() {
       >
         <svg width="76" height="52" viewBox="0 0 76 52">
           {/* 돛대 */}
-          <line x1="38" y1="2" x2="38" y2="28" stroke="#4e342e" strokeWidth="2.5" strokeLinecap="round" />
+          <line
+            x1="38"
+            y1="2"
+            x2="38"
+            y2="28"
+            stroke="#4e342e"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+          />
           {/* 돛 — 오른쪽 */}
           <path d="M38 4 L58 20 L38 26Z" fill="#ef5350" />
           {/* 돛 — 왼쪽 */}
@@ -375,21 +381,60 @@ function WaterAnimation() {
           {/* 선체 */}
           <path d="M6 32 L70 32 L60 50 L16 50Z" fill="#5d4037" />
           {/* 선체 측면 줄 */}
-          <line x1="18" y1="38" x2="58" y2="38" stroke="#795548" strokeWidth="1" opacity="0.6" />
+          <line
+            x1="18"
+            y1="38"
+            x2="58"
+            y2="38"
+            stroke="#795548"
+            strokeWidth="1"
+            opacity="0.6"
+          />
           {/* 선체 테두리 */}
-          <path d="M6 32 L70 32 L60 50 L16 50Z" fill="none" stroke="#3e2723" strokeWidth="1.5" />
+          <path
+            d="M6 32 L70 32 L60 50 L16 50Z"
+            fill="none"
+            stroke="#3e2723"
+            strokeWidth="1.5"
+          />
         </svg>
       </div>
 
       {/* 양쪽 물보라 */}
-      <div style={{ position: "absolute", top: "57%", left: "14%", animation: "bubble-rise 2.4s ease-in infinite" }}>
+      <div
+        style={{
+          position: "absolute",
+          top: "57%",
+          left: "14%",
+          animation: "bubble-rise 2.4s ease-in infinite",
+        }}
+      >
         <svg width="14" height="8" viewBox="0 0 14 8">
-          <path d="M0 7 Q3 2 7 5 Q11 2 14 7" fill="none" stroke="rgba(255,255,255,0.8)" strokeWidth="1.5" strokeLinecap="round" />
+          <path
+            d="M0 7 Q3 2 7 5 Q11 2 14 7"
+            fill="none"
+            stroke="rgba(255,255,255,0.8)"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+          />
         </svg>
       </div>
-      <div style={{ position: "absolute", top: "57%", left: "68%", animation: "bubble-rise 2.4s ease-in 0.8s infinite" }}>
+      <div
+        style={{
+          position: "absolute",
+          top: "57%",
+          left: "68%",
+          animation: "bubble-rise 2.4s ease-in 0.8s infinite",
+        }}
+      >
         <svg width="14" height="8" viewBox="0 0 14 8">
-          <path d="M0 7 Q3 2 7 5 Q11 2 14 7" fill="none" stroke="rgba(255,255,255,0.8)" strokeWidth="1.5" strokeLinecap="round" />
+          <path
+            d="M0 7 Q3 2 7 5 Q11 2 14 7"
+            fill="none"
+            stroke="rgba(255,255,255,0.8)"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+          />
         </svg>
       </div>
     </div>

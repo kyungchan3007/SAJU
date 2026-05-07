@@ -1,24 +1,21 @@
 import Link from "next/link";
+import type { DailyEnergyResponse } from "@/generated/api";
 
-import {
-  locationItems,
-  ohengItems,
-  statItems,
-  todayItems,
-} from "@/domain/saju/guid-card/preview-card/model/model";
-import {
-  DailySajuResult,
-  SajuPreviewCardProps,
-} from "@/domain/saju/guid-card/preview-card/model/type";
+import { ohengItems } from "@/domain/saju/guid-card/preview-card/model/model";
+import { ExpandableTextRow } from "@/domain/saju/guid-card/preview-card/expandable-text-row";
 import { SajuElementAnimation } from "@/features/saju-result/ui/saju-element-animation";
 import { rankObjectValues } from "@/shared/utils/rankByValue";
 import { formatWeakElementLabel } from "@/shared/utils/weakElement";
 
 const cardBase = "sketch-border p-5";
 
+type SajuPreviewCardProps = {
+  dailyResult?: DailyEnergyResponse | null;
+};
+
 export function SajuHeroSection({ dailyResult }: SajuPreviewCardProps) {
   return (
-    <div className="grid grid-cols-[1.1fr_0.9fr] gap-[18px]">
+    <div className="grid grid-cols-1 gap-[18px] sm:grid-cols-[1.1fr_0.9fr]">
       <div className="sketch-border relative overflow-hidden p-6">
         <p className="mb-3.5 text-xs font-bold uppercase tracking-[0.16em] text-black/50">
           오늘의 기운
@@ -26,9 +23,9 @@ export function SajuHeroSection({ dailyResult }: SajuPreviewCardProps) {
         <h2 className="text-2xl font-bold leading-tight tracking-tight text-black">
           오늘의 흐름은
           <br />
-          {dailyResult?.avoidFlows[0]}
+          {dailyResult?.avoidFlows?.[0] ?? "-"}
           <br />
-          {dailyResult?.avoidFlows[1]}
+          {dailyResult?.avoidFlows?.[1] ?? "-"}
         </h2>
         <p className="mt-3 text-sm leading-relaxed text-black/60">
           {dailyResult?.dailyMessage}
@@ -59,7 +56,7 @@ export function SajuHeroSection({ dailyResult }: SajuPreviewCardProps) {
 
 export function SajuStatsSection({ dailyResult }: SajuPreviewCardProps) {
   return (
-    <div className="grid grid-cols-4 gap-3.5">
+    <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-4">
       <div className={cardBase}>
         <strong className="block text-xl font-bold tracking-tight text-black">
           {dailyResult?.todayScore} 점
@@ -97,7 +94,7 @@ export function SajuInsightsSection({ dailyResult }: SajuPreviewCardProps) {
   );
 
   return (
-    <div className="grid grid-cols-2 gap-[18px]">
+    <div className="grid grid-cols-1 gap-[18px] sm:grid-cols-2">
       <div className={cardBase}>
         <h4 className="text-base font-bold text-black">오행 밸런스</h4>
         <div className="mt-4 grid gap-2.5">
@@ -124,34 +121,19 @@ export function SajuInsightsSection({ dailyResult }: SajuPreviewCardProps) {
           급하게 결론을 내리기보다 환경을 고르는 쪽이 더 중요한 날입니다. 호흡이
           느린 공간이 잘 맞습니다.
         </p>
-        <div className="mt-4 grid gap-2.5">
-          {/*{todayItems.map((item) => (*/}
-          {/*  <div*/}
-          {/*    key={item.label}*/}
-          {/*    className="flex items-center justify-between gap-3 border-b border-black/15 px-1 py-2"*/}
-          {/*  >*/}
-          {/*    <span className="text-xs font-bold text-black">{item.label}</span>*/}
-          {/*    <small className="text-xs text-black/50">{item.value}</small>*/}
-          {/*  </div>*/}
-          {/*))}*/}
-          <div className="flex items-center justify-between gap-3 border-b border-black/15 px-1 py-2">
-            <span className="text-xs font-bold text-black">좋은 행동</span>
-            <small className="text-xs text-black/50">
-              {dailyResult?.goodActions?.join(", ") ?? "-"}
-            </small>
-          </div>{" "}
-          <div className="flex items-center justify-between gap-3 border-b border-black/15 px-1 py-2">
-            <span className="text-xs font-bold text-black">피할 흐름</span>
-            <small className="text-xs text-black/50">
-              {dailyResult?.goodActions[0]}
-            </small>
-          </div>
-          <div className="flex items-center justify-between gap-3 border-b border-black/15 px-1 py-2">
-            <span className="text-xs font-bold text-black">권장 장소</span>
-            <small className="text-xs text-black/50">
-              {dailyResult?.recommendPlaces?.join(", ") ?? "-"}
-            </small>
-          </div>
+        <div className="mt-4 grid gap-0">
+          <ExpandableTextRow
+            label="좋은 행동"
+            value={dailyResult?.goodActions?.join(", ") ?? "-"}
+          />
+          <ExpandableTextRow
+            label="피할 흐름"
+            value={dailyResult?.avoidActions?.join(", ") ?? "-"}
+          />
+          <ExpandableTextRow
+            label="권장 장소"
+            value={dailyResult?.recommendPlaces?.join(", ") ?? "-"}
+          />
         </div>
       </div>
     </div>

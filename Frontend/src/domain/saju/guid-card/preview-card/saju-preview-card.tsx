@@ -1,9 +1,13 @@
+import type { DailyEnergyResponse } from "@/generated/api";
 import {
   SajuHeroSection,
   SajuInsightsSection,
   SajuStatsSection,
 } from "@/domain/saju/guid-card/preview-card/saju-preview-card.sections";
-import { SajuPreviewCardProps } from "@/domain/saju/guid-card/preview-card/model/type";
+
+type SajuPreviewCardProps = {
+  dailyResult?: DailyEnergyResponse | null;
+};
 
 export function SajuPreviewCard({ dailyResult }: SajuPreviewCardProps) {
   return (

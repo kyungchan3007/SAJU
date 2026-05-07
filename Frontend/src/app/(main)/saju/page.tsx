@@ -1,5 +1,6 @@
 import { SajuInput } from "@/widgets/saju-input";
 import { Metadata } from "next";
+import type { Route } from "next";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -23,7 +24,7 @@ export default async function SajuPage() {
   const accessToken = (await cookies()).get("saju_access_token")?.value;
 
   if (accessToken) {
-    redirect("/saju/result");
+    redirect("/saju/result" as Route);
   }
 
   return (

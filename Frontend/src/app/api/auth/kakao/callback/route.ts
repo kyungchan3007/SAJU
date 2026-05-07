@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { exchangeOAuthCodeOnServer } from "@/entities/auth/server/exchangeOAuthCodeOnServer";
+import {
+  ACCESS_TOKEN_COOKIE_KEY,
+  REFRESH_TOKEN_COOKIE_KEY,
+} from "@/shared/config/authToken";
 
-const ACCESS_TOKEN_COOKIE_KEY = "saju_access_token";
-const REFRESH_TOKEN_COOKIE_KEY = "saju_refresh_token";
 const DEFAULT_POST_LOGIN_PATH = "/saju/result";
 
 export async function GET(req: NextRequest) {

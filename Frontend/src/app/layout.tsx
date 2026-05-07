@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
 import { Jua, Noto_Sans_KR } from "next/font/google";
+import Script from "next/script";
 import type { ReactNode } from "react";
+import { cookies } from "next/headers";
 import { env } from "@/shared/config";
 import { Providers } from "@/shared/ui";
+import { GlobalNav } from "@/widgets/global-nav";
 import "./globals.css";
 
 /**
@@ -65,14 +68,26 @@ type RootLayoutProps = {
   children: ReactNode;
 };
 
-export default function RootLayout({ children }: RootLayoutProps) {
+export default async function RootLayout({ children }: RootLayoutProps) {
+  const isLoggedIn = !!(await cookies()).get("saju_access_token")?.value;
   return (
     <html lang="ko" suppressHydrationWarning>
       <body
-        className={`${notoSansKr.variable} ${jua.variable} min-h-dvh font-sans text-foreground antialiased`}
+        className={`${notoSansKr.variable} ${jua.variable} min-h-dvh font-sans text-foreground antialiased md:pt-14 pb-16 md:pb-0`}
         style={{ backgroundColor: "rgb(250 248 242)" }}
       >
-        <Providers>{children}</Providers>
+        {env.NEXT_PUBLIC_ADSENSE_CLIENT_ID ? (
+          <Script
+            async
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${env.NEXT_PUBLIC_ADSENSE_CLIENT_ID}`}
+            crossOrigin="anonymous"
+            strategy="afterInteractive"
+          />
+        ) : null}
+        <Providers>
+          <GlobalNav isLoggedIn={isLoggedIn} />
+          {children}
+        </Providers>
       </body>
     </html>
   );

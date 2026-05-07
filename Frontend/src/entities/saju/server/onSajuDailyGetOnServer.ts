@@ -1,9 +1,13 @@
-import { getServerEnv } from "@/shared/config";
+import {
+  ApiResponseDailyEnergyResponse,
+  DailyEnergyResponse,
+} from "@/generated/api";
 import { SAJU_DAILY_ENDPOINT_PATH } from "@/shared/config/endPoint";
+import { authenticatedBackendFetch } from "@/shared/api/auth/authenticatedBackendFetch";
 
 type SajuDailyGetSuccess = {
   success: true;
-  data: unknown;
+  data: DailyEnergyResponse | undefined;
 };
 
 type SajuDailyGetFailure = {
@@ -14,34 +18,17 @@ type SajuDailyGetFailure = {
 
 type SajuDailyGetResult = SajuDailyGetSuccess | SajuDailyGetFailure;
 
-type BackendApiResponse = {
-  message?: string;
-  data?: unknown;
-};
-
-export async function onSajuDailyGetOnServer(
-  accessToken: string,
-): Promise<SajuDailyGetResult> {
-  const { BACKEND_API_BASE_URL } = getServerEnv();
-  if (!BACKEND_API_BASE_URL) {
-    return {
-      success: false,
-      status: 500,
-      message: "BACKEND_API_BASE_URL is not configured.",
-    };
-  }
-
-  const response = await fetch(`${BACKEND_API_BASE_URL}${SAJU_DAILY_ENDPOINT_PATH}`, {
+export async function onSajuDailyGetOnServer(): Promise<SajuDailyGetResult> {
+  const result = await authenticatedBackendFetch(SAJU_DAILY_ENDPOINT_PATH, {
     method: "GET",
-    cache: "no-store",
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
   });
 
-  let body: BackendApiResponse | null = null;
+  const response = result.response;
+
+  let body: ApiResponseDailyEnergyResponse | null = null;
+
   try {
-    body = (await response.json()) as BackendApiResponse;
+    body = (await response.json()) as ApiResponseDailyEnergyResponse;
   } catch {
     body = null;
   }
@@ -57,6 +44,6 @@ export async function onSajuDailyGetOnServer(
 
   return {
     success: true,
-    data: body?.data ?? body,
+    data: body?.data,
   };
 }

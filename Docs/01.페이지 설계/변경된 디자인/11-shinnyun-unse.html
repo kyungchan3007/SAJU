@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>신년운세 — 점신 프로토타입</title>
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<style>
+/* ─── Design Tokens (Sketch System) ─── */
+:root {
+  --bg: #F8F6F1;
+  --bg2: #FDFCF8;
+  --card: #FFFEF9;
+  --border: #0d0d0d;
+  --border-light: rgba(13,13,13,0.12);
+  --text: #0d0d0d;
+  --muted: rgba(13,13,13,0.45);
+  --shadow-sm: 2px 2px 0 #0d0d0d;
+  --shadow-md: 3px 3px 0 #0d0d0d;
+  --shadow-lg: 4px 4px 0 #0d0d0d;
+  --yellow: #FDE047;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+/* ─── Viewport Toggle ─── */
+.toggle-bar {
+  position: fixed; top: 12px; left: 50%; transform: translateX(-50%);
+  z-index: 999; display: flex; gap: 8px;
+  background: var(--card); border: 2px solid var(--border);
+  padding: 6px; border-radius: 8px; box-shadow: var(--shadow-sm);
+}
+.toggle-bar button {
+  padding: 6px 18px; border: 2px solid transparent; border-radius: 4px;
+  font-family: 'Noto Sans KR', sans-serif; font-size: 12px; font-weight: 700;
+  cursor: pointer; background: transparent; color: var(--muted); transition: all .15s;
+}
+.toggle-bar button.active { background: var(--text); color: white; border-color: var(--text); }
+
+/* ─── Shell ─── */
+.shell { max-width: 1100px; margin: 0 auto; padding: 64px 24px 80px; }
+.shell.mobile-shell { max-width: 390px; padding: 56px 16px 80px; }
+
+/* ─── Card ─── */
+.card { background: var(--card); border: 2px solid var(--border); border-radius: var(--radius-md); box-shadow: var(--shadow-md); overflow: hidden; }
+.card-header { display: flex; align-items: center; justify-content: space-between; padding: 13px 18px; border-bottom: 2px solid var(--border); background: rgb(240 238 232); }
+.card-header h3 { font-family: 'Jua', sans-serif; font-size: 14px; letter-spacing: -.01em; }
+.card-body { padding: 16px 18px; }
+
+/* ─── Hero Banner ─── */
+.hero-banner {
+  border: 2px solid var(--border); border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg); overflow: hidden;
+  background: #0d0d0d; color: white; position: relative;
+}
+.hero-deco {
+  position: absolute; inset: 0; z-index: 0; overflow: hidden;
+  background:
+    radial-gradient(ellipse at 85% 15%, rgba(253,224,71,.18), transparent 40%),
+    radial-gradient(ellipse at 15% 85%, rgba(139,92,246,.14), transparent 38%),
+    radial-gradient(ellipse at 55% 55%, rgba(59,130,246,.08), transparent 50%);
+}
+.hero-inner { padding: 24px 22px; position: relative; z-index: 1; }
+.hero-badge {
+  display: inline-block; padding: 3px 10px; border-radius: 99px;
+  border: 1.5px solid rgba(253,224,71,.45); font-size: 10px; font-weight: 700;
+  color: #FDE047; margin-bottom: 10px; background: rgba(253,224,71,.08); letter-spacing: .08em;
+}
+.hero-title { font-family: 'Jua', sans-serif; font-size: clamp(20px,4vw,32px); line-height: 1.2; margin-bottom: 8px; }
+.hero-title .yr { color: #FDE047; }
+.hero-sub { font-size: 12px; color: rgba(255,255,255,.5); line-height: 1.7; }
+.hero-score-num {
+  font-family: 'Jua', sans-serif; font-size: 48px; line-height: 1;
+  background: linear-gradient(135deg,#FDE047 20%,#F59E0B 80%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.hero-grade {
+  font-size: 12px; font-weight: 900; padding: 3px 10px; border-radius: 99px;
+  background: rgba(253,224,71,.15); border: 1.5px solid rgba(253,224,71,.3); color: #FDE047;
+}
+
+/* ─── Score Meter ─── */
+.meter-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.meter-row:last-child { margin-bottom: 0; }
+.meter-icon { font-size: 15px; flex-shrink: 0; }
+.meter-label { font-size: 12px; font-weight: 700; width: 48px; flex-shrink: 0; }
+.meter-bg { flex: 1; height: 8px; background: rgba(13,13,13,.08); border-radius: 99px; overflow: hidden; border: 1px solid rgba(13,13,13,.1); }
+.meter-fill { height: 100%; border-radius: 99px; }
+.meter-val { font-size: 11px; font-weight: 700; width: 24px; text-align: right; color: var(--muted); }
+
+/* ─── Lucky Grid ─── */
+.lucky-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; }
+.lucky-grid.two-col { grid-template-columns: repeat(2,1fr); }
+.lucky-item { border: 2px solid var(--border); border-radius: var(--radius-sm); padding: 12px 8px; text-align: center; box-shadow: var(--shadow-sm); background: var(--card); }
+.lucky-item .li-icon { font-size: 22px; margin-bottom: 5px; }
+.lucky-item .li-label { font-size: 10px; color: var(--muted); font-weight: 600; margin-bottom: 2px; }
+.lucky-item .li-val { font-size: 13px; font-weight: 900; }
+
+/* ─── Month Grid ─── */
+.month-grid { display: grid; grid-template-columns: repeat(6,1fr); gap: 6px; }
+.month-grid.four-col { grid-template-columns: repeat(4,1fr); }
+.month-cell {
+  border: 2px solid var(--border); border-radius: var(--radius-sm);
+  padding: 8px 4px; text-align: center; cursor: pointer;
+  background: var(--card); box-shadow: 2px 2px 0 var(--border); transition: all .1s;
+}
+.month-cell:hover, .month-cell.active { background: var(--text); color: white; transform: translate(-1px,-1px); box-shadow: 3px 3px 0 var(--border); }
+.month-cell .mc-mo { font-size: 10px; color: var(--muted); font-weight: 600; margin-bottom: 2px; }
+.month-cell.active .mc-mo, .month-cell:hover .mc-mo { color: rgba(255,255,255,.6); }
+.month-cell .mc-grade { font-size: 15px; margin-bottom: 2px; }
+.month-cell .mc-stars { font-size: 7px; letter-spacing: 1px; color: #F59E0B; }
+.month-cell.active .mc-stars, .month-cell:hover .mc-stars { color: #FDE047; }
+.month-detail { border: 2px solid var(--border); border-radius: var(--radius-sm); padding: 14px 16px; background: rgb(253 251 245); }
+.month-detail-title { font-family: 'Jua', sans-serif; font-size: 15px; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+.month-detail-tag { display: inline-block; padding: 2px 8px; border-radius: 99px; border: 1.5px solid var(--border); font-size: 10px; font-weight: 700; background: var(--yellow); box-shadow: 1px 1px 0 var(--border); }
+.month-detail p { font-size: 13px; line-height: 1.8; color: rgba(13,13,13,.68); }
+
+/* ─── Web 2-col ─── */
+.web-grid { display: grid; grid-template-columns: 268px 1fr; gap: 18px; align-items: start; }
+.sidebar { display: flex; flex-direction: column; gap: 14px; }
+.main-col { display: flex; flex-direction: column; gap: 14px; }
+
+/* ─── Mobile stack ─── */
+.m-stack { display: flex; flex-direction: column; gap: 12px; }
+
+/* ─── Sticky Tab (mobile) ─── */
+.sticky-tabs {
+  position: fixed; top: 44px; left: 0; right: 0; z-index: 50;
+  display: flex; border-bottom: 2px solid var(--border);
+  background: var(--card); padding: 0 16px; overflow-x: auto;
+}
+.sticky-tab {
+  padding: 9px 14px; font-size: 12px; font-weight: 700; flex-shrink: 0;
+  border-bottom: 3px solid transparent; cursor: pointer; color: var(--muted);
+  background: transparent; border-left: none; border-right: none; border-top: none;
+}
+.sticky-tab.active { color: var(--text); border-bottom-color: var(--text); }
+
+/* ─── Domain Pill ─── */
+.domain-pill {
+  display: inline-flex; align-items: center; gap: 4px; padding: 5px 12px;
+  border: 2px solid var(--border); border-radius: 99px; font-size: 11px; font-weight: 700;
+  box-shadow: 2px 2px 0 var(--border); background: var(--card); cursor: pointer; transition: all .1s;
+}
+.domain-pill:hover, .domain-pill.active { background: var(--text); color: white; transform: translate(-1px,-1px); box-shadow: 3px 3px 0 var(--border); }
+
+/* ─── CTA Button ─── */
+.cta-btn {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%; padding: 16px; border: 2px solid var(--border); border-radius: var(--radius-sm);
+  font-family: 'Jua', sans-serif; font-size: 15px; cursor: pointer;
+  background: var(--text); color: white; box-shadow: var(--shadow-md);
+  transition: all .1s; letter-spacing: -.01em;
+}
+.cta-btn:hover { transform: translate(-1px,-1px); box-shadow: 4px 4px 0 var(--border); }
+.cta-btn.secondary { background: var(--yellow); color: var(--text); }
+
+/* ─── Back Button ─── */
+.back-btn {
+  display: inline-flex; align-items: center; gap: 5px; padding: 7px 14px;
+  border: 2px solid var(--border); border-radius: 99px; font-size: 12px; font-weight: 700;
+  background: var(--card); cursor: pointer; box-shadow: var(--shadow-sm); transition: all .1s;
+}
+.back-btn:hover { transform: translate(-1px,-1px); box-shadow: 3px 3px 0 var(--border); }
+
+/* ─── Detail Text Styles ─── */
+.year-highlight { padding: 14px 16px; border-radius: var(--radius-sm); border: 2px solid var(--border); background: rgb(253 251 240); box-shadow: var(--shadow-sm); }
+.yh-label { font-size: 10px; font-weight: 700; color: var(--muted); letter-spacing: .1em; margin-bottom: 6px; }
+.yh-text { font-size: 13px; line-height: 1.85; color: rgba(13,13,13,.72); }
+.kw-highlight { display: inline-block; background: var(--yellow); padding: 0 3px; border-radius: 2px; font-weight: 700; }
+.kw-tag { padding: 3px 9px; border: 1.5px solid var(--border-light); border-radius: 99px; font-size: 10px; font-weight: 700; color: var(--muted); background: var(--bg); display: inline-block; }
+
+/* ─── Alert Cards ─── */
+.alert { display: flex; align-items: flex-start; gap: 8px; padding: 9px 11px; border-radius: 4px; margin-bottom: 7px; }
+.alert:last-child { margin-bottom: 0; }
+.alert-icon { font-size: 13px; flex-shrink: 0; margin-top: 1px; }
+.alert-text { font-size: 12px; line-height: 1.7; }
+
+/* ─── Saju Info Bar ─── */
+.saju-bar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 9px 14px; border: 2px solid var(--border); border-radius: var(--radius-sm); background: rgb(240 238 232); box-shadow: var(--shadow-sm); }
+.pillar { display: flex; flex-direction: column; align-items: center; gap: 1px; }
+.pillar-ch { font-family: 'Jua', sans-serif; font-size: 17px; }
+.pillar-ro { font-size: 9px; color: var(--muted); }
+.vdivider { width: 1px; height: 28px; background: var(--border-light); }
+.period-badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 9px; border-radius: 99px; border: 1.5px solid var(--border); font-size: 11px; font-weight: 700; background: var(--yellow); box-shadow: 1px 1px 0 var(--border); }
+
+/* ─── Lock CTA area ─── */
+.lock-cta {
+  border: 2px dashed rgba(13,13,13,.2); border-radius: var(--radius-md);
+  padding: 32px 20px; text-align: center; background: rgba(253,224,71,.04);
+}
+.lock-icon { font-size: 34px; margin-bottom: 10px; }
+.lock-title { font-family: 'Jua', sans-serif; font-size: 17px; margin-bottom: 6px; }
+.lock-desc { font-size: 12px; color: var(--muted); line-height: 1.7; margin-bottom: 18px; }
+
+/* ─── Page nav ─── */
+.page-nav { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+</style>
+</head>
+<body>
+
+<!-- Viewport Toggle -->
+<div class="toggle-bar">
+  <button class="active" onclick="setViewport('web')">💻 웹</button>
+  <button onclick="setViewport('mobile')">📱 모바일</button>
+</div>
+
+<!-- ════════════════════════════════════
+     WEB VIEW
+════════════════════════════════════ -->
+<div id="vw-web">
+
+  <!-- ══ PAGE 1: 기본 신년운세 ══ -->
+  <div class="shell" id="wp1">
+
+    <!-- Header -->
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:18px;flex-wrap:wrap;">
+      <div>
+        <p style="font-size:11px;font-weight:700;letter-spacing:.12em;color:var(--muted);margin-bottom:4px;">SHINNYUN UNSE</p>
+        <h1 style="font-family:'Jua',sans-serif;font-size:26px;letter-spacing:-.02em;">2025년 신년운세 <span style="font-size:15px;color:var(--muted);font-family:'Noto Sans KR';">乙巳年</span></h1>
+      </div>
+      <div class="saju-bar">
+        <span style="font-size:11px;color:var(--muted);font-weight:600;">내 사주</span>
+        <div class="vdivider"></div>
+        <div class="pillar"><span class="pillar-ch">己</span><span class="pillar-ro">年</span></div>
+        <div class="pillar"><span class="pillar-ch">巳</span><span class="pillar-ro">月</span></div>
+        <div class="vdivider"></div>
+        <div class="pillar"><span class="pillar-ch">庚</span><span class="pillar-ro">日</span></div>
+        <div class="pillar"><span class="pillar-ch">午</span><span class="pillar-ro">時</span></div>
+        <div class="vdivider"></div>
+        <span class="period-badge">🐍 뱀띠</span>
+      </div>
+    </div>
+
+    <!-- Hero -->
+    <div class="hero-banner" style="margin-bottom:18px;">
+      <div class="hero-deco"></div>
+      <div class="hero-inner" style="display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center;">
+        <div>
+          <div class="hero-badge">✦ 2025년 乙巳年 운세</div>
+          <div class="hero-title"><span class="yr">2025년</span>은<br>도약과 변화의 해</div>
+          <p class="hero-sub">乙巳年 — 나무가 불을 만나 빛을 발하는 형상.<br>오랜 준비가 결실로 이어지는 운기입니다.</p>
+        </div>
+        <div style="text-align:center;flex-shrink:0;">
+          <div style="font-size:18px;letter-spacing:3px;margin-bottom:4px;">⭐⭐⭐⭐</div>
+          <div class="hero-score-num">82</div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:4px;margin-top:4px;">
+            <span class="hero-grade">대길 ✦</span>
+            <span style="font-size:10px;color:rgba(255,255,255,.38);">종합 상위 18%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2-col Grid -->
+    <div class="web-grid">
+
+      <!-- Sidebar -->
+      <div class="sidebar">
+
+        <!-- 종합 운세 점수 -->
+        <div class="card">
+          <div class="card-header"><h3>📊 종합 운세 점수</h3></div>
+          <div class="card-body" style="display:flex;flex-direction:column;gap:8px;">
+            <div class="meter-row"><span class="meter-icon">💰</span><span class="meter-label">재물운</span><div class="meter-bg"><div class="meter-fill" style="width:78%;background:#F59E0B;"></div></div><span class="meter-val">78</span></div>
+            <div class="meter-row"><span class="meter-icon">💕</span><span class="meter-label">연애운</span><div class="meter-bg"><div class="meter-fill" style="width:65%;background:#EC4899;"></div></div><span class="meter-val">65</span></div>
+            <div class="meter-row"><span class="meter-icon">💼</span><span class="meter-label">직업운</span><div class="meter-bg"><div class="meter-fill" style="width:88%;background:#3B82F6;"></div></div><span class="meter-val">88</span></div>
+            <div class="meter-row"><span class="meter-icon">🌿</span><span class="meter-label">건강운</span><div class="meter-bg"><div class="meter-fill" style="width:72%;background:#22C55E;"></div></div><span class="meter-val">72</span></div>
+            <div class="meter-row"><span class="meter-icon">🤝</span><span class="meter-label">인간관계</span><div class="meter-bg"><div class="meter-fill" style="width:83%;background:#8B5CF6;"></div></div><span class="meter-val">83</span></div>
+            <div class="meter-row"><span class="meter-icon">📚</span><span class="meter-label">학업운</span><div class="meter-bg"><div class="meter-fill" style="width:70%;background:#F97316;"></div></div><span class="meter-val">70</span></div>
+          </div>
+        </div>
+
+        <!-- 행운 아이템 -->
+        <div class="card">
+          <div class="card-header"><h3>🍀 행운 아이템</h3></div>
+          <div class="card-body" style="padding:12px;">
+            <div class="lucky-grid">
+              <div class="lucky-item"><div class="li-icon">🎨</div><div class="li-label">행운 색상</div><div class="li-val" style="color:#3B82F6;">파란색</div></div>
+              <div class="lucky-item"><div class="li-icon">🔢</div><div class="li-label">행운 숫자</div><div class="li-val">3 · 7</div></div>
+              <div class="lucky-item"><div class="li-icon">🧭</div><div class="li-label">길한 방향</div><div class="li-val">동북</div></div>
+              <div class="lucky-item"><div class="li-icon">💎</div><div class="li-label">행운 소재</div><div class="li-val">청옥</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 주의사항 -->
+        <div class="card">
+          <div class="card-header"><h3>⚠️ 2025 주의사항</h3></div>
+          <div class="card-body">
+            <div class="alert" style="border:1.5px solid rgba(239,68,68,.2);background:#FEF2F2;border-radius:4px;"><span class="alert-icon">🔴</span><span class="alert-text">4월·9월은 재물 손실 주의. 충동 투자는 금물.</span></div>
+            <div class="alert" style="border:1.5px solid rgba(234,179,8,.2);background:#FEFCE8;border-radius:4px;"><span class="alert-icon">🟡</span><span class="alert-text">6월은 건강 관리 중요. 과로·수면 부족 삼가세요.</span></div>
+            <div class="alert" style="border:1.5px solid rgba(59,130,246,.2);background:#EFF6FF;border-radius:4px;"><span class="alert-icon">🔵</span><span class="alert-text">새로운 파트너십은 계약서를 꼼꼼히 확인 후 진행.</span></div>
+          </div>
+        </div>
+
+      </div><!-- /sidebar -->
+
+      <!-- Main -->
+      <div class="main-col">
+
+        <!-- 월별 운세 -->
+        <div class="card">
+          <div class="card-header">
+            <h3>📅 월별 운세</h3>
+            <span style="font-size:11px;color:var(--muted);">월을 클릭해 상세 확인</span>
+          </div>
+          <div class="card-body" style="display:flex;flex-direction:column;gap:12px;">
+            <div class="month-grid" id="wMonthGrid"></div>
+            <div class="month-detail">
+              <div class="month-detail-title">
+                <span id="wDetailMo">1월</span>
+                <span class="month-detail-tag" id="wDetailTag">🔵 길</span>
+              </div>
+              <p id="wDetailTxt"></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 상세풀이 CTA -->
+        <div class="lock-cta">
+          <div class="lock-icon">🔮</div>
+          <div class="lock-title">신년운세 상세 풀이</div>
+          <p class="lock-desc">
+            연간 총평과 재물·연애·직업·건강<br>
+            분야별 심층 운세 풀이를 확인해보세요.
+          </p>
+          <button class="cta-btn secondary" style="max-width:260px;margin:0 auto;" onclick="goDetail('web')">
+            ✨ 신년운세 상세풀이 보기
+          </button>
+        </div>
+
+      </div><!-- /main -->
+    </div>
+  </div><!-- /wp1 -->
+
+
+  <!-- ══ PAGE 2: 상세풀이 ══ -->
+  <div class="shell" id="wp2" style="display:none;">
+
+    <!-- Nav -->
+    <div class="page-nav">
+      <button class="back-btn" onclick="goBack('web')">← 신년운세</button>
+      <span style="font-size:13px;font-weight:700;color:var(--muted);">상세 풀이</span>
+    </div>
+
+    <div class="web-grid">
+
+      <!-- Sidebar: 점수 요약 -->
+      <div class="sidebar">
+
+        <div class="card">
+          <div class="card-header"><h3>📊 운세 점수 요약</h3></div>
+          <div class="card-body" style="display:flex;flex-direction:column;gap:8px;">
+            <div class="meter-row"><span class="meter-icon">💰</span><span class="meter-label">재물운</span><div class="meter-bg"><div class="meter-fill" style="width:78%;background:#F59E0B;"></div></div><span class="meter-val">78</span></div>
+            <div class="meter-row"><span class="meter-icon">💕</span><span class="meter-label">연애운</span><div class="meter-bg"><div class="meter-fill" style="width:65%;background:#EC4899;"></div></div><span class="meter-val">65</span></div>
+            <div class="meter-row"><span class="meter-icon">💼</span><span class="meter-label">직업운</span><div class="meter-bg"><div class="meter-fill" style="width:88%;background:#3B82F6;"></div></div><span class="meter-val">88</span></div>
+            <div class="meter-row"><span class="meter-icon">🌿</span><span class="meter-label">건강운</span><div class="meter-bg"><div class="meter-fill" style="width:72%;background:#22C55E;"></div></div><span class="meter-val">72</span></div>
+            <div class="meter-row"><span class="meter-icon">🤝</span><span class="meter-label">인간관계</span><div class="meter-bg"><div class="meter-fill" style="width:83%;background:#8B5CF6;"></div></div><span class="meter-val">83</span></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><h3>🗝 올해의 키워드</h3></div>
+          <div class="card-body" style="display:flex;gap:6px;flex-wrap:wrap;">
+            <span class="kw-tag">🚀 도약</span>
+            <span class="kw-tag">💡 창의</span>
+            <span class="kw-tag">🤝 인연</span>
+            <span class="kw-tag">💰 확장</span>
+            <span class="kw-tag">🎯 집중</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><h3>📆 유리 / 주의 시기</h3></div>
+          <div class="card-body" style="display:flex;flex-direction:column;gap:8px;">
+            <div style="padding:10px;border:2px solid var(--border);border-radius:4px;background:#F0FDF4;box-shadow:2px 2px 0 var(--border);">
+              <div style="font-size:10px;font-weight:700;color:#16A34A;margin-bottom:4px;">✅ 유리한 시기</div>
+              <p style="font-size:12px;line-height:1.7;color:rgba(13,13,13,.7);">3월 · 5월 · 7~8월 · 11월</p>
+            </div>
+            <div style="padding:10px;border:2px solid var(--border);border-radius:4px;background:#FEF2F2;box-shadow:2px 2px 0 var(--border);">
+              <div style="font-size:10px;font-weight:700;color:#DC2626;margin-bottom:4px;">⚠️ 주의 시기</div>
+              <p style="font-size:12px;line-height:1.7;color:rgba(13,13,13,.7);">4월 · 6월 · 9월</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Main: 연간총평 + 분야별 상세 -->
+      <div class="main-col">
+
+        <!-- 연간 총평 -->
+        <div class="card">
+          <div class="card-header">
+            <h3>🌟 2025년 연간 총평</h3>
+            <span style="font-size:10px;color:var(--muted);">乙巳年 운기 분석</span>
+          </div>
+          <div class="card-body" style="display:flex;flex-direction:column;gap:12px;">
+            <div class="year-highlight">
+              <div class="yh-label">종합 운세 풀이</div>
+              <p class="yh-text">
+                2025년 <span class="kw-highlight">乙巳年</span>은 천간 乙木이 지지 巳火를 만나
+                목생화(木生火)의 상생 구조가 형성되는 해입니다.
+                내면의 재능이 밖으로 표출되며, 오랫동안 준비해온 계획이
+                <span class="kw-highlight">구체적 성과</span>로 이어질 가능성이 높습니다.
+                특히 상반기 3~5월은 기회의 창이 크게 열리는 시기로, 적극적인 행동이 유리합니다.
+                단, 과도한 확장보다는 선택과 집중이 장기적으로 더 큰 결실을 가져옵니다.
+              </p>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+              <div style="padding:11px;border:2px solid var(--border);border-radius:4px;background:#F0FDF4;box-shadow:2px 2px 0 var(--border);">
+                <div style="font-size:10px;font-weight:700;color:#16A34A;margin-bottom:5px;">✅ 올해 추천 행동</div>
+                <p style="font-size:12px;line-height:1.7;">새로운 도전 과감히 시작<br>인맥 확장 · 네트워킹<br>장기 계획 구체화</p>
+              </div>
+              <div style="padding:11px;border:2px solid var(--border);border-radius:4px;background:#FEF2F2;box-shadow:2px 2px 0 var(--border);">
+                <div style="font-size:10px;font-weight:700;color:#DC2626;margin-bottom:5px;">⚠️ 올해 주의 사항</div>
+                <p style="font-size:12px;line-height:1.7;">충동적 투자 · 큰 지출<br>과로로 인한 건강 악화<br>섣부른 계약 체결</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 분야별 상세운세 -->
+        <div class="card">
+          <div class="card-header">
+            <h3>🗂 분야별 상세 운세</h3>
+            <div style="display:flex;gap:5px;" id="wDomainPills">
+              <span class="domain-pill active" onclick="wSelectDomain(this,0)">💰 재물</span>
+              <span class="domain-pill" onclick="wSelectDomain(this,1)">💕 연애</span>
+              <span class="domain-pill" onclick="wSelectDomain(this,2)">💼 직업</span>
+              <span class="domain-pill" onclick="wSelectDomain(this,3)">🌿 건강</span>
+            </div>
+          </div>
+          <div id="wDomainBody" class="card-body"></div>
+        </div>
+
+      </div>
+    </div>
+  </div><!-- /wp2 -->
+
+</div><!-- /vw-web -->
+
+
+<!-- ════════════════════════════════════
+     MOBILE VIEW
+════════════════════════════════════ -->
+<div id="vw-mobile" style="display:none;">
+
+  <!-- ══ MOBILE PAGE 1: 기본 ══ -->
+  <div id="mp1">
+
+    <!-- Sticky Tabs -->
+    <div class="sticky-tabs">
+      <button class="sticky-tab active" onclick="mTab(this,'mt-overview')">종합</button>
+      <button class="sticky-tab" onclick="mTab(this,'mt-monthly')">월별</button>
+      <button class="sticky-tab" onclick="mTab(this,'mt-lucky')">행운</button>
+    </div>
+
+    <div class="shell mobile-shell" style="padding-top:88px;">
+
+      <!-- Hero -->
+      <div class="hero-banner" style="margin-bottom:12px;">
+        <div class="hero-deco"></div>
+        <div class="hero-inner">
+          <div class="hero-badge">✦ 2025 乙巳年</div>
+          <div class="hero-title"><span class="yr">2025년</span>은 도약과 변화의 해</div>
+          <div style="display:flex;align-items:center;gap:14px;margin-top:14px;">
+            <div class="hero-score-num">82</div>
+            <div style="display:flex;flex-direction:column;gap:4px;">
+              <span class="hero-grade">대길 ✦</span>
+              <span style="font-size:16px;letter-spacing:2px;">⭐⭐⭐⭐</span>
+              <span style="font-size:10px;color:rgba(255,255,255,.38);">종합 상위 18%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="m-stack">
+
+        <!-- 종합 탭 -->
+        <div id="mt-overview">
+          <div class="card">
+            <div class="card-header"><h3>📊 종합 운세 점수</h3></div>
+            <div class="card-body" style="display:flex;flex-direction:column;gap:8px;">
+              <div class="meter-row"><span class="meter-icon">💰</span><span class="meter-label">재물운</span><div class="meter-bg"><div class="meter-fill" style="width:78%;background:#F59E0B;"></div></div><span class="meter-val">78</span></div>
+              <div class="meter-row"><span class="meter-icon">💕</span><span class="meter-label">연애운</span><div class="meter-bg"><div class="meter-fill" style="width:65%;background:#EC4899;"></div></div><span class="meter-val">65</span></div>
+              <div class="meter-row"><span class="meter-icon">💼</span><span class="meter-label">직업운</span><div class="meter-bg"><div class="meter-fill" style="width:88%;background:#3B82F6;"></div></div><span class="meter-val">88</span></div>
+              <div class="meter-row"><span class="meter-icon">🌿</span><span class="meter-label">건강운</span><div class="meter-bg"><div class="meter-fill" style="width:72%;background:#22C55E;"></div></div><span class="meter-val">72</span></div>
+              <div class="meter-row"><span class="meter-icon">🤝</span><span class="meter-label">인간관계</span><div class="meter-bg"><div class="meter-fill" style="width:83%;background:#8B5CF6;"></div></div><span class="meter-val">83</span></div>
+            </div>
+          </div>
+
+          <div style="margin-top:12px;">
+            <div class="card">
+              <div class="card-header"><h3>⚠️ 주의사항</h3></div>
+              <div class="card-body">
+                <div class="alert" style="border:1.5px solid rgba(239,68,68,.2);background:#FEF2F2;border-radius:4px;"><span class="alert-icon">🔴</span><span class="alert-text">4월·9월 재물 손실 주의. 충동 투자 금물.</span></div>
+                <div class="alert" style="border:1.5px solid rgba(234,179,8,.2);background:#FEFCE8;border-radius:4px;"><span class="alert-icon">🟡</span><span class="alert-text">6월 건강 관리 중요. 과로 삼가세요.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 상세풀이 CTA -->
+          <div style="margin-top:12px;padding:24px 16px;border:2px dashed rgba(13,13,13,.18);border-radius:6px;text-align:center;background:rgba(253,224,71,.04);">
+            <div style="font-size:28px;margin-bottom:8px;">🔮</div>
+            <div style="font-family:'Jua',sans-serif;font-size:15px;margin-bottom:5px;">신년운세 상세 풀이</div>
+            <p style="font-size:11px;color:var(--muted);line-height:1.7;margin-bottom:14px;">연간 총평과 분야별 심층 운세를<br>지금 확인해보세요.</p>
+            <button class="cta-btn secondary" onclick="goDetail('mobile')">✨ 상세풀이 보기</button>
+          </div>
+        </div>
+
+        <!-- 월별 탭 -->
+        <div id="mt-monthly" style="display:none;">
+          <div class="card">
+            <div class="card-header"><h3>📅 월별 운세</h3></div>
+            <div class="card-body" style="display:flex;flex-direction:column;gap:12px;">
+              <div class="month-grid four-col" id="mMonthGrid"></div>
+              <div class="month-detail">
+                <div class="month-detail-title">
+                  <span id="mDetailMo">1월</span>
+                  <span class="month-detail-tag" id="mDetailTag">🔵 길</span>
+                </div>
+                <p id="mDetailTxt"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 행운 탭 -->
+        <div id="mt-lucky" style="display:none;">
+          <div class="card">
+            <div class="card-header"><h3>🍀 행운 아이템</h3></div>
+            <div class="card-body" style="padding:12px;">
+              <div class="lucky-grid two-col" style="margin-bottom:12px;">
+                <div class="lucky-item"><div class="li-icon">🎨</div><div class="li-label">행운 색상</div><div class="li-val" style="color:#3B82F6;">파란색</div></div>
+                <div class="lucky-item"><div class="li-icon">🔢</div><div class="li-label">행운 숫자</div><div class="li-val">3 · 7</div></div>
+                <div class="lucky-item"><div class="li-icon">🧭</div><div class="li-label">길한 방향</div><div class="li-val">동북</div></div>
+                <div class="lucky-item"><div class="li-icon">💎</div><div class="li-label">행운 소재</div><div class="li-val">청옥</div></div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:8px;">
+                <div style="display:flex;align-items:center;gap:10px;padding:10px;border:2px solid var(--border);border-radius:4px;box-shadow:2px 2px 0 var(--border);">
+                  <span style="font-size:20px;">🌸</span>
+                  <div><div style="font-size:10px;font-weight:700;color:var(--muted);margin-bottom:2px;">행운의 꽃</div><div style="font-size:13px;font-weight:700;">매화 · 수선화</div></div>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px;padding:10px;border:2px solid var(--border);border-radius:4px;box-shadow:2px 2px 0 var(--border);">
+                  <span style="font-size:20px;">📿</span>
+                  <div><div style="font-size:10px;font-weight:700;color:var(--muted);margin-bottom:2px;">부적 아이템</div><div style="font-size:13px;font-weight:700;">청옥 팔찌 · 목재 소품</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div><!-- /mp1 -->
+
+
+  <!-- ══ MOBILE PAGE 2: 상세풀이 ══ -->
+  <div id="mp2" style="display:none;">
+
+    <!-- Sticky Nav -->
+    <div style="position:fixed;top:44px;left:0;right:0;z-index:50;background:var(--card);border-bottom:2px solid var(--border);display:flex;align-items:center;gap:10px;padding:10px 16px;">
+      <button class="back-btn" onclick="goBack('mobile')">← 신년운세</button>
+      <span style="font-size:13px;font-weight:700;color:var(--muted);">상세 풀이</span>
+    </div>
+
+    <div class="shell mobile-shell" style="padding-top:100px;">
+      <div class="m-stack">
+
+        <!-- 연간 총평 -->
+        <div class="card">
+          <div class="card-header"><h3>🌟 2025년 연간 총평</h3></div>
+          <div class="card-body" style="display:flex;flex-direction:column;gap:10px;">
+            <div class="year-highlight">
+              <div class="yh-label">종합 운세 풀이</div>
+              <p class="yh-text">
+                2025년 <span class="kw-highlight">乙巳年</span>은 목생화(木生火) 상생 구조가 형성되는 해로, 내면의 재능이 표출되며 오래 준비해온 계획이 <span class="kw-highlight">구체적 성과</span>로 이어집니다. 특히 3~5월에 적극 행동하세요. 과도한 확장보다 선택과 집중이 더 큰 결실을 가져옵니다.
+              </p>
+            </div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;">
+              <span class="kw-tag">🚀 도약</span><span class="kw-tag">💡 창의</span>
+              <span class="kw-tag">🤝 인연</span><span class="kw-tag">💰 확장</span>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+              <div style="padding:10px;border:2px solid var(--border);border-radius:4px;background:#F0FDF4;box-shadow:2px 2px 0 var(--border);">
+                <div style="font-size:10px;font-weight:700;color:#16A34A;margin-bottom:4px;">✅ 유리한 시기</div>
+                <p style="font-size:11px;line-height:1.7;">3월 · 5월<br>7~8월 · 11월</p>
+              </div>
+              <div style="padding:10px;border:2px solid var(--border);border-radius:4px;background:#FEF2F2;box-shadow:2px 2px 0 var(--border);">
+                <div style="font-size:10px;font-weight:700;color:#DC2626;margin-bottom:4px;">⚠️ 주의 시기</div>
+                <p style="font-size:11px;line-height:1.7;">4월 · 6월<br>9월</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 분야별 상세운세 -->
+        <div class="card">
+          <div class="card-header"><h3>🗂 분야별 상세 운세</h3></div>
+          <div style="display:flex;gap:5px;padding:10px 14px;border-bottom:2px solid var(--border);overflow-x:auto;" id="mDomainPills">
+            <span class="domain-pill active" onclick="mSelectDomain(this,0)">💰 재물</span>
+            <span class="domain-pill" onclick="mSelectDomain(this,1)">💕 연애</span>
+            <span class="domain-pill" onclick="mSelectDomain(this,2)">💼 직업</span>
+            <span class="domain-pill" onclick="mSelectDomain(this,3)">🌿 건강</span>
+          </div>
+          <div id="mDomainBody" class="card-body"></div>
+        </div>
+
+      </div>
+    </div>
+  </div><!-- /mp2 -->
+
+</div><!-- /vw-mobile -->
+
+
+<script>
+/* ─── Data ─── */
+const MONTHS = [
+  { mo:'1월',  emoji:'🌱', tag:'🔵 길',   text:'새해 초부터 기운이 상승세입니다. 계획을 세우고 기반을 다지는 달로, 조급함 없이 꾸준히 나아가면 좋은 결과가 따라옵니다. 새로운 인연이 맺어질 수 있습니다.' },
+  { mo:'2월',  emoji:'❄️', tag:'🟡 평',   text:'설 명절 전후로 가족과 화목한 시간이 예상됩니다. 다소 차분한 흐름이지만 내실을 다지는 달로 활용하세요. 재물운은 보통이나 안정적입니다.' },
+  { mo:'3월',  emoji:'🌸', tag:'🟢 대길', text:'봄기운과 함께 모든 분야에서 상승세! 새로운 기회가 찾아오고 귀인을 만날 수 있습니다. 계획한 일을 과감히 실행하기 좋은 달입니다.' },
+  { mo:'4월',  emoji:'⚠️', tag:'🔴 주의', text:'재물과 건강 모두 주의가 필요합니다. 충동적인 투자나 큰 결정은 5월로 미루는 것이 좋습니다. 차분하게 현상 유지에 집중하세요.' },
+  { mo:'5월',  emoji:'🌿', tag:'🔵 길',   text:'4월의 침체에서 벗어나 활력이 돌아옵니다. 직업운이 특히 좋으며 새로운 프로젝트 제안이 들어올 수 있습니다.' },
+  { mo:'6월',  emoji:'☀️', tag:'🟡 평',   text:'기운이 달아오르지만 건강 관리가 중요한 시기입니다. 과로와 수면 부족을 주의하고 규칙적인 생활을 유지하세요.' },
+  { mo:'7월',  emoji:'🔥', tag:'🟢 대길', text:'커리어와 재물운이 동시에 상승하는 황금기입니다. 중요한 협상이나 계약이 유리하게 진행됩니다. 자신감을 갖고 적극적으로 임하세요.' },
+  { mo:'8월',  emoji:'🏆', tag:'🟢 대길', text:'올해 최고의 달! 직업에서 큰 성과를 얻거나 중요한 인정을 받을 수 있습니다. 연애·재물·커리어 삼박자가 모두 좋습니다.' },
+  { mo:'9월',  emoji:'⚠️', tag:'🔴 주의', text:'큰 성과 이후 긴장이 풀리기 쉬운 시기입니다. 방심은 금물. 재물 지출이 늘어날 수 있으니 소비를 자제하고 재정비의 달로 삼으세요.' },
+  { mo:'10월', emoji:'🍁', tag:'🔵 길',   text:'결실의 계절. 상반기에 뿌린 씨앗이 수확으로 돌아옵니다. 연애운이 특히 좋은 달로 새로운 만남이나 관계 발전이 기대됩니다.' },
+  { mo:'11월', emoji:'🌟', tag:'🟢 대길', text:'연말을 앞두고 재물운이 크게 상승합니다. 투자·부수입 활동이 좋은 결과를 낳을 수 있습니다. 학업운도 함께 좋습니다.' },
+  { mo:'12월', emoji:'🎄', tag:'🔵 길',   text:'한 해를 마무리하는 달. 연말 모임과 인간관계에서 기쁜 일이 생기며, 내년을 위한 준비를 시작하기 좋습니다.' },
+];
+
+const DOMAINS = [
+  { icon:'💰', label:'재물운', score:78, color:'#F59E0B', bg:'#FEF9C3',
+    text:'2025년 재물운은 상반기보다 하반기가 훨씬 좋습니다. 3월과 7~8월에 수입이 증가하거나 예상치 못한 재물이 들어올 수 있습니다. 단, 4월과 9월은 충동 지출과 투자 실패 위험이 있으니 신중하게 행동하세요.',
+    tips:['7~8월 투자 기회 적극 활용','4월 큰 지출 자제','부수입 확대 검토','장기 저축 계획 수립'],
+    keywords:['수입증가','재테크','절약','투자주의'] },
+  { icon:'💕', label:'연애운', score:65, color:'#EC4899', bg:'#FCE7F3',
+    text:'연애운은 올해 전반적으로 보통 수준이지만, 10~11월에 새로운 인연을 만나거나 기존 관계가 깊어지는 좋은 흐름이 있습니다. 솔로는 자기계발에 집중하다 보면 자연스럽게 인연이 찾아옵니다.',
+    tips:['10~11월 새 인연 기회','자기계발로 매력 업','표현을 아끼지 마세요','갈등 시 대화로 해결'],
+    keywords:['새인연','관계발전','자기계발','소통'] },
+  { icon:'💼', label:'직업운', score:88, color:'#3B82F6', bg:'#DBEAFE',
+    text:'올해 가장 강한 운입니다. 특히 7~8월에 커리어의 전환점이 될 중요한 기회가 찾아올 수 있습니다. 승진·이직·창업 모두 긍정적인 흐름으로, 준비를 잘 해두면 큰 성과를 이룰 수 있습니다.',
+    tips:['7~8월 커리어 황금기','이직·창업 검토 추천','인맥 관리 적극적으로','새 스킬 습득 유리'],
+    keywords:['승진기회','커리어도약','이직검토','성과인정'] },
+  { icon:'🌿', label:'건강운', score:72, color:'#22C55E', bg:'#DCFCE7',
+    text:'전반적으로 양호하지만 6월과 9월에 피로가 누적될 수 있습니다. 규칙적인 운동과 수면을 유지하고, 특히 소화기와 호흡기 건강에 신경 쓰세요. 정기 건강 검진을 놓치지 마세요.',
+    tips:['6월 과로 주의','규칙적 운동 루틴 유지','소화기 관리 중요','상반기 건강검진 권장'],
+    keywords:['규칙운동','수면관리','소화기주의','정기검진'] },
+];
+
+/* ─── Build Month Grid ─── */
+function buildMonthGrid(gridId, moId, tagId, txtId) {
+  const grid = document.getElementById(gridId);
+  if (!grid || grid.children.length > 0) return;
+  MONTHS.forEach((m, i) => {
+    const c = document.createElement('div');
+    c.className = 'month-cell' + (i === 0 ? ' active' : '');
+    c.innerHTML = `<div class="mc-mo">${m.mo}</div><div class="mc-grade">${m.emoji}</div><div class="mc-stars">★★★★</div>`;
+    c.onclick = () => {
+      grid.querySelectorAll('.month-cell').forEach(x => x.classList.remove('active'));
+      c.classList.add('active');
+      document.getElementById(moId).textContent = m.mo;
+      document.getElementById(tagId).textContent = m.tag;
+      document.getElementById(txtId).textContent = m.text;
+    };
+    grid.appendChild(c);
+  });
+  document.getElementById(moId).textContent = MONTHS[0].mo;
+  document.getElementById(tagId).textContent = MONTHS[0].tag;
+  document.getElementById(txtId).textContent = MONTHS[0].text;
+}
+
+/* ─── Render Domain ─── */
+function renderDomain(bodyId, idx) {
+  const d = DOMAINS[idx];
+  document.getElementById(bodyId).innerHTML = `
+    <div style="background:${d.bg};border:2px solid var(--border);border-radius:4px;padding:12px 14px;margin-bottom:10px;box-shadow:2px 2px 0 var(--border);">
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:7px;">
+        <span style="font-size:20px;">${d.icon}</span>
+        <span style="font-family:'Jua',sans-serif;font-size:15px;">${d.label}</span>
+        <span style="margin-left:auto;font-family:'Jua',sans-serif;font-size:20px;color:${d.color};">${d.score}</span>
+        <span style="font-size:11px;color:var(--muted);">/ 100</span>
+      </div>
+      <div style="height:7px;background:rgba(13,13,13,.08);border-radius:99px;overflow:hidden;border:1px solid rgba(13,13,13,.1);margin-bottom:10px;">
+        <div style="height:100%;width:${d.score}%;background:${d.color};border-radius:99px;"></div>
+      </div>
+      <p style="font-size:13px;line-height:1.8;color:rgba(13,13,13,.7);">${d.text}</p>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:10px;">
+      ${d.tips.map(t=>`<div style="display:flex;align-items:flex-start;gap:5px;padding:8px 9px;border:1.5px solid var(--border-light);border-radius:4px;background:var(--card);">
+        <span style="color:${d.color};font-weight:900;font-size:13px;line-height:1.4;flex-shrink:0;">✓</span>
+        <span style="font-size:11px;line-height:1.6;">${t}</span>
+      </div>`).join('')}
+    </div>
+    <div style="display:flex;gap:5px;flex-wrap:wrap;">
+      ${d.keywords.map(k=>`<span class="kw-tag">#${k}</span>`).join('')}
+    </div>
+  `;
+}
+
+/* ─── Viewport Toggle ─── */
+function setViewport(v) {
+  document.querySelectorAll('.toggle-bar button').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('vw-web').style.display = v === 'web' ? '' : 'none';
+  document.getElementById('vw-mobile').style.display = v === 'mobile' ? '' : 'none';
+  if (v === 'mobile') {
+    buildMonthGrid('mMonthGrid','mDetailMo','mDetailTag','mDetailTxt');
+    renderDomain('mDomainBody', 0);
+  }
+}
+
+/* ─── Page Navigation ─── */
+function goDetail(mode) {
+  if (mode === 'web') {
+    document.getElementById('wp1').style.display = 'none';
+    document.getElementById('wp2').style.display = '';
+    renderDomain('wDomainBody', 0);
+  } else {
+    document.getElementById('mp1').style.display = 'none';
+    document.getElementById('mp2').style.display = '';
+    renderDomain('mDomainBody', 0);
+  }
+  window.scrollTo(0, 0);
+}
+function goBack(mode) {
+  if (mode === 'web') {
+    document.getElementById('wp2').style.display = 'none';
+    document.getElementById('wp1').style.display = '';
+  } else {
+    document.getElementById('mp2').style.display = 'none';
+    document.getElementById('mp1').style.display = '';
+  }
+  window.scrollTo(0, 0);
+}
+
+/* ─── Domain Tabs ─── */
+function wSelectDomain(el, idx) {
+  document.querySelectorAll('#wDomainPills .domain-pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  renderDomain('wDomainBody', idx);
+}
+function mSelectDomain(el, idx) {
+  document.querySelectorAll('#mDomainPills .domain-pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  renderDomain('mDomainBody', idx);
+}
+
+/* ─── Mobile Tab Switch ─── */
+function mTab(btn, targetId) {
+  document.querySelectorAll('.sticky-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  ['mt-overview','mt-monthly','mt-lucky'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = id === targetId ? '' : 'none';
+  });
+}
+
+/* ─── Init ─── */
+buildMonthGrid('wMonthGrid','wDetailMo','wDetailTag','wDetailTxt');
+renderDomain('wDomainBody', 0);
+</script>
+</body>
+</html>
