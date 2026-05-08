@@ -1,3 +1,8 @@
+---
+name: saju-frontend-ref-auth
+description: 카카오/이메일 로그인 흐름, /login 관련 경로, 로그인 UI 규칙
+---
+
 # 인증 및 로그인 UI 참고
 
 ## 읽는 조건

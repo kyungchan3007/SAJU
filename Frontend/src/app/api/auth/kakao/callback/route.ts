@@ -5,8 +5,6 @@ import {
   REFRESH_TOKEN_COOKIE_KEY,
 } from "@/shared/config/authToken";
 
-const DEFAULT_POST_LOGIN_PATH = "/saju/result";
-
 export async function GET(req: NextRequest) {
   const code = req.nextUrl.searchParams.get("code");
   if (!code) {
@@ -20,9 +18,8 @@ export async function GET(req: NextRequest) {
         new URL("/login?error=oauth_failed", req.url),
       );
     }
-    const res = NextResponse.redirect(
-      new URL(DEFAULT_POST_LOGIN_PATH, req.url),
-    );
+    const postLoginPath = result.data.isNewUser ? "/saju" : "/home";
+    const res = NextResponse.redirect(new URL(postLoginPath, req.url));
     res.cookies.set(ACCESS_TOKEN_COOKIE_KEY, result.data.accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",

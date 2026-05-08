@@ -1,3 +1,8 @@
+---
+name: saju-frontend-ref-component-guide
+description: 레이어 역할 정의, 분리 원칙, 권장/피해야 할 패턴, 파일 배치 판단 기준, 작업 전 체크리스트
+---
+
 # 컴포넌트 작성 가이드
 
 ## 읽는 조건

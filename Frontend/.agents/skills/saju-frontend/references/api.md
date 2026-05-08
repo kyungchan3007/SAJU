@@ -1,3 +1,8 @@
+---
+name: saju-frontend-ref-api
+description: BFF 경계 규칙, 서버 호출 구조, 현재 API 엔드포인트 목록, OpenAPI 재생성 방법
+---
+
 # API 및 OpenAPI 참고
 
 ## BFF 경계
@@ -6,15 +11,27 @@
 - 백엔드 직접 호출, 쿠키 브리지, 인증 리다이렉트는 BFF 경계를 먼저 확인한다.
 - 클라이언트 UI에서 백엔드 서버 전용 환경변수나 secret을 직접 사용하지 않는다.
 
-## 현재 주요 API 흐름
+## 서버 호출 구조
 
-- `GET/POST /api/saju`: 사주 입력/조회 관련 BFF
-- `GET/POST /api/compatibility`: 궁합 preview/lock 흐름
-- `GET/POST /api/location`: 지도/추천 흐름
-- `POST /api/payment/verify`: 결제 검증 흐름
-- `GET /api/auth/kakao`: 백엔드 카카오 인증 시작점으로 프록시
-- `GET /api/auth/kakao/callback`: code 교환 후 토큰 쿠키 저장
-- `GET/POST /api/auth/[...nextauth]`: NextAuth 핸들러
+- 인증이 필요한 백엔드 호출은 `authenticatedBackendFetch`를 우선 사용한다.
+- 토큰 쿠키 키는 하드코딩 문자열 대신 `src/shared/config/authToken.ts` 상수를 사용한다.
+- 백엔드 응답 파싱/에러 메시지 매핑은 `parseBackendApiResponse`로 통일한다.
+- `route.ts`는 HTTP 입출력과 쿠키 처리에 집중하고, 비즈니스 로직은 `entities/*/server` 등 서버 함수로 위임한다.
+- 로그인/토큰 교환 경로(`auth/kakao`, `auth/kakao/callback`, refresh)는 예외적으로 인증 래퍼 없이 동작할 수 있다.
+
+## 현재 API 엔드포인트
+
+- `GET/POST /api/saju`
+- `POST /api/saju/draft`
+- `POST /api/saju/result`
+- `GET/POST /api/compatibility`
+- `GET/POST /api/location`
+- `POST /api/payment/verify`
+- `GET/DELETE /api/users/me`
+- `GET /api/auth/kakao`
+- `GET /api/auth/kakao/callback`
+- `POST /api/auth/logout`
+- `GET/POST /api/auth/[...nextauth]`
 
 ## OpenAPI 규칙
 
@@ -27,6 +44,7 @@
 ## 작업 체크
 
 - 새 API 연동 전 기존 BFF가 있는지 먼저 확인한다.
-- 인증이 필요한 API는 `saju_access_token` 쿠키 처리와 로그인 리다이렉트 영향을 확인한다.
+- 새 API 연동 시 `src/generated/api`의 타입/SDK를 먼저 확인하고, 생성 파일은 직접 수정하지 않는다.
+- 인증이 필요한 API는 access/refresh 쿠키 처리와 로그인 리다이렉트 영향을 확인한다.
 - React Query 훅은 해당 feature 하위 `hooks/`에 둔다.
 - API 응답 변환은 UI 컴포넌트보다 feature/entity model 쪽에 둔다.

@@ -24,7 +24,7 @@ export const MYPAGE_BANNERS: BannerItem[] = [
 ];
 
 export const MYPAGE_MANAGEMENT_ITEMS: ManagementItem[] = [
-  { icon: "👤", label: "계정 관리", href: "#" },
+  { icon: "👤", label: "계정 관리", href: "/mypage/account" },
   { icon: "🌙", label: "사주정보 관리", href: "#" },
 ];
 

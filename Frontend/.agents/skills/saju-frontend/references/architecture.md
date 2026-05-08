@@ -1,3 +1,8 @@
+---
+name: saju-frontend-ref-architecture
+description: 기술 스택, 레이어 구조(app/widgets/features/entities/shared), 주요 라우트 목록, 작업 원칙
+---
+
 # 프론트엔드 아키텍처 참고
 
 ## 기술 스택

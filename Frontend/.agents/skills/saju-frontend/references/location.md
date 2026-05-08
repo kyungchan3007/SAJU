@@ -1,3 +1,8 @@
+---
+name: saju-frontend-ref-location
+description: /location 관련 경로, 위치 추천/지도 작업 규칙
+---
+
 # /location 작업 참고
 
 ## 읽는 조건

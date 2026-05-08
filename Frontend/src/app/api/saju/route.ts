@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 
 import { createSuccessResponse } from "@/shared/api";
+import { ACCESS_TOKEN_COOKIE_KEY } from "@/shared/config/authToken";
 
 export const revalidate = 60;
 
@@ -16,7 +17,7 @@ export async function GET() {
 }
 
 export async function POST() {
-  const token = (await cookies()).get("saju_access_token")?.value;
+  const token = (await cookies()).get(ACCESS_TOKEN_COOKIE_KEY)?.value;
 
   if (!token) {
     return NextResponse.json(

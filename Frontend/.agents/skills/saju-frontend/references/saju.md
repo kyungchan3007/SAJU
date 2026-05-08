@@ -1,3 +1,8 @@
+---
+name: saju-frontend-ref-saju
+description: /saju 관련 경로, 폼·draft 작업 규칙, 체크리스트
+---
+
 # /saju 입력 흐름 참고
 
 ## 읽는 조건

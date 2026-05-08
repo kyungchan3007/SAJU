@@ -1,7 +1,8 @@
 import "server-only";
 
-import type { ApiResponseUserResponse, UserResponse } from "@/generated/api";
+import type { UserResponse } from "@/generated/api";
 import { authenticatedBackendFetch } from "@/shared/api/auth/authenticatedBackendFetch";
+import { parseBackendApiResponse } from "@/shared/api/backend/parseBackendApiResponse";
 import { SAJU_USERS_ME_PATH } from "@/shared/config/endPoint";
 
 type GetMyProfileSuccess = {
@@ -21,26 +22,18 @@ export async function getMyProfileOnServer(): Promise<GetMyProfileResult> {
   const result = await authenticatedBackendFetch(SAJU_USERS_ME_PATH, {
     method: "GET",
   });
-  const response = result.response;
 
-  let body: ApiResponseUserResponse | null = null;
+  const parsed = await parseBackendApiResponse<UserResponse>(
+    result.response,
+    "User profile request failed.",
+  );
 
-  try {
-    body = (await response.json()) as ApiResponseUserResponse;
-  } catch {
-    body = null;
-  }
-
-  if (!response.ok) {
-    return {
-      success: false,
-      status: response.status,
-      message: body?.message ?? `User profile request failed (${response.status}).`,
-    };
+  if (!parsed.success) {
+    return parsed;
   }
 
   return {
     success: true,
-    data: body?.data,
+    data: parsed.data,
   };
 }

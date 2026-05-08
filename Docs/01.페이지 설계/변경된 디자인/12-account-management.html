@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>계정관리 — 점신 프로토타입</title>
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #F8F6F1;
+  --card: #FFFEF9;
+  --border: #0d0d0d;
+  --border-light: rgba(13,13,13,0.12);
+  --text: #0d0d0d;
+  --muted: rgba(13,13,13,0.45);
+  --shadow-sm: 2px 2px 0 #0d0d0d;
+  --shadow-md: 3px 3px 0 #0d0d0d;
+  --yellow: #FDE047;
+  --red: #EF4444;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+/* ─── Toggle ─── */
+.toggle-bar {
+  position: fixed; top: 12px; left: 50%; transform: translateX(-50%);
+  z-index: 999; display: flex; gap: 8px;
+  background: var(--card); border: 2px solid var(--border);
+  padding: 6px; border-radius: 8px; box-shadow: var(--shadow-sm);
+}
+.toggle-bar button {
+  padding: 6px 18px; border: 2px solid transparent; border-radius: 4px;
+  font-family: 'Noto Sans KR', sans-serif; font-size: 12px; font-weight: 700;
+  cursor: pointer; background: transparent; color: var(--muted); transition: all .15s;
+}
+.toggle-bar button.active { background: var(--text); color: white; border-color: var(--text); }
+
+/* ─── Shell ─── */
+.shell { max-width: 1100px; margin: 0 auto; padding: 68px 24px 80px; }
+.shell.mobile-shell { max-width: 390px; padding: 68px 16px 80px; }
+
+/* ─── Card ─── */
+.card { background: var(--card); border: 2px solid var(--border); border-radius: var(--radius-md); box-shadow: var(--shadow-md); overflow: hidden; }
+.card-header {
+  display: flex; align-items: center; gap: 10px;
+  padding: 14px 18px; border-bottom: 2px solid var(--border); background: rgb(240 238 232);
+}
+.card-header h3 { font-family: 'Jua', sans-serif; font-size: 14px; }
+.card-body { padding: 0; }
+
+/* ─── Back Button ─── */
+.back-btn {
+  display: inline-flex; align-items: center; gap: 5px; padding: 7px 14px;
+  border: 2px solid var(--border); border-radius: 99px; font-size: 12px; font-weight: 700;
+  background: var(--card); cursor: pointer; box-shadow: var(--shadow-sm); transition: all .1s;
+  text-decoration: none; color: var(--text);
+}
+.back-btn:hover { transform: translate(-1px,-1px); box-shadow: 3px 3px 0 var(--border); }
+
+/* ─── Page Header ─── */
+.page-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+.page-title { font-family: 'Jua', sans-serif; font-size: 22px; letter-spacing: -.02em; }
+
+/* ─── Web Layout ─── */
+.web-grid { display: grid; grid-template-columns: 268px 1fr; gap: 18px; align-items: start; }
+.sidebar { display: flex; flex-direction: column; gap: 14px; }
+.main-col { display: flex; flex-direction: column; gap: 14px; }
+
+/* ─── Profile Mini Card (sidebar) ─── */
+.profile-mini {
+  display: flex; align-items: center; gap: 12px; padding: 16px 18px;
+  border-bottom: 2px solid var(--border); background: rgb(250 248 242);
+}
+.avatar {
+  width: 44px; height: 44px; border-radius: 50%; background: var(--text);
+  border: 2px solid var(--border); box-shadow: var(--shadow-sm);
+  flex-shrink: 0;
+}
+.profile-email { font-size: 13px; font-weight: 700; }
+.profile-badge {
+  display: inline-block; margin-top: 3px; padding: 1px 8px; border-radius: 99px;
+  border: 1.5px solid var(--border); font-size: 10px; font-weight: 700;
+  background: var(--yellow); box-shadow: 1px 1px 0 var(--border);
+}
+
+/* ─── Menu List (sidebar) ─── */
+.menu-list { display: flex; flex-direction: column; }
+.menu-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 13px 18px; font-size: 13px; font-weight: 600;
+  border-bottom: 1.5px solid var(--border-light); cursor: pointer;
+  transition: background .1s; color: var(--text); text-decoration: none;
+}
+.menu-item:last-child { border-bottom: none; }
+.menu-item:hover { background: rgb(240 238 232); }
+.menu-item.active { background: rgb(240 238 232); font-weight: 700; }
+.menu-item .arrow { color: var(--muted); font-size: 14px; }
+
+/* ─── Section Row ─── */
+.section-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 18px 20px; border-bottom: 1.5px solid var(--border-light);
+  transition: background .1s;
+}
+.section-row:last-child { border-bottom: none; }
+.row-left { display: flex; flex-direction: column; gap: 3px; }
+.row-label { font-size: 14px; font-weight: 700; }
+.row-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+/* ─── Action Buttons ─── */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 9px 20px; border: 2px solid var(--border); border-radius: var(--radius-sm);
+  font-family: 'Noto Sans KR', sans-serif; font-size: 13px; font-weight: 700;
+  cursor: pointer; transition: all .1s; white-space: nowrap;
+}
+.btn:hover { transform: translate(-1px,-1px); }
+.btn-logout {
+  background: var(--card); color: var(--text); box-shadow: var(--shadow-sm);
+}
+.btn-logout:hover { box-shadow: 3px 3px 0 var(--border); }
+.btn-withdraw {
+  background: var(--red); color: white; border-color: var(--border); box-shadow: var(--shadow-sm);
+}
+.btn-withdraw:hover { box-shadow: 3px 3px 0 var(--border); background: #DC2626; }
+
+/* ─── Kakao Info ─── */
+.kakao-badge {
+  display: inline-flex; align-items: center; gap: 5px; padding: 5px 10px;
+  border: 1.5px solid var(--border-light); border-radius: var(--radius-sm);
+  font-size: 12px; font-weight: 700; background: #FEE500; color: #191919;
+}
+.kakao-dot { width: 8px; height: 8px; border-radius: 50%; background: #3C1E1E; }
+
+/* ─── Modal Overlay ─── */
+.modal-overlay {
+  display: none; position: fixed; inset: 0; z-index: 900;
+  background: rgba(13,13,13,.45); backdrop-filter: blur(2px);
+  align-items: center; justify-content: center;
+}
+.modal-overlay.show { display: flex; }
+.modal {
+  background: var(--card); border: 2px solid var(--border);
+  border-radius: var(--radius-md); box-shadow: var(--shadow-lg);
+  padding: 28px 24px; width: calc(100% - 40px); max-width: 360px;
+  text-align: center;
+}
+.modal-icon { font-size: 36px; margin-bottom: 12px; }
+.modal-title { font-family: 'Jua', sans-serif; font-size: 18px; margin-bottom: 8px; }
+.modal-desc { font-size: 13px; color: var(--muted); line-height: 1.7; margin-bottom: 22px; }
+.modal-desc strong { color: var(--text); }
+.modal-actions { display: flex; gap: 8px; }
+.modal-actions .btn { flex: 1; justify-content: center; }
+.modal-cancel { background: var(--card); color: var(--text); }
+
+/* ─── Toast ─── */
+.toast {
+  display: none; position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%);
+  z-index: 1000; background: var(--text); color: white;
+  padding: 11px 20px; border-radius: 99px; font-size: 13px; font-weight: 700;
+  box-shadow: var(--shadow-md); white-space: nowrap;
+  animation: fadeUp .25s ease;
+}
+.toast.show { display: block; }
+@keyframes fadeUp { from { opacity: 0; transform: translateX(-50%) translateY(8px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
+
+/* ─── Mobile: Full row btn ─── */
+.btn-full {
+  width: 100%; padding: 15px 20px; justify-content: space-between;
+}
+</style>
+</head>
+<body>
+
+<!-- Toggle -->
+<div class="toggle-bar">
+  <button class="active" onclick="setViewport('web')">💻 웹</button>
+  <button onclick="setViewport('mobile')">📱 모바일</button>
+</div>
+
+<!-- ════════════ WEB ════════════ -->
+<div id="vw-web">
+  <div class="shell">
+
+    <div class="page-header">
+      <a class="back-btn" href="#">← 마이페이지</a>
+      <h1 class="page-title">계정관리</h1>
+    </div>
+
+    <div class="web-grid">
+
+      <!-- Sidebar: Nav -->
+      <div class="sidebar">
+        <div class="card">
+          <div class="profile-mini">
+            <div class="avatar"></div>
+            <div>
+              <div class="profile-email">user@kakao.com</div>
+              <span class="profile-badge">일반 회원</span>
+            </div>
+          </div>
+          <nav class="menu-list">
+            <a class="menu-item" href="#">프로필 수정 <span class="arrow">›</span></a>
+            <a class="menu-item" href="#">알림 설정 <span class="arrow">›</span></a>
+            <a class="menu-item" href="#">결제 · 구독 <span class="arrow">›</span></a>
+            <a class="menu-item active" href="#">계정관리 <span class="arrow">›</span></a>
+          </nav>
+        </div>
+      </div>
+
+      <!-- Main -->
+      <div class="main-col">
+
+        <!-- 로그인 정보 -->
+        <div class="card">
+          <div class="card-header"><h3>🔐 로그인 정보</h3></div>
+          <div class="card-body">
+            <div class="section-row">
+              <div class="row-left">
+                <span class="row-label">연동 계정</span>
+                <span class="row-desc">카카오 소셜 로그인으로 가입된 계정입니다.</span>
+              </div>
+              <span class="kakao-badge"><span class="kakao-dot"></span>카카오</span>
+            </div>
+            <div class="section-row">
+              <div class="row-left">
+                <span class="row-label">이메일</span>
+                <span class="row-desc">user@kakao.com</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 로그아웃 -->
+        <div class="card">
+          <div class="card-header"><h3>🔓 로그아웃</h3></div>
+          <div class="card-body">
+            <div class="section-row">
+              <div class="row-left">
+                <span class="row-label">로그아웃</span>
+                <span class="row-desc">현재 기기에서 로그아웃합니다.<br>언제든지 다시 로그인할 수 있습니다.</span>
+              </div>
+              <button class="btn btn-logout" onclick="showModal('logout')">
+                로그아웃
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 회원탈퇴 -->
+        <div class="card">
+          <div class="card-header"><h3>⚠️ 회원탈퇴</h3></div>
+          <div class="card-body">
+            <div class="section-row">
+              <div class="row-left">
+                <span class="row-label" style="color:var(--red);">회원탈퇴</span>
+                <span class="row-desc">
+                  탈퇴 시 모든 운세 데이터와 코인이 삭제됩니다.<br>
+                  이 작업은 되돌릴 수 없습니다.
+                </span>
+              </div>
+              <button class="btn btn-withdraw" onclick="showModal('withdraw')">
+                회원탈퇴
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════ MOBILE ════════════ -->
+<div id="vw-mobile" style="display:none;">
+  <div class="shell mobile-shell">
+
+    <!-- Header -->
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px;">
+      <a class="back-btn" href="#">← 마이페이지</a>
+      <span style="font-family:'Jua',sans-serif;font-size:18px;">계정관리</span>
+    </div>
+
+    <!-- 프로필 미니 -->
+    <div class="card" style="margin-bottom:14px;">
+      <div class="profile-mini">
+        <div class="avatar"></div>
+        <div>
+          <div class="profile-email">user@kakao.com</div>
+          <span class="profile-badge">일반 회원</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 로그인 정보 -->
+    <div class="card" style="margin-bottom:14px;">
+      <div class="card-header"><h3>🔐 로그인 정보</h3></div>
+      <div class="card-body">
+        <div class="section-row">
+          <div class="row-left">
+            <span class="row-label">연동 계정</span>
+            <span class="row-desc">카카오 소셜 로그인</span>
+          </div>
+          <span class="kakao-badge"><span class="kakao-dot"></span>카카오</span>
+        </div>
+        <div class="section-row">
+          <div class="row-left">
+            <span class="row-label">이메일</span>
+            <span class="row-desc">user@kakao.com</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 로그아웃 -->
+    <div class="card" style="margin-bottom:14px;">
+      <div class="card-header"><h3>🔓 로그아웃</h3></div>
+      <div class="card-body">
+        <div class="section-row" style="flex-direction:column;align-items:flex-start;gap:12px;">
+          <div class="row-left">
+            <span class="row-label">로그아웃</span>
+            <span class="row-desc">현재 기기에서 로그아웃합니다. 언제든지 다시 로그인할 수 있습니다.</span>
+          </div>
+          <button class="btn btn-logout btn-full" onclick="showModal('logout')">
+            <span>로그아웃</span>
+            <span style="font-size:16px;">→</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 회원탈퇴 -->
+    <div class="card">
+      <div class="card-header"><h3>⚠️ 회원탈퇴</h3></div>
+      <div class="card-body">
+        <div class="section-row" style="flex-direction:column;align-items:flex-start;gap:12px;">
+          <div class="row-left">
+            <span class="row-label" style="color:var(--red);">회원탈퇴</span>
+            <span class="row-desc">탈퇴 시 모든 운세 데이터와 코인이 영구 삭제됩니다. 이 작업은 되돌릴 수 없습니다.</span>
+          </div>
+          <button class="btn btn-withdraw btn-full" onclick="showModal('withdraw')">
+            <span>회원탈퇴</span>
+            <span style="font-size:16px;">→</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ════════════ 로그아웃 모달 ════════════ -->
+<div class="modal-overlay" id="modal-logout">
+  <div class="modal">
+    <div class="modal-icon">🔓</div>
+    <div class="modal-title">로그아웃 하시겠어요?</div>
+    <p class="modal-desc">
+      현재 기기에서 로그아웃됩니다.<br>
+      언제든지 다시 로그인할 수 있습니다.
+    </p>
+    <div class="modal-actions">
+      <button class="btn modal-cancel" onclick="closeModal('logout')">취소</button>
+      <button class="btn btn-logout" onclick="doAction('logout')">로그아웃</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════ 회원탈퇴 모달 ════════════ -->
+<div class="modal-overlay" id="modal-withdraw">
+  <div class="modal">
+    <div class="modal-icon">⚠️</div>
+    <div class="modal-title">정말 탈퇴하시겠어요?</div>
+    <p class="modal-desc">
+      탈퇴 시 <strong>모든 운세 데이터, 코인, 구매 내역</strong>이<br>
+      영구적으로 삭제됩니다.<br>
+      이 작업은 되돌릴 수 없습니다.
+    </p>
+    <div class="modal-actions">
+      <button class="btn modal-cancel" onclick="closeModal('withdraw')">취소</button>
+      <button class="btn btn-withdraw" onclick="doAction('withdraw')">탈퇴하기</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+
+<script>
+function setViewport(v) {
+  document.querySelectorAll('.toggle-bar button').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('vw-web').style.display    = v === 'web'    ? '' : 'none';
+  document.getElementById('vw-mobile').style.display = v === 'mobile' ? '' : 'none';
+}
+
+function showModal(type) {
+  document.getElementById('modal-' + type).classList.add('show');
+}
+function closeModal(type) {
+  document.getElementById('modal-' + type).classList.remove('show');
+}
+
+function doAction(type) {
+  closeModal(type);
+  const msg = type === 'logout' ? '✅ 로그아웃 되었습니다.' : '✅ 회원탈퇴가 완료되었습니다.';
+  showToast(msg);
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// 모달 바깥 클릭 시 닫기
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) {
+      overlay.classList.remove('show');
+    }
+  });
+});
+</script>
+</body>
+</html>

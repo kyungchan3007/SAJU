@@ -5,6 +5,7 @@ import { onSajuDailyGetOnServer } from "@/entities/saju/server/onSajuDailyGetOnS
 import { onSajuPostOnServer } from "@/entities/saju/server/onSajuPostOnServer";
 import type { SajuFormValues } from "@/features/saju-input/type/type";
 import { createErrorResponse, createSuccessResponse } from "@/shared/api";
+import { ACCESS_TOKEN_COOKIE_KEY } from "@/shared/config/authToken";
 
 export const revalidate = 60;
 
@@ -90,7 +91,7 @@ function clearPendingFormCookie(response: NextResponse) {
 
 export async function POST() {
   const cookieStore = await cookies();
-  const token = cookieStore.get("saju_access_token")?.value;
+  const token = cookieStore.get(ACCESS_TOKEN_COOKIE_KEY)?.value;
 
   if (!token) {
     return NextResponse.json(

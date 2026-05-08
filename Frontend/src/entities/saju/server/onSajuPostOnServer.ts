@@ -1,10 +1,10 @@
 import type { SajuFormValues } from "@/features/saju-input/type/type";
 import type {
-  ApiResponseDailyEnergyResponse,
   DailyEnergyResponse,
   SajuRequest,
 } from "@/generated/api";
 import { authenticatedBackendFetch } from "@/shared/api/auth/authenticatedBackendFetch";
+import { parseBackendApiResponse } from "@/shared/api/backend/parseBackendApiResponse";
 import { SAJU_ENDPOINT_PATH } from "@/shared/config/endPoint";
 import { toBackendBirthDate } from "@/shared/utils/BirthDate";
 
@@ -63,27 +63,18 @@ export async function onSajuPostOnServer(
     },
     body: JSON.stringify(payload),
   });
-  const response = result.response;
+  const parsed = await parseBackendApiResponse<DailyEnergyResponse>(
+    result.response,
+    "Saju request failed.",
+  );
 
-  let body: ApiResponseDailyEnergyResponse | null = null;
-
-  try {
-    body = (await response.json()) as ApiResponseDailyEnergyResponse;
-  } catch {
-    body = null;
-  }
-
-  if (!response.ok) {
-    return {
-      success: false,
-      status: response.status,
-      message: body?.message ?? `Saju request failed (${response.status}).`,
-    };
+  if (!parsed.success) {
+    return parsed;
   }
 
   return {
     success: true,
-    data: body?.data,
+    data: parsed.data,
   };
 }
 

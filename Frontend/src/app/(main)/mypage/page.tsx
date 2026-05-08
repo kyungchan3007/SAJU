@@ -9,9 +9,5 @@ export const metadata: Metadata = {
 };
 
 export default async function MypagePage() {
-  return (
-    <main className="page-shell">
-      <MypageSection />
-    </main>
-  );
+  return <MypageSection />;
 }

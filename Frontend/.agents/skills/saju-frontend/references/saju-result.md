@@ -1,3 +1,8 @@
+---
+name: saju-frontend-ref-saju-result
+description: /saju/result 관련 경로, 결과 조회/캐시 정책, 작업 규칙, 체크리스트
+---
+
 # /saju/result 결과 조회 참고
 
 ## 읽는 조건

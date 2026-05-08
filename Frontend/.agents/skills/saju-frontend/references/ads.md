@@ -1,3 +1,8 @@
+---
+name: saju-frontend-ref-ads
+description: AdSense/Rewarded Ads 정책, 결과 공개 게이트 구현, 광고 슬롯 환경변수, 피해야 할 패턴
+---
+
 # 광고 및 결과 공개 게이트 참고
 
 ## 읽는 조건

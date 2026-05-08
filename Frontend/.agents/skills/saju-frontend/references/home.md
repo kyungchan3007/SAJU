@@ -1,3 +1,8 @@
+---
+name: saju-frontend-ref-home
+description: 홈 화면 정보 구조, 관련 경로, 작업 규칙, 체크리스트
+---
+
 # /home 작업 참고
 
 ## 읽는 조건

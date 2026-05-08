@@ -1,3 +1,8 @@
+---
+name: saju-frontend-ref-mypage
+description: /mypage 관련 경로, 사용자 정보·관리 화면 작업 규칙
+---
+
 # /mypage 작업 참고
 
 ## 읽는 조건

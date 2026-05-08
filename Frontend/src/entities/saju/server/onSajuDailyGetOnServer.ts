@@ -1,7 +1,5 @@
-import {
-  ApiResponseDailyEnergyResponse,
-  DailyEnergyResponse,
-} from "@/generated/api";
+import { DailyEnergyResponse } from "@/generated/api";
+import { parseBackendApiResponse } from "@/shared/api/backend/parseBackendApiResponse";
 import { SAJU_DAILY_ENDPOINT_PATH } from "@/shared/config/endPoint";
 import { authenticatedBackendFetch } from "@/shared/api/auth/authenticatedBackendFetch";
 
@@ -23,27 +21,17 @@ export async function onSajuDailyGetOnServer(): Promise<SajuDailyGetResult> {
     method: "GET",
   });
 
-  const response = result.response;
+  const parsed = await parseBackendApiResponse<DailyEnergyResponse>(
+    result.response,
+    "Daily saju request failed.",
+  );
 
-  let body: ApiResponseDailyEnergyResponse | null = null;
-
-  try {
-    body = (await response.json()) as ApiResponseDailyEnergyResponse;
-  } catch {
-    body = null;
-  }
-
-  if (!response.ok) {
-    return {
-      success: false,
-      status: response.status,
-      message:
-        body?.message ?? `Daily saju request failed (${response.status}).`,
-    };
+  if (!parsed.success) {
+    return parsed;
   }
 
   return {
     success: true,
-    data: body?.data,
+    data: parsed.data,
   };
 }
