@@ -1,7 +1,7 @@
 "use client";
 
 import { OpenmojiImg } from "@/shared/ui/openmoji-img";
-import { zodiacList } from "@/domain/saju/guid-card/12zodiac/model/model";
+import { ZODIAC_LIST } from "@/shared/model/zodiac/model";
 
 type ZodiacListProps = {
   highlightedIndex?: number | null;
@@ -16,7 +16,7 @@ export default function ZodiacList({
         12 간지 동물
       </p>
       <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 lg:grid-cols-6">
-        {zodiacList.map((z, index) => {
+        {ZODIAC_LIST.map((z, index) => {
           const isActive = highlightedIndex === index;
 
           return (
@@ -42,7 +42,9 @@ export default function ZodiacList({
                 >
                   {z.name}
                 </strong>
-                <span className="text-[11px] text-sketch-subtle">{z.hanja}</span>
+                <span className="text-[11px] text-sketch-subtle">
+                  {z.hanja}
+                </span>
               </div>
 
               {isActive && (

@@ -1,14 +1,18 @@
+import { findZodiacByLabel } from "@/shared/model/zodiac/utils";
 import type { MypageUser } from "../type/types";
+
 type Props = { user: MypageUser };
 
 export function MypageProfileCard({ user }: Props) {
+  const zodiac = findZodiacByLabel(user.summaryZodiac);
+
   return (
     <div className="card-saju-primary flex items-center gap-4 p-5 lg:flex-col lg:py-8 lg:text-center">
       <div
         className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full border-2 border-black bg-[#0d0d0d] text-3xl lg:h-20 lg:w-20 lg:text-4xl"
         style={{ boxShadow: "3px 3px 0 #0d0d0d" }}
       >
-        {/*{user.avatarEmoji}*/}
+        {zodiac ? <span>{zodiac.emoji}</span> : user.summaryZodiac}
       </div>
 
       <div className="flex flex-1 flex-col gap-1.5 lg:items-center">
@@ -25,7 +29,7 @@ export function MypageProfileCard({ user }: Props) {
 
       {/* 모바일: 우측 링크 */}
       <a
-        href="/mypage/profile"
+        href="/mypage/jeongtongsaju"
         className="shrink-0 text-xs text-[#0d0d0d]/50 underline hover:text-[#0d0d0d] lg:hidden"
       >
         만세력 보기
@@ -33,7 +37,7 @@ export function MypageProfileCard({ user }: Props) {
 
       {/* 웹: 하단 버튼 */}
       <a
-        href="/mypage/profile"
+        href="/mypage/jeongtongsaju"
         className="btn-saju btn-saju-secondary hidden rounded-full px-5 py-1.5 text-xs lg:inline-block"
       >
         만세력 보기 →

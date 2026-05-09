@@ -32,6 +32,7 @@ description: 기술 스택, 레이어 구조(app/widgets/features/entities/share
 - `/compatibility`: 궁합 결과와 결제 유도
 - `/location`: 위치 추천과 지도
 - `/mypage`: 사용자 정보와 관리 화면
+- `/mypage/jeongtongsaju`: 정통사주 상세 조회
 
 ## 작업 원칙
 

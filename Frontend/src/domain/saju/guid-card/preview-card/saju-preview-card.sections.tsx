@@ -1,10 +1,9 @@
 import Link from "next/link";
 import type { DailyEnergyResponse } from "@/generated/api";
 
-import { ohengItems } from "@/domain/saju/guid-card/preview-card/model/model";
 import { ExpandableTextRow } from "@/domain/saju/guid-card/preview-card/expandable-text-row";
 import { SajuElementAnimation } from "@/features/saju-result/ui/saju-element-animation";
-import { rankObjectValues } from "@/shared/utils/rankByValue";
+import { FiveElementsBalanceCard } from "@/shared/ui/five-elements-balance/five-elements-balance";
 import { formatWeakElementLabel } from "@/shared/utils/weakElement";
 
 const cardBase = "sketch-border p-5";
@@ -88,32 +87,11 @@ export function SajuStatsSection({ dailyResult }: SajuPreviewCardProps) {
 }
 
 export function SajuInsightsSection({ dailyResult }: SajuPreviewCardProps) {
-  const rankedFiveElements = rankObjectValues(
-    dailyResult?.fiveElements,
-    ohengItems,
-  );
-
   return (
     <div className="grid grid-cols-1 gap-[18px] sm:grid-cols-2">
-      <div className={cardBase}>
-        <h4 className="text-base font-bold text-black">오행 밸런스</h4>
-        <div className="mt-4 grid gap-2.5">
-          {rankedFiveElements.map((o) => (
-            <div key={o.name}>
-              <div className="mb-1.5 flex justify-between text-xs text-black/60">
-                <span>{o.name}</span>
-                <span>{o.pct}%</span>
-              </div>
-              <div className="h-2.5 overflow-hidden rounded-none border border-black bg-transparent">
-                <div
-                  className="h-full bg-black"
-                  style={{ width: `${o.pct}%` }}
-                />
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+      <FiveElementsBalanceCard
+        fiveElements={{ elements: dailyResult?.fiveElements ?? {} }}
+      />
 
       <div className={cardBase}>
         <h4 className="text-base font-bold text-black">오늘의 한마디</h4>

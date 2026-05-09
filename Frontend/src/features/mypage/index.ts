@@ -1,4 +1,5 @@
 export { MypageProfileCard } from "./ui/mypage-profile-card";
+export { MypageSidebar } from "./ui/mypage-sidebar";
 export { MypageStatsCard } from "./ui/mypage-stats-card";
 export { MypageQuickMenu } from "./ui/mypage-quick-menu";
 export { MypageBanner } from "./ui/mypage-banner";

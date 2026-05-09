@@ -5,14 +5,6 @@ export const statItems = [
   { value: "잔잔한", label: "권장 무드" },
 ];
 
-export const ohengItems = [
-  { name: "목(木)", pct: 41 },
-  { name: "화(火)", pct: 68 },
-  { name: "토(土)", pct: 75 },
-  { name: "금(金)", pct: 63 },
-  { name: "수(水)", pct: 58 },
-];
-
 export const todayItems = [
   { label: "좋은 행동", value: "정리, 기록, 산책" },
   { label: "피할 흐름", value: "소음, 과한 일정" },

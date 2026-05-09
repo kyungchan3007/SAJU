@@ -1,9 +1,9 @@
-import { zodiacList } from "@/domain/saju/guid-card/12zodiac/model/model";
 import type { InputStepItem } from "@/features/saju-input/step/step";
 import type {
   SajuFormValues,
   TouchedSteps,
 } from "@/features/saju-input/type/type";
+import { ZODIAC_LIST } from "@/shared/model/zodiac/model";
 import {
   isValidBirthMonthDay,
   parseBirthMonthDay,
@@ -35,7 +35,7 @@ export function getHighlightedZodiacIndex(
 // SajuInputFieldsContainer 안에서 getHighlightedZodiacIndex 바로 아래에서 호출된다.
 export function getHighlightedZodiac(highlightedZodiacIndex: number | null) {
   return highlightedZodiacIndex !== null
-    ? zodiacList[highlightedZodiacIndex]
+    ? ZODIAC_LIST[highlightedZodiacIndex]
     : null;
 }
 

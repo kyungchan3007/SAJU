@@ -1,5 +1,6 @@
 export type MypageUser = {
   email: string;
+  summaryZodiac: string;
 };
 
 export type MypageStats = {

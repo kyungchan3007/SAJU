@@ -24,6 +24,7 @@ description: BFF 경계 규칙, 서버 호출 구조, 현재 API 엔드포인트
 - `GET/POST /api/saju`
 - `POST /api/saju/draft`
 - `POST /api/saju/result`
+- `GET /api/saju/traditional`
 - `GET/POST /api/compatibility`
 - `GET/POST /api/location`
 - `POST /api/payment/verify`

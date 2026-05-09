@@ -2,7 +2,7 @@
 name: saju-frontend
 description: >-
   이 저장소의 사주 프론트엔드 구현 또는 변경 요청에 사용한다. Next.js App Router
-  페이지와 흐름(/saju, /saju/result, /home, /mypage, /location, /login),
+  페이지와 흐름(/saju, /saju/result, /home, /mypage, /mypage/jeongtongsaju, /location, /login),
   인증 인식 UX, 사주 입력 임시저장 동작, React Query 사용/캐싱,
   OpenAPI 생성 프론트엔드 클라이언트 연동, UI 상태 및 컴포넌트 레이어 결정 작업이
   해당된다. 사용자가 라우트나 기술명을 명시하지 않아도 해당 영역이면 사용한다.
@@ -25,6 +25,7 @@ description: >-
 - `.tsx` 컴포넌트의 비즈니스 로직, 플로우 로직, 역할 분리 작업이면 `references/component-guide.md`를 읽는다.
 - `/saju` 입력 흐름 작업이면 `references/saju.md`를 읽는다.
 - `/saju/result` 결과 조회 작업이면 `references/saju-result.md`를 읽는다.
+- `/mypage/jeongtongsaju` 또는 정통사주 상세 조회 작업이면 `references/jeongtongsaju.md`를 읽는다.
 - `/home` 작업이면 `references/home.md`를 읽는다.
 - `/login` 또는 인증 UI 작업이면 `references/auth.md`를 읽는다.
 - `/mypage` 작업이면 `references/mypage.md`를 읽는다.
