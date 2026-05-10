@@ -26,6 +26,8 @@ description: >-
 - `/saju` 입력 흐름 작업이면 `references/saju.md`를 읽는다.
 - `/saju/result` 결과 조회 작업이면 `references/saju-result.md`를 읽는다.
 - `/mypage/jeongtongsaju` 또는 정통사주 상세 조회 작업이면 `references/jeongtongsaju.md`를 읽는다.
+- `/mypage/saju-manage` 또는 내 사주 기본 정보 조회·수정 작업이면 `references/saju-manage.md`를 읽는다.
+- `/mypage/zodiac-compatibility` 또는 띠별 궁합 조회·점수 매핑 작업이면 `references/zodiac-compatibility.md`를 읽는다.
 - `/home` 작업이면 `references/home.md`를 읽는다.
 - `/login` 또는 인증 UI 작업이면 `references/auth.md`를 읽는다.
 - `/mypage` 작업이면 `references/mypage.md`를 읽는다.

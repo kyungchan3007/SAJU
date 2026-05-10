@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import type { BannerItem } from "../type/types";
+import type { BannerItem } from "../../type/types";
 
 type Props = { items: BannerItem[] };
 

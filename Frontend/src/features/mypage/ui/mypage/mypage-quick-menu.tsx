@@ -1,4 +1,4 @@
-import type { QuickMenuItem } from "../type/types";
+import type { QuickMenuItem } from "../../type/types";
 
 type Props = { items: QuickMenuItem[] };
 

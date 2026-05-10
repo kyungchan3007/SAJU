@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import type { NavMenuItem, NavTab } from "../type/types";
+import type { NavMenuItem, NavTab } from "../../type/types";
 
 const TABS: NavTab[] = ["운세"];
 
@@ -14,6 +14,12 @@ const MENU_BY_TAB: Record<NavTab, NavMenuItem[]> = {
       label: "궁합",
       sub: "두 사람의 인연",
       href: "/compatibility",
+    },
+    {
+      icon: "🐯",
+      label: "띠별궁합",
+      sub: "띠로 보는 인연",
+      href: "/mypage/zodiac-compatibility",
     },
     { icon: "📅", label: "신년운세", sub: "2025년 흐름", href: "/saju" },
   ],
@@ -75,7 +81,7 @@ export function MypageNavMenu() {
       </div>
 
       {/* 메뉴 그리드 */}
-      <div className="grid grid-cols-4 divide-x divide-black/10">
+      <div className="grid grid-cols-5 divide-x divide-black/10">
         {items.map((item) => (
           <a
             key={item.label}

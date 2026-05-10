@@ -1,5 +1,5 @@
 import { findZodiacByLabel } from "@/shared/model/zodiac/utils";
-import type { MypageUser } from "../type/types";
+import type { MypageUser } from "../../type/types";
 
 type Props = { user: MypageUser };
 

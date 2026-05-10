@@ -1,4 +1,4 @@
-import type { InfoItem } from "../type/types";
+import type { InfoItem } from "../../type/types";
 
 type Props = { items: InfoItem[] };
 

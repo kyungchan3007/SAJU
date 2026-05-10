@@ -1,4 +1,4 @@
-import type { ManagementItem } from "../type/types";
+import type { ManagementItem } from "../../type/types";
 
 type Props = { items: ManagementItem[] };
 

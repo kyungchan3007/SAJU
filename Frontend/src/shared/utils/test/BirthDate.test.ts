@@ -1,5 +1,6 @@
 import {
   isValidBirthMonthDay,
+  parseBackendBirthDateParts,
   parseBirthMonthDay,
   toBackendBirthDate,
 } from "@/shared/utils/BirthDate";
@@ -35,5 +36,23 @@ describe("toBackendBirthDate", () => {
   it("returns null when year or month/day is invalid", () => {
     expect(toBackendBirthDate("92", "3/4")).toBeNull();
     expect(toBackendBirthDate("1992", "13/4")).toBeNull();
+  });
+});
+
+describe("parseBackendBirthDateParts", () => {
+  it("splits backend date into select values", () => {
+    expect(parseBackendBirthDateParts("1992-03-04")).toEqual({
+      year: "1992",
+      month: "3",
+      day: "4",
+    });
+  });
+
+  it("returns empty values for missing input", () => {
+    expect(parseBackendBirthDateParts(null)).toEqual({
+      year: "",
+      month: "",
+      day: "",
+    });
   });
 });

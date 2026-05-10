@@ -1,7 +1,7 @@
 "use client";
 
-import { useMyProfile } from "../hooks/useMyProfile";
-import { MYPAGE_DEFAULT_STATS } from "../model/model";
+import { useMyProfile } from "../../hooks/useMyProfile";
+import { MYPAGE_DEFAULT_STATS } from "../../model/model";
 import { MypageProfileCard } from "./mypage-profile-card";
 import { MypageStatsCard } from "./mypage-stats-card";
 

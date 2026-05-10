@@ -9,11 +9,13 @@ describe("zodiac utils", () => {
 
   it("finds zodiac by plain name or name with suffix", () => {
     expect(findZodiacByLabel("닭")).toMatchObject({
+      key: "rooster",
       emoji: "🐔",
       name: "닭",
       hanja: "酉",
     });
     expect(findZodiacByLabel("뱀띠")).toMatchObject({
+      key: "snake",
       emoji: "🐍",
       name: "뱀",
       hanja: "巳",

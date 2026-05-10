@@ -9,6 +9,13 @@
 3. `SKILL.md`에 매핑된 `references/` 문서 중 필요한 것만 읽는다.
 4. 읽은 내용을 5줄 이내로 요약한 뒤 구현을 시작한다.
 
+## 필수 시작 규칙
+
+- 작업을 시작하기 전에 반드시 `.agents/skills/saju-frontend/SKILL.md`를 먼저 읽는다.
+- 첫 번째 액션은 반드시 `.agents/skills/saju-frontend/SKILL.md` 읽기여야 한다.
+- `SKILL.md`를 읽지 않은 상태에서는 코드 검색, 파일 수정, 구현 계획 수립을 시작하지 않는다.
+- 작업 대상 라우트 또는 기능 도메인을 식별한 뒤, `SKILL.md`에 매핑된 필요한 `references/` 문서만 읽는다.
+
 ## 읽기 제한
 
 - 관련 없는 `.md` 파일은 읽지 않는다.

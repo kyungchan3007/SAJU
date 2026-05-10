@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>사주 관리 — 프로토타입</title>
+  <link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #F8F6F1;
+      --bg-card: #FDFCF8;
+      --bg-muted: #F0EDE6;
+      --fg: #0d0d0d;
+      --border: #0d0d0d;
+      --border-light: #d4d0c8;
+      --muted: #7a7570;
+      --shadow: 4px 4px 0 #0d0d0d;
+      --shadow-sm: 2px 2px 0 #0d0d0d;
+      --yellow: #FFE500;
+      --radius: 3px;
+      --font-display: 'Jua', sans-serif;
+      --font-body: 'Noto Sans KR', sans-serif;
+    }
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--fg);
+      min-height: 100vh;
+      padding: 32px 20px;
+    }
+
+    /* ── 프로토 컨트롤 ── */
+    .proto-bar {
+      display: flex; gap: 8px; margin-bottom: 24px; justify-content: flex-end; flex-wrap: wrap;
+    }
+    .view-btn {
+      padding: 5px 14px; border: 2px solid var(--border); border-radius: 999px;
+      font-size: 12px; font-weight: 600; cursor: pointer; background: var(--bg);
+      font-family: var(--font-body);
+    }
+    .view-btn.active { background: var(--fg); color: #fff; }
+
+    /* ── 레이아웃 ── */
+    .container { max-width: 720px; margin: 0 auto; }
+    .is-mobile .container { max-width: 390px; }
+
+    /* ── 페이지 타이틀 ── */
+    .page-title {
+      font-family: var(--font-display); font-size: 22px; margin-bottom: 20px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .page-title::after { content: ''; flex: 1; height: 2px; background: var(--border); }
+
+    /* ── 카드 ── */
+    .card {
+      background: var(--bg-card); border: 2px solid var(--border);
+      border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 16px;
+    }
+    .card-header {
+      background: var(--bg-muted); border-bottom: 2px solid var(--border);
+      padding: 12px 20px; font-family: var(--font-display); font-size: 15px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .card-body { padding: 20px; }
+
+    /* ── 정보 행 ── */
+    .info-grid { display: flex; flex-direction: column; }
+    .info-row {
+      display: flex; align-items: center; padding: 13px 0;
+      border-bottom: 1px solid var(--border-light); gap: 12px;
+    }
+    .info-row:last-child { border-bottom: none; }
+    .info-label { font-size: 12px; font-weight: 700; color: var(--muted); min-width: 90px; letter-spacing: .03em; }
+    .info-value { font-size: 14px; font-weight: 600; flex: 1; }
+    .info-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      border: 2px solid var(--border); border-radius: 999px;
+      padding: 3px 12px; font-size: 12px; font-weight: 700;
+      background: var(--bg-card); box-shadow: var(--shadow-sm);
+    }
+    .info-badge.yellow { background: var(--yellow); }
+
+    /* ── 수정 버튼 ── */
+    .btn-edit {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 6px 16px; border: 2px solid var(--border); border-radius: 999px;
+      font-size: 12px; font-weight: 700; cursor: pointer;
+      background: var(--bg-card); box-shadow: var(--shadow-sm);
+      font-family: var(--font-body); transition: transform .1s;
+    }
+    .btn-edit:hover { transform: translate(-1px,-1px); box-shadow: var(--shadow); }
+
+    /* ── 경고 배너 ── */
+    .warn-banner {
+      background: #fffbeb; border: 2px solid #d97706; border-radius: var(--radius);
+      padding: 12px 16px; font-size: 12px; line-height: 1.6; color: #92400e;
+      margin-bottom: 16px; box-shadow: 2px 2px 0 #d97706;
+    }
+    .warn-banner strong { font-weight: 700; }
+
+    /* ── 폼 ── */
+    .form-grid { display: flex; flex-direction: column; gap: 16px; }
+    .form-field { display: flex; flex-direction: column; gap: 6px; }
+    .form-label { font-size: 12px; font-weight: 700; color: var(--muted); letter-spacing: .03em; }
+    .form-label .required { color: #ef4444; margin-left: 2px; }
+    .form-select {
+      width: 100%; padding: 10px 14px;
+      border: 2px solid var(--border); border-radius: var(--radius);
+      font-family: var(--font-body); font-size: 14px; font-weight: 600;
+      background: var(--bg-card); color: var(--fg);
+      appearance: none; -webkit-appearance: none;
+      outline: none; cursor: pointer; box-shadow: var(--shadow-sm);
+    }
+    .form-select:focus { box-shadow: var(--shadow); }
+    .select-wrap { position: relative; }
+    .select-wrap::after {
+      content: '▾'; position: absolute; right: 14px; top: 50%;
+      transform: translateY(-50%); pointer-events: none; font-size: 12px; color: var(--muted);
+    }
+    .date-row { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 8px; }
+    .toggle-group {
+      display: flex; border: 2px solid var(--border); border-radius: var(--radius);
+      overflow: hidden; box-shadow: var(--shadow-sm);
+    }
+    .toggle-option {
+      flex: 1; padding: 10px; text-align: center; font-size: 13px; font-weight: 700;
+      cursor: pointer; border: none; background: var(--bg-card);
+      font-family: var(--font-body); color: var(--fg);
+      border-right: 2px solid var(--border);
+    }
+    .toggle-option:last-child { border-right: none; }
+    .toggle-option.selected { background: var(--fg); color: #fff; }
+    .time-unknown-row { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+    .custom-checkbox {
+      width: 18px; height: 18px; border: 2px solid var(--border); border-radius: 3px;
+      background: var(--bg-card); cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; box-shadow: var(--shadow-sm);
+    }
+    .custom-checkbox.checked { background: var(--fg); }
+    .custom-checkbox.checked::after { content: '✓'; color: #fff; font-size: 11px; font-weight: 900; }
+    .time-unknown-label { font-size: 13px; font-weight: 600; color: var(--muted); cursor: pointer; }
+    .form-actions { display: flex; gap: 10px; margin-top: 4px; }
+    .btn-save {
+      flex: 1; padding: 12px; background: var(--fg); color: #fff;
+      border: 2px solid var(--border); border-radius: var(--radius);
+      font-family: var(--font-display); font-size: 15px; cursor: pointer;
+      box-shadow: var(--shadow); transition: transform .1s;
+    }
+    .btn-save:hover { transform: translate(-1px,-1px); }
+    .btn-cancel {
+      padding: 12px 20px; background: var(--bg-card);
+      border: 2px solid var(--border); border-radius: var(--radius);
+      font-family: var(--font-body); font-size: 14px; font-weight: 700;
+      cursor: pointer; box-shadow: var(--shadow-sm);
+    }
+
+    /* ── 웹 전용: 수정 폼 인라인 (기본 숨김) ── */
+    #edit-inline { display: none; }
+    #edit-inline.open { display: block; }
+
+    /* ── 모바일: 슬라이드 전환 ── */
+    .is-mobile .mobile-slider {
+      overflow: hidden;
+      position: relative;
+      width: 100%;
+    }
+    .is-mobile .slider-track {
+      display: flex;
+      width: 100%;
+      transition: transform .32s cubic-bezier(.4,0,.2,1);
+    }
+    .is-mobile .slider-panel {
+      min-width: 100%;
+      width: 100%;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+    /* 웹에서는 슬라이더 비활성 — 모바일 전용 패널 숨김 */
+    .slider-track { display: block; }
+    .slider-panel { display: block; }
+    #panel-edit { display: none; }
+    .is-mobile #panel-edit { display: block; }
+
+    /* 모바일 뒤로가기 헤더 */
+    .mobile-back-header {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .is-mobile .mobile-back-header { display: flex; }
+    .btn-back {
+      display: flex; align-items: center; gap: 4px;
+      padding: 6px 14px; border: 2px solid var(--border); border-radius: 999px;
+      font-size: 12px; font-weight: 700; cursor: pointer;
+      background: var(--bg-card); box-shadow: var(--shadow-sm);
+      font-family: var(--font-body);
+    }
+    .mobile-edit-title { font-family: var(--font-display); font-size: 17px; }
+
+    /* 토스트 */
+    .toast {
+      position: fixed; bottom: 28px; left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--fg); color: #fff;
+      padding: 12px 24px; border-radius: 999px;
+      font-size: 13px; font-weight: 600; box-shadow: var(--shadow);
+      transition: transform .3s cubic-bezier(.34,1.56,.64,1);
+      white-space: nowrap; z-index: 999;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+
+    /* 미등록 상태 */
+    .empty-state {
+      padding: 48px 20px; text-align: center;
+      display: flex; flex-direction: column; align-items: center; gap: 12px;
+    }
+    .empty-icon { font-size: 48px; }
+    .empty-title { font-family: var(--font-display); font-size: 18px; }
+    .empty-sub { font-size: 13px; color: var(--muted); line-height: 1.6; }
+    .btn-register {
+      margin-top: 4px; padding: 10px 24px;
+      background: var(--yellow); border: 2px solid var(--border);
+      border-radius: var(--radius); font-family: var(--font-display);
+      font-size: 14px; cursor: pointer; box-shadow: var(--shadow-sm);
+    }
+  </style>
+</head>
+<body>
+
+<div class="proto-bar">
+  <button class="view-btn active" onclick="setView('web',this)">🖥 웹</button>
+  <button class="view-btn" onclick="setView('mobile',this)">📱 모바일</button>
+  <button class="view-btn active" onclick="setMode('registered',this)" style="margin-left:12px">사주 등록됨</button>
+  <button class="view-btn" onclick="setMode('empty',this)">사주 미등록</button>
+</div>
+
+<div class="container">
+  <div class="page-title">사주 관리</div>
+
+  <!-- ══ 미등록 상태 ══ -->
+  <div id="state-empty" style="display:none">
+    <div class="card">
+      <div class="card-body empty-state">
+        <div class="empty-icon">🔮</div>
+        <div class="empty-title">아직 사주 정보가 없어요</div>
+        <div class="empty-sub">생년월일·시간·성별을 입력하면<br>나만의 사주 분석을 시작할 수 있어요.</div>
+        <button class="btn-register">사주 입력하기 →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ 등록됨 ══ -->
+  <div id="state-registered">
+    <div class="mobile-slider">
+      <div class="slider-track" id="slider-track">
+
+        <!-- ── 패널 1: 뷰 ── -->
+        <div class="slider-panel" id="panel-view">
+
+          <!-- 현재 사주 정보 -->
+          <div class="card">
+            <div class="card-header">
+              현재 사주 정보
+              <button class="btn-edit" onclick="enterEdit()">✏️ 수정하기</button>
+            </div>
+            <div class="card-body">
+              <div class="info-grid">
+                <div class="info-row">
+                  <span class="info-label">생년월일</span>
+                  <span class="info-value">1993년 10월 15일</span>
+                  <span class="info-badge">양력</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">태어난 시간</span>
+                  <span class="info-value">오전 09:00</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">성별</span>
+                  <span class="info-badge yellow">여성</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">태어난 도시</span>
+                  <span class="info-value">서울특별시</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 사주 요약 -->
+          <div class="card">
+            <div class="card-header">나의 사주 요약</div>
+            <div class="card-body">
+              <div class="info-grid">
+                <div class="info-row">
+                  <span class="info-label">띠</span>
+                  <span class="info-badge yellow">🐓 닭띠</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">신강·신약</span>
+                  <span class="info-badge">신약(身弱)</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">격국</span>
+                  <span class="info-badge">편인격</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">용신</span>
+                  <div style="display:flex;gap:6px">
+                    <span class="info-badge" style="background:#DBEAFE">💧 수(水)</span>
+                    <span class="info-badge" style="background:#DCFCE7">🌿 목(木)</span>
+                  </div>
+                </div>
+              </div>
+              <p style="margin-top:12px;font-size:11px;color:var(--muted);line-height:1.6">
+                ※ 사주 정보를 수정하면 위 요약이 새로 계산됩니다.
+              </p>
+            </div>
+          </div>
+
+          <!-- 웹 전용: 수정 폼 인라인 -->
+          <div id="edit-inline">
+            <div class="warn-banner">
+              ⚠️ <strong>주의:</strong> 사주 정보를 수정하면 기존 분석 결과가 새로 계산됩니다. 변경 전 내용은 복원되지 않습니다.
+            </div>
+            <div class="card">
+              <div class="card-header">사주 정보 수정</div>
+              <div class="card-body">
+                <div class="form-grid">
+                  <!-- 양력/음력 -->
+                  <div class="form-field">
+                    <label class="form-label">양력 / 음력 <span class="required">*</span></label>
+                    <div class="toggle-group">
+                      <button class="toggle-option selected" onclick="selectToggle(this)">양력</button>
+                      <button class="toggle-option" onclick="selectToggle(this)">음력</button>
+                      <button class="toggle-option" onclick="selectToggle(this)">음력 (윤달)</button>
+                    </div>
+                  </div>
+                  <!-- 생년월일 -->
+                  <div class="form-field">
+                    <label class="form-label">생년월일 <span class="required">*</span></label>
+                    <div class="date-row">
+                      <div class="select-wrap"><select class="form-select" id="web-year"></select></div>
+                      <div class="select-wrap"><select class="form-select" id="web-month"></select></div>
+                      <div class="select-wrap"><select class="form-select" id="web-day"></select></div>
+                    </div>
+                  </div>
+                  <!-- 태어난 시간 -->
+                  <div class="form-field">
+                    <label class="form-label">태어난 시간</label>
+                    <div id="web-time-wrap" style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+                      <div class="select-wrap"><select class="form-select" id="web-hour"></select></div>
+                      <div class="select-wrap"><select class="form-select" id="web-minute"></select></div>
+                    </div>
+                    <div class="time-unknown-row">
+                      <div class="custom-checkbox" id="web-time-check" onclick="toggleTime('web')"></div>
+                      <span class="time-unknown-label" onclick="toggleTime('web')">태어난 시간을 모릅니다</span>
+                    </div>
+                  </div>
+                  <!-- 성별 -->
+                  <div class="form-field">
+                    <label class="form-label">성별 <span class="required">*</span></label>
+                    <div class="toggle-group">
+                      <button class="toggle-option selected" onclick="selectToggle(this)">여성</button>
+                      <button class="toggle-option" onclick="selectToggle(this)">남성</button>
+                    </div>
+                  </div>
+                  <!-- 도시 -->
+                  <div class="form-field">
+                    <label class="form-label">태어난 도시</label>
+                    <div class="select-wrap"><select class="form-select" id="web-city"></select></div>
+                    <p style="margin-top:6px;font-size:11px;color:var(--muted)">출생 도시는 사주의 지역 보정값 계산에 사용됩니다.</p>
+                  </div>
+                  <!-- 버튼 -->
+                  <div class="form-actions">
+                    <button class="btn-cancel" onclick="cancelEdit()">취소</button>
+                    <button class="btn-save" onclick="saveEdit()">저장하기</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /panel-view -->
+
+        <!-- ── 패널 2: 모바일 수정 (슬라이드) ── -->
+        <div class="slider-panel" id="panel-edit">
+          <div class="mobile-back-header">
+            <button class="btn-back" onclick="cancelEdit()">← 뒤로</button>
+            <span class="mobile-edit-title">사주 정보 수정</span>
+          </div>
+          <div class="warn-banner">
+            ⚠️ <strong>주의:</strong> 사주 정보를 수정하면 기존 분석 결과가 새로 계산됩니다.
+          </div>
+          <div class="card">
+            <div class="card-body">
+              <div class="form-grid">
+                <!-- 양력/음력 -->
+                <div class="form-field">
+                  <label class="form-label">양력 / 음력 <span class="required">*</span></label>
+                  <div class="toggle-group">
+                    <button class="toggle-option selected" onclick="selectToggle(this)">양력</button>
+                    <button class="toggle-option" onclick="selectToggle(this)">음력</button>
+                    <button class="toggle-option" onclick="selectToggle(this)">음력 (윤달)</button>
+                  </div>
+                </div>
+                <!-- 생년월일 -->
+                <div class="form-field">
+                  <label class="form-label">생년월일 <span class="required">*</span></label>
+                  <div class="date-row">
+                    <div class="select-wrap"><select class="form-select" id="mob-year"></select></div>
+                    <div class="select-wrap"><select class="form-select" id="mob-month"></select></div>
+                    <div class="select-wrap"><select class="form-select" id="mob-day"></select></div>
+                  </div>
+                </div>
+                <!-- 태어난 시간 -->
+                <div class="form-field">
+                  <label class="form-label">태어난 시간</label>
+                  <div id="mob-time-wrap" style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+                    <div class="select-wrap"><select class="form-select" id="mob-hour"></select></div>
+                    <div class="select-wrap"><select class="form-select" id="mob-minute"></select></div>
+                  </div>
+                  <div class="time-unknown-row">
+                    <div class="custom-checkbox" id="mob-time-check" onclick="toggleTime('mob')"></div>
+                    <span class="time-unknown-label" onclick="toggleTime('mob')">태어난 시간을 모릅니다</span>
+                  </div>
+                </div>
+                <!-- 성별 -->
+                <div class="form-field">
+                  <label class="form-label">성별 <span class="required">*</span></label>
+                  <div class="toggle-group">
+                    <button class="toggle-option selected" onclick="selectToggle(this)">여성</button>
+                    <button class="toggle-option" onclick="selectToggle(this)">남성</button>
+                  </div>
+                </div>
+                <!-- 도시 -->
+                <div class="form-field">
+                  <label class="form-label">태어난 도시</label>
+                  <div class="select-wrap"><select class="form-select" id="mob-city"></select></div>
+                  <p style="margin-top:6px;font-size:11px;color:var(--muted)">출생 도시는 사주의 지역 보정값 계산에 사용됩니다.</p>
+                </div>
+                <!-- 버튼 -->
+                <div class="form-actions">
+                  <button class="btn-cancel" onclick="cancelEdit()">취소</button>
+                  <button class="btn-save" onclick="saveEdit()">저장하기</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div><!-- /panel-edit -->
+
+      </div><!-- /slider-track -->
+    </div><!-- /mobile-slider -->
+  </div><!-- /state-registered -->
+
+</div>
+
+<div class="toast" id="toast">✅ 사주 정보가 저장됐습니다</div>
+
+<script>
+  const HOURS = Array.from({length:24},(_,i)=>{
+    const ampm = i < 12 ? '오전' : '오후';
+    const h = i === 0 ? '0시 (자시)' : i <= 12 ? `${i}시` : `${i-12}시`;
+    return { value: i, label: `${ampm} ${h}` };
+  });
+  const CITIES = ['서울특별시','부산광역시','대구광역시','인천광역시','광주광역시','대전광역시','울산광역시','세종특별자치시','수원시','고양시','용인시','성남시','춘천시','강릉시','청주시','전주시','포항시','창원시','제주시','서귀포시'];
+
+  function fillSelect(id, options, selectedValue) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.innerHTML = options.map(o =>
+      `<option value="${o.value}"${o.value == selectedValue ? ' selected' : ''}>${o.label}</option>`
+    ).join('');
+  }
+
+  function initSelects() {
+    const years = Array.from({length:100},(_,i)=>({value:2005-i, label:`${2005-i}년`}));
+    const months = Array.from({length:12},(_,i)=>({value:i+1, label:`${i+1}월`}));
+    const days = Array.from({length:31},(_,i)=>({value:i+1, label:`${i+1}일`}));
+    const minutes = Array.from({length:60},(_,i)=>({value:i, label:`${String(i).padStart(2,'0')}분`}));
+    const cities = CITIES.map(c=>({value:c,label:c}));
+
+    ['web','mob'].forEach(p => {
+      fillSelect(`${p}-year`, years, 1993);
+      fillSelect(`${p}-month`, months, 10);
+      fillSelect(`${p}-day`, days, 15);
+      fillSelect(`${p}-hour`, HOURS, 9);
+      fillSelect(`${p}-minute`, minutes, 0);
+      fillSelect(`${p}-city`, cities, '서울특별시');
+    });
+  }
+
+  initSelects();
+
+  let isMobile = false;
+  let timeUnknown = { web: false, mob: false };
+
+  function setView(mode, btn) {
+    document.querySelectorAll('.view-btn').forEach(b => {
+      if (b.textContent.includes('웹') || b.textContent.includes('모바일')) b.classList.remove('active');
+    });
+    btn.classList.add('active');
+    isMobile = mode === 'mobile';
+    document.body.classList.toggle('is-mobile', isMobile);
+    // 뷰 전환 시 편집 초기화
+    cancelEdit();
+  }
+
+  function setMode(mode, btn) {
+    document.querySelectorAll('.view-btn').forEach(b => {
+      if (b.textContent.includes('등록')) b.classList.remove('active');
+    });
+    btn.classList.add('active');
+    const isEmpty = mode === 'empty';
+    document.getElementById('state-empty').style.display = isEmpty ? 'block' : 'none';
+    document.getElementById('state-registered').style.display = isEmpty ? 'none' : 'block';
+    cancelEdit();
+  }
+
+  function enterEdit() {
+    if (isMobile) {
+      // 모바일: 슬라이드
+      document.getElementById('slider-track').style.transform = 'translateX(-100%)';
+    } else {
+      // 웹: 인라인 펼치기
+      document.getElementById('edit-inline').classList.add('open');
+      setTimeout(() => document.getElementById('edit-inline').scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+    }
+  }
+
+  function cancelEdit() {
+    if (isMobile) {
+      document.getElementById('slider-track').style.transform = 'translateX(0)';
+    } else {
+      document.getElementById('edit-inline').classList.remove('open');
+    }
+  }
+
+  function saveEdit() {
+    cancelEdit();
+    const toast = document.getElementById('toast');
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2400);
+  }
+
+  function selectToggle(el) {
+    el.closest('.toggle-group').querySelectorAll('.toggle-option').forEach(b => b.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+
+  function toggleTime(prefix) {
+    timeUnknown[prefix] = !timeUnknown[prefix];
+    const v = timeUnknown[prefix];
+    document.getElementById(`${prefix}-time-check`).classList.toggle('checked', v);
+    const wrap = document.getElementById(`${prefix}-time-wrap`);
+    wrap.style.opacity = v ? '0.35' : '1';
+    wrap.style.pointerEvents = v ? 'none' : 'auto';
+  }
+</script>
+</body>
+</html>

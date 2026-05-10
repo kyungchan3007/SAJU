@@ -1,5 +1,5 @@
 import { Button } from "@/shared/ui/button";
-import type { MypageStats } from "../type/types";
+import type { MypageStats } from "../../type/types";
 
 type Props = { stats: MypageStats };
 

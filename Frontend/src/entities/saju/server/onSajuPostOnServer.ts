@@ -1,11 +1,12 @@
 import type { SajuFormValues } from "@/features/saju-input/type/type";
-import type {
-  DailyEnergyResponse,
-  SajuRequest,
-} from "@/generated/api";
+import type { DailyEnergyResponse, SajuRequest } from "@/generated/api";
 import { authenticatedBackendFetch } from "@/shared/api/auth/authenticatedBackendFetch";
 import { parseBackendApiResponse } from "@/shared/api/backend/parseBackendApiResponse";
 import { SAJU_ENDPOINT_PATH } from "@/shared/config/endPoint";
+import {
+  isSajuCalendarInputType,
+  toBackendSajuCalendarType,
+} from "@/shared/model/saju-calendar/utils";
 import { toBackendBirthDate } from "@/shared/utils/BirthDate";
 
 type SajuPostSuccess = {
@@ -39,7 +40,7 @@ export async function onSajuPostOnServer(
 
   if (
     !isSajuGender(formValues.gender) ||
-    !isSajuCalendarType(formValues.calendarType)
+    !isSajuCalendarInputType(formValues.calendarType)
   ) {
     return {
       success: false,
@@ -51,7 +52,7 @@ export async function onSajuPostOnServer(
   const payload: SajuRequest = {
     birthTime: formValues.birthTime || null,
     gender: formValues.gender,
-    calendarType: formValues.calendarType,
+    calendarType: toBackendSajuCalendarType(formValues.calendarType),
     birthDate,
     city: formValues.city || null,
   };
@@ -80,10 +81,4 @@ export async function onSajuPostOnServer(
 
 function isSajuGender(value: string): value is SajuRequest["gender"] {
   return value === "MALE" || value === "FEMALE";
-}
-
-function isSajuCalendarType(
-  value: string,
-): value is SajuRequest["calendarType"] {
-  return value === "SOLAR" || value === "LUNAR";
 }

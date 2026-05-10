@@ -33,3 +33,17 @@ export function toBackendBirthDate(
 
   return `${trimmedYear}-${String(monthDay.month).padStart(2, "0")}-${String(monthDay.day).padStart(2, "0")}`;
 }
+
+export function parseBackendBirthDateParts(value?: string | null) {
+  if (!value) {
+    return { year: "", month: "", day: "" };
+  }
+
+  const [year, month, day] = value.split("-");
+
+  return {
+    year: year ?? "",
+    month: month ? String(Number(month)) : "",
+    day: day ? String(Number(day)) : "",
+  };
+}
