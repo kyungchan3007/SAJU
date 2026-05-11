@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>정통사주 풀이 — 점신 프로토타입</title>
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ivory: #F8F6F1;
+    --black: #1A1A1A;
+    --border: 2px solid #1A1A1A;
+    --shadow: 3px 3px 0 #1A1A1A;
+    --shadow-lg: 5px 5px 0 #1A1A1A;
+    --green: #2E7D4F;
+    --green-light: #E8F5EE;
+    --gold: #B8860B;
+    --gold-light: #FFF8E1;
+    --pink: #C2185B;
+    --pink-light: #FCE4EC;
+    --blue: #1565C0;
+    --blue-light: #E3F2FD;
+    --orange: #E65100;
+    --orange-light: #FFF3E0;
+    --purple: #6A1B9A;
+    --purple-light: #F3E5F5;
+  }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: #e8e4dc;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 16px 40px;
+  }
+
+  /* ── 뷰포트 토글 ── */
+  .viewport-toggle {
+    display: flex; gap: 8px; margin-bottom: 16px;
+  }
+  .vp-btn {
+    padding: 6px 14px; font-size: 12px; font-weight: 700;
+    border: var(--border); background: white; cursor: pointer;
+    box-shadow: var(--shadow); font-family: 'Noto Sans KR', sans-serif;
+    transition: transform .1s;
+  }
+  .vp-btn.active { background: var(--black); color: white; }
+  .vp-btn:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 #1A1A1A; }
+
+  /* ── 기기 프레임 ── */
+  .device-frame {
+    border: var(--border); box-shadow: var(--shadow-lg);
+    background: var(--ivory); overflow: hidden;
+    transition: width .3s, border-radius .3s;
+  }
+  .device-frame.mobile { width: 390px; border-radius: 32px; }
+  .device-frame.web    { width: 860px; border-radius: 12px; }
+
+  /* ── 앱 헤더 ── */
+  .app-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 20px; border-bottom: var(--border);
+    background: white; position: sticky; top: 0; z-index: 30;
+  }
+  .app-header .back-btn {
+    font-size: 18px; cursor: pointer; background: none; border: none;
+    font-family: 'Noto Sans KR', sans-serif; font-size: 13px; font-weight: 700;
+    padding: 6px 10px; border: var(--border); box-shadow: var(--shadow);
+    background: white; cursor: pointer;
+  }
+  .app-header h1 {
+    font-family: 'Jua', sans-serif; font-size: 18px; color: var(--black);
+  }
+  .app-header .share-btn {
+    font-size: 18px; background: none; border: none; cursor: pointer; padding: 4px;
+  }
+
+  /* ── 컨텐츠 스크롤 영역 ── */
+  .scroll-area {
+    overflow-y: auto;
+    max-height: calc(100vh - 80px);
+  }
+  .device-frame.mobile .scroll-area { max-height: 780px; }
+  .device-frame.web    .scroll-area { max-height: 700px; }
+
+  /* ── 배너 ── */
+  .hero-banner {
+    background: linear-gradient(135deg, #1a4a2e 0%, #2E7D4F 60%, #4CAF50 100%);
+    padding: 28px 20px 24px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-banner::before {
+    content: '🌿';
+    position: absolute; right: 20px; top: 16px; font-size: 48px; opacity: .4;
+  }
+  .hero-banner .sub { font-size: 12px; opacity: .85; margin-bottom: 6px; }
+  .hero-banner h2 { font-family: 'Jua', sans-serif; font-size: 24px; line-height: 1.3; }
+  .hero-banner .user-name {
+    display: inline-block; margin-top: 10px;
+    background: rgba(255,255,255,.2); border: 1px solid rgba(255,255,255,.4);
+    border-radius: 20px; padding: 4px 12px; font-size: 13px; font-weight: 700;
+  }
+
+  /* ── 사주 기본 정보 ── */
+  .saju-info-card {
+    margin: 16px; padding: 16px;
+    background: white; border: var(--border); box-shadow: var(--shadow);
+    border-radius: 4px;
+  }
+  .saju-info-card .card-title {
+    font-family: 'Jua', sans-serif; font-size: 14px; color: var(--green);
+    margin-bottom: 12px;
+  }
+  .pillars-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
+  }
+  .pillar-item {
+    text-align: center; padding: 10px 6px;
+    border: var(--border); background: var(--ivory);
+  }
+  .pillar-item .pillar-label {
+    font-size: 10px; color: #666; margin-bottom: 6px; font-weight: 700;
+  }
+  .pillar-item .pillar-gan {
+    font-family: 'Jua', sans-serif; font-size: 22px;
+    color: var(--black); line-height: 1;
+  }
+  .pillar-item .pillar-ji {
+    font-family: 'Jua', sans-serif; font-size: 22px;
+    color: var(--green); line-height: 1; margin-top: 4px;
+  }
+  .pillar-item .pillar-animal {
+    font-size: 10px; color: #888; margin-top: 4px;
+  }
+  /* 오행 */
+  .ohaeng-row {
+    display: flex; gap: 6px; margin-top: 12px; flex-wrap: wrap;
+  }
+  .ohaeng-chip {
+    padding: 4px 10px; border: var(--border); font-size: 12px; font-weight: 700;
+    border-radius: 2px;
+  }
+  .ohaeng-chip.wood  { background: #E8F5EE; color: #2E7D4F; }
+  .ohaeng-chip.fire  { background: #FEECEC; color: #C62828; }
+  .ohaeng-chip.earth { background: #FFF8E1; color: #F9A825; }
+  .ohaeng-chip.metal { background: #FAFAFA; color: #424242; }
+  .ohaeng-chip.water { background: #E3F2FD; color: #1565C0; }
+
+  /* ── 스티키 탭 ── */
+  .tab-nav {
+    display: flex; overflow-x: auto; gap: 0;
+    border-bottom: var(--border); background: white;
+    position: sticky; top: 53px; z-index: 20;
+    scrollbar-width: none;
+  }
+  .tab-nav::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    flex: 0 0 auto; padding: 12px 16px;
+    font-family: 'Noto Sans KR', sans-serif; font-size: 13px; font-weight: 700;
+    background: none; border: none; cursor: pointer; color: #888;
+    border-bottom: 3px solid transparent; margin-bottom: -2px; white-space: nowrap;
+    transition: color .2s;
+  }
+  .tab-btn.active { color: var(--black); border-bottom-color: var(--black); }
+
+  /* ── 섹션 ── */
+  .section-block {
+    display: none; padding: 20px 16px;
+    border-bottom: 8px solid #eee;
+  }
+  .section-block.active { display: block; }
+
+  .section-block .section-title {
+    font-family: 'Jua', sans-serif; font-size: 19px; color: var(--black);
+    margin-bottom: 14px; line-height: 1.4;
+  }
+  .section-block .section-subtitle {
+    font-size: 13px; color: #888; margin-bottom: 4px; font-weight: 700;
+  }
+  .section-block p {
+    font-size: 14px; line-height: 1.85; color: #333;
+    margin-bottom: 14px;
+  }
+  .section-block p:last-child { margin-bottom: 0; }
+
+  /* 점수 배지 */
+  .score-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 14px; border: var(--border); box-shadow: var(--shadow);
+    font-family: 'Jua', sans-serif; font-size: 16px;
+    margin-bottom: 14px; background: white;
+  }
+  .score-badge .score-num { font-size: 22px; }
+
+  /* 키워드 태그 */
+  .keyword-row { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0; }
+  .keyword-tag {
+    padding: 5px 12px; border: var(--border); font-size: 12px; font-weight: 700;
+    background: white; box-shadow: var(--shadow);
+  }
+
+  /* 주의/긍정 박스 */
+  .info-box {
+    padding: 14px 16px; border: var(--border); margin: 12px 0;
+    box-shadow: var(--shadow); font-size: 13px; line-height: 1.7;
+  }
+  .info-box.positive { background: var(--green-light); border-left: 4px solid var(--green); }
+  .info-box.caution  { background: #FFF3CD; border-left: 4px solid #F59E0B; }
+  .info-box .box-label {
+    font-family: 'Jua', sans-serif; font-size: 13px; margin-bottom: 6px;
+  }
+
+  /* ── 행운 포인트 섹션 ── */
+  .lucky-section {
+    padding: 20px 16px; background: white; border-bottom: 8px solid #eee;
+  }
+  .lucky-section .section-title {
+    font-family: 'Jua', sans-serif; font-size: 17px; margin-bottom: 16px;
+  }
+  .lucky-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .lucky-item {
+    padding: 14px 10px; text-align: center;
+    border: var(--border); background: var(--ivory); box-shadow: var(--shadow);
+  }
+  .lucky-item .lucky-emoji { font-size: 24px; display: block; margin-bottom: 6px; }
+  .lucky-item .lucky-label { font-size: 10px; color: #888; font-weight: 700; margin-bottom: 4px; }
+  .lucky-item .lucky-value { font-family: 'Jua', sans-serif; font-size: 14px; }
+
+  /* ── 앱전용 카테고리 ── */
+  .app-only-section {
+    padding: 20px 16px; background: var(--ivory); border-bottom: 8px solid #eee;
+  }
+  .app-only-badge {
+    display: inline-block; padding: 3px 10px; font-size: 11px; font-weight: 700;
+    background: #FFE500; border: var(--border); margin-bottom: 10px;
+  }
+  .app-only-section .section-title {
+    font-family: 'Jua', sans-serif; font-size: 16px; margin-bottom: 14px;
+  }
+  .category-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;
+  }
+  .category-card {
+    padding: 16px; border: var(--border); background: white;
+    box-shadow: var(--shadow); display: flex; align-items: center; gap: 12px;
+    cursor: pointer; transition: transform .1s;
+  }
+  .category-card:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 #1A1A1A; }
+  .category-card .cat-icon { font-size: 26px; }
+  .category-card .cat-name { font-family: 'Jua', sans-serif; font-size: 15px; }
+  .category-card .cat-desc { font-size: 11px; color: #888; margin-top: 2px; }
+
+  /* ── 공유 섹션 ── */
+  .share-section {
+    padding: 24px 16px; text-align: center; background: white;
+  }
+  .share-section h3 { font-family: 'Jua', sans-serif; font-size: 18px; margin-bottom: 4px; }
+  .share-section .share-count { font-size: 13px; color: #888; margin-bottom: 16px; }
+  .share-btn-row { display: flex; gap: 8px; justify-content: center; }
+  .share-btn {
+    padding: 10px 20px; border: var(--border); font-size: 13px; font-weight: 700;
+    background: var(--black); color: white; cursor: pointer;
+    box-shadow: var(--shadow); font-family: 'Noto Sans KR', sans-serif;
+  }
+  .share-btn.outline { background: white; color: var(--black); }
+
+  /* ── Web 2컬럼 ── */
+  .device-frame.web .web-layout {
+    display: grid; grid-template-columns: 300px 1fr;
+    max-height: 700px;
+  }
+  .device-frame.web .web-sidebar {
+    border-right: var(--border); overflow-y: auto; background: white;
+  }
+  .device-frame.web .web-main {
+    overflow-y: auto;
+  }
+  .device-frame.mobile .web-layout { display: block; }
+  .device-frame.mobile .web-sidebar { display: none; }
+
+  /* sidebar nav */
+  .sidebar-nav { padding: 20px 0; }
+  .sidebar-nav .nav-title {
+    padding: 8px 20px; font-family: 'Jua', sans-serif; font-size: 13px; color: #888;
+    text-transform: uppercase; letter-spacing: .05em;
+  }
+  .sidebar-nav .nav-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 20px; font-size: 14px; font-weight: 700;
+    cursor: pointer; border-left: 3px solid transparent;
+    color: #555; transition: all .2s;
+  }
+  .sidebar-nav .nav-item:hover { background: var(--ivory); }
+  .sidebar-nav .nav-item.active {
+    color: var(--black); border-left-color: var(--black); background: var(--ivory);
+  }
+  .sidebar-nav .nav-item .nav-dot {
+    width: 8px; height: 8px; border-radius: 50%; background: #ccc; flex-shrink: 0;
+  }
+  .sidebar-nav .nav-item.active .nav-dot { background: var(--green); }
+
+  /* 탭 — 웹에서 숨김 */
+  .device-frame.web .tab-nav { display: none; }
+  /* 섹션 — 웹에서 항상 표시 */
+  .device-frame.web .section-block { display: block; }
+</style>
+</head>
+<body>
+
+<div class="viewport-toggle">
+  <button class="vp-btn active" onclick="setViewport('mobile', this)">📱 모바일</button>
+  <button class="vp-btn" onclick="setViewport('web', this)">🖥️ 웹</button>
+</div>
+
+<div class="device-frame mobile" id="frame">
+
+  <!-- 헤더 -->
+  <div class="app-header">
+    <button class="back-btn">← 뒤로</button>
+    <h1>정통사주 풀이</h1>
+    <button class="share-btn">🔗</button>
+  </div>
+
+  <!-- 웹 2컬럼 레이아웃 -->
+  <div class="web-layout">
+
+    <!-- 사이드바 (웹 전용) -->
+    <div class="web-sidebar">
+      <div class="sidebar-nav">
+        <div class="nav-title">풀이 목차</div>
+        <div class="nav-item active" onclick="switchTab('total', this)">
+          <span class="nav-dot"></span> 나의 사주 &amp; 총운
+        </div>
+        <div class="nav-item" onclick="switchTab('money', this)">
+          <span class="nav-dot"></span> 재물운
+        </div>
+        <div class="nav-item" onclick="switchTab('love', this)">
+          <span class="nav-dot"></span> 애정운
+        </div>
+        <div class="nav-item" onclick="switchTab('job', this)">
+          <span class="nav-dot"></span> 직업 &amp; 적성
+        </div>
+        <div class="nav-item" onclick="switchTab('health', this)">
+          <span class="nav-dot"></span> 건강운
+        </div>
+        <div class="nav-item" onclick="switchTab('caution', this)">
+          <span class="nav-dot"></span> 꼭 조심하자
+        </div>
+      </div>
+    </div>
+
+    <!-- 메인 콘텐츠 -->
+    <div class="web-main scroll-area">
+
+      <!-- 히어로 배너 -->
+      <div class="hero-banner">
+        <div class="sub">사주팔자가 알려주는 나의 운명은?</div>
+        <h2>26년 정통사주</h2>
+        <div class="user-name">👤 박경찬님의 사주</div>
+      </div>
+
+      <!-- 사주 기본 정보 -->
+      <div class="saju-info-card">
+        <div class="card-title">🔯 나의 사주팔자</div>
+        <div class="pillars-grid">
+          <div class="pillar-item">
+            <div class="pillar-label">年柱</div>
+            <div class="pillar-gan">甲</div>
+            <div class="pillar-ji">子</div>
+            <div class="pillar-animal">쥐띠</div>
+          </div>
+          <div class="pillar-item">
+            <div class="pillar-label">月柱</div>
+            <div class="pillar-gan">丙</div>
+            <div class="pillar-ji">午</div>
+            <div class="pillar-animal">말</div>
+          </div>
+          <div class="pillar-item">
+            <div class="pillar-label">日柱</div>
+            <div class="pillar-gan">戊</div>
+            <div class="pillar-ji">申</div>
+            <div class="pillar-animal">원숭이</div>
+          </div>
+          <div class="pillar-item">
+            <div class="pillar-label">時柱</div>
+            <div class="pillar-gan">庚</div>
+            <div class="pillar-ji">辰</div>
+            <div class="pillar-animal">용</div>
+          </div>
+        </div>
+        <div class="ohaeng-row">
+          <div class="ohaeng-chip wood">木 1</div>
+          <div class="ohaeng-chip fire">火 2</div>
+          <div class="ohaeng-chip earth">土 2</div>
+          <div class="ohaeng-chip metal">金 2</div>
+          <div class="ohaeng-chip water">水 1</div>
+        </div>
+      </div>
+
+      <!-- 탭 (모바일) -->
+      <div class="tab-nav">
+        <button class="tab-btn active" onclick="switchTab('total', this)">총운</button>
+        <button class="tab-btn" onclick="switchTab('money', this)">재물운</button>
+        <button class="tab-btn" onclick="switchTab('love', this)">애정운</button>
+        <button class="tab-btn" onclick="switchTab('job', this)">직업운</button>
+        <button class="tab-btn" onclick="switchTab('health', this)">건강운</button>
+        <button class="tab-btn" onclick="switchTab('caution', this)">주의</button>
+      </div>
+
+      <!-- ── 총운 ── -->
+      <div class="section-block active" id="sec-total">
+        <div class="section-title">나에게 올해는</div>
+
+        <div class="score-badge" style="color:var(--green)">
+          <span>🌿</span>
+          <span class="score-num">78</span>
+          <span style="font-size:14px">/ 100점</span>
+        </div>
+
+        <p>박경찬님은 올해 착실하고 꾸준한 모습으로 본인의 일을 해나갈 것이며 많은 꿈을 갖는 것 보다 달성 가능한 현실적인 목표를 세운다면 이를 충분히 완수해 낼 수 있는 시기입니다. 올해는 무리하거나 과감한 모습으로 자신의 일을 하지는 않지만 착실하고 성실하며 일관된 모습으로 일을 할 수 있는 시기이므로 일정 부분의 성과를 거둘 수 있는 때입니다.</p>
+
+        <p>그리고 이러한 면 때문에 자신의 분야에서 직장이나, 학교, 모임 등에서 주변 사람들의 칭찬을 받는 일이 생길 것이며 사람들과도 잘 어울리며 조화를 이루는 데에 힘쓰게 되니 마음이 안락하고 사람들에게도 사랑을 주고 받는 일이 있을 것입니다. 올해는 주로 동갑내기나, 나이가 어린 사람들과 가까이 하는 것이 좋은 해입니다.</p>
+
+        <div class="info-box positive">
+          <div class="box-label">✅ 올해의 행운 포인트</div>
+          꾸준한 노력이 빛을 발하는 한 해입니다. 봄철(3~5월)에 좋은 기회가 찾아올 가능성이 높으니 준비를 게을리 하지 마세요.
+        </div>
+
+        <div class="keyword-row">
+          <span class="keyword-tag">#성실</span>
+          <span class="keyword-tag">#꾸준함</span>
+          <span class="keyword-tag">#인간관계</span>
+          <span class="keyword-tag">#내실다지기</span>
+        </div>
+      </div>
+
+      <!-- ── 재물운 ── -->
+      <div class="section-block" id="sec-money">
+        <div class="section-title">올해 재물운은 어떨까요</div>
+
+        <div class="score-badge" style="color:var(--gold)">
+          <span>💰</span>
+          <span class="score-num">72</span>
+          <span style="font-size:14px">/ 100점</span>
+        </div>
+
+        <p>올해 재물운은 전반적으로 안정적인 흐름을 보입니다. 박경찬님의 사주에서 금(金)의 기운이 강하게 작용하고 있어 꾸준한 수입이 유지되는 한 해가 될 것입니다. 다만 상반기에는 예상치 못한 지출이 발생할 수 있으니 충동적인 소비나 투자는 자제하는 것이 좋습니다.</p>
+
+        <p>하반기로 갈수록 재물의 흐름이 좋아지는 경향이 있으며, 특히 9월과 10월에는 예상치 못한 부수입이나 기회가 찾아올 수 있습니다. 새로운 재테크나 투자보다는 기존에 하던 일을 더욱 충실히 하는 것이 안정적인 재물 운용에 도움이 됩니다.</p>
+
+        <div class="info-box caution">
+          <div class="box-label">⚠️ 재물 주의사항</div>
+          보증이나 대출, 큰 금액의 투자는 상반기에 특히 주의하세요. 올해는 지키는 재물이 더 가치 있는 한 해입니다.
+        </div>
+
+        <div class="keyword-row">
+          <span class="keyword-tag" style="background:var(--gold-light)">#안정수입</span>
+          <span class="keyword-tag" style="background:var(--gold-light)">#절약</span>
+          <span class="keyword-tag" style="background:var(--gold-light)">#하반기기회</span>
+        </div>
+      </div>
+
+      <!-- ── 애정운 ── -->
+      <div class="section-block" id="sec-love">
+        <div class="section-title">올해 애정운은 어떨까요</div>
+
+        <div class="score-badge" style="color:var(--pink)">
+          <span>💕</span>
+          <span class="score-num">65</span>
+          <span style="font-size:14px">/ 100점</span>
+        </div>
+
+        <p>올해 애정운에서 이성문제가 주요한 이슈로 떠오를 것이며 이성과의 관계에 여러 가지 이슈들이 많은 시기이고 여러 이성을 만나게 되는 일이 있지만 이와 함께 아픈 경험들도 나타나게 됩니다. 그러므로 이성관계에서 너무 마음을 상하지 않도록 적절하게 감정조절을 해 나갈 필요가 있을 것입니다.</p>
+
+        <p>현재 연애 중이라면 관계를 더욱 깊이 있게 발전시킬 기회가 찾아올 수 있습니다. 그러나 무리하게 관계를 진전시키려 하지 말고 자연스러운 흐름에 맡기는 것이 좋습니다. 미혼인 경우 봄과 가을에 좋은 인연을 만날 가능성이 있으니 주변 사람들과의 교류를 넓혀 보세요.</p>
+
+        <div class="info-box positive">
+          <div class="box-label">💌 애정 포인트</div>
+          진심을 담은 표현이 관계를 더욱 단단하게 만들어 줍니다. 올해는 솔직한 대화가 최고의 애정 운세를 만드는 열쇠입니다.
+        </div>
+
+        <div class="keyword-row">
+          <span class="keyword-tag" style="background:var(--pink-light)">#설렘</span>
+          <span class="keyword-tag" style="background:var(--pink-light)">#감정조절</span>
+          <span class="keyword-tag" style="background:var(--pink-light)">#솔직한대화</span>
+        </div>
+      </div>
+
+      <!-- ── 직업운 ── -->
+      <div class="section-block" id="sec-job">
+        <div class="section-title">올해 직업 &amp; 적성운은</div>
+
+        <div class="score-badge" style="color:var(--orange)">
+          <span>💼</span>
+          <span class="score-num">80</span>
+          <span style="font-size:14px">/ 100점</span>
+        </div>
+
+        <p>올해는 직업적으로 상당히 활발한 한 해가 될 것입니다. 박경찬님의 사주에서 목(木)과 토(土)의 기운이 조화를 이루고 있어 현재 하고 있는 일에서 성과를 인정받을 기회가 찾아옵니다. 특히 상반기에 업무 능력을 인정받는 중요한 순간이 있을 것이며, 이를 통해 직장 내 위치가 한층 올라갈 수 있습니다.</p>
+
+        <p>새로운 프로젝트나 업무 변화에 대해서도 긍정적으로 받아들이는 것이 좋습니다. 평소 배우고 싶었던 기술이나 자격증 취득에 도전하기 좋은 한 해이기도 합니다. 이직이나 창업을 고려하고 있다면 하반기가 더욱 유리한 타이밍입니다.</p>
+
+        <div class="info-box positive">
+          <div class="box-label">🚀 직업 운세 요약</div>
+          노력한 만큼 정직하게 결실이 맺히는 해입니다. 꾸준한 자기계발과 성실한 업무 태도가 큰 기회를 불러옵니다.
+        </div>
+
+        <div class="keyword-row">
+          <span class="keyword-tag" style="background:var(--orange-light)">#승진기회</span>
+          <span class="keyword-tag" style="background:var(--orange-light)">#자기계발</span>
+          <span class="keyword-tag" style="background:var(--orange-light)">#인정받는한해</span>
+        </div>
+      </div>
+
+      <!-- ── 건강운 ── -->
+      <div class="section-block" id="sec-health">
+        <div class="section-title">올해 건강운은 어떨까요</div>
+
+        <div class="score-badge" style="color:var(--blue)">
+          <span>🏥</span>
+          <span class="score-num">70</span>
+          <span style="font-size:14px">/ 100점</span>
+        </div>
+
+        <p>올해 건강운은 전반적으로 무난한 편이지만 스트레스 관리에 특히 주의를 기울여야 합니다. 업무나 인간관계에서 오는 심리적 부담이 건강에 영향을 미칠 수 있는 시기입니다. 규칙적인 생활 리듬을 유지하고 충분한 수면을 취하는 것이 무엇보다 중요합니다.</p>
+
+        <p>특히 여름철(6~8월)에 소화기 계통이나 피부 관련 문제가 발생할 수 있으니 음식 관리와 자외선 차단에 신경 쓰세요. 꾸준한 운동 습관을 들이면 하반기에 체력이 향상되어 더욱 활기찬 생활이 가능합니다. 정기적인 건강검진을 통해 예방적 관리를 하는 것을 권합니다.</p>
+
+        <div class="info-box caution">
+          <div class="box-label">⚠️ 건강 주의사항</div>
+          무리한 야근이나 과음은 피하고, 충분한 휴식을 취하세요. 작은 건강 이상도 빠르게 대처하는 것이 중요한 해입니다.
+        </div>
+
+        <div class="keyword-row">
+          <span class="keyword-tag" style="background:var(--blue-light)">#스트레스관리</span>
+          <span class="keyword-tag" style="background:var(--blue-light)">#규칙적생활</span>
+          <span class="keyword-tag" style="background:var(--blue-light)">#예방관리</span>
+        </div>
+      </div>
+
+      <!-- ── 주의사항 ── -->
+      <div class="section-block" id="sec-caution">
+        <div class="section-title">올해 이것만은 꼭 조심하자</div>
+
+        <p>한편, 올해는 이성문제에 대한 관심이 매우 많이 생기는 때입니다. 이성과의 관계에 여러 가지 이슈들이 많은 시기이고 여러 이성을 만나게 되는 일이 있지만 이와 함께 아픈 경험들도 나타나게 됩니다. 그러므로 이성관계에서 너무 마음을 상하지 않도록 적절하게 감정조절을 해 나갈 필요가 있을 것입니다.</p>
+
+        <p>전반적으로 올해는 연초에 가진 꿈을 연말까지 지속시키는 것이 다소 어려운 시기입니다. 많은 성과를 내거나 내 꿈이나 욕심이 100퍼센트 부합되어 결실이 나타나지는 않지만 꿈과 계획을 크게 갖고 그에 따른 노력도 연말까지 지속적으로 게을리 하지 않는다면 본인이 원하는 목표에 근접한 열매를 맺게 될 것입니다.</p>
+
+        <div class="info-box caution">
+          <div class="box-label">⚠️ 3가지 주의사항</div>
+          ① 충동적인 큰 결정은 반드시 신중하게<br>
+          ② 지인의 보증이나 금전거래는 피할 것<br>
+          ③ 건강 이상 신호를 무시하지 말 것
+        </div>
+      </div>
+
+      <!-- 행운 포인트 -->
+      <div class="lucky-section">
+        <div class="section-title">🍀 나의 행운 포인트</div>
+        <div class="lucky-grid">
+          <div class="lucky-item">
+            <span class="lucky-emoji">🎨</span>
+            <div class="lucky-label">행운의 색</div>
+            <div class="lucky-value">초록·금색</div>
+          </div>
+          <div class="lucky-item">
+            <span class="lucky-emoji">🔢</span>
+            <div class="lucky-label">행운의 숫자</div>
+            <div class="lucky-value">3, 8, 9</div>
+          </div>
+          <div class="lucky-item">
+            <span class="lucky-emoji">🧭</span>
+            <div class="lucky-label">행운의 방향</div>
+            <div class="lucky-value">동쪽·남쪽</div>
+          </div>
+          <div class="lucky-item">
+            <span class="lucky-emoji">💎</span>
+            <div class="lucky-label">행운의 아이템</div>
+            <div class="lucky-value">에메랄드</div>
+          </div>
+          <div class="lucky-item">
+            <span class="lucky-emoji">🌸</span>
+            <div class="lucky-label">좋은 계절</div>
+            <div class="lucky-value">봄·가을</div>
+          </div>
+          <div class="lucky-item">
+            <span class="lucky-emoji">🍱</span>
+            <div class="lucky-label">행운의 음식</div>
+            <div class="lucky-value">녹황색채소</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 앱전용 카테고리 -->
+      <div class="app-only-section">
+        <div class="app-only-badge">APP 전용</div>
+        <div class="section-title">그 외 다양한 운들을<br>점신 앱에서 확인해 보세요!</div>
+        <div class="category-grid">
+          <div class="category-card">
+            <span class="cat-icon">🌀</span>
+            <div>
+              <div class="cat-name">평생사주</div>
+              <div class="cat-desc">대운·세운 흐름</div>
+            </div>
+          </div>
+          <div class="category-card">
+            <span class="cat-icon">💰</span>
+            <div>
+              <div class="cat-name">재물</div>
+              <div class="cat-desc">월별 재물 상세</div>
+            </div>
+          </div>
+          <div class="category-card">
+            <span class="cat-icon">💕</span>
+            <div>
+              <div class="cat-name">애정</div>
+              <div class="cat-desc">연애·결혼 운세</div>
+            </div>
+          </div>
+          <div class="category-card">
+            <span class="cat-icon">💪</span>
+            <div>
+              <div class="cat-name">능력</div>
+              <div class="cat-desc">적성·직업운</div>
+            </div>
+          </div>
+          <div class="category-card">
+            <span class="cat-icon">❤️</span>
+            <div>
+              <div class="cat-name">건강</div>
+              <div class="cat-desc">월별 건강 체크</div>
+            </div>
+          </div>
+          <div class="category-card">
+            <span class="cat-icon">📅</span>
+            <div>
+              <div class="cat-name">월별운세</div>
+              <div class="cat-desc">12개월 상세 흐름</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 공유 -->
+      <div class="share-section">
+        <h3>나의 운세를 공유해보세요!</h3>
+        <div class="share-count">1,356,774명이 공유하였습니다.</div>
+        <div class="share-btn-row">
+          <button class="share-btn outline">📋 복사</button>
+          <button class="share-btn">📤 공유하기</button>
+        </div>
+      </div>
+
+    </div><!-- /web-main -->
+  </div><!-- /web-layout -->
+
+</div><!-- /device-frame -->
+
+<script>
+function setViewport(mode, btn) {
+  document.querySelectorAll('.vp-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const frame = document.getElementById('frame');
+  frame.className = 'device-frame ' + mode;
+}
+
+function switchTab(id, source) {
+  // 탭 버튼 활성화
+  const isSidebar = source?.closest('.sidebar-nav');
+  if (isSidebar) {
+    document.querySelectorAll('.sidebar-nav .nav-item').forEach(i => i.classList.remove('active'));
+    source.classList.add('active');
+  } else {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    source?.classList.add('active');
+  }
+
+  // 섹션 전환 (모바일)
+  const frame = document.getElementById('frame');
+  if (!frame.classList.contains('web')) {
+    document.querySelectorAll('.section-block').forEach(s => s.classList.remove('active'));
+    const target = document.getElementById('sec-' + id);
+    if (target) target.classList.add('active');
+  }
+
+  // 웹: 스크롤
+  if (frame.classList.contains('web')) {
+    const target = document.getElementById('sec-' + id);
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+}
+</script>
+</body>
+</html>

@@ -176,6 +176,152 @@
       font-size: 14px; cursor: pointer; box-shadow: var(--shadow-sm);
     }
 
+    /* ── 등록된 사주 카드 ── */
+    .saju-card-list {
+      display: flex; gap: 10px; overflow-x: auto;
+      padding: 4px 2px 8px;
+      scrollbar-width: none;
+    }
+    .saju-card-list::-webkit-scrollbar { display: none; }
+
+    .saju-card {
+      flex-shrink: 0; width: 80px;
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      cursor: pointer; position: relative;
+    }
+    .saju-card-avatar {
+      width: 72px; height: 72px;
+      border: 2px solid var(--border); border-radius: 12px;
+      background: var(--bg-muted);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 32px;
+      box-shadow: var(--shadow-sm);
+      transition: transform .12s, box-shadow .12s;
+      position: relative; overflow: visible;
+    }
+    .saju-card:hover .saju-card-avatar {
+      transform: translate(-1px,-1px);
+      box-shadow: 3px 3px 0 var(--border);
+    }
+    .saju-card.selected .saju-card-avatar {
+      border-color: var(--border); border-width: 2px;
+      background: #FFF9C2;
+      box-shadow: 3px 3px 0 var(--border);
+    }
+    .saju-check {
+      display: none;
+      position: absolute; top: -7px; right: -7px;
+      width: 22px; height: 22px; border-radius: 50%;
+      background: var(--fg); border: 2px solid #fff;
+      align-items: center; justify-content: center;
+      font-size: 11px; color: #fff; font-weight: 900;
+      box-shadow: 0 1px 4px rgba(0,0,0,.25);
+    }
+    .saju-card.selected .saju-check { display: flex; }
+    .saju-card-name {
+      font-size: 12px; font-weight: 700; color: var(--fg);
+      text-align: center; line-height: 1.2;
+    }
+    .saju-card.selected .saju-card-name { color: var(--fg); }
+
+    /* 편집 모드 — X 버튼 */
+    .saju-delete-btn {
+      display: none;
+      position: absolute; top: -8px; left: -8px;
+      width: 22px; height: 22px; border-radius: 50%;
+      background: #ef4444; border: 2px solid #fff;
+      align-items: center; justify-content: center;
+      font-size: 11px; color: #fff; font-weight: 900;
+      box-shadow: 0 1px 4px rgba(0,0,0,.3);
+      cursor: pointer; z-index: 2;
+      line-height: 1;
+    }
+    .edit-mode .saju-card:not(.saju-card-add):not(.no-delete) .saju-delete-btn {
+      display: flex;
+    }
+    /* 편집 모드에서 카드 흔들림 */
+    .edit-mode .saju-card:not(.saju-card-add):not(.no-delete) .saju-card-avatar {
+      animation: wiggle .5s ease-in-out infinite alternate;
+    }
+    @keyframes wiggle {
+      from { transform: rotate(-1.5deg); }
+      to   { transform: rotate(1.5deg); }
+    }
+    /* 편집 모드에서 hover 효과 제거 */
+    .edit-mode .saju-card:hover .saju-card-avatar {
+      transform: none; box-shadow: var(--shadow-sm);
+    }
+    /* 편집 버튼 */
+    .btn-edit-mode {
+      padding: 3px 12px; border: 2px solid var(--border);
+      border-radius: 999px; font-size: 12px; font-weight: 700;
+      cursor: pointer; background: var(--bg-card);
+      font-family: var(--font-body); box-shadow: var(--shadow-sm);
+      transition: all .1s;
+    }
+    .btn-edit-mode.active {
+      background: var(--fg); color: #fff;
+    }
+    /* 삭제 불가 — 나 카드 */
+    .no-delete .saju-card-avatar { opacity: 1; }
+
+    /* 추가 버튼 카드 */
+    .saju-card-add .saju-card-avatar {
+      background: var(--bg-card);
+      border-style: dashed; border-color: var(--border-light);
+      box-shadow: none; color: var(--muted); font-size: 26px;
+    }
+    .saju-card-add:hover .saju-card-avatar {
+      border-color: var(--border); border-style: solid;
+      background: var(--bg-muted);
+      transform: translate(-1px,-1px); box-shadow: var(--shadow-sm);
+    }
+    .saju-card-add .saju-card-name { color: var(--muted); }
+    /* 편집 모드에서 추가 버튼 숨김 */
+    .edit-mode .saju-card-add { display: none; }
+
+    /* 추가 모달 */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0; z-index: 100;
+      background: rgba(13,13,13,.45); backdrop-filter: blur(2px);
+      align-items: center; justify-content: center;
+    }
+    .modal-overlay.show { display: flex; }
+    .modal {
+      background: var(--bg-card); border: 2px solid var(--border);
+      border-radius: 8px; box-shadow: var(--shadow);
+      padding: 24px; width: calc(100% - 40px); max-width: 360px;
+    }
+    .modal-title {
+      font-family: var(--font-display); font-size: 17px;
+      margin-bottom: 18px; display: flex; justify-content: space-between; align-items: center;
+    }
+    .modal-close {
+      width: 28px; height: 28px; border: 2px solid var(--border);
+      border-radius: var(--radius); background: var(--bg-muted);
+      cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center;
+    }
+    .modal-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+    .modal-label { font-size: 12px; font-weight: 700; color: var(--muted); }
+    .modal-input {
+      padding: 10px 12px; border: 2px solid var(--border); border-radius: var(--radius);
+      font-family: var(--font-body); font-size: 14px; font-weight: 600;
+      background: var(--bg-card); outline: none; box-shadow: var(--shadow-sm);
+    }
+    .modal-input:focus { box-shadow: var(--shadow); }
+    .modal-actions { display: flex; gap: 8px; margin-top: 20px; }
+    .btn-modal-cancel {
+      flex: 1; padding: 11px; border: 2px solid var(--border);
+      border-radius: var(--radius); font-family: var(--font-display);
+      font-size: 14px; cursor: pointer; background: var(--bg-muted);
+    }
+    .btn-modal-confirm {
+      flex: 2; padding: 11px; border: 2px solid var(--border);
+      border-radius: var(--radius); font-family: var(--font-display);
+      font-size: 14px; cursor: pointer;
+      background: var(--fg); color: #fff; box-shadow: var(--shadow-sm);
+    }
+
     /* 토스트 */
     .toast {
       position: fixed; bottom: 28px; left: 50%;
@@ -216,17 +362,24 @@
   <!-- ══ 등록됨 ══ -->
   <div id="state-registered">
 
-    <!-- 현재 사주 요약 -->
+    <!-- 등록된 사주 카드 -->
     <div class="card">
-      <div class="card-header">나의 사주 요약</div>
+      <div class="card-header" style="display:flex;justify-content:space-between;align-items:center;">
+        <span>등록된 사주 <span style="font-family:var(--font-body);font-size:12px;color:var(--muted);font-weight:600;" id="card-count-label">3 / 4</span></span>
+        <button class="btn-edit-mode" id="edit-mode-btn" onclick="toggleEditMode()">편집</button>
+      </div>
+      <div class="card-body" style="padding:16px 20px;">
+        <div class="saju-card-list" id="saju-card-list"></div>
+      </div>
+    </div>
+
+    <!-- 나의 사주 요약 -->
+    <div class="card">
+      <div class="card-header" style="display:flex;justify-content:space-between;align-items:center;">
+        <span id="summary-title">나의 사주 요약</span>
+      </div>
       <div class="card-body">
-        <div class="summary-row">
-          <span class="badge yellow">🐓 닭띠</span>
-          <span class="badge">신약(身弱)</span>
-          <span class="badge">편인격</span>
-          <span class="badge" style="background:#DBEAFE">💧 수(水)</span>
-          <span class="badge" style="background:#DCFCE7">🌿 목(木)</span>
-        </div>
+        <div class="summary-row" id="summary-badges"></div>
         <p class="field-hint" style="margin-top:8px">※ 정보를 수정하면 사주 요약이 새로 계산됩니다.</p>
       </div>
     </div>
@@ -315,9 +468,242 @@
   </div>
 </div>
 
+<!-- 삭제 확인 모달 -->
+<div class="modal-overlay" id="delete-modal">
+  <div class="modal" style="text-align:center;">
+    <div style="font-size:36px;margin-bottom:12px;">🗑️</div>
+    <div style="font-family:var(--font-display);font-size:17px;margin-bottom:8px;" id="delete-modal-title">삭제하시겠어요?</div>
+    <p style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:22px;" id="delete-modal-desc">
+      해당 사주 정보가 영구 삭제됩니다.<br>이 작업은 되돌릴 수 없습니다.
+    </p>
+    <div class="modal-actions">
+      <button class="btn-modal-cancel" onclick="closeDeleteModal()">취소</button>
+      <button class="btn-modal-confirm" style="background:#ef4444;" onclick="confirmDelete()">삭제하기</button>
+    </div>
+  </div>
+</div>
+
+<!-- 사주 추가 모달 -->
+<div class="modal-overlay" id="add-modal">
+  <div class="modal">
+    <div class="modal-title">
+      사주 추가
+      <button class="modal-close" onclick="closeAddModal()">✕</button>
+    </div>
+    <div class="modal-field">
+      <label class="modal-label">이름 (별칭)</label>
+      <input class="modal-input" id="modal-name" type="text" placeholder="예: 아빠, 친구, 홍길동" maxlength="8" />
+    </div>
+    <div class="modal-field">
+      <label class="modal-label">아바타</label>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;" id="avatar-picker">
+        <span class="avatar-opt selected" onclick="pickAvatar(this,'🧑')">🧑</span>
+        <span class="avatar-opt" onclick="pickAvatar(this,'👨')">👨</span>
+        <span class="avatar-opt" onclick="pickAvatar(this,'👩')">👩</span>
+        <span class="avatar-opt" onclick="pickAvatar(this,'👴')">👴</span>
+        <span class="avatar-opt" onclick="pickAvatar(this,'👵')">👵</span>
+        <span class="avatar-opt" onclick="pickAvatar(this,'🧒')">🧒</span>
+        <span class="avatar-opt" onclick="pickAvatar(this,'👶')">👶</span>
+        <span class="avatar-opt" onclick="pickAvatar(this,'🐱')">🐱</span>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-modal-cancel" onclick="closeAddModal()">취소</button>
+      <button class="btn-modal-confirm" onclick="confirmAdd()">다음 — 사주 입력 →</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast">✅ 사주 정보가 저장됐습니다</div>
 
+<style>
+  .avatar-opt {
+    width: 40px; height: 40px; font-size: 22px;
+    display: flex; align-items: center; justify-content: center;
+    border: 2px solid var(--border-light); border-radius: 8px;
+    cursor: pointer; background: var(--bg-muted); transition: all .1s;
+  }
+  .avatar-opt.selected {
+    border-color: var(--border); background: #FFF9C2;
+    box-shadow: var(--shadow-sm);
+  }
+</style>
+
 <script>
+  /* ── 사주 프로필 데이터 ── */
+  const PROFILES = [
+    {
+      id: 1, name: '나', avatar: '🧑', isMe: true,
+      badges: [
+        { label: '🐓 닭띠', bg: '#FFE500' },
+        { label: '신약(身弱)', bg: '' },
+        { label: '편인격', bg: '' },
+        { label: '💧 수(水)', bg: '#DBEAFE' },
+        { label: '🌿 목(木)', bg: '#DCFCE7' },
+      ]
+    },
+    {
+      id: 2, name: '아빠', avatar: '👨', isMe: false,
+      badges: [
+        { label: '🐯 호랑이띠', bg: '#FFE500' },
+        { label: '신강(身強)', bg: '' },
+        { label: '정관격', bg: '' },
+        { label: '⚙️ 금(金)', bg: '#F1F5F9' },
+        { label: '🌍 토(土)', bg: '#FEF9C3' },
+      ]
+    },
+    {
+      id: 3, name: '엄마', avatar: '👩', isMe: false,
+      badges: [
+        { label: '🐰 토끼띠', bg: '#FFE500' },
+        { label: '중화(中和)', bg: '' },
+        { label: '식신격', bg: '' },
+        { label: '🔥 화(火)', bg: '#FEE2E2' },
+        { label: '🌍 토(土)', bg: '#FEF9C3' },
+      ]
+    },
+  ];
+
+  let selectedId = 1;
+  let selectedAvatar = '🧑';
+  let isEditMode = false;
+  let pendingDeleteId = null;
+
+  /* ── 카드 렌더 ── */
+  function renderCards() {
+    const list = document.getElementById('saju-card-list');
+    const count = PROFILES.length;
+    const max = 4;
+    document.getElementById('card-count-label').textContent = `${count} / ${max}`;
+
+    let html = PROFILES.map(p => `
+      <div class="saju-card${p.id === selectedId ? ' selected' : ''}${p.isMe ? ' no-delete' : ''}"
+           onclick="handleCardClick(event, ${p.id})">
+        <div class="saju-card-avatar">
+          <span class="saju-check">✓</span>
+          ${!p.isMe ? `<span class="saju-delete-btn" onclick="openDeleteModal(event,${p.id},'${p.name}')">✕</span>` : ''}
+          ${p.avatar}
+        </div>
+        <div class="saju-card-name">
+          ${p.name}${p.isMe ? '<br><span style="font-size:10px;color:var(--muted);font-weight:500;">(나)</span>' : ''}
+        </div>
+      </div>
+    `).join('');
+
+    if (count < max) {
+      html += `
+        <div class="saju-card saju-card-add" onclick="openAddModal()">
+          <div class="saju-card-avatar">＋</div>
+          <div class="saju-card-name" style="color:var(--muted);">추가</div>
+        </div>
+      `;
+    }
+
+    list.innerHTML = html;
+    renderSummary();
+  }
+
+  /* ── 요약 렌더 ── */
+  function renderSummary() {
+    const profile = PROFILES.find(p => p.id === selectedId);
+    if (!profile) return;
+    document.getElementById('summary-title').textContent =
+      profile.isMe ? '나의 사주 요약' : `${profile.name}의 사주 요약`;
+    document.getElementById('summary-badges').innerHTML =
+      profile.badges.map(b =>
+        `<span class="badge" style="${b.bg ? `background:${b.bg}` : ''}">${b.label}</span>`
+      ).join('');
+  }
+
+  /* ── 카드 클릭 — 편집 모드면 선택 막기 ── */
+  function handleCardClick(e, id) {
+    if (isEditMode) return;
+    selectProfile(id);
+  }
+
+  /* ── 프로필 선택 ── */
+  function selectProfile(id) {
+    selectedId = id;
+    renderCards();
+  }
+
+  /* ── 편집 모드 토글 ── */
+  function toggleEditMode() {
+    isEditMode = !isEditMode;
+    const btn = document.getElementById('edit-mode-btn');
+    const list = document.getElementById('saju-card-list');
+    btn.textContent = isEditMode ? '완료' : '편집';
+    btn.classList.toggle('active', isEditMode);
+    list.classList.toggle('edit-mode', isEditMode);
+  }
+
+  /* ── 삭제 모달 ── */
+  function openDeleteModal(e, id, name) {
+    e.stopPropagation();
+    pendingDeleteId = id;
+    document.getElementById('delete-modal-title').textContent = `'${name}' 사주를 삭제할까요?`;
+    document.getElementById('delete-modal').classList.add('show');
+  }
+  function closeDeleteModal() {
+    pendingDeleteId = null;
+    document.getElementById('delete-modal').classList.remove('show');
+  }
+  function confirmDelete() {
+    if (pendingDeleteId === null) return;
+    const profile = PROFILES.find(p => p.id === pendingDeleteId);
+    const idx = PROFILES.findIndex(p => p.id === pendingDeleteId);
+    if (idx !== -1) PROFILES.splice(idx, 1);
+    // 삭제된 게 선택된 카드면 '나'로 복귀
+    if (selectedId === pendingDeleteId) selectedId = PROFILES[0].id;
+    closeDeleteModal();
+    renderCards();
+    showToast(`🗑️ ${profile?.name} 사주가 삭제됐습니다`);
+  }
+
+  document.getElementById('delete-modal').addEventListener('click', e => {
+    if (e.target === e.currentTarget) closeDeleteModal();
+  });
+
+  /* ── 추가 모달 ── */
+  function openAddModal() {
+    document.getElementById('add-modal').classList.add('show');
+    document.getElementById('modal-name').value = '';
+    selectedAvatar = '🧑';
+    document.querySelectorAll('.avatar-opt').forEach(el => {
+      el.classList.toggle('selected', el.textContent.trim() === '🧑');
+    });
+  }
+  function closeAddModal() {
+    document.getElementById('add-modal').classList.remove('show');
+  }
+  function pickAvatar(el, emoji) {
+    document.querySelectorAll('.avatar-opt').forEach(e => e.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedAvatar = emoji;
+  }
+  function confirmAdd() {
+    const name = document.getElementById('modal-name').value.trim();
+    if (!name) { document.getElementById('modal-name').focus(); return; }
+    const newId = Date.now();
+    PROFILES.push({
+      id: newId, name, avatar: selectedAvatar, isMe: false,
+      badges: [
+        { label: '🔮 분석 전', bg: '#F3E8FF' },
+        { label: '사주 입력 필요', bg: '' },
+      ]
+    });
+    selectedId = newId;
+    closeAddModal();
+    renderCards();
+    showToast(`✅ ${name} 사주가 추가됐습니다`);
+  }
+
+  /* 모달 바깥 클릭 닫기 */
+  document.getElementById('add-modal').addEventListener('click', e => {
+    if (e.target === e.currentTarget) closeAddModal();
+  });
+
+  /* ── 기존 유틸 ── */
   const CITIES = ['서울특별시','부산광역시','대구광역시','인천광역시','광주광역시','대전광역시','울산광역시','세종특별자치시','수원시','고양시','용인시','성남시','춘천시','강릉시','청주시','전주시','포항시','창원시','제주시','서귀포시'];
 
   function fillSelect(id, options, selected) {
@@ -378,10 +764,18 @@
   }
 
   function onSave() {
+    showToast('✅ 사주 정보가 저장됐습니다');
+  }
+
+  function showToast(msg) {
     const toast = document.getElementById('toast');
+    toast.textContent = msg;
     toast.classList.add('show');
     setTimeout(() => toast.classList.remove('show'), 2400);
   }
+
+  /* ── 초기화 ── */
+  renderCards();
 </script>
 </body>
 </html>
