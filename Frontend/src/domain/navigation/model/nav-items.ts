@@ -19,4 +19,4 @@ export const NAV_ITEMS: NavItem[] = [
   { href: "/mypage", label: "마이", icon: User },
 ];
 
-export const GLOBAL_NAV_HIDDEN_PATHS = ["/login"];
+export const GLOBAL_NAV_HIDDEN_PATHS = ["/login", "/auth/restore"];

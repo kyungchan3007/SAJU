@@ -1,49 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import type { NavMenuItem, NavTab } from "../../type/types";
-
-const TABS: NavTab[] = ["운세"];
-
-const MENU_BY_TAB: Record<NavTab, NavMenuItem[]> = {
-  운세: [
-    { icon: "🔮", label: "오늘의 운세", sub: "매일 업데이트", href: "/saju" },
-    { icon: "⭐", label: "사주분석", sub: "사주 기반 풀이", href: "/saju" },
-    {
-      icon: "💑",
-      label: "궁합",
-      sub: "두 사람의 인연",
-      href: "/compatibility",
-    },
-    {
-      icon: "🐯",
-      label: "띠별궁합",
-      sub: "띠로 보는 인연",
-      href: "/mypage/zodiac-compatibility",
-    },
-    { icon: "📅", label: "신년운세", sub: "2025년 흐름", href: "/saju" },
-  ],
-};
-
-// 추후 메뉴 확장 시 NavTab 타입에 항목을 다시 추가하고 MENU_BY_TAB에 복구한다.
-// 타로: [
-//   { icon: "🃏", label: "오늘의 타로", sub: "한 장 뽑기", href: "#" },
-//   { icon: "🌙", label: "연애 타로", sub: "관계 에너지", href: "#" },
-//   { icon: "💼", label: "직업 타로", sub: "커리어 방향", href: "#" },
-//   { icon: "✨", label: "종합 타로", sub: "전반적 흐름", href: "#" },
-// ],
-// 상담: [
-//   { icon: "💬", label: "1:1 실시간 상담", sub: "전문 상담사", href: "#" },
-//   { icon: "📝", label: "전화 상담", sub: "예약 상담", href: "#" },
-//   { icon: "🤝", label: "채팅 상담", sub: "텍스트 상담", href: "#" },
-//   { icon: "📺", label: "영상 상담", sub: "화상 연결", href: "#" },
-// ],
-// 점신몰: [
-//   { icon: "🛍", label: "부적", sub: "행운 아이템", href: "#" },
-//   { icon: "💍", label: "액세서리", sub: "에너지 소품", href: "#" },
-//   { icon: "📖", label: "사주책", sub: "운세 도서", href: "#" },
-//   { icon: "🎁", label: "기프트", sub: "선물 패키지", href: "#" },
-// ],
+import type { NavTab } from "../../type/types";
+import { MENU_BY_TAB, TABS } from "@/features/mypage/model/model";
 
 export function MypageNavMenu() {
   const [activeTab, setActiveTab] = useState<NavTab>("운세");

@@ -7,6 +7,7 @@ import {
 
 export async function GET(req: NextRequest) {
   const code = req.nextUrl.searchParams.get("code");
+  console.log("code", code);
   if (!code) {
     return NextResponse.redirect(new URL("/login?error=missing_code", req.url));
   }
@@ -18,8 +19,16 @@ export async function GET(req: NextRequest) {
         new URL("/login?error=oauth_failed", req.url),
       );
     }
-    const postLoginPath = result.data.isNewUser ? "/saju" : "/home";
+
+    const postLoginPath =
+      result.data.accountStatus === "PENDING_DELETION"
+        ? "/auth/restore"
+        : result.data.isNewUser
+          ? "/saju"
+          : "/home";
+
     const res = NextResponse.redirect(new URL(postLoginPath, req.url));
+
     res.cookies.set(ACCESS_TOKEN_COOKIE_KEY, result.data.accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
@@ -34,6 +43,7 @@ export async function GET(req: NextRequest) {
       path: "/",
       maxAge: 60 * 60,
     });
+
     return res;
   } catch {
     return NextResponse.redirect(

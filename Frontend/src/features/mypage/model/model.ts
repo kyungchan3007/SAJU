@@ -3,6 +3,8 @@ import type {
   BannerItem,
   ManagementItem,
   InfoItem,
+  NavTab,
+  NavMenuItem,
 } from "@/features/mypage";
 
 export const MYPAGE_DEFAULT_STATS: MypageStats = {
@@ -34,3 +36,30 @@ export const MYPAGE_INFO_ITEMS: InfoItem[] = [
   { icon: "👍", label: "추천하기", href: "#" },
   { icon: "🏠", label: "점신 상담사 입점하기", href: "#" },
 ];
+
+export const TABS: NavTab[] = ["운세"];
+
+export const MENU_BY_TAB: Record<NavTab, NavMenuItem[]> = {
+  운세: [
+    { icon: "🔮", label: "오늘의 운세", sub: "매일 업데이트", href: "/saju" },
+    { icon: "⭐", label: "사주분석", sub: "사주 기반 풀이", href: "/saju" },
+    {
+      icon: "💑",
+      label: "궁합",
+      sub: "두 사람의 인연",
+      href: "/compatibility",
+    },
+    {
+      icon: "🐯",
+      label: "띠별궁합",
+      sub: "띠로 보는 인연",
+      href: "/mypage/zodiac-compatibility",
+    },
+    {
+      icon: "📅",
+      label: "신년운세",
+      sub: "2025년 흐름",
+      href: "/mypage/year-fortune",
+    },
+  ],
+};

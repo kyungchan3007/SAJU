@@ -77,6 +77,20 @@ const config: Config = {
       backgroundImage: {
         "sketch-paper": "none",
       },
+      keyframes: {
+        wiggle: {
+          "0%": { transform: "rotate(-1.5deg)" },
+          "100%": { transform: "rotate(1.5deg)" },
+        },
+        heartbeat: {
+          "0%, 100%": { transform: "scale(1)" },
+          "50%": { transform: "scale(1.18)" },
+        },
+      },
+      animation: {
+        wiggle: "wiggle 0.5s ease-in-out infinite alternate",
+        heartbeat: "heartbeat 1.2s ease-in-out infinite",
+      },
     },
   },
   plugins: [tailwindcssAnimate],

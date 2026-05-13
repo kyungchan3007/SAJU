@@ -1,11 +1,8 @@
 import { NextResponse } from "next/server";
 
 import { logoutOnServer } from "@/entities/auth/server/logoutOnServer";
+import { clearAuthCookies } from "@/shared/api/auth/clearAuthCookies";
 import { createErrorResponse, createSuccessResponse } from "@/shared/api";
-import {
-  ACCESS_TOKEN_COOKIE_KEY,
-  REFRESH_TOKEN_COOKIE_KEY,
-} from "@/shared/config/authToken";
 
 export async function POST() {
   const result = await logoutOnServer();
@@ -20,8 +17,7 @@ export async function POST() {
   const response = NextResponse.json(
     createSuccessResponse({ loggedOut: true }),
   );
-  response.cookies.delete(ACCESS_TOKEN_COOKIE_KEY);
-  response.cookies.delete(REFRESH_TOKEN_COOKIE_KEY);
+  clearAuthCookies(response);
 
   return response;
 }

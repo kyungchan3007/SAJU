@@ -3,10 +3,7 @@ import { NextResponse } from "next/server";
 import { deleteMyAccountOnServer } from "@/entities/user/server/deleteMyAccountOnServer";
 import { getMyProfileOnServer } from "@/entities/user/server/getMyProfileOnServer";
 import { createErrorResponse, createSuccessResponse } from "@/shared/api";
-import {
-  ACCESS_TOKEN_COOKIE_KEY,
-  REFRESH_TOKEN_COOKIE_KEY,
-} from "@/shared/config/authToken";
+import { clearAuthCookies } from "@/shared/api/auth/clearAuthCookies";
 
 export async function GET() {
   const result = await getMyProfileOnServer();
@@ -32,8 +29,7 @@ export async function DELETE() {
   }
 
   const response = NextResponse.json(createSuccessResponse({ deleted: true }));
-  response.cookies.delete(ACCESS_TOKEN_COOKIE_KEY);
-  response.cookies.delete(REFRESH_TOKEN_COOKIE_KEY);
+  clearAuthCookies(response);
 
   return response;
 }

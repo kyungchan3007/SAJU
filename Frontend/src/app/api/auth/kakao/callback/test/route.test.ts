@@ -88,6 +88,27 @@ describe("/api/auth/kakao/callback GET", () => {
     expect(response.headers.get("location")).toBe("http://localhost/home");
   });
 
+  it("redirects to /auth/restore for pending deletion user", async () => {
+    mockedExchangeOAuthCodeOnServer.mockResolvedValue({
+      success: true,
+      data: {
+        isNewUser: false,
+        accountStatus: "PENDING_DELETION",
+        accessToken: "access-pending",
+        refreshToken: "refresh-pending",
+      },
+    });
+
+    const response = await GET(
+      createRequest("http://localhost/api/auth/kakao/callback?code=abc"),
+    );
+
+    expect(response.status).toBe(307);
+    expect(response.headers.get("location")).toBe(
+      "http://localhost/auth/restore",
+    );
+  });
+
   it("redirects to oauth_exception when exchange throws", async () => {
     mockedExchangeOAuthCodeOnServer.mockRejectedValue(new Error("boom"));
 

@@ -16,6 +16,7 @@ description: BFF 경계 규칙, 서버 호출 구조, 현재 API 엔드포인트
 - 인증이 필요한 백엔드 호출은 `authenticatedBackendFetch`를 우선 사용한다.
 - 토큰 쿠키 키는 하드코딩 문자열 대신 `src/shared/config/authToken.ts` 상수를 사용한다.
 - 백엔드 응답 파싱/에러 메시지 매핑은 `parseBackendApiResponse`로 통일한다.
+- 생성형 풀이 응답처럼 `PENDING/COMPLETE` 상태 보존이 필요하면 `parseGeneratedInterpretationResponse`를 사용해 `meta.backendStatus`를 유지한다.
 - `route.ts`는 HTTP 입출력과 쿠키 처리에 집중하고, 비즈니스 로직은 `entities/*/server` 등 서버 함수로 위임한다.
 - 로그인/토큰 교환 경로(`auth/kakao`, `auth/kakao/callback`, refresh)는 예외적으로 인증 래퍼 없이 동작할 수 있다.
 
@@ -25,6 +26,10 @@ description: BFF 경계 규칙, 서버 호출 구조, 현재 API 엔드포인트
 - `POST /api/saju/draft`
 - `POST /api/saju/result`
 - `GET /api/saju/traditional`
+- `GET /api/saju/me/year`
+- `GET /api/saju/me/compatibility/[partnerId]`
+- `GET/POST /api/partners`
+- `GET/PUT/DELETE /api/partners/[partnerId]`
 - `GET/POST /api/compatibility`
 - `GET/POST /api/location`
 - `POST /api/payment/verify`
@@ -49,3 +54,4 @@ description: BFF 경계 규칙, 서버 호출 구조, 현재 API 엔드포인트
 - 인증이 필요한 API는 access/refresh 쿠키 처리와 로그인 리다이렉트 영향을 확인한다.
 - React Query 훅은 해당 feature 하위 `hooks/`에 둔다.
 - API 응답 변환은 UI 컴포넌트보다 feature/entity model 쪽에 둔다.
+- 파트너 CRUD는 `/api/partners` BFF를 통하고, 목록 캐시는 `PARTNERS_QUERY_KEY` 기준으로 무효화한다.
