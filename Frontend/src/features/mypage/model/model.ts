@@ -42,7 +42,7 @@ export const TABS: NavTab[] = ["운세"];
 export const MENU_BY_TAB: Record<NavTab, NavMenuItem[]> = {
   운세: [
     { icon: "🔮", label: "오늘의 운세", sub: "매일 업데이트", href: "/saju" },
-    { icon: "⭐", label: "사주분석", sub: "사주 기반 풀이", href: "/saju" },
+    { icon: "⭐", label: "사주분석", sub: "사주 기반 풀이", href: "/mypage/traditional-fortune" },
     {
       icon: "💑",
       label: "궁합",

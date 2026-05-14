@@ -6,7 +6,7 @@ import { CompatibilityResultView } from "@/features/compatibility/ui/compatibili
 
 export function CompatibilitySection() {
   const compat = useCompatibility();
-  console.log(compat);
+
   return (
     <div className="flex flex-col gap-4">
       <h2 className="flex items-center gap-2.5 font-display text-[22px]">

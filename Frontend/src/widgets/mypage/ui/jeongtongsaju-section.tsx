@@ -6,10 +6,7 @@ import { JeongtongsajuPillars } from "@/features/mypage/ui/jeongtongsaju/jeongto
 import { JeongtongsajuFiveElements } from "@/features/mypage/ui/jeongtongsaju/jeongtongsaju-fiveelements";
 import { JeongtongsajuTwelveGrowth } from "@/features/mypage/ui/jeongtongsaju/jeongtongsaju-twelve-growth";
 import { JeongtongsajuDaewoon } from "@/features/mypage/ui/jeongtongsaju/jeongtongsaju-daewoon";
-import type { Pillar } from "@/features/mypage/ui/jeongtongsaju/jeongtongsaju-pillars";
-import type { FiveElements } from "@/features/mypage/ui/jeongtongsaju/jeongtongsaju-fiveelements";
-import type { TwelveGrowthInfo } from "@/features/mypage/ui/jeongtongsaju/jeongtongsaju-twelve-growth";
-import type { DaewoonItem } from "@/features/mypage/ui/jeongtongsaju/jeongtongsaju-daewoon";
+import { toJeongtongsajuViewModel } from "@/features/mypage/model/jeongtongsaju";
 import {
   EmptyStateCard,
   ErrorStateCard,
@@ -65,13 +62,9 @@ export function JeongtongsajuSection() {
     );
   }
 
-  const saju = data.data;
-  const traits = (saju.traits ?? {}) as Record<string, string>;
-  const pillars = (saju.pillars ?? []) as Pillar[];
-  const fiveElements = (saju.fiveElements ?? { elements: {} }) as FiveElements;
-  const twelveGrowthInfo = (saju.twelveGrowthInfo ?? {}) as TwelveGrowthInfo;
-  const bigLuck = (saju.bigLuck ?? []) as DaewoonItem[];
-  console.log(bigLuck);
+  const { traits, pillars, fiveElements, twelveGrowthInfo, bigLuck } =
+    toJeongtongsajuViewModel(data.data);
+
   return (
     <div className="flex flex-col gap-4">
       <h2 className="flex items-center gap-2.5 font-['Jua',sans-serif] text-[22px]">

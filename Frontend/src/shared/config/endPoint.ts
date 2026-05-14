@@ -5,6 +5,8 @@ export const SAJU_ENDPOINT_PATH = "/api/saju";
 export const SAJU_DAILY_ENDPOINT_PATH = "/api/saju/me/daily";
 export const SAJU_YEAR_FORTUNE_ENDPOINT_PATH = "/api/saju/me/year";
 export const SAJU_TRADITIONAL_ENDPOINT_PATH = "/api/saju/me/traditional";
+export const SAJU_TRADITIONAL_FORTUNE_ENDPOINT_PATH =
+  "/api/saju/me/traditional-fortune";
 export const SAJU_ZODIAC_COMPATIBILITY_ENDPOINT_PATH =
   "/api/saju/me/zodiac-compatibility";
 export const SAJU_COMPATIBILITY_ENDPOINT_PATH = "/api/saju/me/compatibility";

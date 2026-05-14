@@ -7,7 +7,7 @@ import {
 
 export async function GET(req: NextRequest) {
   const code = req.nextUrl.searchParams.get("code");
-  console.log("code", code);
+
   if (!code) {
     return NextResponse.redirect(new URL("/login?error=missing_code", req.url));
   }

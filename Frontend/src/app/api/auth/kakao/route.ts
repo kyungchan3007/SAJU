@@ -38,7 +38,7 @@ export async function GET() {
 
   if (backendResponse.status >= 300 && backendResponse.status < 400) {
     const locationHeader = backendResponse.headers.get("location");
-    console.log(backendResponse);
+
     if (!locationHeader) {
       return NextResponse.json(
         createErrorResponse(
