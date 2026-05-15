@@ -21,17 +21,23 @@ export type CompatibilityResultDisplay = {
 };
 
 const SECTION_META: Record<string, { icon: string; color: string; label: string }> = {
-  love:        { icon: "❤️",  color: "#EC4899", label: "사랑궁합" },
-  personality: { icon: "🤝",  color: "#8B5CF6", label: "성격궁합" },
-  wealth:      { icon: "💰",  color: "#F59E0B", label: "재물궁합" },
-  health:      { icon: "🌿",  color: "#22C55E", label: "건강궁합" },
+  love: { icon: "💘", color: "#EC4899", label: "연인궁합" },
+  personality: { icon: "🧠", color: "#8B5CF6", label: "성격궁합" },
+  communication: { icon: "🗣️", color: "#06B6D4", label: "소통궁합" },
+  trust: { icon: "🤝", color: "#3B82F6", label: "신뢰궁합" },
+  marriage: { icon: "💍", color: "#14B8A6", label: "결혼궁합" },
+  wealth: { icon: "💰", color: "#F59E0B", label: "재물궁합" },
+  conflict: { icon: "⚡", color: "#EF4444", label: "갈등요인" },
 };
 
 const SECTION_FALLBACK_META = [
-  { icon: "❤️", color: "#EC4899", label: "사랑궁합" },
-  { icon: "🤝", color: "#8B5CF6", label: "성격궁합" },
+  { icon: "💘", color: "#EC4899", label: "연인궁합" },
+  { icon: "🧠", color: "#8B5CF6", label: "성격궁합" },
+  { icon: "🗣️", color: "#06B6D4", label: "소통궁합" },
+  { icon: "🤝", color: "#3B82F6", label: "신뢰궁합" },
+  { icon: "💍", color: "#14B8A6", label: "결혼궁합" },
   { icon: "💰", color: "#F59E0B", label: "재물궁합" },
-  { icon: "🌿", color: "#22C55E", label: "건강궁합" },
+  { icon: "⚡", color: "#EF4444", label: "갈등요인" },
 ];
 
 function parseSectionDisplay(
@@ -58,9 +64,7 @@ export function toCompatibilityResultDisplay(
 ): CompatibilityResultDisplay {
   const status = normalizeStatus(data.status);
   const sections = (data.sections ?? []).map(parseSectionDisplay);
-  const tags = sections
-    .map((s) => s.keyword)
-    .filter(Boolean);
+  const tags = sections.map((s) => s.keyword).filter(Boolean);
 
   return {
     status,

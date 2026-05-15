@@ -20,10 +20,14 @@ export function PartnerAddModal({
 
   useEffect(() => {
     if (isOpen) {
-      setName("");
       setTimeout(() => inputRef.current?.focus(), 50);
     }
   }, [isOpen]);
+
+  function handleClose() {
+    setName("");
+    onClose();
+  }
 
   function handleConfirm() {
     const trimmed = name.trim();
@@ -31,6 +35,7 @@ export function PartnerAddModal({
       inputRef.current?.focus();
       return;
     }
+    setName("");
     onConfirm(trimmed);
   }
 
@@ -40,7 +45,7 @@ export function PartnerAddModal({
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-[rgba(13,13,13,0.45)] backdrop-blur-sm"
       onClick={(e) => {
-        if (e.target === e.currentTarget) onClose();
+        if (e.target === e.currentTarget) handleClose();
       }}
     >
       <div
@@ -51,7 +56,7 @@ export function PartnerAddModal({
           <span>사주 추가</span>
           <button
             type="button"
-            onClick={onClose}
+            onClick={handleClose}
             className="flex h-7 w-7 items-center justify-center rounded-sm border-2 border-black bg-[#F0EDE6] text-[14px]"
           >
             ✕
@@ -80,7 +85,7 @@ export function PartnerAddModal({
         <div className="mt-5 flex gap-2">
           <button
             type="button"
-            onClick={onClose}
+            onClick={handleClose}
             disabled={isPending}
             className="flex-1 rounded-sm border-2 border-black bg-[#F0EDE6] py-2.5 font-display text-[14px] disabled:opacity-50"
           >

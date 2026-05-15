@@ -2,15 +2,16 @@
 
 import { useState } from "react";
 import type { PartnerResponse } from "@/generated/api";
-import { getPartnerAvatar } from "@/features/mypage/model/partner";
-import { MAX_PARTNERS } from "@/features/mypage/hooks/usePartners";
-
-type SelectedTarget = "me" | number;
+import {
+  getPartnerAvatar,
+  MAX_PARTNERS,
+} from "@/features/mypage/model/partner";
+import type { SajuManageSelectedTarget } from "@/features/mypage/model/sajuManageTarget";
 
 type Props = {
   partners: PartnerResponse[];
-  selectedTarget: SelectedTarget;
-  onSelect: (target: SelectedTarget) => void;
+  selectedTarget: SajuManageSelectedTarget;
+  onSelect: (target: SajuManageSelectedTarget) => void;
   onAdd: () => void;
   onDelete: (partnerId: number, partnerName: string) => void;
   disabled?: boolean;
@@ -28,7 +29,7 @@ export function SajuCardList({
   const total = partners.length + 1; // +1 for "me"
   const canAdd = total < MAX_PARTNERS;
 
-  function handleCardClick(target: SelectedTarget) {
+  function handleCardClick(target: SajuManageSelectedTarget) {
     if (isEditMode) return;
     onSelect(target);
   }
@@ -143,7 +144,7 @@ function SajuCard({
             e.stopPropagation();
             onDelete?.();
           }}
-          className="absolute -left-2 -top-2 z-10 flex h-[22px] w-[22px] items-center justify-center rounded-full border-2 border-white bg-red-500 text-[11px] font-black text-white leading-none"
+          className="absolute -left-2 -top-2 z-10 flex h-[22px] w-[22px] items-center justify-center rounded-full border-2 border-white bg-red-500 text-[11px] font-black leading-none text-white"
           style={{ boxShadow: "0 1px 4px rgba(0,0,0,.3)" }}
         >
           ✕

@@ -1,28 +1,59 @@
 "use client";
 
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { ReactNode } from "react";
+import { AdSlot } from "@/shared/ui/ad-slot.client";
 
-import { SajuLoadingAdSlot } from "@/features/saju-result/ui/saju-loading-ad-slot.client";
-
-type AnalysisProgressScreenProps = {
+type AdProgressGateProps = {
   progress: number;
   isComplete?: boolean;
   onRevealResult?: () => void;
+  minGateDurationMs?: number;
 };
 
-export function AnalysisProgressScreen({
+export function AdProgressGate({
   progress,
   isComplete = false,
   onRevealResult,
-}: AnalysisProgressScreenProps) {
-  const roundedProgress = Math.min(100, Math.max(0, Math.round(progress)));
+  minGateDurationMs = 10_000,
+}: AdProgressGateProps) {
+  const startedAtRef = useRef<number>(Date.now());
+  const [elapsedMs, setElapsedMs] = useState(0);
+
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      setElapsedMs(Date.now() - startedAtRef.current);
+    }, 120);
+
+    return () => window.clearInterval(timer);
+  }, []);
+
+  const minDurationReached = elapsedMs >= minGateDurationMs;
+
+  const roundedProgress = useMemo(() => {
+    const timeRatio = Math.min(elapsedMs / minGateDurationMs, 1);
+    const timedProgress = Math.round(timeRatio * 95);
+
+    if (!minDurationReached) {
+      return timedProgress;
+    }
+
+    if (isComplete) {
+      return 100;
+    }
+
+    const bounded = Math.min(100, Math.max(0, Math.round(progress)));
+    return Math.min(Math.max(bounded, 95), 99);
+  }, [elapsedMs, isComplete, minDurationReached, minGateDurationMs, progress]);
+
+  const canRevealResult = isComplete && minDurationReached;
 
   return (
     <section className="mx-auto flex min-h-[calc(100dvh-5rem)] w-full max-w-[560px] flex-col px-0 pb-28 pt-4 sm:pt-6 md:min-h-0 md:pb-0">
       <div className="space-y-5">
         <header className="space-y-3 text-center">
           <p className="font-display text-2xl leading-tight text-black sm:text-3xl">
-            사주 운세를 분석하고 있어요!
+            사주 운세를 분석하고 있어.
           </p>
           <div className="hidden md:block">
             <AnalysisProgressBar progress={roundedProgress} variant="inline" />
@@ -33,33 +64,31 @@ export function AnalysisProgressScreen({
           <p className="text-center text-xs font-medium text-black/45">
             Advertisements
           </p>
-          <SajuLoadingAdSlot />
+          <AdSlot />
         </div>
 
         <div className="space-y-3">
-          <StatusNote>
-            오늘도 많은 분들이 사주 운세를 확인하고 있어요.
-          </StatusNote>
+          <StatusNote>오늘 많은 분들이 사주 운세를 확인하고 있어.</StatusNote>
           <StatusNote>
             <span className="mr-1 rounded-full border border-black bg-black px-2 py-0.5 text-[10px] font-bold text-white">
               Tip
             </span>
-            풀이가 완성되면 결과를 저장하고 다시 확인할 수 있어요.
+            광고가 끝나면 결과를 확인할 수 있어.
           </StatusNote>
           <StatusNote>
-            {isComplete
-              ? "분석이 완료되었습니다. 사주풀이를 확인하세요."
-              : "잠시 후 분석 결과로 이동합니다."}
+            {canRevealResult
+              ? "분석이 완료됐어. 사주 운세를 확인해."
+              : "잠시 후 분석 결과로 이동해."}
           </StatusNote>
         </div>
 
-        {isComplete && onRevealResult ? (
+        {canRevealResult && onRevealResult ? (
           <button
             type="button"
             className="btn-saju btn-saju-primary min-h-11 w-full"
             onClick={onRevealResult}
           >
-            사주풀이 보기
+            사주결과 보기
           </button>
         ) : null}
       </div>
@@ -100,7 +129,7 @@ function AnalysisProgressBar({
     >
       <div className="mb-2 flex items-center justify-between gap-3 text-sm font-bold text-black">
         <span>
-          {progress >= 100 ? "사주 분석이 완료되었습니다" : "운세를 풀이하고 있어요"}
+          {progress >= 100 ? "사주 분석이 완료됐어." : "운세를 준비하고 있어."}
         </span>
         <span>{progress}%</span>
       </div>

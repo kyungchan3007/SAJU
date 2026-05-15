@@ -5,7 +5,7 @@ import { SajuPreviewCard } from "@/domain/saju";
 import { fetchSajuResultOnClient } from "@/entities/saju";
 import { useAnalysisProgress } from "@/features/saju-result/hooks/useAnalysisProgress";
 import { SAJU_RESULT_QUERY_KEY } from "@/features/saju-result/model/query";
-import { AnalysisProgressScreen } from "@/features/saju-result/ui/analysis-progress-screen.client";
+import { AdProgressGate } from "@/shared/ui/ad-progress-gate.client";
 
 export function SajuResult() {
   const [isResultRevealed, setIsResultRevealed] = useState(false);
@@ -21,7 +21,7 @@ export function SajuResult() {
 
   if (shouldShowPending || (isResultReady && !isResultRevealed)) {
     return (
-      <AnalysisProgressScreen
+      <AdProgressGate
         progress={isResultReady ? 100 : progress}
         isComplete={isResultReady}
         onRevealResult={() => setIsResultRevealed(true)}

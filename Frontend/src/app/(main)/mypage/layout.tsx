@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { MypageSidebar } from "@/features/mypage";
 import { ACCESS_TOKEN_COOKIE_KEY } from "@/shared/config/authToken";
+import { MypageLayoutShell } from "@/features/mypage/ui/mypage-layout-shell.client";
 
 export default async function MypageLayout({
   children,
@@ -15,10 +15,7 @@ export default async function MypageLayout({
 
   return (
     <main className="page-shell">
-      <div className="grid gap-5 lg:grid-cols-[300px_1fr] lg:items-start lg:gap-6">
-        <MypageSidebar />
-        <div className="min-w-0">{children}</div>
-      </div>
+      <MypageLayoutShell>{children}</MypageLayoutShell>
     </main>
   );
 }

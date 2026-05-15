@@ -9,7 +9,16 @@ import { deletePartnerOnClient } from "@/entities/partner/client/deletePartnerOn
 import type { PartnerRequest } from "@/generated/api";
 
 export const PARTNERS_QUERY_KEY = ["partners"] as const;
-export const MAX_PARTNERS = 4;
+
+type PartnerCreateResult = {
+  id: number | null;
+  errorMessage: string | null;
+};
+
+type PartnerMutationResult = {
+  success: boolean;
+  errorMessage: string | null;
+};
 
 export function usePartners() {
   const queryClient = useQueryClient();
@@ -47,49 +56,54 @@ export function usePartners() {
       void queryClient.invalidateQueries({ queryKey: PARTNERS_QUERY_KEY }),
   });
 
-  const partners = query.data?.success
-    ? (query.data.data?.partners ?? [])
-    : [];
+  const partners = query.data?.success ? (query.data.data?.partners ?? []) : [];
 
-  async function handleCreate(payload: PartnerRequest): Promise<number | null> {
+  async function handleCreate(
+    payload: PartnerRequest,
+  ): Promise<PartnerCreateResult> {
     setErrorMessage(null);
     try {
       const result = await createMutation.mutateAsync(payload);
-      return result.success ? (result.data?.id ?? null) : null;
+      return {
+        id: result.success ? (result.data?.id ?? null) : null,
+        errorMessage: null,
+      };
     } catch (e) {
-      setErrorMessage(
-        e instanceof Error ? e.message : "파트너 추가에 실패했습니다.",
-      );
-      return null;
+      const message =
+        e instanceof Error ? e.message : "파트너 추가에 실패했습니다.";
+      setErrorMessage(message);
+      return { id: null, errorMessage: message };
     }
   }
 
   async function handleUpdate(
     partnerId: number,
     payload: PartnerRequest,
-  ): Promise<boolean> {
+  ): Promise<PartnerMutationResult> {
     setErrorMessage(null);
     try {
       await updateMutation.mutateAsync({ partnerId, payload });
-      return true;
+      return { success: true, errorMessage: null };
     } catch (e) {
-      setErrorMessage(
-        e instanceof Error ? e.message : "파트너 수정에 실패했습니다.",
-      );
-      return false;
+      const message =
+        e instanceof Error ? e.message : "파트너 수정에 실패했습니다.";
+      setErrorMessage(message);
+      return { success: false, errorMessage: message };
     }
   }
 
-  async function handleDelete(partnerId: number): Promise<boolean> {
+  async function handleDelete(
+    partnerId: number,
+  ): Promise<PartnerMutationResult> {
     setErrorMessage(null);
     try {
       await deleteMutation.mutateAsync(partnerId);
-      return true;
+      return { success: true, errorMessage: null };
     } catch (e) {
-      setErrorMessage(
-        e instanceof Error ? e.message : "파트너 삭제에 실패했습니다.",
-      );
-      return false;
+      const message =
+        e instanceof Error ? e.message : "파트너 삭제에 실패했습니다.";
+      setErrorMessage(message);
+      return { success: false, errorMessage: message };
     }
   }
 

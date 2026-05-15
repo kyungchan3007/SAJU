@@ -1,7 +1,13 @@
-import type { PartnerResponse, PartnerRequest, SajuRequest } from "@/generated/api";
+import type {
+  PartnerResponse,
+  PartnerRequest,
+  SajuRequest,
+} from "@/generated/api";
 import { normalizeSajuCalendarInputType } from "@/shared/model/saju-calendar/utils";
 import { parseBackendBirthDateParts } from "@/shared/utils/BirthDate";
 import type { SajuManageFormValues } from "./sajuManage";
+
+export const MAX_PARTNERS = 4;
 
 export const EMPTY_PARTNER_FORM_VALUES: SajuManageFormValues = {
   birthYear: "1990",

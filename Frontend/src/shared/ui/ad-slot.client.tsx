@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect } from "react";
-
 import { env } from "@/shared/config/env";
 
 declare global {
@@ -10,15 +9,13 @@ declare global {
   }
 }
 
-export function SajuLoadingAdSlot() {
+export function AdSlot() {
   const clientId = env.NEXT_PUBLIC_ADSENSE_CLIENT_ID;
   const slotId = env.NEXT_PUBLIC_ADSENSE_SAJU_LOADING_SLOT;
   const canRenderAdsense = Boolean(clientId && slotId);
 
   useEffect(() => {
-    if (!canRenderAdsense) {
-      return;
-    }
+    if (!canRenderAdsense) return;
 
     try {
       window.adsbygoogle = window.adsbygoogle || [];
@@ -37,7 +34,7 @@ export function SajuLoadingAdSlot() {
         <div className="space-y-2">
           <p className="font-display text-2xl text-black">AD</p>
           <p className="text-xs font-semibold text-black/45">
-            광고가 표시될 영역입니다
+            광고가 표시되는 영역이야.
           </p>
         </div>
       </div>
