@@ -1,24 +1,36 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 type UseAdGateParams = {
   enabled: boolean;
   isContentReady: boolean;
+  resetKey?: unknown;
 };
 
-export function useAdGate({ enabled, isContentReady }: UseAdGateParams) {
-  const [isUnlocked, setIsUnlocked] = useState(false);
+type UnlockState = {
+  isUnlocked: boolean;
+  resetKey: unknown;
+};
 
-  useEffect(() => {
-    if (!enabled) {
-      setIsUnlocked(false);
-    }
-  }, [enabled]);
+export function useAdGate({
+  enabled,
+  isContentReady,
+  resetKey,
+}: UseAdGateParams) {
+  const [unlockState, setUnlockState] = useState<UnlockState>({
+    isUnlocked: false,
+    resetKey,
+  });
+
+  const isUnlocked =
+    enabled &&
+    unlockState.isUnlocked &&
+    Object.is(unlockState.resetKey, resetKey);
 
   return {
     isUnlocked,
     shouldShowGate: enabled && (!isUnlocked || !isContentReady),
-    unlock: () => setIsUnlocked(true),
+    unlock: () => setUnlockState({ isUnlocked: true, resetKey }),
   };
 }

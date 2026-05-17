@@ -12,9 +12,12 @@ import { useAdGate } from "@/shared/hooks/use-ad-gate";
 import { AdProgressGate } from "@/shared/ui/ad-progress-gate.client";
 
 export function TraditionalFortuneSection() {
-  const { isLoading, isError, errorMessage, data, domains } = useTraditionalFortune();
+  const { isLoading, isError, errorMessage, data, domains } =
+    useTraditionalFortune();
   const { activeDomain, setActiveDomain, activeDomainData } =
     useTraditionalFortuneSectionState({ domains });
+  const isContentReady = !isLoading && Boolean(data);
+  const adGate = useAdGate({ enabled: true, isContentReady });
 
   if (isError) {
     return (
@@ -23,9 +26,6 @@ export function TraditionalFortuneSection() {
       />
     );
   }
-
-  const isContentReady = !isLoading && Boolean(data);
-  const adGate = useAdGate({ enabled: true, isContentReady });
 
   if (adGate.shouldShowGate) {
     return (
@@ -43,9 +43,9 @@ export function TraditionalFortuneSection() {
     <div className="flex flex-col gap-4">
       <TraditionalFortuneHeader targetYear={data.targetYear} />
       <TraditionalFortuneHeroBanner data={data} />
-      {(data.overallFortune || data.favorablePeriods || data.cautiousPeriods) && (
-        <TraditionalFortuneOverallCard data={data} />
-      )}
+      {(data.overallFortune ||
+        data.favorablePeriods ||
+        data.cautiousPeriods) && <TraditionalFortuneOverallCard data={data} />}
       {domains.length > 0 && (
         <TraditionalFortuneDomainCard
           domains={domains}
@@ -54,7 +54,9 @@ export function TraditionalFortuneSection() {
           onSelectDomain={setActiveDomain}
         />
       )}
-      {data.yearCautions && <TraditionalFortuneCautionCard text={data.yearCautions} />}
+      {data.yearCautions && (
+        <TraditionalFortuneCautionCard text={data.yearCautions} />
+      )}
     </div>
   );
 }

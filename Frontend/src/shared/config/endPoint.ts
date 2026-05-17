@@ -11,7 +11,11 @@ export const SAJU_ZODIAC_COMPATIBILITY_ENDPOINT_PATH =
   "/api/saju/me/zodiac-compatibility";
 export const SAJU_COMPATIBILITY_ENDPOINT_PATH = "/api/saju/me/compatibility";
 export const SAJU_PLACE_RECOMMEND_ENDPOINT_PATH = "/api/place/recommend";
+export const KAKAO_LOCAL_KEYWORD_SEARCH_URL =
+  "https://dapi.kakao.com/v2/local/search/keyword.json";
 export const SAJU_AUTH_REFRESH_PATH = "/api/auth/refresh";
 export const SAJU_USERS_ME_PATH = "/api/users/me";
 export const SAJU_USERS_ME_RESTORE_PATH = "/api/users/me/restore";
 export const SAJU_PARTNERS_PATH = "/api/partners";
+export const LOCATION_KEYWORDS_ENDPOINT_PATH = "/api/location";
+export const LOCATION_SEARCH_ENDPOINT_PATH = "/api/location/search";

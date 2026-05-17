@@ -17,6 +17,7 @@ export function useYearFortune() {
     staleTime: 0,
     retry: 1,
   });
+  const { refetch } = query;
 
   const raw = query.data?.success ? query.data : null;
   const backendStatus = raw?.meta?.backendStatus;
@@ -26,11 +27,11 @@ export function useYearFortune() {
     if (!isPending) return;
 
     const timer = window.setInterval(() => {
-      query.refetch();
+      refetch();
     }, 5000);
 
     return () => window.clearInterval(timer);
-  }, [isPending, query.refetch]);
+  }, [isPending, refetch]);
 
   const display: YearFortuneDisplay | null = raw
     ? toYearFortuneDisplay(raw.data ?? undefined, backendStatus)

@@ -11,13 +11,28 @@ export function CompatibilitySection() {
   const isResultReady =
     compat.result?.status === "COMPLETE" && Boolean(compat.selectedPartner);
   const gateEnabled = compat.isInResultView && !compat.resultError;
-  const adGate = useAdGate({ enabled: gateEnabled, isContentReady: isResultReady });
+  const adGate = useAdGate({
+    enabled: gateEnabled,
+    isContentReady: isResultReady,
+    resetKey: compat.resultRequestId,
+  });
+  const shouldShowResult =
+    compat.isInResultView &&
+    !compat.resultError &&
+    adGate.isUnlocked &&
+    isResultReady &&
+    Boolean(compat.result) &&
+    Boolean(compat.selectedPartner);
+  const shouldShowHeading = !compat.isInResultView || shouldShowResult;
 
   return (
     <div className="flex flex-col gap-4">
-      <h2 className="flex items-center gap-2.5 font-display text-[22px]">
-        궁합<span className="h-0.5 flex-1 bg-black" />
-      </h2>
+      {shouldShowHeading && (
+        <h2 className="flex items-center gap-2.5 font-display text-[22px]">
+          궁합
+          <span className="h-0.5 flex-1 bg-black" />
+        </h2>
+      )}
 
       {compat.resultError && compat.isInResultView && (
         <div className="flex flex-col gap-3">
@@ -42,18 +57,13 @@ export function CompatibilitySection() {
         />
       )}
 
-      {compat.isInResultView &&
-        !compat.resultError &&
-        adGate.isUnlocked &&
-        isResultReady &&
-        compat.result &&
-        compat.selectedPartner && (
-          <CompatibilityResultView
-            partner={compat.selectedPartner}
-            result={compat.result}
-            onReset={compat.handleReset}
-          />
-        )}
+      {shouldShowResult && compat.result && compat.selectedPartner && (
+        <CompatibilityResultView
+          partner={compat.selectedPartner}
+          result={compat.result}
+          onReset={compat.handleReset}
+        />
+      )}
 
       {!compat.isInResultView && (
         <PartnerSelectView

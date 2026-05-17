@@ -19,6 +19,7 @@ export function useCompatibility() {
     null,
   );
   const [fetchPartnerId, setFetchPartnerId] = useState<number | null>(null);
+  const [resultRequestId, setResultRequestId] = useState(0);
 
   const myProfileQuery = useQuery({
     queryKey: SAJU_PROFILE_QUERY_KEY,
@@ -43,6 +44,7 @@ export function useCompatibility() {
     staleTime: 0,
     retry: 1,
   });
+  const { refetch: refetchCompatibility } = compatibilityQuery;
 
   const myProfile = myProfileQuery.data?.success
     ? myProfileQuery.data.data
@@ -52,7 +54,8 @@ export function useCompatibility() {
     ? (partnersQuery.data.data?.partners ?? [])
     : [];
 
-  const selectedPartner = partners.find((p) => p.id === selectedPartnerId) ?? null;
+  const selectedPartner =
+    partners.find((p) => p.id === selectedPartnerId) ?? null;
 
   const compatibilityData = compatibilityQuery.data?.success
     ? compatibilityQuery.data.data
@@ -65,17 +68,13 @@ export function useCompatibility() {
     }
 
     const timer = window.setInterval(() => {
-      compatibilityQuery.refetch();
+      refetchCompatibility();
     }, 5000);
 
     return () => {
       window.clearInterval(timer);
     };
-  }, [
-    compatibilityQuery.refetch,
-    fetchPartnerId,
-    shouldPollCompatibility,
-  ]);
+  }, [fetchPartnerId, refetchCompatibility, shouldPollCompatibility]);
 
   const result: CompatibilityResultDisplay | null = compatibilityData
     ? toCompatibilityResultDisplay(compatibilityData)
@@ -89,6 +88,7 @@ export function useCompatibility() {
 
   function handleShowResult() {
     if (!selectedPartnerId) return;
+    setResultRequestId((current) => current + 1);
     setFetchPartnerId(selectedPartnerId);
   }
 
@@ -110,11 +110,12 @@ export function useCompatibility() {
     handleShowResult,
     // 결과 화면
     result,
+    resultRequestId,
     resultLoading: compatibilityQuery.isFetching,
     resultError: compatibilityQuery.isError
-      ? (compatibilityQuery.error instanceof Error
-          ? compatibilityQuery.error.message
-          : "궁합 조회에 실패했어요.")
+      ? compatibilityQuery.error instanceof Error
+        ? compatibilityQuery.error.message
+        : "궁합 조회에 실패했어요."
       : null,
     handleReset,
   };

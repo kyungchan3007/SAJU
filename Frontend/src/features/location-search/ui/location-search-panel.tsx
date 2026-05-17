@@ -1,27 +1,99 @@
-import { Button } from "@/shared/ui";
+import type { LocationSearchPlace } from "@/entities/location";
+import { KeywordTabs } from "@/features/location-search/ui/keyword-tabs";
+import { PlaceList } from "@/features/location-search/ui/place-list";
+import { YongshinBanner } from "@/features/location-search/ui/yongshin-banner";
 
-export function LocationSearchPanel() {
+type LocationSearchPanelProps = {
+  keywords: string[];
+  strongestElement?: string;
+  strongestScore?: number;
+  keywordsLoading: boolean;
+  keywordsError: boolean;
+  selectedKeyword: string | null;
+  onSelectKeyword: (keyword: string) => void;
+  places: LocationSearchPlace[];
+  placesLoading: boolean;
+  placesError: boolean;
+  selectedPlace: LocationSearchPlace | null;
+  currentPlaceIndex: number;
+  onChangePlaceIndex: (index: number) => void;
+  onSelectPlace: (place: LocationSearchPlace) => void;
+};
+
+export function LocationSearchPanel({
+  keywords,
+  strongestElement,
+  strongestScore,
+  keywordsLoading,
+  keywordsError,
+  selectedKeyword,
+  onSelectKeyword,
+  places,
+  placesLoading,
+  placesError,
+  selectedPlace,
+  currentPlaceIndex,
+  onChangePlaceIndex,
+  onSelectPlace,
+}: LocationSearchPanelProps) {
   return (
-    <section className="rounded-[2rem] border border-border/60 bg-card/80 p-6 shadow-sm">
-      <div className="space-y-2">
-        <p className="text-xs font-semibold uppercase tracking-[0.3em] text-muted-foreground">
-          Location Search
-        </p>
-        <h2 className="text-xl font-semibold text-card-foreground">
-          Saju-aware place recommendation request
-        </h2>
-        <p className="text-sm text-muted-foreground">
-          Future requests will combine saju profile context and user location
-          signals before hitting the location BFF route.
-        </p>
+    <div className="flex flex-col gap-4 lg:h-full lg:min-h-0">
+      <div className="shrink-0">
+        <YongshinBanner
+          strongestElement={strongestElement}
+          strongestScore={strongestScore}
+        />
       </div>
 
-      <div className="mt-5 flex gap-3">
-        <Button type="button">Use current location</Button>
-        <Button type="button" variant="outline">
-          Search by region
-        </Button>
-      </div>
-    </section>
+      {keywordsLoading && (
+        <div className="flex shrink-0 gap-2">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div
+              key={i}
+              className="h-20 flex-1 animate-pulse rounded-sm border-2 border-black bg-[#F0EDE6]"
+            />
+          ))}
+        </div>
+      )}
+
+      {keywordsError && !keywordsLoading && (
+        <div
+          className="shrink-0 rounded-sm border-2 border-black bg-white px-4 py-3 text-sm text-[#7a7570]"
+          style={{ boxShadow: "2px 2px 0 #0d0d0d" }}
+        >
+          ⚠️ 추천 키워드를 불러올 수 없습니다.
+        </div>
+      )}
+
+      {!keywordsLoading && !keywordsError && keywords.length === 0 && (
+        <div
+          className="shrink-0 rounded-sm border-2 border-black bg-white px-4 py-3 text-sm text-[#7a7570]"
+          style={{ boxShadow: "2px 2px 0 #0d0d0d" }}
+        >
+          추천 키워드가 없습니다.
+        </div>
+      )}
+
+      {!keywordsLoading && keywords.length > 0 && (
+        <div className="shrink-0">
+          <KeywordTabs
+            keywords={keywords}
+            selectedKeyword={selectedKeyword}
+            onSelect={onSelectKeyword}
+          />
+        </div>
+      )}
+
+      <PlaceList
+        places={places}
+        selectedKeyword={selectedKeyword}
+        selectedPlace={selectedPlace}
+        currentIndex={currentPlaceIndex}
+        onChangeIndex={onChangePlaceIndex}
+        onSelectPlace={onSelectPlace}
+        isLoading={placesLoading}
+        isError={placesError}
+      />
+    </div>
   );
 }

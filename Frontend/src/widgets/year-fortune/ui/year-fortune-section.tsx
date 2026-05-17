@@ -9,7 +9,10 @@ import { useAdGate } from "@/shared/hooks/use-ad-gate";
 import { AdProgressGate } from "@/shared/ui/ad-progress-gate.client";
 
 export function YearFortuneSection() {
-  const { isLoading, isError, errorMessage, isPending, display } = useYearFortune();
+  const { isLoading, isError, errorMessage, isPending, display } =
+    useYearFortune();
+  const isContentReady = !isLoading && !isPending && Boolean(display);
+  const adGate = useAdGate({ enabled: true, isContentReady });
 
   if (isError) {
     return (
@@ -18,9 +21,6 @@ export function YearFortuneSection() {
       </div>
     );
   }
-
-  const isContentReady = !isLoading && !isPending && Boolean(display);
-  const adGate = useAdGate({ enabled: true, isContentReady });
 
   if (adGate.shouldShowGate) {
     return (
@@ -53,7 +53,10 @@ export function YearFortuneSection() {
       <YearFortuneDomainTabs domains={display.domains} />
 
       {display.months.length > 0 && (
-        <YearFortuneMonthly months={display.months} targetYear={display.targetYear} />
+        <YearFortuneMonthly
+          months={display.months}
+          targetYear={display.targetYear}
+        />
       )}
     </div>
   );

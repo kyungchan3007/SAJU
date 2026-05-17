@@ -17,11 +17,17 @@ export function AdProgressGate({
   onRevealResult,
   minGateDurationMs = 10_000,
 }: AdProgressGateProps) {
-  const startedAtRef = useRef<number>(Date.now());
+  const startedAtRef = useRef<number | null>(null);
   const [elapsedMs, setElapsedMs] = useState(0);
 
   useEffect(() => {
+    startedAtRef.current = Date.now();
+
     const timer = window.setInterval(() => {
+      if (startedAtRef.current === null) {
+        return;
+      }
+
       setElapsedMs(Date.now() - startedAtRef.current);
     }, 120);
 
