@@ -105,7 +105,9 @@ export async function POST() {
     cookieStore.get(SAJU_DAILY_CACHE_COOKIE_KEY)?.value,
   );
   if (cachedDailyResult) {
-    const response = NextResponse.json(createSuccessResponse(cachedDailyResult));
+    const response = NextResponse.json(
+      createSuccessResponse(cachedDailyResult),
+    );
     clearPendingFormCookie(response);
     return response;
   }
@@ -182,4 +184,9 @@ export async function POST() {
       { status: dailyResult.status },
     );
   }
+
+  return NextResponse.json(
+    createErrorResponse("SAJU_DAILY_GET_FAILED", "Daily saju request failed."),
+    { status: 500 },
+  );
 }

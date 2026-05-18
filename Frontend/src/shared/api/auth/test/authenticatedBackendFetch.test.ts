@@ -28,6 +28,16 @@ function createCookieStore(values: Record<string, string>) {
   };
 }
 
+function expectSuccessResult(
+  result: Awaited<ReturnType<typeof authenticatedBackendFetch>>,
+) {
+  if (!result.success) {
+    throw new Error("Expected authenticated backend fetch to succeed.");
+  }
+
+  return result;
+}
+
 describe("authenticatedBackendFetch", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -61,10 +71,11 @@ describe("authenticatedBackendFetch", () => {
     const result = await authenticatedBackendFetch("/api/test", {
       method: "GET",
     });
+    const successResult = expectSuccessResult(result);
 
     expect(result.success).toBe(true);
-    expect(result.accessToken).toBe("access-1");
-    expect(result.response.status).toBe(200);
+    expect(successResult.accessToken).toBe("access-1");
+    expect(successResult.response.status).toBe(200);
     expect(fetchSpy).toHaveBeenCalledWith(
       "https://backend.test/api/test",
       expect.objectContaining({
@@ -78,7 +89,9 @@ describe("authenticatedBackendFetch", () => {
   });
 
   it("returns first 401 response when refresh token is missing", async () => {
-    mockedCookies.mockResolvedValue(createCookieStore({ saju_access_token: "a" }));
+    mockedCookies.mockResolvedValue(
+      createCookieStore({ saju_access_token: "a" }),
+    );
     const firstResponse = new Response("unauthorized", { status: 401 });
     vi.spyOn(globalThis, "fetch").mockResolvedValue(firstResponse);
 
@@ -131,9 +144,10 @@ describe("authenticatedBackendFetch", () => {
     });
 
     const result = await authenticatedBackendFetch("/api/test");
+    const successResult = expectSuccessResult(result);
 
     expect(result.success).toBe(true);
-    expect(result.accessToken).toBe("new-access");
+    expect(successResult.accessToken).toBe("new-access");
     expect(fetchSpy).toHaveBeenCalledTimes(2);
     expect(fetchSpy.mock.calls[1][1]).toEqual(
       expect.objectContaining({

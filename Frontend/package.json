@@ -7,6 +7,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "test:e2e": "playwright test",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:ui": "playwright test --ui",
     "test:unit": "vitest run",
     "test:unit:watch": "vitest",
     "lint": "eslint . --max-warnings=0",
@@ -51,6 +54,7 @@
   },
   "devDependencies": {
     "@hey-api/openapi-ts": "0.96.1",
+    "@playwright/test": "^1.60.0",
     "@types/node": "^25.5.2",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",

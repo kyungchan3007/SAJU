@@ -32,7 +32,7 @@ export function MypageProfileCard({ user }: Props) {
         href="/mypage/jeongtongsaju"
         className="shrink-0 text-xs text-[#0d0d0d]/50 underline hover:text-[#0d0d0d] lg:hidden"
       >
-        만세력 보기
+        정통사주 보기
       </a>
 
       {/* 웹: 하단 버튼 */}
@@ -40,7 +40,7 @@ export function MypageProfileCard({ user }: Props) {
         href="/mypage/jeongtongsaju"
         className="btn-saju btn-saju-secondary hidden rounded-full px-5 py-1.5 text-xs lg:inline-block"
       >
-        만세력 보기 →
+        정통사주 보기 →
       </a>
     </div>
   );

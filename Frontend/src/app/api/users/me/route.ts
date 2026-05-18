@@ -4,6 +4,10 @@ import { deleteMyAccountOnServer } from "@/entities/user/server/deleteMyAccountO
 import { getMyProfileOnServer } from "@/entities/user/server/getMyProfileOnServer";
 import { createErrorResponse, createSuccessResponse } from "@/shared/api";
 import { clearAuthCookies } from "@/shared/api/auth/clearAuthCookies";
+import {
+  AUTH_COOKIE_OPTIONS,
+  USER_EMAIL_COOKIE_KEY,
+} from "@/shared/config/authToken";
 
 export async function GET() {
   const result = await getMyProfileOnServer();
@@ -15,7 +19,15 @@ export async function GET() {
     );
   }
 
-  return NextResponse.json(createSuccessResponse(result.data));
+  const response = NextResponse.json(createSuccessResponse(result.data));
+  const email = result.data?.email ?? "";
+
+  response.cookies.set(USER_EMAIL_COOKIE_KEY, email, {
+    ...AUTH_COOKIE_OPTIONS,
+    maxAge: 60 * 60,
+  });
+
+  return response;
 }
 
 export async function DELETE() {
