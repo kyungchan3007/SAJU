@@ -21,9 +21,10 @@ description: >-
 
 1. Claude가 구현 완료한다.
 2. 사용자가 Codex에 검증 요청한다.
-3. Codex는 `code-review-guard`로 결과를 반환한다.
-4. HOLD면 Claude가 수정하고, Codex가 재검증한다.
-5. PASS면 병합한다.
+3. Codex는 `references/gate-matrix.md`로 작업 유형을 먼저 분류한다.
+4. Codex는 `references/EVAL.md` 게이트/점수 기준으로 `code-review-guard` 결과를 반환한다.
+5. HOLD면 Claude가 수정하고, Codex가 재검증한다.
+6. PASS면 병합한다.
 
 ## 스킬 적용 규칙
 
@@ -31,6 +32,7 @@ description: >-
 - 성능/렌더링/번들 점검이 필요하면 `vercel-react-best-practices` 추가
 - 접근성/웹 인터페이스 가이드 점검이 필요하면 `web-design-guidelines` 추가
 - `src/generated/api` 직접 수정 금지
+- 최종 판정/출력 형식은 반드시 `references/EVAL.md`를 따른다.
 
 ## 명령 템플릿
 

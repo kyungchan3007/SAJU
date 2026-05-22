@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SAJU:ME — 나의 명식 리포트</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@700;900&display=swap');
+    * { font-family: "Malgun Gothic", "맑은 고딕", sans-serif; box-sizing: border-box; margin: 0; padding: 0; }
+    .serif { font-family: 'Noto Serif KR', Georgia, serif; }
+    .glass-card { background: white; border-radius: 20px; box-shadow: 0 2px 16px rgba(0,0,0,0.08); }
+    .donut-segment { fill: none; stroke-width: 20; }
+    .hide-scrollbar { scrollbar-width: none; }
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
+  </style>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#5956E9',
+            brand: { 50: '#F0EEFF', 100: '#E0DAFF', 200: '#C4BAFF', 300: '#9B93F7', 500: '#6563EC', 600: '#5956E9', 700: '#4340C5', 800: '#3730A3' },
+            'element-mok': '#22c55e',
+            'element-hwa': '#ef4444',
+            'element-to':  '#eab308',
+            'element-geum':'#94a3b8',
+            'element-sui': '#3b82f6',
+          },
+          fontFamily: {
+            hanja: ['"Noto Serif KR"', 'Georgia', 'serif'],
+          },
+          boxShadow: {
+            card: '0 2px 16px rgba(0,0,0,0.08)',
+          },
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-[#F4F2FC] text-gray-900">
+
+  <!-- ── NAV ── -->
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur border-b border-gray-100">
+    <div class="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+          <path d="M9 1L16 5V13L9 17L2 13V5L9 1Z" fill="#5956E9"/>
+        </svg>
+        <div>
+          <div class="font-black text-sm tracking-tight text-gray-900">SAJU:ME</div>
+          <div class="text-[9px] text-gray-400 -mt-0.5">정통사주로 해석하는 나의 명식</div>
+        </div>
+      </div>
+      <div class="flex items-center gap-7 text-sm font-medium text-gray-500">
+        <a href="#" class="hover:text-[#5956E9] transition-colors">오늘의운세</a>
+        <a href="#" class="text-[#5956E9] font-semibold">정통사주</a>
+        <a href="#" class="hover:text-[#5956E9] transition-colors">대운·세운</a>
+        <a href="#" class="hover:text-[#5956E9] transition-colors">궁합</a>
+        <a href="#" class="hover:text-[#5956E9] transition-colors">타로</a>
+        <a href="#" class="hover:text-[#5956E9] transition-colors">커뮤니티</a>
+      </div>
+      <div class="flex items-center gap-3">
+        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+        </svg>
+        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-300 to-indigo-500 cursor-pointer flex items-center justify-center text-white text-xs font-bold">수</div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ── HERO ── -->
+  <!-- 이미지가 absolute 배경에 깔리고, 좌우 그라디언트 위로 카드/텍스트가 z-10으로 올라오는 구조 -->
+  <section style="position:relative; overflow:hidden; background:#F4F2FC; height:420px; margin-top:56px;">
+
+    <!-- 배경 인물 이미지 — 중앙 하단 고정, 뒤에 깔림 (경로: PROTOTYPE폴더 → ../PERSON/) -->
+    <img
+      src="../PERSON/saju-profile-water-woman_hero.png"
+      alt="수 기운 여성 프로필 이미지"
+      style="position:absolute; bottom:0; left:50%; transform:translateX(-50%); height:100%; width:auto; object-fit:contain; object-position:center bottom; pointer-events:none; user-select:none;"
+    />
+
+    <!-- 좌측 그라디언트 -->
+    <div style="position:absolute; inset:0; background:linear-gradient(to right, rgba(244,242,252,0.96) 0%, rgba(244,242,252,0.72) 28%, rgba(244,242,252,0.00) 52%); pointer-events:none;"></div>
+    <!-- 우측 그라디언트 -->
+    <div style="position:absolute; inset:0; background:linear-gradient(to left, rgba(244,242,252,0.94) 0%, rgba(244,242,252,0.65) 24%, rgba(244,242,252,0.00) 50%); pointer-events:none;"></div>
+    <!-- 하단 그라디언트 — 바디와 seamless 연결 (100% 완전 불투명으로 seam 제거) -->
+    <div style="position:absolute; left:0; right:0; bottom:0; height:160px; background:linear-gradient(to bottom, rgba(244,242,252,0.00) 0%, rgba(244,242,252,0.50) 40%, rgba(244,242,252,0.88) 70%, rgba(244,242,252,1.00) 100%); pointer-events:none;"></div>
+
+    <!-- 콘텐츠 — z-10으로 이미지 위에 올라옴 -->
+    <div style="position:relative; z-index:10; max-width:1152px; margin:0 auto; padding:22px 28px; height:100%;">
+      <div style="display:grid; grid-template-columns:262px 1fr 244px; height:100%; align-items:center;">
+
+        <!-- 좌: 히어로 텍스트 + 명식 정보 -->
+        <div style="display:flex; flex-direction:column; justify-content:center; gap:9px;">
+
+          <!-- 타이틀 블록 -->
+          <div>
+            <div style="font-size:9px; font-weight:700; color:#5956E9; margin-bottom:5px; letter-spacing:0.06em; text-transform:uppercase;">정통사주</div>
+            <div style="font-size:20px; font-weight:900; line-height:1.2; color:#111827; margin-bottom:2px;">AI가 해석한</div>
+            <div style="font-size:20px; font-weight:900; line-height:1.2; color:#5956E9; margin-bottom:7px;">나의 명식 리포트</div>
+            <p style="font-size:11px; color:#6B7280; line-height:1.6;">사주팔자와 오행의 흐름을 바탕으로<br>당신의 성향과 운명의 방향을 분석했어요.</p>
+          </div>
+
+          <!-- 띠 / 신강신약 / 격국 -->
+          <div style="display:flex; gap:5px;">
+            <!-- 띠 -->
+            <div style="flex:1; display:flex; align-items:center; gap:5px; background:white; border-radius:8px; padding:6px 8px; box-shadow:0 1px 5px rgba(0,0,0,0.07);">
+              <div style="width:18px; height:18px; border-radius:4px; background:#FFF3E8; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#F97316" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+              </div>
+              <div>
+                <div style="font-size:8px; color:#9CA3AF; line-height:1;">띠</div>
+                <div style="font-size:10px; font-weight:700; color:#111827; line-height:1.3;">범띠</div>
+              </div>
+            </div>
+            <!-- 신강신약 -->
+            <div style="flex:1; display:flex; align-items:center; gap:5px; background:white; border-radius:8px; padding:6px 8px; box-shadow:0 1px 5px rgba(0,0,0,0.07);">
+              <div style="width:18px; height:18px; border-radius:4px; background:#FEF3C7; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m8 3 4 8 5-5 5 15H2L8 3z"/></svg>
+              </div>
+              <div>
+                <div style="font-size:8px; color:#9CA3AF; line-height:1;">신강/신약</div>
+                <div style="font-size:10px; font-weight:700; color:#111827; line-height:1.3;">신약<span style="font-size:8px; font-weight:400; color:#9CA3AF;">(身弱)</span></div>
+              </div>
+            </div>
+            <!-- 격국 -->
+            <div style="flex:1; display:flex; align-items:center; gap:5px; background:white; border-radius:8px; padding:6px 8px; box-shadow:0 1px 5px rgba(0,0,0,0.07);">
+              <div style="width:18px; height:18px; border-radius:4px; background:#F1F5F9; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+              </div>
+              <div>
+                <div style="font-size:8px; color:#9CA3AF; line-height:1;">격국</div>
+                <div style="font-size:10px; font-weight:700; color:#111827; line-height:1.3;">정관격</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 사주 요약 -->
+          <div style="background:white; border-radius:8px; padding:7px 10px; box-shadow:0 1px 5px rgba(0,0,0,0.07);">
+            <div style="display:flex; align-items:center; gap:5px;">
+              <div style="width:16px; height:16px; border-radius:4px; background:#F0EEFF; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#5956E9" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+              </div>
+              <div style="font-size:8px; color:#9CA3AF;">사주 요약</div>
+            </div>
+            <div style="margin-top:5px; font-size:10px; font-weight:600; color:#374151; letter-spacing:0.03em;">
+              기사년&nbsp;&nbsp;경오월&nbsp;&nbsp;<span style="color:#5956E9; font-weight:700;">임인일</span>&nbsp;&nbsp;갑진시
+            </div>
+          </div>
+
+          <!-- 용신 / 보조 용신 -->
+          <div style="display:flex; gap:5px;">
+            <div style="flex:1; display:flex; align-items:center; gap:6px; background:white; border-radius:8px; padding:7px 10px; box-shadow:0 1px 5px rgba(0,0,0,0.07);">
+              <div style="width:20px; height:20px; border-radius:5px; background:#FFFBEB; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#EAB308" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v8"/><path d="m4.93 10.93 1.41 1.41"/><path d="M2 18h2"/><path d="M20 18h2"/><path d="m19.07 10.93-1.41 1.41"/><path d="M22 22H2"/><path d="m8 22 2-7"/><path d="m16 22-2-7"/></svg>
+              </div>
+              <div>
+                <div style="font-size:8px; color:#9CA3AF; margin-bottom:1px;">용신</div>
+                <div style="font-size:12px; font-weight:800; color:#111827;">금(金)</div>
+              </div>
+            </div>
+            <div style="flex:1; display:flex; align-items:center; gap:6px; background:white; border-radius:8px; padding:7px 10px; box-shadow:0 1px 5px rgba(0,0,0,0.07);">
+              <div style="width:20px; height:20px; border-radius:5px; background:#EFF6FF; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/></svg>
+              </div>
+              <div>
+                <div style="font-size:8px; color:#9CA3AF; margin-bottom:1px;">보조 용신</div>
+                <div style="font-size:12px; font-weight:800; color:#2563EB;">수(水)</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 신강·신약 분석 (좌측으로 이동 — 컴팩트 수평 레이아웃) -->
+          <div style="background:white; border-radius:8px; padding:7px 10px; box-shadow:0 1px 5px rgba(0,0,0,0.07);">
+            <div style="font-size:8px; color:#9CA3AF; margin-bottom:4px;">신강·신약 분석</div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <div style="flex:1;">
+                <div style="font-size:11px; font-weight:800; color:#111827; line-height:1.2;">신약 <span style="font-size:8px; font-weight:500; color:#9CA3AF;">身弱</span></div>
+                <div style="font-size:9px; color:#6B7280; margin-top:1px; line-height:1.4;">일간의 기운이 약해 도움이 필요한 상태</div>
+              </div>
+              <div style="width:28px; height:28px; border-radius:50%; background:linear-gradient(135deg,#EEF2FF,#C7D2FE); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                <span style="font-size:13px;">⛰️</span>
+              </div>
+            </div>
+            <div style="margin-top:5px;">
+              <div style="display:flex; justify-content:space-between; font-size:7px; color:#9CA3AF; margin-bottom:2px;">
+                <span>신약</span><span>중화</span><span>신강</span>
+              </div>
+              <div style="height:3px; background:#F3F4F6; border-radius:99px; position:relative;">
+                <div style="width:28%; height:100%; background:linear-gradient(to right,#6366F1,#818CF8); border-radius:99px;"></div>
+                <div style="position:absolute; top:50%; left:28%; transform:translate(-50%,-50%); width:6px; height:6px; background:#5956E9; border-radius:50%; border:1px solid white;"></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- 중: 이미지 통과 영역 (비워둠 — 이미지가 absolute로 뒤에 보임) -->
+        <div></div>
+
+        <!-- 우: 분석 카드들 (신약카드 좌측으로 이동 → 2카드만, 크기 소폭 확대) -->
+        <div style="display:flex; flex-direction:column; gap:10px; padding:12px 0; align-self:stretch; justify-content:center;">
+
+          <!-- 심성 분석 카드 -->
+          <div style="background:white; border-radius:14px; padding:12px 14px; box-shadow:0 2px 12px rgba(0,0,0,0.09);">
+            <div style="font-size:11px; font-weight:700; color:#111827; margin-bottom:8px; display:flex; align-items:center; gap:5px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#6366F1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96-.46 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z"/><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96-.46 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z"/></svg>
+              심성 분석
+            </div>
+            <div style="display:flex; flex-direction:column; gap:5px;">
+              <div style="display:flex; align-items:center; gap:7px;">
+                <span style="font-size:10px; color:#6B7280; width:24px;">비겁</span>
+                <div style="flex:1; height:5px; background:#F3F4F6; border-radius:99px;"><div style="width:30%; height:100%; background:#6366F1; border-radius:99px;"></div></div>
+                <span style="font-size:10px; color:#9CA3AF; width:22px; text-align:right;">30%</span>
+              </div>
+              <div style="display:flex; align-items:center; gap:7px;">
+                <span style="font-size:10px; color:#6B7280; width:24px;">식상</span>
+                <div style="flex:1; height:5px; background:#F3F4F6; border-radius:99px;"><div style="width:25%; height:100%; background:#22C55E; border-radius:99px;"></div></div>
+                <span style="font-size:10px; color:#9CA3AF; width:22px; text-align:right;">25%</span>
+              </div>
+              <div style="display:flex; align-items:center; gap:7px;">
+                <span style="font-size:10px; color:#6B7280; width:24px;">재성</span>
+                <div style="flex:1; height:5px; background:#F3F4F6; border-radius:99px;"><div style="width:20%; height:100%; background:#EAB308; border-radius:99px;"></div></div>
+                <span style="font-size:10px; color:#9CA3AF; width:22px; text-align:right;">20%</span>
+              </div>
+              <div style="display:flex; align-items:center; gap:7px;">
+                <span style="font-size:10px; color:#6B7280; width:24px;">관성</span>
+                <div style="flex:1; height:5px; background:#F3F4F6; border-radius:99px;"><div style="width:15%; height:100%; background:#EF4444; border-radius:99px;"></div></div>
+                <span style="font-size:10px; color:#9CA3AF; width:22px; text-align:right;">15%</span>
+              </div>
+              <div style="display:flex; align-items:center; gap:7px;">
+                <span style="font-size:10px; color:#6B7280; width:24px;">인성</span>
+                <div style="flex:1; height:5px; background:#F3F4F6; border-radius:99px;"><div style="width:10%; height:100%; background:#94A3B8; border-radius:99px;"></div></div>
+                <span style="font-size:10px; color:#9CA3AF; width:22px; text-align:right;">10%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 이달의 운세 카드 (12-month carousel) -->
+          <div style="background:linear-gradient(135deg,#5956E9,#7C3AED); border-radius:14px; padding:12px 14px; box-shadow:0 2px 12px rgba(89,86,233,0.32);">
+            <div style="font-size:10px; color:rgba(255,255,255,0.65); margin-bottom:6px; letter-spacing:0.04em;">이달의 운세</div>
+
+            <!-- Month selector carousel -->
+            <div id="monthCarousel" style="display:flex; gap:1px; overflow-x:auto; scrollbar-width:none; margin-bottom:7px; -webkit-overflow-scrolling:touch;">
+              <style>
+                #monthCarousel::-webkit-scrollbar { display:none; }
+                .mc-btn {
+                  flex-shrink:0; border:none; cursor:pointer;
+                  padding:2px 6px; border-radius:5px; font-size:10px; font-weight:500;
+                  color:rgba(255,255,255,0.55); background:transparent;
+                  font-family:inherit; transition:background 0.15s, color 0.15s;
+                  white-space:nowrap; line-height:1.5;
+                }
+                .mc-btn:hover { color:rgba(255,255,255,0.85); background:rgba(255,255,255,0.12); }
+                .mc-btn.mc-active {
+                  color:#fff; font-weight:700;
+                  background:rgba(255,255,255,0.22);
+                }
+                /* current real-world month indicator */
+                .mc-btn.mc-current {
+                  color:rgba(255,255,255,0.78);
+                }
+                .mc-btn.mc-current::after {
+                  content:'✦';
+                  font-size:5px;
+                  vertical-align:super;
+                  line-height:1;
+                  margin-left:1px;
+                  opacity:0.7;
+                  font-style:normal;
+                }
+                .mc-btn.mc-current.mc-active {
+                  color:#fff;
+                }
+                .mc-btn.mc-current.mc-active::after {
+                  opacity:0.9;
+                }
+              </style>
+              <button class="mc-btn" data-month="1">1월</button>
+              <button class="mc-btn" data-month="2">2월</button>
+              <button class="mc-btn" data-month="3">3월</button>
+              <button class="mc-btn" data-month="4">4월</button>
+              <button class="mc-btn mc-active" data-month="5">5월</button>
+              <button class="mc-btn" data-month="6">6월</button>
+              <button class="mc-btn" data-month="7">7월</button>
+              <button class="mc-btn" data-month="8">8월</button>
+              <button class="mc-btn" data-month="9">9월</button>
+              <button class="mc-btn" data-month="10">10월</button>
+              <button class="mc-btn" data-month="11">11월</button>
+              <button class="mc-btn" data-month="12">12월</button>
+            </div>
+
+            <!-- Dynamic content -->
+            <div id="fortuneTitle" style="font-size:12px; font-weight:700; color:white; margin-bottom:6px; display:flex; align-items:center; gap:3px;">
+              2026년 5월
+              <svg id="fortuneStar" xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 24 24" fill="rgba(255,255,255,0.85)" stroke="none" style="display:none; flex-shrink:0;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
+            <div id="fortuneText" style="font-size:11px; color:rgba(255,255,255,0.85); line-height:1.6; min-height:36px;">
+              금(金)의 기운이 강해지는 달로<br>새로운 기회가 찾아올 가능성이 높습니다.<br>재물운과 명예운이 함께 상승합니다.
+            </div>
+            <div id="fortuneTags" style="margin-top:6px; display:flex; gap:5px; flex-wrap:wrap;">
+              <span style="font-size:10px; background:rgba(255,255,255,0.2); color:white; padding:2px 8px; border-radius:99px;">재물운 ↑</span>
+              <span style="font-size:10px; background:rgba(255,255,255,0.2); color:white; padding:2px 8px; border-radius:99px;">명예운 ↑</span>
+            </div>
+          </div>
+
+          <script>
+            (function() {
+              var data = {
+                1:  { title:'2026년 1월', text:'수(水)의 기운이 내면을 깊게 채우는 달로<br>성찰과 계획이 결실을 맺는 시기입니다.<br>건강운과 학문운이 안정적으로 흐릅니다.', tags:['건강운 ↑','학문운 ↑'] },
+                2:  { title:'2026년 2월', text:'목(木)의 기운이 싹트는 시기로<br>새로운 시작과 변화가 찾아옵니다.<br>인연운과 사업운에 변화가 생깁니다.', tags:['인연운 ↑','사업운 ↑'] },
+                3:  { title:'2026년 3월', text:'봄의 기운이 상승하며 활동력이 높아집니다.<br>대인관계에서 좋은 기회가 열립니다.<br>재물운과 건강운이 함께 안정됩니다.', tags:['재물운 ↑','대인운 ↑'] },
+                4:  { title:'2026년 4월', text:'화(火)의 기운이 강해지는 달로<br>열정과 추진력이 빛을 발합니다.<br>직장운과 명예운이 크게 상승합니다.', tags:['직장운 ↑','명예운 ↑'] },
+                5:  { title:'2026년 5월', text:'금(金)의 기운이 강해지는 달로<br>새로운 기회가 찾아올 가능성이 높습니다.<br>재물운과 명예운이 함께 상승합니다.', tags:['재물운 ↑','명예운 ↑'] },
+                6:  { title:'2026년 6월', text:'토(土)의 기운이 안정적으로 흘러<br>꾸준한 노력이 성과로 이어집니다.<br>가족운과 내실운이 깊어집니다.', tags:['가족운 ↑','안정운 ↑'] },
+                7:  { title:'2026년 7월', text:'수(水)의 기운이 상승하는 한여름으로<br>창의력과 감수성이 풍부해집니다.<br>학습운과 예술운이 두드러집니다.', tags:['학습운 ↑','창의운 ↑'] },
+                8:  { title:'2026년 8월', text:'금(金)의 기운이 절정에 달하며<br>결실과 수확의 시기가 됩니다.<br>취업운과 재물운이 크게 상승합니다.', tags:['취업운 ↑','재물운 ↑'] },
+                9:  { title:'2026년 9월', text:'정리와 마무리가 중요한 시기입니다.<br>인간관계를 정비하기 좋은 달이에요.<br>건강 관리에 특별히 신경 쓰세요.', tags:['건강 주의','정리운 ↑'] },
+                10: { title:'2026년 10월', text:'수(水)·금(金)의 조화로운 흐름 속에<br>지혜롭고 차분한 판단이 가능합니다.<br>투자운과 사업운이 호조를 보입니다.', tags:['투자운 ↑','사업운 ↑'] },
+                11: { title:'2026년 11월', text:'겨울을 준비하는 시기로 인내가 필요합니다.<br>내면의 강화와 자기 계발이 빛납니다.<br>학업운과 자격증운이 상승합니다.', tags:['학업운 ↑','계발운 ↑'] },
+                12: { title:'2026년 12월', text:'한 해를 마무리하는 달로 감사와 성찰의 시간.\n주변 인연들과의 관계가 깊어집니다.<br>정신운과 인연운이 따뜻하게 빛납니다.', tags:['인연운 ↑','마무리운 ↑'] }
+              };
+
+              var titleEl = document.getElementById('fortuneTitle');
+              var textEl  = document.getElementById('fortuneText');
+              var tagsEl  = document.getElementById('fortuneTags');
+              var starEl  = document.getElementById('fortuneStar');
+              var btns    = document.querySelectorAll('.mc-btn');
+
+              function renderTags(tags) {
+                return tags.map(function(t) {
+                  return '<span style="font-size:10px;background:rgba(255,255,255,0.2);color:white;padding:2px 8px;border-radius:99px;">' + t + '</span>';
+                }).join('');
+              }
+
+              /* current real-world month — drives both carousel indicator and title star */
+              var currentMonth = new Date().getMonth() + 1;
+
+              /* mark carousel pill for current month */
+              btns.forEach(function(btn) {
+                if (parseInt(btn.getAttribute('data-month')) === currentMonth) {
+                  btn.classList.add('mc-current');
+                }
+              });
+
+              /* sync title star with whatever month is initially selected in HTML */
+              var initialBtn = document.querySelector('.mc-btn.mc-active');
+              var initialMonth = initialBtn ? parseInt(initialBtn.getAttribute('data-month')) : -1;
+              starEl.style.display = (initialMonth === currentMonth) ? 'inline' : 'none';
+
+              btns.forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                  var m = parseInt(btn.getAttribute('data-month'));
+                  var d = data[m];
+                  btns.forEach(function(b){ b.classList.remove('mc-active'); });
+                  btn.classList.add('mc-active');
+                  btn.scrollIntoView({ behavior:'smooth', block:'nearest', inline:'center' });
+                  titleEl.childNodes[0].textContent = d.title + ' ';
+                  textEl.innerHTML  = d.text;
+                  tagsEl.innerHTML  = renderTags(d.tags);
+                  /* show title star only when the selected month is the actual current month */
+                  starEl.style.display = (m === currentMonth) ? 'inline' : 'none';
+                });
+              });
+            })();
+          </script>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 사주팔자 + 오행 분포도 ── -->
+  <section style="padding:32px 0 16px; margin-top:-40px; position:relative; z-index:1;">
+    <div class="max-w-6xl mx-auto px-6">
+      <div style="display:grid; grid-template-columns:minmax(0,1fr) 340px; gap:32px; align-items:start;">
+
+        <!-- 좌: 사주팔자 -->
+        <section class="component-saju-pillars glass-card p-8" style="min-width:0;">
+          <div class="flex items-center gap-2 mb-6">
+            <h2 class="text-xl font-bold text-gray-900">나의 사주팔자</h2>
+            <button class="text-gray-400 hover:text-gray-600">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+              </svg>
+            </button>
+          </div>
+          <div class="grid grid-cols-4 gap-4 mb-6">
+            <!-- 연주 (己巳) -->
+            <div class="flex flex-col items-center">
+              <span class="text-sm text-gray-500 mb-4">연주</span>
+              <div class="bg-white border border-gray-100 rounded-2xl p-6 w-full flex flex-col items-center shadow-sm">
+                <span class="text-3xl font-hanja font-bold text-element-to mb-2">기</span>
+                <span class="text-3xl font-hanja font-bold text-element-hwa mb-6">사</span>
+                <span class="text-xl font-hanja text-gray-700 mb-1">絶</span>
+                <span class="text-sm text-gray-500">절</span>
+              </div>
+            </div>
+            <!-- 월주 (庚午) -->
+            <div class="flex flex-col items-center">
+              <span class="text-sm text-gray-500 mb-4">월주</span>
+              <div class="bg-white border border-gray-100 rounded-2xl p-6 w-full flex flex-col items-center shadow-sm">
+                <span class="text-3xl font-hanja font-bold text-element-geum mb-2">경</span>
+                <span class="text-3xl font-hanja font-bold text-element-hwa mb-6">오</span>
+                <span class="text-xl font-hanja text-gray-700 mb-1">胎</span>
+                <span class="text-sm text-gray-500">태</span>
+              </div>
+            </div>
+            <!-- 일주 (壬寅) — 강조 -->
+            <div class="flex flex-col items-center relative">
+              <span class="text-sm text-brand-600 font-bold mb-4">일주</span>
+              <div class="bg-brand-50 border-2 border-brand-200 rounded-2xl p-6 w-full flex flex-col items-center shadow-sm relative overflow-hidden">
+                <div class="absolute inset-0 bg-brand-100 opacity-20"></div>
+                <span class="text-3xl font-hanja font-bold text-element-sui mb-2 relative z-10">임</span>
+                <span class="text-3xl font-hanja font-bold text-element-mok mb-6 relative z-10">인</span>
+                <span class="text-xl font-hanja text-brand-800 mb-1 relative z-10">病</span>
+                <span class="text-sm text-brand-600 relative z-10">병</span>
+              </div>
+            </div>
+            <!-- 시주 (甲辰) -->
+            <div class="flex flex-col items-center">
+              <span class="text-sm text-gray-500 mb-4">시주</span>
+              <div class="bg-white border border-gray-100 rounded-2xl p-6 w-full flex flex-col items-center shadow-sm">
+                <span class="text-3xl font-hanja font-bold text-element-mok mb-2">갑</span>
+                <span class="text-3xl font-hanja font-bold text-element-to mb-6">진</span>
+                <span class="text-xl font-hanja text-gray-700 mb-1">墓</span>
+                <span class="text-sm text-gray-500">묘</span>
+              </div>
+            </div>
+          </div>
+          <div class="bg-gray-50 rounded-xl p-4 flex gap-4 text-xs text-gray-500">
+            <div><span class="font-semibold text-gray-700">연주:</span> 초기 환경, 외부 이미지</div>
+            <div><span class="font-semibold text-gray-700">월주:</span> 사회성, 일, 성장 환경</div>
+            <div><span class="font-semibold text-gray-700">일주:</span> 나 자신, 관계의 중심</div>
+            <div><span class="font-semibold text-gray-700">시주:</span> 미래 방향, 내면의 잠재력</div>
+          </div>
+        </section>
+
+        <!-- 우: 오행 분포도 -->
+        <section class="component-elemental-chart glass-card p-8" style="min-width:0;">
+          <div class="flex items-center gap-2 mb-6">
+            <h2 class="text-xl font-bold text-gray-900">오행 분포도</h2>
+            <button class="text-gray-400 hover:text-gray-600"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></button>
+          </div>
+          <div class="flex items-center gap-4 mb-8">
+            <!-- Donut Chart -->
+            <div class="relative w-28 h-28 flex-shrink-0">
+              <svg class="transform -rotate-90 w-full h-full" viewBox="0 0 100 100">
+                <circle class="donut-segment" cx="50" cy="50" r="35" stroke="#eab308" stroke-dasharray="100 220" stroke-dashoffset="0"></circle>
+                <circle class="donut-segment" cx="50" cy="50" r="35" stroke="#ef4444" stroke-dasharray="85 235" stroke-dashoffset="-100"></circle>
+                <circle class="donut-segment" cx="50" cy="50" r="35" stroke="#22c55e" stroke-dasharray="58 262" stroke-dashoffset="-185"></circle>
+                <circle class="donut-segment" cx="50" cy="50" r="35" stroke="#94a3b8" stroke-dasharray="38 282" stroke-dashoffset="-243"></circle>
+                <circle class="donut-segment" cx="50" cy="50" r="35" stroke="#3b82f6" stroke-dasharray="32 288" stroke-dashoffset="-281"></circle>
+              </svg>
+              <div class="absolute inset-0 bg-white rounded-full m-7"></div>
+            </div>
+            <!-- Bar Charts -->
+            <div class="flex-1 min-w-0 space-y-2">
+              <div class="flex items-center gap-1.5 text-xs">
+                <span class="w-3 h-3 rounded-full bg-element-mok flex-shrink-0 flex items-center justify-center text-white text-[8px]">목</span>
+                <div class="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-element-mok" style="width:18.5%"></div></div>
+                <span class="text-gray-500 w-8 flex-shrink-0 text-right">18.5%</span>
+              </div>
+              <div class="flex items-center gap-1.5 text-xs">
+                <span class="w-3 h-3 rounded-full bg-element-hwa flex-shrink-0 flex items-center justify-center text-white text-[8px]">화</span>
+                <div class="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-element-hwa" style="width:27.3%"></div></div>
+                <span class="text-gray-500 w-8 flex-shrink-0 text-right">27.3%</span>
+              </div>
+              <div class="flex items-center gap-1.5 text-xs">
+                <span class="w-3 h-3 rounded-full bg-element-to flex-shrink-0 flex items-center justify-center text-white text-[8px]">토</span>
+                <div class="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-element-to" style="width:31.8%"></div></div>
+                <span class="text-gray-500 w-8 flex-shrink-0 text-right font-bold text-gray-800">31.8%</span>
+              </div>
+              <div class="flex items-center gap-1.5 text-xs">
+                <span class="w-3 h-3 rounded-full bg-element-geum flex-shrink-0 flex items-center justify-center text-white text-[8px]">금</span>
+                <div class="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-element-geum" style="width:12.1%"></div></div>
+                <span class="text-gray-500 w-8 flex-shrink-0 text-right">12.1%</span>
+              </div>
+              <div class="flex items-center gap-1.5 text-xs">
+                <span class="w-3 h-3 rounded-full bg-element-sui flex-shrink-0 flex items-center justify-center text-white text-[8px]">수</span>
+                <div class="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-element-sui" style="width:10.2%"></div></div>
+                <span class="text-gray-500 w-8 flex-shrink-0 text-right">10.2%</span>
+              </div>
+            </div>
+          </div>
+          <div class="bg-brand-50 rounded-xl p-5">
+            <h4 class="text-sm font-bold text-brand-800 mb-1">오행 해석</h4>
+            <p class="text-sm text-gray-700 mb-4">토와 화의 기운이 강한 편이에요.<br>금과 수의 기운을 보완하면 균형이 좋아져요.</p>
+            <div class="flex gap-2">
+              <div class="bg-white rounded-lg px-3 py-1.5 flex items-center gap-2 border border-brand-100 flex-1 justify-center">
+                <span class="text-xs text-gray-500">용신</span>
+                <span class="text-sm font-bold">금(金)</span>
+              </div>
+              <div class="bg-white rounded-lg px-3 py-1.5 flex items-center gap-2 border border-brand-100 flex-1 justify-center">
+                <span class="text-xs text-gray-500">보조 용신</span>
+                <span class="text-sm font-bold">수(水)</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 대운 흐름 ── -->
+  <!-- ── 대운 흐름 ── -->
+  <section style="padding:16px 0;">
+    <div class="max-w-6xl mx-auto px-6">
+      <section class="bg-white rounded-3xl p-8 shadow-card border border-gray-50">
+        <div class="flex items-baseline gap-3 mb-8">
+          <h2 class="text-xl font-bold text-gray-900">대운 흐름</h2>
+          <span class="text-sm text-gray-500">10년 단위로 변화하는 운의 흐름</span>
+        </div>
+        <div class="flex overflow-x-auto hide-scrollbar gap-2 justify-between" style="padding-top:40px; padding-bottom:16px;">
+          <!-- 1-10 -->
+          <div class="flex-1 min-w-[100px] flex flex-col items-center opacity-50 relative">
+            <div class="absolute right-0 top-1/2 w-4 border-t border-dashed border-gray-300 translate-x-1/2"></div>
+            <span class="text-[13px] text-gray-500 mb-3">1-10세</span>
+            <div class="text-2xl font-hanja font-bold text-gray-800 mb-1">己巳</div>
+            <div class="text-sm text-gray-600 mb-1">기사</div>
+            <div class="text-xs text-gray-400">1990-1999</div>
+          </div>
+          <!-- 11-20 -->
+          <div class="flex-1 min-w-[100px] flex flex-col items-center opacity-50 relative">
+            <div class="absolute right-0 top-1/2 w-4 border-t border-dashed border-gray-300 translate-x-1/2"></div>
+            <span class="text-[13px] text-gray-500 mb-3">11-20세</span>
+            <div class="text-2xl font-hanja font-bold text-gray-800 mb-1">戊辰</div>
+            <div class="text-sm text-gray-600 mb-1">무진</div>
+            <div class="text-xs text-gray-400">2000-2009</div>
+          </div>
+          <!-- 21-30 -->
+          <div class="flex-1 min-w-[100px] flex flex-col items-center opacity-50 relative">
+            <div class="absolute right-0 top-1/2 w-4 border-t border-dashed border-gray-300 translate-x-1/2"></div>
+            <span class="text-[13px] text-gray-500 mb-3">21-30세</span>
+            <div class="text-2xl font-hanja font-bold text-gray-800 mb-1">丁卯</div>
+            <div class="text-sm text-gray-600 mb-1">정묘</div>
+            <div class="text-xs text-gray-400">2010-2019</div>
+          </div>
+          <!-- 31-40 (현재 대운) -->
+          <div class="flex-1 min-w-[120px] flex flex-col items-center relative z-10">
+            <div class="absolute -top-7 bg-brand-500 text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full">현재 대운</div>
+            <span class="text-[13px] font-bold text-brand-600 mb-3 mt-1">31-40세</span>
+            <div class="text-[28px] font-hanja font-bold text-gray-900 mb-1">丙寅</div>
+            <div class="text-[15px] font-bold text-gray-800 mb-1">병인</div>
+            <div class="text-xs font-bold text-brand-600">2020-2029</div>
+            <div class="absolute inset-[-12px] border-2 border-brand-200 rounded-2xl bg-brand-50/20 -z-10"></div>
+          </div>
+          <!-- 41-50 -->
+          <div class="flex-1 min-w-[100px] flex flex-col items-center opacity-70 relative">
+            <div class="absolute right-0 top-1/2 w-4 border-t border-dashed border-gray-300 translate-x-1/2"></div>
+            <span class="text-[13px] text-gray-500 mb-3">41-50세</span>
+            <div class="text-2xl font-hanja font-bold text-gray-800 mb-1">乙丑</div>
+            <div class="text-sm text-gray-600 mb-1">을축</div>
+            <div class="text-xs text-gray-400">2030-2039</div>
+          </div>
+          <!-- 51-60 -->
+          <div class="flex-1 min-w-[100px] flex flex-col items-center opacity-50 relative">
+            <div class="absolute right-0 top-1/2 w-4 border-t border-dashed border-gray-300 translate-x-1/2"></div>
+            <span class="text-[13px] text-gray-500 mb-3">51-60세</span>
+            <div class="text-2xl font-hanja font-bold text-gray-800 mb-1">甲子</div>
+            <div class="text-sm text-gray-600 mb-1">갑자</div>
+            <div class="text-xs text-gray-400">2040-2049</div>
+          </div>
+          <!-- 61-70 -->
+          <div class="flex-1 min-w-[100px] flex flex-col items-center opacity-50 relative">
+            <div class="absolute right-0 top-1/2 w-4 border-t border-dashed border-gray-300 translate-x-1/2"></div>
+            <span class="text-[13px] text-gray-500 mb-3">61-70세</span>
+            <div class="text-2xl font-hanja font-bold text-gray-800 mb-1">癸亥</div>
+            <div class="text-sm text-gray-600 mb-1">계해</div>
+            <div class="text-xs text-gray-400">2050-2059</div>
+          </div>
+          <!-- 71-80 -->
+          <div class="flex-1 min-w-[100px] flex flex-col items-center opacity-50">
+            <span class="text-[13px] text-gray-500 mb-3">71-80세</span>
+            <div class="text-2xl font-hanja font-bold text-gray-800 mb-1">壬戌</div>
+            <div class="text-sm text-gray-600 mb-1">임술</div>
+            <div class="text-xs text-gray-400">2060-2069</div>
+          </div>
+        </div>
+        <div class="mt-8 bg-brand-50/50 rounded-2xl p-5 flex items-center justify-between border border-brand-100">
+          <div class="flex items-start gap-3">
+            <div class="w-8 h-8 rounded-full bg-brand-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-brand-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>
+            </div>
+            <div>
+              <p class="text-[15px] text-gray-800 font-medium">현재 병인 대운은 <strong class="text-brand-600 font-bold">확장과 변화의 시기</strong>예요.</p>
+              <p class="text-[14px] text-gray-500 mt-1">새로운 도전과 인맥, 커리어의 전환점이 될 수 있는 흐름이에요.</p>
+            </div>
+          </div>
+          <button class="px-5 py-2.5 bg-white border border-brand-200 text-brand-600 font-semibold text-sm rounded-xl hover:bg-brand-50 transition shadow-sm whitespace-nowrap">
+            대운 더 자세히 보기 ›
+          </button>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <!-- ── 12운성 분석 ── -->
+  <section style="padding:16px 0;">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="grid grid-cols-1 xl:grid-cols-4 gap-6">
+
+        <!-- 12운성 카드 (3/4) -->
+        <div class="xl:col-span-3 bg-white rounded-3xl p-8 shadow-card border border-gray-50">
+          <div class="flex items-baseline gap-3 mb-6">
+            <h2 class="text-xl font-bold text-gray-900">12운성 분석</h2>
+            <span class="text-sm text-gray-500">각 기둥의 12운성의 의미</span>
+          </div>
+          <div class="grid grid-cols-4 gap-4">
+            <!-- 절 -->
+            <div class="bg-gray-50/50 rounded-2xl p-5 border border-gray-100 flex flex-col items-center text-center">
+              <span class="text-xs font-medium text-gray-500 mb-3 bg-white px-2 py-1 rounded-md border border-gray-100 shadow-sm">연주</span>
+              <div class="w-16 h-16 rounded-full bg-brand-100 flex items-center justify-center text-2xl font-hanja font-bold text-brand-700 mb-4">絶</div>
+              <h3 class="font-bold text-gray-900 mb-2">절 <span class="text-gray-500 font-normal">(단절·소멸)</span></h3>
+              <p class="text-[13px] text-gray-600 leading-relaxed">기운이 완전히 끊기는 단계.<br>새로운 사이클 직전</p>
+            </div>
+            <!-- 태 -->
+            <div class="bg-gray-50/50 rounded-2xl p-5 border border-gray-100 flex flex-col items-center text-center">
+              <span class="text-xs font-medium text-gray-500 mb-3 bg-white px-2 py-1 rounded-md border border-gray-100 shadow-sm">월주</span>
+              <div class="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center text-2xl font-hanja font-bold text-green-700 mb-4">胎</div>
+              <h3 class="font-bold text-gray-900 mb-2">태 <span class="text-gray-500 font-normal">(잉태·준비)</span></h3>
+              <p class="text-[13px] text-gray-600 leading-relaxed">새 생명이 잉태되는 단계.<br>보이지 않는 곳에서 준비 중</p>
+            </div>
+            <!-- 병 (일주 강조) -->
+            <div class="bg-gray-50/50 rounded-2xl p-5 border border-red-100 flex flex-col items-center text-center relative overflow-hidden">
+              <div class="absolute inset-0 bg-red-50/30"></div>
+              <span class="text-xs font-bold text-red-600 mb-3 bg-white px-2 py-1 rounded-md border border-red-100 shadow-sm relative z-10">일주</span>
+              <div class="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center text-2xl font-hanja font-bold text-red-600 mb-4 relative z-10">病</div>
+              <h3 class="font-bold text-gray-900 mb-2 relative z-10">병 <span class="text-gray-500 font-normal">(약화·침체)</span></h3>
+              <p class="text-[13px] text-gray-600 leading-relaxed relative z-10">기운이 약해지고<br>쉬어가야 하는 단계</p>
+            </div>
+            <!-- 묘 -->
+            <div class="bg-gray-50/50 rounded-2xl p-5 border border-gray-100 flex flex-col items-center text-center">
+              <span class="text-xs font-medium text-gray-500 mb-3 bg-white px-2 py-1 rounded-md border border-gray-100 shadow-sm">시주</span>
+              <div class="w-16 h-16 rounded-full bg-yellow-100 flex items-center justify-center text-2xl font-hanja font-bold text-yellow-700 mb-4">墓</div>
+              <h3 class="font-bold text-gray-900 mb-2">묘 <span class="text-gray-500 font-normal">(저장·잠복)</span></h3>
+              <p class="text-[13px] text-gray-600 leading-relaxed">땅속에 저장되는 단계.<br>겉으로 드러나지 않고 내실을 다짐</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 오늘의 조언 (1/4) -->
+        <div class="bg-gradient-to-b from-brand-50 to-white rounded-3xl p-8 shadow-card border border-brand-100 flex flex-col relative overflow-hidden">
+          <div class="absolute bottom-0 left-0 right-0 h-24 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAwIDEyMCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+PHBhdGggZmlsbD0iI2U5ZDRmZiIgZmlsbC1vcGFjaXR5PSIwLjMiIGQ9Ik0wLDc0LjVjMTE4LjIsMTAuNCwyMjAuNS01LjgsMzMwLjktMzAuNWMxMTQuNC0yNS44LDIxOS42LTIzLjcsMzI1LjMsNS41Qzc1NS43LDU4LjIsODY0Ljg1LjIsOTg4LjksMjEuNGMxMjQuOCwyLjUsMjExLjItMy44LDIxMS4yLTMuOFYxMjBIMHYtNDUuNVoiLz48L3N2Zz4=')] bg-cover bg-no-repeat opacity-60"></div>
+          <h2 class="text-xl font-bold text-brand-800 mb-6 relative z-10">오늘의 조언</h2>
+          <div class="space-y-5 relative z-10 flex-1">
+            <!-- 인간관계 -->
+            <div>
+              <h4 class="text-[14px] font-bold text-brand-700 flex items-center gap-1.5 mb-1.5">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                인간관계
+              </h4>
+              <p class="text-[14px] text-gray-700 leading-relaxed pl-5">신뢰를 기반으로 관계를 쌓으면 오래 가는 인연이 찾아와요.</p>
+            </div>
+            <!-- 커리어 -->
+            <div>
+              <h4 class="text-[14px] font-bold text-brand-700 flex items-center gap-1.5 mb-1.5">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                커리어
+              </h4>
+              <p class="text-[14px] text-gray-700 leading-relaxed pl-5">책임감과 성실성이 강점이에요. 꾸준한 노력이 성과로 이어져요.</p>
+            </div>
+            <!-- 라이프스타일 -->
+            <div>
+              <h4 class="text-[14px] font-bold text-brand-700 flex items-center gap-1.5 mb-1.5">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8h1a4 4 0 1 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/><line x1="6" x2="6" y1="2" y2="4"/><line x1="10" x2="10" y1="2" y2="4"/><line x1="14" x2="14" y1="2" y2="4"/></svg>
+                라이프스타일
+              </h4>
+              <p class="text-[14px] text-gray-700 leading-relaxed pl-5">수면과 휴식, 수분 섭취를 통해 에너지를 안정적으로 관리하세요.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 다음 단계 ── -->
+  <section style="padding: 50px 0px;">
+    <div class="max-w-6xl mx-auto px-6">
+      <section>
+        <div class="flex items-baseline gap-3 mb-6 px-2">
+          <h2 class="text-lg font-bold text-gray-900">다음 단계</h2>
+          <span class="text-sm text-gray-500">더 깊이 있는 분석과 인사이트를 확인해보세요.</span>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <!-- CTA 1 -->
+          <a class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm hover:shadow-md hover:border-brand-200 transition group flex flex-col justify-between h-32 relative overflow-hidden" href="#">
+            <div>
+              <h3 class="font-bold text-gray-900 mb-1 group-hover:text-brand-600 transition">궁합 보기</h3>
+              <p class="text-[13px] text-gray-500 line-clamp-2">내게 잘 맞는 인연은<br>어떤 사람일까요?</p>
+            </div>
+            <div class="absolute bottom-4 right-4 w-10 h-10 rounded-full bg-purple-50 flex items-center justify-center text-purple-600 group-hover:bg-purple-100 transition">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+            </div>
+          </a>
+          <!-- CTA 2 -->
+          <a class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm hover:shadow-md hover:border-brand-200 transition group flex flex-col justify-between h-32 relative overflow-hidden" href="#">
+            <div>
+              <h3 class="font-bold text-gray-900 mb-1 group-hover:text-brand-600 transition">올해 운세 보기</h3>
+              <p class="text-[13px] text-gray-500 line-clamp-2">2025년 나의 운세와<br>기회를 확인해보세요.</p>
+            </div>
+            <div class="absolute bottom-4 right-4 w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 group-hover:bg-blue-100 transition">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+            </div>
+          </a>
+          <!-- CTA 3 -->
+          <a class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm hover:shadow-md hover:border-brand-200 transition group flex flex-col justify-between h-32 relative overflow-hidden" href="#">
+            <div>
+              <h3 class="font-bold text-gray-900 mb-1 group-hover:text-brand-600 transition">상세 성향 리포트</h3>
+              <p class="text-[13px] text-gray-500 line-clamp-2">나의 성격, 연애, 직업 성향을<br>더 자세히 분석해드려요.</p>
+            </div>
+            <div class="absolute bottom-4 right-4 w-10 h-10 rounded-full bg-green-50 flex items-center justify-center text-green-600 group-hover:bg-green-100 transition">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+            </div>
+          </a>
+          <!-- CTA 4 -->
+          <a class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm hover:shadow-md hover:border-brand-200 transition group flex flex-col justify-between h-32 relative overflow-hidden" href="#">
+            <div>
+              <h3 class="font-bold text-gray-900 mb-1 group-hover:text-brand-600 transition">PDF 리포트 저장</h3>
+              <p class="text-[13px] text-gray-500 line-clamp-2">나의 사주 리포트를<br>PDF로 저장해보세요.</p>
+            </div>
+            <div class="absolute bottom-4 right-4 w-10 h-10 rounded-full bg-orange-50 flex items-center justify-center text-orange-600 group-hover:bg-orange-100 transition">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+            </div>
+          </a>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <!-- ── 푸터 CTA ── -->
+  <section style="padding:56px 24px; text-align:center; background:linear-gradient(135deg,#5956E9 0%,#7B79F0 100%);">
+    <h2 style="font-size:22px; font-weight:900; color:white; margin-bottom:8px;">더 자세한 분석이 필요하신가요?</h2>
+    <p style="font-size:13px; color:rgba(255,255,255,0.7); margin-bottom:24px;">전문 역술가의 1:1 심층 분석을 받아보세요.</p>
+    <a href="#" style="display:inline-flex; align-items:center; gap:8px; padding:12px 32px; border-radius:999px; background:white; color:#5956E9; font-size:14px; font-weight:700; text-decoration:none; transition:opacity 0.2s;" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
+      심층 분석 신청하기 →
+    </a>
+  </section>
+
+</body>
+</html>

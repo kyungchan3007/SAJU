@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SAJU:ME — 오늘의 운세</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@700;900&display=swap');
+
+    /* ── RESET ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Malgun Gothic", "맑은 고딕", sans-serif;
+      background: #F4F2FC;
+      color: #111827;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    /* ── MATERIAL SYMBOLS ── */
+    .material-symbols-outlined {
+      font-family: 'Material Symbols Outlined';
+      font-weight: normal; font-style: normal;
+      line-height: 1; letter-spacing: normal; text-transform: none;
+      display: inline-block; white-space: nowrap;
+      direction: ltr; -webkit-font-smoothing: antialiased;
+    }
+
+    /* ══════════════════════════════════════
+       NAV
+    ══════════════════════════════════════ */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(255,255,255,0.97);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid #F3F4F6;
+      height: 56px;
+    }
+    .nav-inner {
+      max-width: 1152px; margin: 0 auto; padding: 0 24px;
+      height: 100%; display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+    .nav-logo-mark { font-weight: 900; font-size: 13px; letter-spacing: -0.5px; color: #111827; }
+    .nav-logo-sub { font-size: 9px; color: #9CA3AF; margin-top: -2px; }
+    .nav-links { display: flex; align-items: center; gap: 24px; list-style: none; }
+    .nav-links a {
+      font-size: 13px; font-weight: 500; color: #6B7280;
+      text-decoration: none; transition: color 0.15s;
+    }
+    .nav-links a:hover { color: #5956E9; }
+    .nav-links a.active {
+      color: #5956E9; font-weight: 700;
+      border-bottom: 2px solid #5956E9; padding-bottom: 1px;
+    }
+    .nav-actions { display: flex; align-items: center; gap: 12px; }
+    .nav-bell { width: 20px; height: 20px; color: #9CA3AF; cursor: pointer; }
+    .nav-avatar {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: linear-gradient(135deg, #93C5FD, #6366F1);
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 11px; font-weight: 700; cursor: pointer;
+    }
+
+    /* ══════════════════════════════════════
+       HERO
+    ══════════════════════════════════════ */
+    .hero {
+      position: relative; overflow: hidden;
+      background: #F4F2FC;
+      height: 420px;
+      margin-top: 56px;
+    }
+
+    /* Person image — bottom-center, contained */
+    .hero-person {
+      position: absolute; bottom: 0; left: 50%;
+      transform: translateX(-50%);
+      height: 100%; width: auto;
+      object-fit: contain; object-position: center bottom;
+      pointer-events: none; user-select: none;
+    }
+
+    /* Left gradient — protects text */
+    .hero-grad-l {
+      position: absolute; inset: 0;
+      background: linear-gradient(to right,
+        rgba(244,242,252,0.96) 0%,
+        rgba(244,242,252,0.72) 28%,
+        rgba(244,242,252,0.00) 52%);
+    }
+    /* Right gradient — protects card */
+    .hero-grad-r {
+      position: absolute; inset: 0;
+      background: linear-gradient(to left,
+        rgba(244,242,252,0.94) 0%,
+        rgba(244,242,252,0.65) 24%,
+        rgba(244,242,252,0.00) 50%);
+    }
+    /* Bottom fade — seamless transition into page */
+    .hero-grad-b {
+      position: absolute; left: 0; right: 0; bottom: 0;
+      height: 110px;
+      background: linear-gradient(to bottom,
+        rgba(244,242,252,0.00) 0%,
+        rgba(244,242,252,0.42) 52%,
+        rgba(244,242,252,0.86) 100%);
+    }
+
+    /* 3-column grid */
+    .hero-content {
+      position: relative; z-index: 10;
+      max-width: 1152px; margin: 0 auto;
+      padding: 38px 32px;
+      height: 100%;
+      display: grid;
+      grid-template-columns: 330px 1fr 252px;
+      align-items: center;
+    }
+
+    /* ── Hero Left ── */
+    .hero-left { display: flex; flex-direction: column; gap: 11px; }
+
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 11px; font-weight: 700;
+      color: #5956E9; letter-spacing: 0.06em;
+    }
+    .hero-name {
+      font-size: 19px; font-weight: 600;
+      color: #374151; line-height: 1.2;
+    }
+    .hero-title {
+      font-size: 34px; font-weight: 900;
+      color: #111827; line-height: 1.1;
+      margin-top: 1px;
+    }
+    .hero-desc {
+      font-size: 12px; color: #6B7280;
+      line-height: 1.75; margin-top: 1px;
+    }
+    .date-chip {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: white; border-radius: 10px;
+      padding: 8px 14px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      font-size: 12.5px; font-weight: 600; color: #374151;
+      width: fit-content; margin-top: 2px;
+    }
+
+    /* ── Hero Right — "오늘의 한마디" card ── */
+    .quote-card {
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 4px 22px rgba(89,86,233,0.12);
+      display: flex; flex-direction: column;
+      align-self: stretch;          /* fills hero grid row height */
+    }
+    .quote-lbl {
+      display: flex; align-items: center; gap: 5px;
+      font-size: 11px; font-weight: 700; color: #5956E9;
+      margin-bottom: 13px;
+    }
+    .quote-msg {
+      font-size: 12.5px; color: #374151;
+      line-height: 1.85; font-weight: 400;
+    }
+
+    /* 나의 사주 — weak element info block */
+    .saju-block {
+      margin-top: 13px; flex: 1;
+      background: #F5F3FF; border-radius: 10px;
+      padding: 12px 14px;
+      display: flex; flex-direction: column; gap: 3px;
+    }
+    .saju-block-lbl {
+      font-size: 10px; font-weight: 700;
+      color: #A09ECC; letter-spacing: 0.06em; text-transform: uppercase;
+    }
+    .saju-block-val {
+      font-size: 18px; font-weight: 800; color: #5956E9;
+      margin-top: 2px;
+    }
+    .saju-block-desc {
+      font-size: 11px; color: #7C72D8; line-height: 1.6; margin-top: 2px;
+    }
+
+    /* Bottom purple quote */
+    .quote-bottom {
+      margin-top: 13px;
+      font-size: 12px; color: #5956E9;
+      font-weight: 600; line-height: 1.72;
+    }
+
+    /* ══════════════════════════════════════
+       STATS CARDS
+    ══════════════════════════════════════ */
+    .stats-wrap {
+      max-width: 1152px; margin: 0 auto;
+      padding: 0 32px;
+      position: relative; z-index: 20;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    .stats-card {
+      background: white; border-radius: 14px;
+      padding: 18px 20px;
+      box-shadow: 0 2px 14px rgba(0,0,0,0.07);
+      display: flex; flex-direction: column;
+      min-height: 118px;
+    }
+    .stats-card-hd {
+      display: flex; align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .stats-card-name { font-size: 13px; font-weight: 700; color: #111827; }
+    .stats-info-ico {
+      font-size: 16px; color: #D1D5DB;
+      font-variation-settings: 'FILL' 0, 'wght' 300;
+    }
+    /* Score card */
+    .score-num {
+      font-size: 36px; font-weight: 900;
+      color: #111827; line-height: 1;
+      margin-bottom: 10px;
+    }
+    .score-num span { font-size: 13px; font-weight: 600; color: #9CA3AF; margin-left: 2px; }
+    .score-bar-wrap {
+      height: 8px; background: #E0DAFF;
+      border-radius: 99px; overflow: hidden;
+    }
+    .score-bar {
+      height: 100%; background: #5956E9;
+      border-radius: 99px; transition: width 1s ease;
+    }
+    /* Icon cards */
+    .stats-icon-row {
+      display: flex; align-items: center;
+      gap: 14px; flex: 1;
+    }
+    .stats-ico-circle {
+      width: 48px; height: 48px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .stats-ico-circle .material-symbols-outlined { font-size: 26px; }
+    .stats-sub-lbl {
+      font-size: 10px; font-weight: 600; color: #9CA3AF;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .stats-val { font-size: 14px; font-weight: 700; color: #111827; }
+    .bg-lav { background: #F0EEFF; }
+    .bg-rose { background: #FFF1F2; }
+    .text-brand { color: #5956E9; }
+    .text-rose { color: #EF4444; }
+
+    /* ══════════════════════════════════════
+       CONTENT AREA
+    ══════════════════════════════════════ */
+    .content {
+      max-width: 1152px; margin: 18px auto 0;
+      padding: 0 32px 52px;
+      display: flex; flex-direction: column; gap: 14px;
+    }
+
+    /* Base card */
+    .card {
+      background: white; border-radius: 14px;
+      box-shadow: 0 1px 8px rgba(0,0,0,0.05);
+      border: 1px solid #F3F4F6;
+      padding: 18px 20px;
+    }
+    .card-hd {
+      display: flex; align-items: center; gap: 6px;
+      margin-bottom: 14px;
+    }
+    .card-title { font-size: 13px; font-weight: 700; color: #111827; }
+    .card-info-ico {
+      font-size: 14px; color: #D1D5DB;
+      font-variation-settings: 'FILL' 0, 'wght' 300;
+    }
+
+    /* Two-column mid */
+    .mid-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+    /* ── 오행 흐름 ── */
+    .ohaeng-row {
+      display: flex; align-items: center;
+      gap: 20px; margin-bottom: 14px;
+    }
+    /* Donut */
+    .donut-wrap {
+      position: relative;
+      width: 120px; height: 120px;
+      flex-shrink: 0;
+    }
+    .donut-wrap svg {
+      width: 100%; height: 100%;
+      transform: rotate(-90deg);
+    }
+    .donut-hole {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .donut-hole-inner {
+      width: 68px; height: 68px;
+      background: white; border-radius: 50%;
+    }
+    /* Bars */
+    .elem-bars { flex: 1; display: flex; flex-direction: column; gap: 9px; }
+    .elem-row { display: flex; align-items: center; gap: 8px; }
+    .elem-badge {
+      width: 24px; height: 24px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 600; color: white; flex-shrink: 0;
+    }
+    .elem-track {
+      flex: 1; height: 6px;
+      background: #F3F4F6; border-radius: 99px; overflow: hidden;
+    }
+    .elem-fill { height: 100%; border-radius: 99px; }
+    .elem-pct {
+      font-size: 11px; font-weight: 500; color: #9CA3AF;
+      width: 36px; text-align: right; flex-shrink: 0;
+    }
+    /* Weak element box */
+    .weak-box {
+      background: #F5F3FF; border-radius: 10px;
+      padding: 11px 13px;
+      display: flex; flex-direction: column; gap: 3px;
+    }
+    .weak-box p { font-size: 12px; color: #374151; line-height: 1.6; }
+    .whl { color: #3B82F6; font-weight: 600; }
+    .wgr { color: #9CA3AF; }
+
+    /* Element colors */
+    .bg-wood  { background: #10B981; }
+    .bg-fire  { background: #EF4444; }
+    .bg-earth { background: #F59E0B; }
+    .bg-metal { background: #6B7280; }
+    .bg-water { background: #3B82F6; }
+
+    /* ── 흐름 한눈에 보기 ── */
+    .flow-rows { display: flex; flex-direction: column; }
+    .flow-row {
+      display: flex; gap: 12px;
+      padding: 11px 0;
+      border-bottom: 1px solid #F3F4F6;
+    }
+    .flow-row:first-child { padding-top: 0; }
+    .flow-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .flow-ico {
+      width: 32px; height: 32px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; margin-top: 1px;
+    }
+    .flow-ico .material-symbols-outlined { font-size: 16px; }
+    .flow-ico.good    { background: #F0FDF4; color: #16A34A; }
+    .flow-ico.bad     { background: #FEF2F2; color: #DC2626; }
+    .flow-ico.caution { background: #FFFBEB; color: #D97706; }
+    .flow-ico.place   { background: #EFF6FF; color: #2563EB; }
+    .flow-body { flex: 1; }
+    .flow-body-ttl {
+      font-size: 12px; font-weight: 600;
+      color: #111827; margin-bottom: 4px;
+    }
+    .flow-body ul { list-style: disc; list-style-position: inside; }
+    .flow-body ul li { font-size: 11.5px; color: #9CA3AF; line-height: 1.55; }
+
+    /* ── 오늘의 조언 ── */
+    .advice-top {
+      display: flex; align-items: center;
+      gap: 18px; margin-bottom: 20px;
+    }
+    .advice-ico {
+      width: 60px; height: 60px; border-radius: 50%;
+      background: #EDE9FF;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; color: #5956E9;
+    }
+    .advice-ico .material-symbols-outlined { font-size: 28px; }
+    .advice-title {
+      font-size: 16px; font-weight: 800;
+      color: #111827; margin-bottom: 5px;
+    }
+    .advice-desc { font-size: 13px; color: #6B7280; line-height: 1.75; }
+    .advice-boxes {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+    }
+    .advice-box {
+      border: 1px solid rgba(180,170,240,0.3);
+      border-radius: 12px; padding: 16px 18px;
+    }
+    .advice-box-hd {
+      display: flex; align-items: center; gap: 5px; margin-bottom: 10px;
+    }
+    .advice-box-hd .material-symbols-outlined { font-size: 13px; color: #5956E9; }
+    .advice-box-lbl {
+      font-size: 10px; font-weight: 700;
+      color: #5956E9; letter-spacing: 0.4px;
+    }
+    .advice-box-val {
+      font-size: 14px; font-weight: 700;
+      color: #111827; line-height: 1.5;
+    }
+
+    /* ── 탐색하기 ── */
+    .section-ttl {
+      font-size: 14px; font-weight: 700;
+      color: #111827; margin-bottom: 12px;
+    }
+    .explore-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+    }
+    .explore-card {
+      background: white; border-radius: 14px; padding: 18px 16px;
+      display: flex; flex-direction: column; align-items: flex-start; gap: 10px;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+      border: 1px solid #F3F4F6; cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+    }
+    .explore-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 18px rgba(0,0,0,0.1);
+      border-color: #E0DAFF;
+    }
+    .explore-ico {
+      width: 40px; height: 40px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .explore-card-ttl { font-size: 12.5px; font-weight: 700; color: #111827; }
+    .explore-card-desc { font-size: 11px; color: #9CA3AF; line-height: 1.5; }
+
+    /* ══════════════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════════════ */
+    @media (max-width: 900px) {
+      .hero { height: auto; min-height: 300px; padding-bottom: 50px; }
+      .hero-content { grid-template-columns: 1fr; padding: 28px; align-items: flex-start; }
+      .hero-person { opacity: 0.11; height: 80%; }
+      .hero-grad-l { background: rgba(244,242,252,0.93); }
+      .hero-grad-b { display: none; }
+      .quote-card { align-self: auto; }
+      .stats-grid { grid-template-columns: 1fr; gap: 10px; }
+      .mid-grid { grid-template-columns: 1fr; }
+      .advice-top { flex-direction: column; }
+      .advice-boxes { grid-template-columns: 1fr; }
+      .explore-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════
+     NAV
+══════════════════════════════════════ -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+        <path d="M9 1L16 5V13L9 17L2 13V5L9 1Z" fill="#5956E9"/>
+      </svg>
+      <div>
+        <div class="nav-logo-mark">SAJU:ME</div>
+        <div class="nav-logo-sub">정통사주로 해석하는 나의 명식</div>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#" class="active">오늘의운세</a></li>
+      <li><a href="#">정통사주</a></li>
+      <li><a href="#">대운·세운</a></li>
+      <li><a href="#">궁합</a></li>
+      <li><a href="#">타로</a></li>
+      <li><a href="#">커뮤니티</a></li>
+      <li><a href="#">마이페이지</a></li>
+    </ul>
+    <div class="nav-actions">
+      <svg class="nav-bell" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+      </svg>
+      <div class="nav-avatar">수</div>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════
+     HERO
+══════════════════════════════════════ -->
+<section class="hero">
+  <img src="../PERSON/saju-profile-water-woman_hero.png"
+       alt="오늘의 운세 인물" class="hero-person" />
+  <div class="hero-grad-l"></div>
+  <div class="hero-grad-r"></div>
+  <div class="hero-grad-b"></div>
+
+  <div class="hero-content">
+
+    <!-- LEFT: 타이틀 + 날짜 -->
+    <div class="hero-left">
+      <div class="hero-badge">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="#5956E9">
+          <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6L12 2z"/>
+        </svg>
+        오늘의 사주
+      </div>
+      <div>
+        <div class="hero-name">김사주님의</div>
+        <div class="hero-title">오늘의 운세</div>
+      </div>
+      <p class="hero-desc">
+        당신의 사주를 바탕으로 분석한<br>
+        오늘의 에너지 흐름과 조언을 확인하세요.
+      </p>
+      <div class="date-chip">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+             stroke="#5956E9" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="4" width="18" height="18" rx="2"/>
+          <line x1="16" y1="2" x2="16" y2="6"/>
+          <line x1="8"  y1="2" x2="8"  y2="6"/>
+          <line x1="3"  y1="10" x2="21" y2="10"/>
+        </svg>
+        <span id="dateText">2026년 5월 19일 (화)</span>
+      </div>
+    </div>
+
+    <!-- CENTER: 인물 이미지 투과 영역 -->
+    <div></div>
+
+    <!-- RIGHT: 오늘의 한마디 -->
+    <div class="quote-card">
+      <div class="quote-lbl">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+             stroke="#5956E9" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        </svg>
+        오늘의 한마디
+      </div>
+
+      <p class="quote-msg" id="quoteText">
+        감정 표현이 자연스러운 날입니다.<br>
+        다만 조절이 필요할 수 있습니다.
+      </p>
+
+      <!-- 나의 사주 — weak element block -->
+      <div class="saju-block">
+        <div class="saju-block-lbl">나의 사주</div>
+        <div class="saju-block-val" id="weakElemVal">수 (水)</div>
+        <div class="saju-block-desc" id="weakElemDesc">
+          오늘은 수 기운 보완이 필요한 날이에요.
+        </div>
+      </div>
+
+      <p class="quote-bottom">
+        "오늘은 감정의 흐름을 따르되,<br>균형을 잃지 마세요."
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     STATS CARDS
+══════════════════════════════════════ -->
+<div class="stats-wrap">
+  <section class="stats-grid">
+
+    <!-- 오늘의 총운 -->
+    <div class="stats-card">
+      <div class="stats-card-hd">
+        <span class="stats-card-name">오늘의 총운</span>
+        <span class="material-symbols-outlined stats-info-ico">info</span>
+      </div>
+      <div class="score-num" id="scoreNum">58<span>점</span></div>
+      <div class="score-bar-wrap">
+        <div class="score-bar" id="scoreBar" style="width:58%"></div>
+      </div>
+    </div>
+
+    <!-- 좋은 시간 -->
+    <div class="stats-card" style="justify-content:center;">
+      <div class="stats-icon-row">
+        <div class="stats-ico-circle bg-lav">
+          <span class="material-symbols-outlined text-brand">schedule</span>
+        </div>
+        <div>
+          <p class="stats-sub-lbl">좋은 시간</p>
+          <p class="stats-val" id="goodTimeEl">오후 1~3시</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 오늘의 무드 -->
+    <div class="stats-card" style="justify-content:center;">
+      <div class="stats-icon-row">
+        <div class="stats-ico-circle bg-rose">
+          <span class="material-symbols-outlined text-rose"
+                style="font-variation-settings:'FILL' 1;">favorite</span>
+        </div>
+        <div>
+          <p class="stats-sub-lbl">오늘의 무드</p>
+          <p class="stats-val" id="moodEl">조화로운 소통</p>
+        </div>
+      </div>
+    </div>
+
+  </section>
+</div>
+
+<!-- ══════════════════════════════════════
+     MAIN CONTENT
+══════════════════════════════════════ -->
+<div class="content">
+
+  <!-- ── 오행 흐름 + 흐름 한눈에 보기 ── -->
+  <div class="mid-grid">
+
+    <!-- 오늘의 오행 흐름 -->
+    <div class="card">
+      <div class="card-hd">
+        <span class="card-title">오늘의 오행 흐름</span>
+        <span class="material-symbols-outlined card-info-ico">info</span>
+      </div>
+
+      <div class="ohaeng-row">
+        <!--
+          Donut SVG
+          r=40, cx=cy=50, circumference=2π×40≈251.2
+          stroke-width=18 (thick ring, inner edge r=31→74.4px at 120px)
+          Each segment: stroke-dasharray=251.2, dashoffset=circumference−arc
+          Rotation = cumulative % × 360
+        -->
+        <div class="donut-wrap">
+          <svg viewBox="0 0 100 100">
+            <!-- 목 18.5% arc=46.5 offset=204.7 start=0° -->
+            <circle cx="50" cy="50" r="40" fill="transparent"
+              stroke="#10B981" stroke-width="18"
+              stroke-dasharray="251.2" stroke-dashoffset="204.7"/>
+            <!-- 화 27.3% arc=68.6 offset=182.6 start=66.6° -->
+            <circle cx="50" cy="50" r="40" fill="transparent"
+              stroke="#EF4444" stroke-width="18"
+              stroke-dasharray="251.2" stroke-dashoffset="182.6"
+              style="transform-origin:center;transform:rotate(66.6deg)"/>
+            <!-- 토 31.8% arc=79.9 offset=171.3 start=164.8° -->
+            <circle cx="50" cy="50" r="40" fill="transparent"
+              stroke="#F59E0B" stroke-width="18"
+              stroke-dasharray="251.2" stroke-dashoffset="171.3"
+              style="transform-origin:center;transform:rotate(164.8deg)"/>
+            <!-- 금 12.1% arc=30.4 offset=220.8 start=279.3° -->
+            <circle cx="50" cy="50" r="40" fill="transparent"
+              stroke="#6B7280" stroke-width="18"
+              stroke-dasharray="251.2" stroke-dashoffset="220.8"
+              style="transform-origin:center;transform:rotate(279.3deg)"/>
+            <!-- 수 10.2% arc=25.6 offset=225.5 start=322.9° -->
+            <circle cx="50" cy="50" r="40" fill="transparent"
+              stroke="#3B82F6" stroke-width="18"
+              stroke-dasharray="251.2" stroke-dashoffset="225.5"
+              style="transform-origin:center;transform:rotate(322.9deg)"/>
+          </svg>
+          <div class="donut-hole">
+            <div class="donut-hole-inner"></div>
+          </div>
+        </div>
+
+        <!-- 오행 막대 바 -->
+        <div class="elem-bars">
+          <div class="elem-row">
+            <span class="elem-badge bg-wood">목</span>
+            <div class="elem-track"><div class="elem-fill bg-wood" style="width:18.5%"></div></div>
+            <span class="elem-pct">18.5%</span>
+          </div>
+          <div class="elem-row">
+            <span class="elem-badge bg-fire">화</span>
+            <div class="elem-track"><div class="elem-fill bg-fire" style="width:27.3%"></div></div>
+            <span class="elem-pct">27.3%</span>
+          </div>
+          <div class="elem-row">
+            <span class="elem-badge bg-earth">토</span>
+            <div class="elem-track"><div class="elem-fill bg-earth" style="width:31.8%"></div></div>
+            <span class="elem-pct">31.8%</span>
+          </div>
+          <div class="elem-row">
+            <span class="elem-badge bg-metal">금</span>
+            <div class="elem-track"><div class="elem-fill bg-metal" style="width:12.1%"></div></div>
+            <span class="elem-pct">12.1%</span>
+          </div>
+          <div class="elem-row">
+            <span class="elem-badge bg-water">수</span>
+            <div class="elem-track"><div class="elem-fill bg-water" style="width:10.2%"></div></div>
+            <span class="elem-pct">10.2%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 약한 기운 박스 -->
+      <div class="weak-box">
+        <p>오늘은 <span class="whl">'수'</span> 기운이 약해요.</p>
+        <p class="wgr">수 기운을 보완하면 더 안정적인 하루를 보낼 수 있어요.</p>
+        <p style="margin-top:3px;">약한 기운: <span class="whl">수 (水)</span></p>
+      </div>
+    </div>
+
+    <!-- 오늘의 흐름 한눈에 보기 -->
+    <div class="card">
+      <div class="card-hd">
+        <span class="card-title">오늘의 흐름 한눈에 보기</span>
+        <span class="material-symbols-outlined card-info-ico">info</span>
+      </div>
+      <div class="flow-rows">
+        <div class="flow-row">
+          <div class="flow-ico good">
+            <span class="material-symbols-outlined"
+                  style="font-variation-settings:'FILL' 1;">thumb_up</span>
+          </div>
+          <div class="flow-body">
+            <div class="flow-body-ttl">좋은 활동</div>
+            <ul>
+              <li>편안한 대화 나누기</li>
+              <li>작업 또는 프로젝트 정리하기</li>
+              <li>소규모 모임 참석하기</li>
+            </ul>
+          </div>
+        </div>
+        <div class="flow-row">
+          <div class="flow-ico bad">
+            <span class="material-symbols-outlined"
+                  style="font-variation-settings:'FILL' 1;">thumb_down</span>
+          </div>
+          <div class="flow-body">
+            <div class="flow-body-ttl">피해야 할 활동</div>
+            <ul>
+              <li>큰 결단 내리기</li>
+              <li>무리한 일정 잡기</li>
+              <li>감정적으로 과격한 반응 보이기</li>
+            </ul>
+          </div>
+        </div>
+        <div class="flow-row">
+          <div class="flow-ico caution">
+            <span class="material-symbols-outlined"
+                  style="font-variation-settings:'FILL' 1;">warning</span>
+          </div>
+          <div class="flow-body">
+            <div class="flow-body-ttl">주의할 흐름</div>
+            <ul>
+              <li>급한 이동 지양</li>
+              <li>새로운 전략 실험하기</li>
+            </ul>
+          </div>
+        </div>
+        <div class="flow-row">
+          <div class="flow-ico place">
+            <span class="material-symbols-outlined"
+                  style="font-variation-settings:'FILL' 1;">location_on</span>
+          </div>
+          <div class="flow-body">
+            <div class="flow-body-ttl">추천 장소</div>
+            <ul>
+              <li>카페나 소규모 모임 장소</li>
+              <li>조용한 공원이나 산책로</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /mid-grid -->
+
+  <!-- ── 오늘의 조언 ── -->
+  <div class="card">
+    <div class="advice-top">
+      <div class="advice-ico">
+        <span class="material-symbols-outlined">alarm_on</span>
+      </div>
+      <div>
+        <div class="advice-title">오늘의 조언</div>
+        <p class="advice-desc">
+          오늘은 조화와 균형이 중요한 날이에요.
+          좋은 흐름을 잘 활용하고, 무리한 흐름은 피하면
+          더 편안하고 안정적인 하루를 보낼 수 있어요.
+        </p>
+      </div>
+    </div>
+    <div class="advice-boxes">
+      <div class="advice-box">
+        <div class="advice-box-hd">
+          <span class="material-symbols-outlined">check_circle</span>
+          <span class="advice-box-lbl">오늘의 키워드</span>
+        </div>
+        <div class="advice-box-val">조화 · 균형 · 소통</div>
+      </div>
+      <div class="advice-box">
+        <div class="advice-box-hd">
+          <span class="material-symbols-outlined">check_circle</span>
+          <span class="advice-box-lbl">피하면 좋은 일</span>
+        </div>
+        <div class="advice-box-val">과도한 결단 · 무리한 일정</div>
+      </div>
+      <div class="advice-box">
+        <div class="advice-box-hd">
+          <span class="material-symbols-outlined">check_circle</span>
+          <span class="advice-box-lbl">하면 좋은 일</span>
+        </div>
+        <div class="advice-box-val">대화 · 정리 · 참여</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 탐색하기 ── -->
+  <div>
+    <div class="section-ttl">탐색하기</div>
+    <div class="explore-grid">
+
+      <div class="explore-card">
+        <div class="explore-ico" style="background:#FFF0F0;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+               stroke="#EF4444" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06
+                     a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78
+                     1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+        </div>
+        <div>
+          <div class="explore-card-ttl">궁합 보기</div>
+          <div class="explore-card-desc">나와 잘 맞는 사람은 누구일까요?</div>
+        </div>
+      </div>
+
+      <div class="explore-card">
+        <div class="explore-ico" style="background:#FFFBEB;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+               stroke="#F59E0B" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+          </svg>
+        </div>
+        <div>
+          <div class="explore-card-ttl">올해 운세</div>
+          <div class="explore-card-desc">2026년 한 해의 흐름을 미리 확인하세요.</div>
+        </div>
+      </div>
+
+      <div class="explore-card">
+        <div class="explore-ico" style="background:#EFF6FF;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+               stroke="#3B82F6" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+          </svg>
+        </div>
+        <div>
+          <div class="explore-card-ttl">상세 성향 리포트</div>
+          <div class="explore-card-desc">나의 성격과 잠재력을 깊이 분석해드려요.</div>
+        </div>
+      </div>
+
+      <div class="explore-card">
+        <div class="explore-ico" style="background:#F0EEFF;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+               stroke="#5956E9" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+        </div>
+        <div>
+          <div class="explore-card-ttl">PDF로 저장</div>
+          <div class="explore-card-desc">나의 사주 리포트를 PDF로 다운받으세요.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- /content -->
+
+<script>
+  const API = {
+    "success": true,
+    "data": {
+      "targetDate":    "2026-05-19",
+      "todayScore":    58,
+      "goodTime":      "오후 1~3시",
+      "mood":          "조화로운 소통",
+      "dailyMessage":  "감정 표현이 자연스러운 날입니다. 다만 조절이 필요할 수 있습니다.",
+      "goodActions":   ["편안한 대화 나누기","작업 또는 프로젝트 정리하기","소규모 모임 참석하기"],
+      "avoidActions":  ["큰 결단 내리기","무리한 일정 잡기","감정적으로 과격한 반응 보이기"],
+      "avoidFlows":    ["급한 이동 지양","새로운 전략 실험하기"],
+      "recommendPlaces":["카페나 소규모 모임 장소","조용한 공원이나 산책로"],
+      "weakElement":   "water",
+      "fiveElements":  { "목":18.5, "화":27.3, "토":31.8, "금":12.1, "수":10.2 }
+    },
+    "error": null
+  };
+
+  const d = API.data;
+
+  /* ── 오늘 날짜 ── */
+  const DAYS = ['일','월','화','수','목','금','토'];
+  const today = new Date(d.targetDate);
+  document.getElementById('dateText').textContent =
+    `${today.getFullYear()}년 ${today.getMonth()+1}월 ${today.getDate()}일 (${DAYS[today.getDay()]})`;
+
+  /* ── 점수 ── */
+  document.getElementById('scoreNum').innerHTML = `${d.todayScore}<span>점</span>`;
+  document.getElementById('scoreBar').style.width = d.todayScore + '%';
+
+  /* ── 시간 / 무드 ── */
+  document.getElementById('goodTimeEl').textContent = d.goodTime;
+  document.getElementById('moodEl').textContent = d.mood;
+
+  /* ── 오늘의 한마디 본문 ── */
+  document.getElementById('quoteText').innerHTML =
+    d.dailyMessage.replace('. ', '.<br>');
+
+  /* ── 약한 기운 (나의 사주 블록) ── */
+  const ELEM_KO = {
+    water:'수 (水)', fire:'화 (火)', wood:'목 (木)', metal:'금 (金)', earth:'토 (土)'
+  };
+  const ELEM_DESC = {
+    water:'오늘은 수 기운 보완이 필요한 날이에요.',
+    fire: '오늘은 화 기운 보완이 필요한 날이에요.',
+    wood: '오늘은 목 기운 보완이 필요한 날이에요.',
+    metal:'오늘은 금 기운 보완이 필요한 날이에요.',
+    earth:'오늘은 토 기운 보완이 필요한 날이에요.'
+  };
+  const we = d.weakElement;
+  document.getElementById('weakElemVal').textContent  = ELEM_KO[we]   || we;
+  document.getElementById('weakElemDesc').textContent = ELEM_DESC[we] || '';
+</script>
+
+</body>
+</html>
