@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SAJU:ME — 사주 입력</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Malgun Gothic", "맑은 고딕", sans-serif;
+      background: #F4F2FC;
+      color: #111827;
+    }
+
+    /* ══════════════════════════════════════
+       NAV
+    ══════════════════════════════════════ */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(255,255,255,0.97);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid #F3F4F6;
+      height: 56px;
+    }
+    .nav-inner {
+      max-width: 1152px; margin: 0 auto; padding: 0 24px;
+      height: 100%; display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+    .nav-logo-mark { font-weight: 900; font-size: 13px; letter-spacing: -0.5px; color: #111827; }
+    .nav-logo-sub { font-size: 9px; color: #9CA3AF; margin-top: -2px; }
+    .nav-links { display: flex; align-items: center; gap: 24px; list-style: none; }
+    .nav-links a {
+      font-size: 13px; font-weight: 500; color: #6B7280;
+      text-decoration: none; transition: color 0.15s;
+    }
+    .nav-links a:hover { color: #5956E9; }
+    .nav-links a.active {
+      color: #5956E9; font-weight: 700;
+      border-bottom: 2px solid #5956E9; padding-bottom: 1px;
+    }
+    .nav-actions { display: flex; align-items: center; gap: 12px; }
+    .nav-bell { width: 20px; height: 20px; color: #9CA3AF; cursor: pointer; }
+    .nav-avatar {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: linear-gradient(135deg, #93C5FD, #6366F1);
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 11px; font-weight: 700; cursor: pointer;
+    }
+
+    /* ══════════════════════════════════════
+       MAIN
+    ══════════════════════════════════════ */
+    .main {
+      margin-top: 56px;
+      padding: 32px 24px;
+      max-width: 860px;
+      margin-left: auto;
+      margin-right: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    /* ══════════════════════════════════════
+       HERO
+    ══════════════════════════════════════ */
+    .hero {
+      border-radius: 32px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+    }
+    .hero-img {
+      width: 100%; height: 368px; display: block;
+      object-fit: cover;
+    }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to right, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.25) 55%, transparent 85%);
+    }
+    .hero-content {
+      position: absolute; inset: 0;
+      padding: 48px 52px;
+      display: flex; flex-direction: column; justify-content: center;
+      max-width: 560px;
+    }
+    .hero-badge {
+      display: inline-block; padding: 5px 14px; border-radius: 999px;
+      font-size: 11px; font-weight: 700;
+      background: rgba(255,255,255,0.90); color: #5956E9;
+      margin-bottom: 18px; width: fit-content;
+    }
+    .hero-title {
+      font-size: 28px; font-weight: 900; color: #fff;
+      line-height: 1.4; margin-bottom: 12px; letter-spacing: -0.5px;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.45);
+    }
+    .hero-title span { color: #C7C4F8; }
+    .hero-desc {
+      font-size: 15px; color: #fff; font-weight: 700; line-height: 1.7;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.55), 0 1px 4px rgba(0,0,0,0.40);
+    }
+
+    /* ══════════════════════════════════════
+       INPUT CARD
+    ══════════════════════════════════════ */
+    .input-card {
+      background: #fff;
+      border-radius: 28px;
+      padding: 36px 36px 32px;
+      box-shadow: 0 2px 16px rgba(89,86,233,0.08);
+      border: 1.5px solid #EDE9FF;
+    }
+
+    .card-header { margin-bottom: 24px; }
+    .card-title {
+      font-size: 20px; font-weight: 900; color: #111827;
+      letter-spacing: -0.4px; margin-bottom: 6px;
+    }
+    .card-desc { font-size: 13px; color: #6B7280; line-height: 1.7; }
+
+    /* 안내 박스 */
+    .notice-box {
+      background: #F0EEFF;
+      border-radius: 16px;
+      padding: 16px 18px;
+      margin-bottom: 28px;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .notice-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+    .notice-list { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+    .notice-list li { font-size: 12px; color: #5956E9; font-weight: 600; line-height: 1.6; }
+
+    /* 폼 그리드 */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .form-group { display: flex; flex-direction: column; gap: 7px; }
+    .form-label {
+      font-size: 12px; font-weight: 700; color: #374151;
+    }
+    .form-label .required {
+      color: #5956E9; margin-left: 2px;
+    }
+
+    .form-input, .form-select {
+      height: 50px; padding: 0 16px;
+      border: 1.5px solid #E5E7EB; border-radius: 14px;
+      font-size: 13px; font-family: "Malgun Gothic", sans-serif;
+      color: #111827; background: #fff;
+      transition: border-color 0.15s;
+      outline: none;
+      appearance: none;
+      -webkit-appearance: none;
+      cursor: pointer;
+    }
+    .form-input:focus, .form-select:focus {
+      border-color: #5956E9;
+      box-shadow: 0 0 0 3px rgba(89,86,233,0.10);
+    }
+    .form-input::placeholder { color: #D1D5DB; }
+
+    /* select 화살표 */
+    .select-wrap { position: relative; }
+    .select-wrap::after {
+      content: '▾';
+      position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+      font-size: 12px; color: #9CA3AF; pointer-events: none;
+    }
+    .select-wrap .form-select { width: 100%; padding-right: 36px; }
+
+    /* 시간 미상 토글 */
+    .time-unknown-row {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-top: -6px; margin-bottom: 4px;
+    }
+    .toggle-label { font-size: 12px; color: #6B7280; font-weight: 600; }
+    .toggle-wrap { display: flex; align-items: center; gap: 8px; }
+    .toggle {
+      width: 40px; height: 22px; border-radius: 999px;
+      background: #E5E7EB; position: relative; cursor: pointer;
+      transition: background 0.2s; border: none; outline: none;
+      flex-shrink: 0;
+    }
+    .toggle.on { background: #5956E9; }
+    .toggle-dot {
+      width: 16px; height: 16px; border-radius: 50%; background: #fff;
+      position: absolute; top: 3px; left: 3px;
+      transition: left 0.2s;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.18);
+    }
+    .toggle.on .toggle-dot { left: 21px; }
+    .toggle-text { font-size: 11px; color: #9CA3AF; }
+    .toggle.on + .toggle-text { color: #5956E9; font-weight: 700; }
+
+    /* 띠 미리보기 */
+    .zodiac-preview {
+      background: #F4F2FC;
+      border-radius: 16px;
+      padding: 16px 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-top: 4px;
+    }
+    .zodiac-icon-box {
+      width: 56px; height: 56px; border-radius: 14px;
+      background: #fff;
+      border: 1.5px solid #DDD8FF;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .zodiac-icon-box img { width: 38px; height: 38px; object-fit: contain; mix-blend-mode: multiply; }
+    .zodiac-info-title {
+      font-size: 14px; font-weight: 800; color: #111827; margin-bottom: 4px;
+    }
+    .zodiac-info-desc { font-size: 11px; color: #9CA3AF; }
+
+    /* 12띠 미니 그리드 */
+    .zodiac-mini-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 6px;
+      margin-top: 4px;
+    }
+    .zodiac-mini-item {
+      display: flex; flex-direction: column; align-items: center; gap: 3px;
+      padding: 6px 4px; border-radius: 10px;
+      background: #fff; border: 1.5px solid #F3F4F6;
+      cursor: pointer; transition: all 0.15s;
+    }
+    .zodiac-mini-item.highlight {
+      background: #F0EEFF; border-color: #5956E9;
+    }
+    .zodiac-mini-img { width: 20px; height: 20px; object-fit: contain; mix-blend-mode: multiply; }
+    .zodiac-mini-name { font-size: 8px; font-weight: 700; color: #9CA3AF; }
+    .zodiac-mini-item.highlight .zodiac-mini-name { color: #5956E9; }
+
+    /* 제출 버튼 */
+    .btn-submit {
+      width: 100%; height: 54px; border-radius: 16px;
+      background: linear-gradient(to right, #5956E9, #7C3AED);
+      color: #fff; border: none; cursor: pointer;
+      font-size: 16px; font-weight: 900;
+      font-family: "Malgun Gothic", sans-serif;
+      box-shadow: 0 4px 20px rgba(89,86,233,0.32);
+      transition: opacity 0.2s;
+      margin-top: 8px;
+    }
+    .btn-submit:hover { opacity: 0.88; }
+    .btn-note {
+      font-size: 11px; color: #9CA3AF; text-align: center; margin-top: 10px;
+    }
+
+    /* ══════════════════════════════════════
+       FOOTER
+    ══════════════════════════════════════ */
+    footer {
+      background: #F9FAFB;
+      border-top: 1px solid #F3F4F6;
+      padding: 40px 32px;
+      margin-top: 0;
+    }
+    .footer-inner {
+      max-width: 1152px; margin: 0 auto;
+      display: flex; align-items: center;
+      justify-content: space-between; flex-wrap: wrap; gap: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════
+     NAV
+══════════════════════════════════════ -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+        <path d="M9 1L16 5V13L9 17L2 13V5L9 1Z" fill="#5956E9"/>
+      </svg>
+      <div>
+        <div class="nav-logo-mark">SAJU:ME</div>
+        <div class="nav-logo-sub">정통사주로 해석하는 나의 명식</div>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#">오늘의운세</a></li>
+      <li><a href="#" class="active">정통사주</a></li>
+      <li><a href="#">궁합</a></li>
+      <li><a href="#">타로</a></li>
+      <li><a href="#">커뮤니티</a></li>
+      <li><a href="#">마이페이지</a></li>
+    </ul>
+    <div class="nav-actions">
+      <svg class="nav-bell" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+      </svg>
+      <div class="nav-avatar">수</div>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════
+     MAIN
+══════════════════════════════════════ -->
+<main class="main">
+
+  <!-- 히어로 -->
+  <section class="hero">
+    <img class="hero-img" src="../hero.png" alt="사주 입력 히어로" />
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <span class="hero-badge">정통사주</span>
+      <h1 class="hero-title">
+        당신의 사주를<br>
+        <span>입력해주세요</span>
+      </h1>
+      <p class="hero-desc">
+        생년월일과 출생 시간만 있으면<br>
+        나만의 사주 해석이 시작됩니다.
+      </p>
+    </div>
+  </section>
+
+  <!-- 사주 입력 폼 -->
+  <div class="input-card">
+
+    <div class="card-header">
+      <div class="card-title">사주 정보 입력</div>
+      <div class="card-desc">정확한 사주 분석을 위해 아래 정보를 입력해주세요.</div>
+    </div>
+
+    <!-- 안내 -->
+    <div class="notice-box">
+      <span class="notice-icon">💡</span>
+      <ul class="notice-list">
+        <li>양력과 음력 중 어떤 기준인지 먼저 확인한 뒤 입력해 주세요.</li>
+        <li>출생 시간을 모르셔도 시간 미상 여부를 선택해 진행하실 수 있습니다.</li>
+        <li>출생 시간까지 입력하시면 사주 해석 결과를 더 풍부하게 받아보실 수 있습니다.</li>
+      </ul>
+    </div>
+
+    <!-- 입력 폼 -->
+    <div class="form-grid">
+
+      <!-- 출생 연도 -->
+      <div class="form-group">
+        <label class="form-label">출생 연도 <span class="required">*</span></label>
+        <div class="select-wrap">
+          <select class="form-select" id="birth-year" onchange="updateZodiac()">
+            <option value="">연도 선택</option>
+            <option value="2000">2000년</option>
+            <option value="1999">1999년</option>
+            <option value="1998">1998년</option>
+            <option value="1997">1997년</option>
+            <option value="1996">1996년</option>
+            <option value="1995">1995년</option>
+            <option value="1994">1994년</option>
+            <option value="1993">1993년</option>
+            <option value="1992">1992년</option>
+            <option value="1991">1991년</option>
+            <option value="1990">1990년</option>
+            <option value="1989">1989년</option>
+            <option value="1988">1988년</option>
+            <option value="1987">1987년</option>
+            <option value="1986">1986년</option>
+            <option value="1985">1985년</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- 출생 월/일 -->
+      <div class="form-group">
+        <label class="form-label">출생 월 / 일 <span class="required">*</span></label>
+        <input class="form-input" type="text" id="birth-date"
+          placeholder="03 / 14" maxlength="7"
+          oninput="formatDate(this); updateZodiac()" />
+      </div>
+
+      <!-- 양력/음력 -->
+      <div class="form-group">
+        <label class="form-label">양력 / 음력 <span class="required">*</span></label>
+        <div class="select-wrap">
+          <select class="form-select">
+            <option value="solar">양력</option>
+            <option value="lunar">음력</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- 성별 -->
+      <div class="form-group">
+        <label class="form-label">성별 <span class="required">*</span></label>
+        <div class="select-wrap">
+          <select class="form-select">
+            <option value="">성별 선택</option>
+            <option value="male">남성</option>
+            <option value="female">여성</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- 출생 시간 -->
+      <div class="form-group">
+        <label class="form-label">출생 시간</label>
+        <div class="select-wrap">
+          <select class="form-select" id="birth-time">
+            <option value="">시간 선택</option>
+            <option value="자시">자시 (23:00 ~ 01:00)</option>
+            <option value="축시">축시 (01:00 ~ 03:00)</option>
+            <option value="인시">인시 (03:00 ~ 05:00)</option>
+            <option value="묘시">묘시 (05:00 ~ 07:00)</option>
+            <option value="진시">진시 (07:00 ~ 09:00)</option>
+            <option value="사시">사시 (09:00 ~ 11:00)</option>
+            <option value="오시">오시 (11:00 ~ 13:00)</option>
+            <option value="미시">미시 (13:00 ~ 15:00)</option>
+            <option value="신시">신시 (15:00 ~ 17:00)</option>
+            <option value="유시">유시 (17:00 ~ 19:00)</option>
+            <option value="술시">술시 (19:00 ~ 21:00)</option>
+            <option value="해시">해시 (21:00 ~ 23:00)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- 출생 도시 -->
+      <div class="form-group">
+        <label class="form-label">출생 도시</label>
+        <div class="select-wrap">
+          <select class="form-select">
+            <option value="">도시 선택</option>
+            <option value="seoul">서울</option>
+            <option value="busan">부산</option>
+            <option value="incheon">인천</option>
+            <option value="daegu">대구</option>
+            <option value="daejeon">대전</option>
+            <option value="gwangju">광주</option>
+            <option value="ulsan">울산</option>
+            <option value="jeju">제주</option>
+          </select>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 시간 미상 토글 -->
+    <div class="time-unknown-row" style="margin-top:16px;">
+      <span class="toggle-label">출생 시간을 모르시나요?</span>
+      <div class="toggle-wrap">
+        <button class="toggle" id="toggle-unknown" onclick="toggleUnknown(this)">
+          <div class="toggle-dot"></div>
+        </button>
+        <span class="toggle-text" id="toggle-text">시간 미상</span>
+      </div>
+    </div>
+
+    <!-- 띠 미리보기 -->
+    <div class="zodiac-preview" style="margin-top:20px;">
+      <div class="zodiac-icon-box" id="zodiac-icon">
+        <svg width="28" height="28" fill="none" stroke="#C7D2FE" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      </div>
+      <div>
+        <div class="zodiac-info-title" id="zodiac-title">출생 연도를 선택하면 띠가 자동으로 표시됩니다</div>
+        <div class="zodiac-info-desc" id="zodiac-desc">예: 2000년 → 용띠</div>
+      </div>
+    </div>
+
+    <!-- 12띠 미니 그리드 -->
+    <div class="zodiac-mini-grid" style="margin-top:16px;" id="zodiac-grid">
+      <div class="zodiac-mini-item" data-idx="0"><img class="zodiac-mini-img" src="../animals/rat.png" alt="쥐"><span class="zodiac-mini-name">쥐</span></div>
+      <div class="zodiac-mini-item" data-idx="1"><img class="zodiac-mini-img" src="../animals/cow.png" alt="소"><span class="zodiac-mini-name">소</span></div>
+      <div class="zodiac-mini-item" data-idx="2"><img class="zodiac-mini-img" src="../animals/tiger.png" alt="호랑이"><span class="zodiac-mini-name">호랑이</span></div>
+      <div class="zodiac-mini-item" data-idx="3"><img class="zodiac-mini-img" src="../animals/rabbit.png" alt="토끼"><span class="zodiac-mini-name">토끼</span></div>
+      <div class="zodiac-mini-item" data-idx="4"><img class="zodiac-mini-img" src="../animals/dragon.png" alt="용"><span class="zodiac-mini-name">용</span></div>
+      <div class="zodiac-mini-item" data-idx="5"><img class="zodiac-mini-img" src="../animals/snake.png" alt="뱀"><span class="zodiac-mini-name">뱀</span></div>
+      <div class="zodiac-mini-item" data-idx="6"><img class="zodiac-mini-img" src="../animals/hors.png" alt="말"><span class="zodiac-mini-name">말</span></div>
+      <div class="zodiac-mini-item" data-idx="7"><img class="zodiac-mini-img" src="../animals/sheep.png" alt="양"><span class="zodiac-mini-name">양</span></div>
+      <div class="zodiac-mini-item" data-idx="8"><img class="zodiac-mini-img" src="../animals/monkey.png" alt="원숭이"><span class="zodiac-mini-name">원숭이</span></div>
+      <div class="zodiac-mini-item" data-idx="9"><img class="zodiac-mini-img" src="../animals/chiken.png" alt="닭"><span class="zodiac-mini-name">닭</span></div>
+      <div class="zodiac-mini-item" data-idx="10"><img class="zodiac-mini-img" src="../animals/dog.png" alt="개"><span class="zodiac-mini-name">개</span></div>
+      <div class="zodiac-mini-item" data-idx="11"><img class="zodiac-mini-img" src="../animals/pig.png" alt="돼지"><span class="zodiac-mini-name">돼지</span></div>
+    </div>
+
+    <!-- 제출 버튼 -->
+    <button class="btn-submit" onclick="handleSubmit()">
+      ✨ 사주 분석 시작하기
+    </button>
+    <p class="btn-note">🔒 입력된 정보는 사주 분석 목적으로만 사용됩니다.</p>
+
+  </div>
+
+</main>
+
+<!-- ══════════════════════════════════════
+     FOOTER
+══════════════════════════════════════ -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div style="font-weight:800; font-size:15px; color:#111827; margin-bottom:4px;">SAJU:ME</div>
+      <div style="font-size:12px; color:#9CA3AF;">© 2026 SAJU:ME. All rights reserved.</div>
+    </div>
+    <div style="display:flex; gap:24px;">
+      <a href="#" style="font-size:13px; color:#9CA3AF; text-decoration:none;">Privacy Policy</a>
+      <a href="#" style="font-size:13px; color:#9CA3AF; text-decoration:none;">Terms of Service</a>
+      <a href="#" style="font-size:13px; color:#9CA3AF; text-decoration:none;">Contact Us</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const zodiacs = [
+    { img: '../animals/rat.png',    name: '쥐띠',    idx: 0 },
+    { img: '../animals/cow.png',    name: '소띠',    idx: 1 },
+    { img: '../animals/tiger.png',  name: '호랑이띠', idx: 2 },
+    { img: '../animals/rabbit.png', name: '토끼띠',  idx: 3 },
+    { img: '../animals/dragon.png', name: '용띠',    idx: 4 },
+    { img: '../animals/snake.png',  name: '뱀띠',    idx: 5 },
+    { img: '../animals/hors.png',   name: '말띠',    idx: 6 },
+    { img: '../animals/sheep.png',  name: '양띠',    idx: 7 },
+    { img: '../animals/monkey.png', name: '원숭이띠', idx: 8 },
+    { img: '../animals/chiken.png', name: '닭띠',    idx: 9 },
+    { img: '../animals/dog.png',    name: '개띠',    idx: 10 },
+    { img: '../animals/pig.png',    name: '돼지띠',  idx: 11 },
+  ];
+
+  // 연도 → 띠 인덱스
+  function getZodiacIdx(year) {
+    return ((year - 4) % 12 + 12) % 12;
+  }
+
+  function updateZodiac() {
+    const year = parseInt(document.getElementById('birth-year').value);
+    const items = document.querySelectorAll('.zodiac-mini-item');
+    items.forEach(el => el.classList.remove('highlight'));
+
+    if (!year) {
+      document.getElementById('zodiac-icon').innerHTML = '<svg width="28" height="28" fill="none" stroke="#C7D2FE" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>';
+      document.getElementById('zodiac-title').textContent = '출생 연도를 선택하면 띠가 자동으로 표시됩니다';
+      document.getElementById('zodiac-desc').textContent = '예: 2000년 → 용띠';
+      return;
+    }
+
+    const idx = getZodiacIdx(year);
+    const z = zodiacs[idx];
+
+    document.getElementById('zodiac-icon').innerHTML = `<img src="${z.img}" alt="${z.name}" style="width:38px;height:38px;object-fit:contain;">`;
+    document.getElementById('zodiac-title').textContent = `${year}년생 · ${z.name}`;
+    document.getElementById('zodiac-desc').textContent = '12간지에서 자동으로 강조 표시됩니다.';
+
+    document.querySelector(`.zodiac-mini-item[data-idx="${idx}"]`).classList.add('highlight');
+  }
+
+  function formatDate(input) {
+    let v = input.value.replace(/\D/g, '').slice(0, 4);
+    if (v.length >= 3) v = v.slice(0, 2) + ' / ' + v.slice(2);
+    input.value = v;
+  }
+
+  function toggleUnknown(btn) {
+    btn.classList.toggle('on');
+    const isOn = btn.classList.contains('on');
+    document.getElementById('toggle-text').textContent = isOn ? '시간 미상 선택됨' : '시간 미상';
+    document.getElementById('birth-time').disabled = isOn;
+    document.getElementById('birth-time').style.opacity = isOn ? '0.4' : '1';
+  }
+
+  function handleSubmit() {
+    const year = document.getElementById('birth-year').value;
+    const date = document.getElementById('birth-date').value;
+    if (!year || !date) {
+      alert('출생 연도와 출생 월/일은 필수 입력 항목입니다.');
+      return;
+    }
+    alert('사주 분석을 시작합니다! 🌟');
+  }
+
+  // nav 스크롤 그림자
+  window.addEventListener('scroll', () => {
+    document.querySelector('.nav').style.boxShadow =
+      window.scrollY > 20 ? '0 2px 12px rgba(0,0,0,0.08)' : '';
+  });
+</script>
+
+</body>
+</html>

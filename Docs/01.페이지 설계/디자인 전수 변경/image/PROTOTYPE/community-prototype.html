@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SAJU:ME — 커뮤니티</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Malgun Gothic", "맑은 고딕", sans-serif;
+      background: #F4F2FC;
+      color: #111827;
+    }
+
+    /* ══════════════════════════════════════
+       NAV
+    ══════════════════════════════════════ */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(255,255,255,0.97);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid #F3F4F6;
+      height: 56px;
+    }
+    .nav-inner {
+      max-width: 1152px; margin: 0 auto; padding: 0 24px;
+      height: 100%; display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+    .nav-logo-mark { font-weight: 900; font-size: 13px; letter-spacing: -0.5px; color: #111827; }
+    .nav-logo-sub { font-size: 9px; color: #9CA3AF; margin-top: -2px; }
+    .nav-links { display: flex; align-items: center; gap: 24px; list-style: none; }
+    .nav-links a {
+      font-size: 13px; font-weight: 500; color: #6B7280;
+      text-decoration: none; transition: color 0.15s;
+    }
+    .nav-links a:hover { color: #5956E9; }
+    .nav-links a.active {
+      color: #5956E9; font-weight: 700;
+      border-bottom: 2px solid #5956E9; padding-bottom: 1px;
+    }
+    .nav-actions { display: flex; align-items: center; gap: 12px; }
+    .nav-bell { width: 20px; height: 20px; color: #9CA3AF; cursor: pointer; }
+    .nav-avatar {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: linear-gradient(135deg, #93C5FD, #6366F1);
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 11px; font-weight: 700; cursor: pointer;
+    }
+
+    /* ══════════════════════════════════════
+       HERO
+    ══════════════════════════════════════ */
+    .hero {
+      border-radius: 32px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+    }
+    .hero-img {
+      width: 100%; height: 368px; display: block;
+      object-fit: cover;
+    }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to right, rgba(0,0,0,0.52) 0%, rgba(0,0,0,0.20) 55%, transparent 80%);
+    }
+    .hero-content {
+      position: absolute; inset: 0;
+      padding: 48px 52px;
+      display: flex; flex-direction: column; justify-content: center;
+      max-width: 560px;
+    }
+    .hero-badge {
+      display: inline-block; padding: 5px 14px; border-radius: 999px;
+      font-size: 11px; font-weight: 700;
+      background: rgba(255,255,255,0.90); color: #5956E9;
+      margin-bottom: 18px; width: fit-content;
+    }
+    .hero-title {
+      font-size: 28px; font-weight: 900; color: #fff;
+      line-height: 1.4; margin-bottom: 12px; letter-spacing: -0.5px;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.45);
+    }
+    .hero-title span { color: #C7C4F8; }
+    .hero-desc {
+      font-size: 15px; color: #fff; font-weight: 700; line-height: 1.7;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.55), 0 1px 4px rgba(0,0,0,0.40);
+    }
+
+    /* ══════════════════════════════════════
+       MAIN LAYOUT
+    ══════════════════════════════════════ */
+    .main {
+      margin-top: 56px;
+      padding: 32px 24px;
+      max-width: 860px;
+      margin-left: auto;
+      margin-right: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    /* ══════════════════════════════════════
+       섹션 번호 뱃지
+    ══════════════════════════════════════ */
+    .step-badge {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: #5956E9; color: #fff;
+      font-size: 13px; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .step-header {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 6px;
+    }
+    .step-title { font-size: 20px; font-weight: 900; color: #111827; }
+    .step-desc { font-size: 13px; color: #9CA3AF; margin-left: 40px; margin-bottom: 20px; }
+
+    /* ══════════════════════════════════════
+       02 내 사주 기반 추천 (항상 표시)
+    ══════════════════════════════════════ */
+    .reco-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    .reco-card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 24px 20px;
+      display: flex; flex-direction: column; align-items: center; text-align: center;
+      border: 1.5px solid #F3F4F6;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+      gap: 8px;
+    }
+    .reco-icon-wrap {
+      width: 48px; height: 48px; border-radius: 50%;
+      background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; margin-bottom: 4px;
+    }
+    .reco-label {
+      font-size: 10px; color: #9CA3AF; font-weight: 600;
+      letter-spacing: 0.04em; text-transform: uppercase;
+    }
+    .reco-value { font-size: 24px; font-weight: 900; color: #111827; }
+    .reco-text { font-size: 12px; color: #6B7280; line-height: 1.6; }
+    .reco-note {
+      font-size: 10px; color: #9CA3AF; text-align: center; margin-top: -8px;
+    }
+
+    /* ══════════════════════════════════════
+       STEP 영역
+    ══════════════════════════════════════ */
+
+    /* 진행 표시바 */
+    .progress-wrap {
+      display: flex; align-items: center; gap: 0;
+      margin-bottom: 28px;
+    }
+    .progress-step {
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      flex: 1; position: relative;
+    }
+    .progress-step::after {
+      content: '';
+      position: absolute; top: 14px; left: 50%; width: 100%; height: 2px;
+      background: #E5E7EB; z-index: 0;
+    }
+    .progress-step:last-child::after { display: none; }
+    .progress-dot {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: #E5E7EB; color: #9CA3AF;
+      font-size: 12px; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      position: relative; z-index: 1; transition: all 0.3s;
+    }
+    .progress-dot.active { background: #5956E9; color: #fff; }
+    .progress-dot.done {
+      background: #5956E9; color: #fff;
+    }
+    .progress-label {
+      font-size: 10px; font-weight: 600; color: #9CA3AF; white-space: nowrap;
+    }
+    .progress-label.active { color: #5956E9; }
+
+    /* 스텝 섹션 */
+    .step-section { display: none; }
+    .step-section.active { display: block; }
+
+    /* fade 애니메이션 */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .step-section.active { animation: fadeIn 0.3s ease; }
+
+    /* ══════════════════════════════════════
+       03 만남 유형 선택
+    ══════════════════════════════════════ */
+    .type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .type-card {
+      background: #fff; border-radius: 20px;
+      border: 2px solid #F3F4F6;
+      overflow: hidden; cursor: pointer;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      position: relative;
+    }
+    .type-card:hover { border-color: #C7C4F8; box-shadow: 0 4px 20px rgba(89,86,233,0.10); }
+    .type-card.selected { border-color: #5956E9; box-shadow: 0 4px 20px rgba(89,86,233,0.18); }
+    .type-card img { width: 100%; height: 180px; object-fit: cover; display: block; }
+    .type-card-body { padding: 18px 20px 20px; }
+    .type-card-title { font-size: 15px; font-weight: 800; color: #111827; margin-bottom: 6px; }
+    .type-card-desc { font-size: 12px; color: #6B7280; line-height: 1.65; }
+    .type-check {
+      position: absolute; top: 12px; right: 12px;
+      width: 24px; height: 24px; border-radius: 50%;
+      border: 2px solid #E5E7EB; background: #fff;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+    }
+    .type-card.selected .type-check {
+      background: #5956E9; border-color: #5956E9;
+    }
+    .type-check-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: #fff; display: none;
+    }
+    .type-card.selected .type-check-dot { display: block; }
+    .type-info {
+      background: #F0EEFF; border-radius: 14px;
+      padding: 12px 16px; margin-top: 16px;
+      display: flex; align-items: flex-start; gap: 8px;
+    }
+    .type-info-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+    .type-info-text { font-size: 11px; color: #5956E9; font-weight: 600; line-height: 1.6; }
+
+    /* ══════════════════════════════════════
+       04 신청 정보 입력
+    ══════════════════════════════════════ */
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-label { font-size: 12px; font-weight: 700; color: #374151; }
+    .form-input {
+      height: 48px; padding: 0 16px;
+      border: 1.5px solid #E5E7EB; border-radius: 14px;
+      font-size: 13px; font-family: "Malgun Gothic", sans-serif;
+      color: #111827; background: #fff;
+      transition: border-color 0.15s;
+      outline: none;
+    }
+    .form-input:focus { border-color: #5956E9; box-shadow: 0 0 0 3px rgba(89,86,233,0.10); }
+    .form-input::placeholder { color: #D1D5DB; }
+    .form-note {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 11px; color: #9CA3AF; margin-top: 4px;
+      justify-content: center;
+    }
+
+    /* ══════════════════════════════════════
+       05 관심 주제 선택
+    ══════════════════════════════════════ */
+    .topic-wrap {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+    }
+    .topic-group {
+      background: #fff; border-radius: 20px; padding: 20px;
+      border: 1.5px solid #F3F4F6;
+    }
+    .topic-group-title {
+      font-size: 13px; font-weight: 800; text-align: center;
+      margin-bottom: 16px; padding-bottom: 12px;
+      border-bottom: 1px solid #F3F4F6;
+    }
+    .topic-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .topic-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .topic-btn {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 6px; padding: 12px 8px; border-radius: 14px;
+      border: 1.5px solid #F3F4F6; background: #fff;
+      cursor: pointer; transition: all 0.15s; font-family: "Malgun Gothic", sans-serif;
+    }
+    .topic-btn:hover { border-color: #C7C4F8; background: #F9F8FF; }
+    .topic-btn.selected { border-color: #5956E9; background: #F0EEFF; }
+    .topic-btn-icon { font-size: 22px; }
+    .topic-btn-text { font-size: 11px; font-weight: 700; color: #374151; text-align: center; line-height: 1.4; }
+    .topic-btn.selected .topic-btn-text { color: #5956E9; }
+    .topic-divider {
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+    }
+    .topic-or {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: #fff; border: 1.5px solid #E5E7EB;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700; color: #9CA3AF;
+    }
+
+    /* ══════════════════════════════════════
+       하단 고정 버튼
+    ══════════════════════════════════════ */
+    .bottom-bar {
+      padding: 16px 24px 24px;
+      border-top: 1px solid #F3F4F6;
+    }
+    .bottom-bar-inner {
+      max-width: 860px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: center; gap: 12px;
+    }
+    .btn-prev {
+      display: flex; align-items: center; gap: 4px;
+      padding: 0 20px; height: 52px; border-radius: 16px;
+      background: #F4F2FC; border: none; cursor: pointer;
+      font-size: 13px; font-weight: 700; color: #6B7280;
+      font-family: "Malgun Gothic", sans-serif;
+      transition: opacity 0.2s; flex-shrink: 0;
+    }
+    .btn-prev:hover { opacity: 0.80; }
+    .btn-next {
+      flex: 1; max-width: 400px; min-width: 300px;
+      height: 52px; border-radius: 16px;
+      background: linear-gradient(to right, #5956E9, #7C3AED);
+      color: #fff; border: none; cursor: pointer;
+      font-size: 15px; font-weight: 800;
+      font-family: "Malgun Gothic", sans-serif;
+      box-shadow: 0 4px 20px rgba(89,86,233,0.30);
+      transition: opacity 0.2s;
+    }
+    .btn-next:hover { opacity: 0.88; }
+    .bottom-note { font-size: 11px; color: #9CA3AF; text-align: center; margin-top: 6px; }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════
+     NAV
+══════════════════════════════════════ -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+        <path d="M9 1L16 5V13L9 17L2 13V5L9 1Z" fill="#5956E9"/>
+      </svg>
+      <div>
+        <div class="nav-logo-mark">SAJU:ME</div>
+        <div class="nav-logo-sub">정통사주로 해석하는 나의 명식</div>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#">오늘의운세</a></li>
+      <li><a href="#">정통사주</a></li>
+      <li><a href="#">궁합</a></li>
+      <li><a href="#">타로</a></li>
+      <li><a href="#" class="active">커뮤니티</a></li>
+      <li><a href="#">마이페이지</a></li>
+    </ul>
+    <div class="nav-actions">
+      <svg class="nav-bell" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+      </svg>
+      <div class="nav-avatar">수</div>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════
+     MAIN
+══════════════════════════════════════ -->
+<main class="main">
+
+  <!-- ① 히어로 배너 -->
+  <section class="hero">
+    <img class="hero-img"
+      src="../PERSON/group.png"
+      alt="커뮤니티 히어로" />
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <span class="hero-badge">커뮤니티</span>
+      <h1 class="hero-title">
+        나와 비슷한 기운의<br>
+        <span>사람들과 연결되어보세요</span>
+      </h1>
+      <p class="hero-desc">
+        오행별 단체방부터 소셜 모임, 취향 모임까지<br>
+        다양한 커뮤니티로 함께해요.
+      </p>
+    </div>
+  </section>
+
+  <!-- ② 내 사주 기반 추천 (항상 표시) -->
+  <section>
+    <div class="step-header">
+      <div class="step-badge">02</div>
+      <h2 class="step-title">내 사주 기반 추천</h2>
+    </div>
+    <p class="step-desc">당신에게 잘 맞는 만남 분위기를 추천드려요.</p>
+
+    <div class="reco-grid">
+      <!-- 나의 주요 기운 -->
+      <div class="reco-card" style="background:#F0F9FF; border-color:#BFDBFE;">
+        <div class="reco-icon-wrap">💧</div>
+        <div class="reco-label">나의 주요 기운</div>
+        <div class="reco-value" style="color:#1D4ED8;">수 · 금</div>
+        <div class="reco-text">차분하고 섬세한 대화를 선호하며<br>깊이 있는 관계를 중요하게 생각해요.</div>
+      </div>
+      <!-- 잘 맞는 분위기 -->
+      <div class="reco-card" style="background:#F0FDF4; border-color:#BBF7D0;">
+        <div class="reco-icon-wrap">🌿</div>
+        <div class="reco-label">잘 맞는 분위기</div>
+        <div class="reco-value" style="color:#15803D; font-size:18px;">편안한 대화형</div>
+        <div class="reco-text">서로의 생각을 공유하며<br>천천히 친해지는 분위기가 잘 맞아요.</div>
+      </div>
+      <!-- 추천 만남 스타일 -->
+      <div class="reco-card" style="background:#FFF1F2; border-color:#FECDD3;">
+        <div class="reco-icon-wrap">❤️</div>
+        <div class="reco-label">추천 만남 스타일</div>
+        <div class="reco-value" style="color:#BE123C; font-size:18px;">공감 &amp; 이해 중심</div>
+        <div class="reco-text">공감과 이해를 바탕으로 한 만남에서<br>더 편안함을 느낄 수 있어요.</div>
+      </div>
+    </div>
+    <p class="reco-note">※ 사주 정보는 참고용이며, 개인 경험에 따라 다를 수 있습니다.</p>
+  </section>
+
+  <!-- ③ 스텝 영역 -->
+  <section>
+
+    <!-- 진행 표시바 -->
+    <div class="progress-wrap">
+      <div class="progress-step">
+        <div class="progress-dot active" id="dot-1">1</div>
+        <div class="progress-label active" id="label-1">만남 유형</div>
+      </div>
+      <div class="progress-step">
+        <div class="progress-dot" id="dot-2">2</div>
+        <div class="progress-label" id="label-2">신청 정보</div>
+      </div>
+      <div class="progress-step">
+        <div class="progress-dot" id="dot-3">3</div>
+        <div class="progress-label" id="label-3">관심 주제</div>
+      </div>
+    </div>
+
+    <!-- STEP 1 — 03 만남 유형 선택 -->
+    <div class="step-section active" id="step-1">
+      <div class="step-header">
+        <div class="step-badge">03</div>
+        <h2 class="step-title">관심 있는 만남 유형 선택</h2>
+        <span style="margin-left:auto; font-size:11px; font-weight:700; color:#9CA3AF;">1 / 3</span>
+      </div>
+      <p class="step-desc">참여하고 싶은 만남 유형을 선택해주세요.</p>
+
+      <div class="type-grid">
+        <!-- 친구 모임 -->
+        <div class="type-card" id="type-friend" onclick="selectType('friend')">
+          <div class="type-check"><div class="type-check-dot"></div></div>
+          <img src="../PERSON/friend.png" alt="편하게 대화하는 친구 모임" />
+          <div class="type-card-body">
+            <div class="type-card-title">편하게 대화하는 친구 모임</div>
+            <div class="type-card-desc">연애가 부담스럽거나, 가볍게 대화하고 친구를 만들고 싶은 분들을 위한 모임이에요.</div>
+          </div>
+        </div>
+        <!-- 로테이션 소개팅 -->
+        <div class="type-card" id="type-meeting" onclick="selectType('meeting')">
+          <div class="type-check"><div class="type-check-dot"></div></div>
+          <img src="../PERSON/meeting.png" alt="천천히 설레는 로테이션 소개팅" />
+          <div class="type-card-body">
+            <div class="type-card-title">천천히 설레는 로테이션 소개팅</div>
+            <div class="type-card-desc">바로 매칭되는 부담 없이, 관심이 모이면 열리는 소개팅 회차에 참여할 수 있어요.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="type-info">
+        <div class="type-info-icon">💡</div>
+        <div class="type-info-text">
+          지금 바로 매칭되거나 연결되는 서비스가 아니에요.<br>
+          관심이 모이면 로테이션 친구 모임 또는 소개팅 회차가 열릴 수 있어요.
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2 — 04 신청 정보 입력 -->
+    <div class="step-section" id="step-2">
+      <div class="step-header">
+        <div class="step-badge">04</div>
+        <h2 class="step-title">신청 정보 입력</h2>
+        <span style="margin-left:auto; font-size:11px; font-weight:700; color:#9CA3AF;">2 / 3</span>
+      </div>
+      <p class="step-desc">정확한 안내를 위해 정보를 입력해주세요.</p>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">사용할 닉네임</label>
+          <input class="form-input" type="text" placeholder="예) 햇살같은나" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">나이</label>
+          <input class="form-input" type="text" placeholder="예) 29" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">휴대폰 번호</label>
+          <input class="form-input" type="text" placeholder="예) 010-1234-5678" />
+        </div>
+      </div>
+      <div class="form-note">
+        🔒 입력한 정보는 로테이션 모임 안내와 본인 확인 용도로만 사용돼요.
+      </div>
+    </div>
+
+    <!-- STEP 3 — 05 관심 주제 선택 -->
+    <div class="step-section" id="step-3">
+      <div class="step-header">
+        <div class="step-badge">05</div>
+        <h2 class="step-title">관심 주제 선택</h2>
+        <span style="margin-left:auto; font-size:11px; font-weight:700; color:#9CA3AF;">3 / 3</span>
+      </div>
+      <p class="step-desc">관심 있는 주제를 선택해주세요. (복수 선택 가능)</p>
+
+      <div class="topic-wrap">
+        <!-- 친구 모임 주제 -->
+        <div class="topic-group" style="background:#F9F8FF; border-color:#E0DAFF;">
+          <div class="topic-group-title" style="color:#5956E9;">친구 모임을 선택하셨나요? 💫</div>
+          <div class="topic-grid-3">
+            <button class="topic-btn" onclick="toggleTopic(this)">
+              <span class="topic-btn-icon">🌊</span>
+              <span class="topic-btn-text">한강 산책</span>
+            </button>
+            <button class="topic-btn" onclick="toggleTopic(this)">
+              <span class="topic-btn-icon">💬</span>
+              <span class="topic-btn-text">연애 고민</span>
+            </button>
+            <button class="topic-btn" onclick="toggleTopic(this)">
+              <span class="topic-btn-icon">🏋️</span>
+              <span class="topic-btn-text">운동하기</span>
+            </button>
+            <button class="topic-btn" onclick="toggleTopic(this)">
+              <span class="topic-btn-icon">☕</span>
+              <span class="topic-btn-text">카페가기</span>
+            </button>
+            <button class="topic-btn" onclick="toggleTopic(this)" style="grid-column: span 2;">
+              <span class="topic-btn-icon">🎬</span>
+              <span class="topic-btn-text">영화·전시</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 소개팅 주제 -->
+        <div class="topic-group" style="background:#FFF5F7; border-color:#FECDD3;">
+          <div class="topic-group-title" style="color:#E8718D;">소개팅을 선택하셨나요? 💕</div>
+          <div class="topic-grid-2">
+            <button class="topic-btn" onclick="toggleTopic(this)" style="height:88px;">
+              <span class="topic-btn-icon">☕</span>
+              <span class="topic-btn-text">카페에서<br>가볍게 대화</span>
+            </button>
+            <button class="topic-btn" onclick="toggleTopic(this)" style="height:88px;">
+              <span class="topic-btn-icon">🎵</span>
+              <span class="topic-btn-text">취향으로<br>가까워지는 소개팅</span>
+            </button>
+            <button class="topic-btn" onclick="toggleTopic(this)" style="height:88px;">
+              <span class="topic-btn-icon">🃏</span>
+              <span class="topic-btn-text">밸런스 게임<br>대화 소개팅</span>
+            </button>
+            <button class="topic-btn" onclick="toggleTopic(this)" style="height:88px;">
+              <span class="topic-btn-icon">☯️</span>
+              <span class="topic-btn-text">사주궁합<br>토크 소개팅</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+</main>
+
+<!-- ══════════════════════════════════════
+     하단 고정 버튼
+══════════════════════════════════════ -->
+<div class="bottom-bar">
+  <div class="bottom-bar-inner">
+    <button class="btn-prev" id="btn-prev" onclick="goPrev()" style="display:none;">
+      ← 이전
+    </button>
+    <button class="btn-next" id="btn-next" onclick="goNext()">
+      다음으로 →
+    </button>
+  </div>
+  <p class="bottom-note" id="bottom-note">만남 유형을 선택한 뒤 다음으로 넘어가세요.</p>
+</div>
+
+<!-- ══════════════════════════════════════
+     FOOTER
+══════════════════════════════════════ -->
+<footer style="background:#F9FAFB; border-top:1px solid #F3F4F6; padding:40px 32px; margin-top:0;">
+  <div style="max-width:1152px; margin:0 auto; display:flex; align-items:center;
+              justify-content:space-between; flex-wrap:wrap; gap:20px;">
+    <div>
+      <div style="font-weight:800; font-size:15px; color:#111827; margin-bottom:4px;">SAJU:ME</div>
+      <div style="font-size:12px; color:#9CA3AF;">© 2026 SAJU:ME. All rights reserved.</div>
+    </div>
+    <div style="display:flex; gap:24px;">
+      <a href="#" style="font-size:13px; color:#9CA3AF; text-decoration:none;">Privacy Policy</a>
+      <a href="#" style="font-size:13px; color:#9CA3AF; text-decoration:none;">Terms of Service</a>
+      <a href="#" style="font-size:13px; color:#9CA3AF; text-decoration:none;">Contact Us</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  let currentStep = 1;
+  const totalSteps = 3;
+
+  const notes = [
+    '만남 유형을 선택한 뒤 다음으로 넘어가세요.',
+    '정보를 입력한 뒤 다음으로 넘어가세요.',
+    '관심 주제를 선택하고 알림을 신청해보세요!'
+  ];
+
+  function showStep(step) {
+    // 섹션 토글
+    for (let i = 1; i <= totalSteps; i++) {
+      document.getElementById('step-' + i).classList.toggle('active', i === step);
+    }
+
+    // 진행바 업데이트
+    for (let i = 1; i <= totalSteps; i++) {
+      const dot = document.getElementById('dot-' + i);
+      const label = document.getElementById('label-' + i);
+      dot.classList.remove('active', 'done');
+      label.classList.remove('active');
+      if (i < step) { dot.classList.add('done'); dot.innerHTML = '✓'; }
+      else if (i === step) { dot.classList.add('active'); dot.innerHTML = i; label.classList.add('active'); }
+      else { dot.innerHTML = i; }
+    }
+
+    // 버튼 업데이트
+    document.getElementById('btn-prev').style.display = step > 1 ? 'flex' : 'none';
+    const btnNext = document.getElementById('btn-next');
+    if (step === totalSteps) {
+      btnNext.textContent = '관심 남기고 알림 받기 🔔';
+      btnNext.style.background = 'linear-gradient(to right, #5956E9, #7C3AED)';
+    } else {
+      btnNext.textContent = '다음으로 →';
+    }
+
+    // 하단 메모
+    document.getElementById('bottom-note').textContent = notes[step - 1];
+
+    // 스크롤 유지 (현재 위치 고수)
+  }
+
+  function goNext() {
+    if (currentStep < totalSteps) {
+      currentStep++;
+      showStep(currentStep);
+    } else {
+      alert('관심 신청이 완료됐어요! 모임이 열리면 알림을 보내드릴게요 🎉');
+    }
+  }
+
+  function goPrev() {
+    if (currentStep > 1) {
+      currentStep--;
+      showStep(currentStep);
+    }
+  }
+
+  function selectType(type) {
+    document.getElementById('type-friend').classList.toggle('selected', type === 'friend');
+    document.getElementById('type-meeting').classList.toggle('selected', type === 'meeting');
+  }
+
+  function toggleTopic(btn) {
+    btn.classList.toggle('selected');
+  }
+
+  // 초기화
+  showStep(1);
+
+  // 스크롤 nav 그림자
+  window.addEventListener('scroll', () => {
+    document.querySelector('.nav').style.boxShadow =
+      window.scrollY > 20 ? '0 2px 12px rgba(0,0,0,0.08)' : '';
+  });
+</script>
+
+</body>
+</html>

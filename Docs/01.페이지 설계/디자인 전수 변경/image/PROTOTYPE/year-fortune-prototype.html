@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SAJU:ME — 신년운세</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    * { font-family: "Malgun Gothic", "맑은 고딕", sans-serif !important; }
+    body { background: #F4F2FC; color: #111827; }
+
+    /* ── NAV ── */
+    .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(255,255,255,0.97); backdrop-filter: blur(10px); border-bottom: 1px solid #F3F4F6; height: 56px; }
+    .nav-inner { max-width: 1152px; margin: 0 auto; padding: 0 24px; height: 100%; display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+    .nav-logo-mark { font-weight: 900; font-size: 13px; letter-spacing: -0.5px; color: #111827; }
+    .nav-logo-sub { font-size: 9px; color: #9CA3AF; margin-top: -2px; }
+    .nav-links { display: flex; align-items: center; gap: 24px; list-style: none; }
+    .nav-links a { font-size: 13px; font-weight: 500; color: #6B7280; text-decoration: none; }
+    .nav-links a:hover { color: #5956E9; }
+    .nav-links a.active { color: #5956E9; font-weight: 700; border-bottom: 2px solid #5956E9; padding-bottom: 1px; }
+    .nav-actions { display: flex; align-items: center; gap: 12px; }
+    .nav-avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #93C5FD, #6366F1); display: flex; align-items: center; justify-content: center; color: white; font-size: 11px; font-weight: 700; }
+
+    /* ── 컨텍스트 헤더 ── */
+    .ctx-header {
+      background: linear-gradient(135deg, #5956E9 0%, #7C3AED 60%, #A855F7 100%);
+      border-radius: 24px;
+      padding: 28px 32px;
+      box-shadow: 0 4px 24px rgba(89,86,233,0.28);
+      position: relative;
+      overflow: hidden;
+    }
+    .ctx-header::before {
+      content: '2026';
+      position: absolute; right: -8px; top: -12px;
+      font-size: 110px; font-weight: 900;
+      color: rgba(255,255,255,0.06); line-height: 1; pointer-events: none;
+    }
+
+    /* ── 도메인 탭 ── */
+    .domain-tabs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
+    .domain-tabs::-webkit-scrollbar { display: none; }
+    .domain-tab {
+      padding: 9px 20px; border-radius: 999px;
+      font-size: 13px; font-weight: 700;
+      cursor: pointer; transition: all 0.18s;
+      white-space: nowrap; border: none;
+    }
+    .domain-tab.active { background: #5956E9; color: #fff; box-shadow: 0 4px 12px rgba(89,86,233,0.25); }
+    .domain-tab:not(.active) { background: #fff; color: #6B7280; border: 1.5px solid #E5E7EB; }
+    .domain-tab:not(.active):hover { border-color: #5956E9; color: #5956E9; }
+
+    .domain-content { display: none; }
+    .domain-content.active { display: block; }
+
+    /* ── 월별 아이템 ── */
+    .month-item {
+      display: flex; gap: 16px;
+      padding: 18px 0;
+      border-bottom: 1px solid #F3F4F6;
+      align-items: flex-start;
+    }
+    .month-item:last-child { border-bottom: none; }
+
+    .month-badge {
+      width: 48px; height: 48px; border-radius: 14px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .month-badge.good { background: #F0EEFF; }
+    .month-badge.normal { background: #F9FAFB; }
+    .month-badge.caution { background: #FFF5F5; }
+
+    .month-num { font-size: 18px; font-weight: 900; line-height: 1; }
+    .month-num.good { color: #5956E9; }
+    .month-num.normal { color: #6B7280; }
+    .month-num.caution { color: #EF4444; }
+
+    .month-unit { font-size: 10px; font-weight: 700; margin-top: 1px; }
+    .month-unit.good { color: #5956E9; }
+    .month-unit.normal { color: #9CA3AF; }
+    .month-unit.caution { color: #EF4444; }
+
+    /* 월 텍스트 접기/펼치기 */
+    .month-text {
+      font-size: 13px; color: #4B5563; line-height: 1.75;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      transition: all 0.2s;
+    }
+    .month-text.expanded {
+      display: block;
+      -webkit-line-clamp: unset;
+    }
+    .month-toggle {
+      font-size: 11px; font-weight: 700; color: #5956E9;
+      cursor: pointer; margin-top: 6px; display: inline-flex;
+      align-items: center; gap: 3px; background: none; border: none;
+      padding: 0;
+    }
+    .month-toggle:hover { opacity: 0.75; }
+  </style>
+  <script>tailwind.config = { theme: { extend: { colors: { brand: { primary: '#5956E9', light: '#F0EEFF' } } } } }</script>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 1L16 5V13L9 17L2 13V5L9 1Z" fill="#5956E9"/></svg>
+      <div><div class="nav-logo-mark">SAJU:ME</div><div class="nav-logo-sub">정통사주로 해석하는 나의 명식</div></div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#">오늘의운세</a></li>
+      <li><a href="#">정통사주</a></li>
+      <li><a href="#">궁합</a></li>
+      <li><a href="#">타로</a></li>
+      <li><a href="#">커뮤니티</a></li>
+      <li><a href="#" class="active">마이페이지</a></li>
+    </ul>
+    <div class="nav-actions">
+      <svg width="20" height="20" fill="none" stroke="#9CA3AF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+        <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+      </svg>
+      <div class="nav-avatar">수</div>
+    </div>
+  </div>
+</nav>
+
+<main class="px-6 py-8 mt-14 max-w-3xl mx-auto flex flex-col gap-6">
+
+  <!-- 컨텍스트 헤더 -->
+  <div class="ctx-header">
+    <div class="flex items-center gap-2 mb-3">
+      <span class="text-xs font-bold px-3 py-1 rounded-full bg-white/20 text-white">신년운세</span>
+    </div>
+    <div class="text-3xl font-black text-white mb-1">2026년 (병오년)</div>
+    <div class="text-sm font-bold text-white/80 mb-4">기사년 경오월 임인일 갑진시 · 1989년생 · 남성</div>
+    <div class="flex flex-col gap-2">
+      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-white/15 w-fit">
+        <i data-lucide="git-branch" style="width:14px;height:14px;color:#fff;"></i>
+        <span class="text-xs font-bold text-white">확장과 실행이 강해지는 병인(丙寅) 대운 (7년차)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 영역별 운세 탭 카드 -->
+  <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm">
+    <div class="flex items-center gap-2 mb-5">
+      <div class="w-8 h-8 rounded-full flex items-center justify-center" style="background:#F0EEFF;">
+        <i data-lucide="layout-grid" style="width:15px;height:15px;color:#5956E9;"></i>
+      </div>
+      <span class="font-black text-base">영역별 운세</span>
+    </div>
+
+    <div class="domain-tabs mb-6">
+      <button class="domain-tab active" onclick="switchDomain(this,'general')">총론</button>
+      <button class="domain-tab" onclick="switchDomain(this,'wealth')">
+        <i data-lucide="wallet" style="width:12px;height:12px;display:inline;vertical-align:middle;margin-right:3px;"></i>재물운
+      </button>
+      <button class="domain-tab" onclick="switchDomain(this,'career')">
+        <i data-lucide="briefcase" style="width:12px;height:12px;display:inline;vertical-align:middle;margin-right:3px;"></i>직장·사업운
+      </button>
+      <button class="domain-tab" onclick="switchDomain(this,'family')">
+        <i data-lucide="heart-pulse" style="width:12px;height:12px;display:inline;vertical-align:middle;margin-right:3px;"></i>가정·건강운
+      </button>
+      <button class="domain-tab" onclick="switchDomain(this,'relation')">
+        <i data-lucide="users" style="width:12px;height:12px;display:inline;vertical-align:middle;margin-right:3px;"></i>이성·대인관계
+      </button>
+    </div>
+
+    <!-- 총론 -->
+    <div class="domain-content active" id="domain-general">
+      <div class="flex items-center gap-2 mb-4">
+        <div class="w-8 h-8 rounded-full flex items-center justify-center" style="background:#F0EEFF;">
+          <i data-lucide="compass" style="width:15px;height:15px;color:#5956E9;"></i>
+        </div>
+        <span class="font-black text-base text-gray-900">총론</span>
+      </div>
+      <p class="text-sm text-slate-600 leading-relaxed">
+        2026년은 선생님의 원국에 이미 강하게 자리한 화(火)의 온도를 다시 한번 높이는 해입니다. 임수 일간이 여름의 뜨거운 들판 위에 놓인 형상인데, 병오년의 병화와 오화가 들어오면 세상은 선생님을 더 강하게 호출하고, 보여 달라고 요구하고, 결과를 내라고 재촉하는 분위기가 짙어집니다. 다만 일간이 신약하고 용신이 금, 희신이 수인 구조이므로 올해는 무작정 앞으로만 달리기보다 '열을 식혀 주는 장치'를 함께 갖출 때 운이 가장 고급스럽게 작동합니다.
+      </p>
+      <p class="text-sm text-slate-600 leading-relaxed mt-3">
+        현재 병인 대운 역시 병화와 인목이 함께 움직이며 식상과 재성의 흐름을 키우기 때문에, 아이디어를 밖으로 꺼내고 사람들 앞에 선보이는 힘은 강해지지만 체력, 집중력, 감정 소모를 관리하지 않으면 쉽게 마를 수 있습니다. 한마디로 2026년은 큰 무대가 열리는 해이지만, 물을 머금은 나무처럼 유연함과 회복력을 챙기는 사람이 끝까지 빛나는 해입니다. 바쁘고 뜨거운 만큼, 잘 쉬고 잘 정리하는 사람이 결국 더 멀리 갑니다.
+      </p>
+      <div class="mt-4 flex items-start gap-2 p-4 rounded-xl" style="background:#F0EEFF;">
+        <i data-lucide="lightbulb" style="width:15px;height:15px;color:#5956E9;flex-shrink:0;margin-top:2px;"></i>
+        <p class="text-xs leading-relaxed" style="color:#5956E9;">
+          용신: 금(金) · 희신: 수(水) — 바쁘고 뜨거운 해일수록 쉬고 정리하는 사람이 더 멀리 갑니다.
+        </p>
+      </div>
+    </div>
+
+    <!-- 재물운 -->
+    <div class="domain-content" id="domain-wealth">
+      <div class="flex items-center gap-2 mb-4">
+        <div class="w-8 h-8 rounded-full flex items-center justify-center" style="background:#FEFCE8;">
+          <i data-lucide="wallet" style="width:15px;height:15px;color:#CA8A04;"></i>
+        </div>
+        <span class="font-black text-base text-gray-900">재물운</span>
+      </div>
+      <p class="text-sm text-slate-600 leading-relaxed">
+        선생님은 원국에 재성이 적지 않고 월지 오화, 년지 사화 등 이미 돈의 흐름과 현실 감각이 강한 구조를 갖고 있습니다. 2026년 병오년은 임수 기준으로 천간 병화는 편재, 지지 오는 정재의 성격을 띠어 '기회성 수익'과 '안정적 현금 흐름'이 동시에 부각되는 해로 볼 수 있습니다.
+      </p>
+      <p class="text-sm text-slate-600 leading-relaxed mt-3">
+        특히 병인 대운의 인목이 식신 역할을 하며 올해의 화 기운으로 자연스럽게 연결되기 때문에, 말하고 만들고 기획하고 움직이는 능력이 곧 돈이 되기 쉽습니다. 다만 신약한 일간에게 재성이 과도하게 강해지면 수입이 생겨도 지출과 책임이 함께 커지는 형태로 나타날 수 있습니다.
+      </p>
+      <div class="grid grid-cols-2 gap-3 mt-4">
+        <div class="p-4 rounded-xl" style="background:#F0FDF4;">
+          <div class="flex items-center gap-1.5 mb-2">
+            <i data-lucide="trending-up" style="width:13px;height:13px;color:#16A34A;"></i>
+            <span class="text-xs font-bold text-green-700">상반기 전략</span>
+          </div>
+          <p class="text-xs text-slate-600 leading-relaxed">성과급, 영업, 프로젝트 수익, 부업, 투자 제안 등 외부 기회를 넓게 보세요.</p>
+        </div>
+        <div class="p-4 rounded-xl" style="background:#F0F9FF;">
+          <div class="flex items-center gap-1.5 mb-2">
+            <i data-lucide="shield-check" style="width:13px;height:13px;color:#0284C7;"></i>
+            <span class="text-xs font-bold text-blue-600">하반기 전략</span>
+          </div>
+          <p class="text-xs text-slate-600 leading-relaxed">현금흐름 정리, 세금 점검, 장기 자산 배분, 비상금 정비가 필요합니다.</p>
+        </div>
+      </div>
+      <div class="mt-3 flex items-start gap-2 p-3 rounded-xl" style="background:#FEFCE8;">
+        <i data-lucide="alert-circle" style="width:14px;height:14px;color:#CA8A04;flex-shrink:0;margin-top:2px;"></i>
+        <p class="text-xs text-slate-600 leading-relaxed">보여지는 성과보다 <strong>남는 구조</strong>를 만드는 것이 올해 돈복을 지키는 가장 중요한 포인트입니다.</p>
+      </div>
+    </div>
+
+    <!-- 직장·사업운 -->
+    <div class="domain-content" id="domain-career">
+      <div class="flex items-center gap-2 mb-4">
+        <div class="w-8 h-8 rounded-full flex items-center justify-center" style="background:#F0FDF4;">
+          <i data-lucide="briefcase" style="width:15px;height:15px;color:#16A34A;"></i>
+        </div>
+        <span class="font-black text-base text-gray-900">직장 / 사업운</span>
+      </div>
+      <p class="text-sm text-slate-600 leading-relaxed">
+        원국이 정관격인 선생님은 본래 질서, 책임, 기준, 평판을 중요하게 다루는 분입니다. 2026년 병오년은 식상에서 재성으로 흐르는 힘이 강해져, 내가 가진 아이디어나 전문성, 말과 기획이 실제 성과와 매출, 계약, 자리로 연결되기 좋은 해입니다.
+      </p>
+      <p class="text-sm text-slate-600 leading-relaxed mt-3">
+        직장인이라면 중요한 프로젝트의 전면에 서거나 실적 압박이 커지는 대신 존재감도 함께 커질 수 있고, 사업가나 프리랜서라면 브랜딩, 제안, 발표, 콘텐츠, 세일즈가 곧 경쟁력이 됩니다. 특히 해외, 외부 네트워크, 원격 협업, 출장, 새로운 시장 개척과 연결될수록 일이 더 크게 열릴 가능성이 큽니다.
+      </p>
+      <div class="mt-4 flex flex-col gap-2">
+        <div class="flex items-center gap-2 p-3 rounded-xl border border-slate-100">
+          <i data-lucide="check-circle" style="width:14px;height:14px;color:#5956E9;flex-shrink:0;"></i>
+          <p class="text-xs text-slate-600">혼자 완벽하려 하기보다 <strong>시스템화와 위임, 협업</strong>이 올해의 핵심입니다.</p>
+        </div>
+        <div class="flex items-center gap-2 p-3 rounded-xl border border-slate-100">
+          <i data-lucide="check-circle" style="width:14px;height:14px;color:#5956E9;flex-shrink:0;"></i>
+          <p class="text-xs text-slate-600">올해의 직업운은 단순 승진운이 아니라, <strong>이름값과 실적이 함께 올라가는 해</strong>입니다.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 가정·건강운 -->
+    <div class="domain-content" id="domain-family">
+      <div class="flex items-center gap-2 mb-4">
+        <div class="w-8 h-8 rounded-full flex items-center justify-center" style="background:#FFF1F2;">
+          <i data-lucide="heart-pulse" style="width:15px;height:15px;color:#F43F5E;"></i>
+        </div>
+        <span class="font-black text-base text-gray-900">가정 / 건강운</span>
+      </div>
+      <p class="text-sm text-slate-600 leading-relaxed">
+        오행 분포를 보면 화와 토가 강하고 수가 약한 편이라, 기본적으로 몸과 마음이 쉽게 건조해지고 과열되기 쉬운 구조입니다. 여기에 2026년 병오년의 화 기운이 더해지면 겉으로는 추진력과 활력이 살아나지만, 속으로는 수분과 여유가 빠져나가듯 피로가 쌓일 수 있습니다.
+      </p>
+      <div class="mt-4 grid grid-cols-2 gap-3">
+        <div class="p-3 rounded-xl" style="background:#FFF5F5;">
+          <div class="flex items-center gap-1.5 mb-2">
+            <i data-lucide="stethoscope" style="width:13px;height:13px;color:#EF4444;"></i>
+            <span class="text-xs font-bold text-red-600">주의 건강 패턴</span>
+          </div>
+          <div class="flex flex-col gap-1">
+            <p class="text-xs text-slate-500">· 심혈관 과열감 · 혈압성 스트레스</p>
+            <p class="text-xs text-slate-500">· 눈의 피로 · 수면 질 저하</p>
+            <p class="text-xs text-slate-500">· 탈수성 피곤 · 근육 긴장</p>
+          </div>
+        </div>
+        <div class="p-3 rounded-xl" style="background:#F0FDF4;">
+          <div class="flex items-center gap-1.5 mb-2">
+            <i data-lucide="leaf" style="width:13px;height:13px;color:#16A34A;"></i>
+            <span class="text-xs font-bold text-green-700">추천 건강 루틴</span>
+          </div>
+          <div class="flex flex-col gap-1">
+            <p class="text-xs text-slate-500">· 물가 산책 · 수영 · 반신욕</p>
+            <p class="text-xs text-slate-500">· 늦은 밤 디지털 차단</p>
+            <p class="text-xs text-slate-500">· 카페인 조절 · 정기 검진</p>
+          </div>
+        </div>
+      </div>
+      <div class="mt-3 flex items-start gap-2 p-3 rounded-xl" style="background:#F0EEFF;">
+        <i data-lucide="info" style="width:14px;height:14px;color:#5956E9;flex-shrink:0;margin-top:2px;"></i>
+        <p class="text-xs leading-relaxed" style="color:#5956E9;">가정운 자체가 나쁘다기보다, 바깥일이 커질수록 집 안에서는 <strong>조용한 회복 루틴</strong>이 필요하다는 뜻입니다.</p>
+      </div>
+    </div>
+
+    <!-- 이성·대인관계 -->
+    <div class="domain-content" id="domain-relation">
+      <div class="flex items-center gap-2 mb-4">
+        <div class="w-8 h-8 rounded-full flex items-center justify-center" style="background:#FFF1F2;">
+          <i data-lucide="users" style="width:15px;height:15px;color:#F43F5E;"></i>
+        </div>
+        <span class="font-black text-base text-gray-900">이성 / 대인관계</span>
+      </div>
+      <p class="text-sm text-slate-600 leading-relaxed">
+        2026년은 사람을 끌어당기는 열감이 강해지는 해입니다. 선생님은 원국에 이미 존재감과 활동성이 적지 않은데, 병오년이 오면 말투, 분위기, 일하는 방식에서 '눈에 띄는 사람'이 되기 쉽습니다.
+      </p>
+      <p class="text-sm text-slate-600 leading-relaxed mt-3">
+        이성운 역시 들어오는 인연은 분명히 생기기 쉽지만, 문제는 속도입니다. 너무 빠르게 가까워지거나, 일과 감정이 섞이거나, 매력과 호감은 큰데 지속성 검증이 늦어질 수 있으니 올해는 설렘보다 생활 리듬이 맞는지를 보는 것이 중요합니다.
+      </p>
+      <div class="mt-4 flex flex-col gap-2">
+        <div class="flex items-start gap-2 p-3 rounded-xl" style="background:#F9F8FF;">
+          <i data-lucide="heart" style="width:14px;height:14px;color:#5956E9;flex-shrink:0;margin-top:2px;"></i>
+          <p class="text-xs text-slate-600 leading-relaxed">좋은 인연은 <strong>'편한 사람'의 얼굴</strong>로 들어올 가능성이 높습니다. 억지로 쥐려는 관계는 오래가기 어렵습니다.</p>
+        </div>
+        <div class="flex items-start gap-2 p-3 rounded-xl" style="background:#F9F8FF;">
+          <i data-lucide="message-circle" style="width:14px;height:14px;color:#5956E9;flex-shrink:0;margin-top:2px;"></i>
+          <p class="text-xs text-slate-600 leading-relaxed">중요한 관계일수록 결론을 서두르기보다 <strong>한 템포 쉬고 듣는 태도</strong>가 관계의 품격을 높입니다.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 월별 운세 -->
+  <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm">
+    <div class="flex items-center gap-2 mb-5">
+      <div class="w-8 h-8 rounded-full flex items-center justify-center" style="background:#F0EEFF;">
+        <i data-lucide="calendar" style="width:15px;height:15px;color:#5956E9;"></i>
+      </div>
+      <span class="font-black text-base">월별 운세</span>
+      <span class="ml-auto text-xs text-slate-400">항목을 눌러 전체 내용을 확인하세요</span>
+    </div>
+
+    <div id="month-list"></div>
+  </div>
+
+</main>
+
+<footer style="background:#F9FAFB;border-top:1px solid #F3F4F6;padding:40px 32px;margin-top:16px;">
+  <div style="max-width:1152px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;">
+    <div>
+      <div style="font-weight:800;font-size:15px;color:#111827;margin-bottom:4px;">SAJU:ME</div>
+      <div style="font-size:12px;color:#9CA3AF;">© 2026 SAJU:ME. All rights reserved.</div>
+    </div>
+    <div style="display:flex;gap:24px;">
+      <a href="#" style="font-size:13px;color:#9CA3AF;text-decoration:none;">Privacy Policy</a>
+      <a href="#" style="font-size:13px;color:#9CA3AF;text-decoration:none;">Terms of Service</a>
+      <a href="#" style="font-size:13px;color:#9CA3AF;text-decoration:none;">Contact Us</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  lucide.createIcons();
+
+  /* ── 도메인 탭 전환 ── */
+  function switchDomain(btn, id) {
+    document.querySelectorAll('.domain-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.domain-content').forEach(c => c.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('domain-' + id).classList.add('active');
+    lucide.createIcons();
+  }
+
+  /* ── 월별 데이터 ── */
+  const monthlyFortunes = [
+    { month: 1,  label: '1월',  type: 'normal',
+      title: '속도보다 설계',
+      fortune: '1월은 한 해의 엔진을 예열하는 달입니다. 아직 병오년의 불길이 본격적으로 치솟기 전이지만, 선생님 내부에서는 이미 \'올해는 뭔가 크게 움직여야 한다\'는 감각이 서서히 살아납니다. 이 시기에는 무리하게 성과를 내기보다 방향 설정이 훨씬 중요합니다. 특히 현재 병인 대운의 흐름상 아이디어와 실행 욕구가 강해지기 쉬운데, 1월에는 그 에너지를 바로 소모하지 말고 계획서, 포트폴리오, 제안서, 예산표처럼 눈에 보이는 틀로 먼저 정리해 두는 것이 좋습니다. 돈 문제에서도 즉흥 투자나 충동 소비보다 구조를 점검하는 쪽이 유리합니다. 인간관계에서는 오랜만에 연락이 닿는 사람, 예전 프로젝트 인연, 묵혀 둔 협업 제안이 다시 살아날 수 있는데, 이 중 일부는 올해 중요한 연결점이 됩니다. 1월의 핵심은 속도보다 설계입니다. 씨앗을 뿌리는 마음으로 차분하게 움직이면, 이후 달들이 훨씬 수월해집니다.' },
+    { month: 2,  label: '2월',  type: 'good',
+      title: '문이 열리는 달',
+      fortune: '2월은 관계와 실무가 함께 살아나는 달입니다. 선생님의 원국에서 식상과 재성의 연결이 중요한데, 이 달에는 말, 기획, 제안, 아이디어가 실제 반응으로 돌아오기 시작합니다. 직장에서는 보고, 발표, 협상, 실적 점검 같은 장면에서 존재감이 커질 수 있고, 사업이나 프리랜서라면 클라이언트 접점이 늘어나며 \'이 사람 괜찮다\'는 평가를 받기 쉬운 시기입니다. 재물운은 소소한 성과가 보이기 시작하되 아직 크게 확장하기보다는 테스트와 검증이 중요합니다. 이성운도 움직임이 있지만, 매력적인 사람일수록 속도 조절이 필요합니다. 처음부터 모든 것을 보여주기보다 여백을 남기는 태도가 오히려 관계를 오래 갑니다. 2월은 문이 열리는 달이니, 문턱에서 서두르지 말고 품위 있게 들어가시면 됩니다.' },
+    { month: 3,  label: '3월',  type: 'good',
+      title: '길 위에서 답을 만나는 달',
+      fortune: '3월은 행동 반경이 넓어지고 이동성이 살아나는 달입니다. 선생님 사주에는 원래도 이동, 변화, 외부 확장과 관련된 기운이 강하게 깔려 있어 한 자리에 오래 머물기보다 움직일 때 운이 열리는 편인데, 이달은 그 특성이 더 선명하게 드러납니다. 출장, 외근, 미팅, 새로운 거래처 탐색, 업계 행사 참여, 공부나 자격증 준비 같은 외부 활동이 좋은 결과로 이어질 가능성이 큽니다. 재물운은 이동과 정보 속에서 기회를 발견하는 흐름이 있어, 가만히 있기보다 발로 뛰는 쪽이 유리합니다. 다만 체력이 따라주지 않으면 모든 기회가 부담으로 바뀔 수 있으니, 일정 사이에 회복 시간을 반드시 넣어야 합니다. 3월은 길 위에서 답을 만나는 달입니다.' },
+    { month: 4,  label: '4월',  type: 'normal',
+      title: '핵심 줄기를 키우는 달',
+      fortune: '4월은 실질적인 성과를 끌어내기 위한 조율의 달입니다. 1~3월에 뿌린 씨앗이 이제 어느 정도 형태를 갖추기 시작하면서, 선생님은 \'무엇을 더할지\'보다 \'무엇을 덜어낼지\'를 결정해야 할 수 있습니다. 직장에서는 맡은 일의 범위가 늘어나거나, 중간 리더 역할처럼 사람과 일을 동시에 챙겨야 하는 상황이 생길 수 있습니다. 사업적으로는 계약이나 금전 흐름의 윤곽이 조금 더 구체화되지만, 세부 조항과 비용 구조를 꼼꼼히 보는 것이 중요합니다. 건강은 위장, 입안 염증, 피로 누적에 주의가 필요합니다. 4월은 불필요한 가지를 쳐내고 핵심 줄기를 키우는 달입니다.' },
+    { month: 5,  label: '5월',  type: 'good',
+      title: '오래 타오르려면 물이 필요한 달',
+      fortune: '5월은 병오년의 뜨거운 본색이 본격적으로 체감되는 시기입니다. 선생님의 원국은 이미 사화와 오화가 있어 여름의 열기가 강한 편인데, 이달은 세운의 화 기운이 겹쳐 성과 압박, 외부 요청, 사람들의 기대가 크게 늘어날 수 있습니다. 특히 영업, 제안, 홍보, 발표, 콘텐츠 발행, 브랜딩, 협상 같은 활동은 눈에 띄는 반응을 만들기 쉽습니다. 그러나 신약한 임수에게 너무 강한 화는 쉽게 마름을 만들기 때문에, 이달에는 \'잘되는 만큼 쉬어야 한다\'는 원칙이 꼭 필요합니다. 건강은 심장 두근거림, 수면의 질, 음주 후 피로 회복, 탈수에 특히 주의가 필요합니다. 5월은 불꽃처럼 화려하지만, 오래 타오르려면 산소와 물이 함께 필요합니다.' },
+    { month: 6,  label: '6월',  type: 'good',
+      title: '정상에 가까운 달',
+      fortune: '6월은 올해의 정점 중 하나로 볼 수 있는 달입니다. 일이 몰리고, 사람을 만나고, 결과를 보여줘야 하는 장면이 많아질 가능성이 큽니다. 선생님의 사주에서 식상생재의 흐름이 살아나면 말과 기획이 수익으로 이어지기 쉬운데, 6월은 바로 그 연결 고리가 강하게 작동할 수 있습니다. 직장에서는 실적 인정, 새로운 역할 제안, 외부 협업, 팀 내 핵심 포지션 부각 같은 흐름이 들어올 수 있고, 사업이나 개인 프로젝트에서는 고객 반응이나 계약 성사 가능성이 높아집니다. \'다 받는 것\'이 능력이 아니라 \'잘 고르는 것\'이 능력이 됩니다. 6월은 정상에 가까운 달이니, 올라가는 것만큼 내려오는 체력 관리도 함께 설계해야 합니다.' },
+    { month: 7,  label: '7월',  type: 'caution',
+      title: '물 한 컵을 마시는 달',
+      fortune: '7월은 뜨거운 외부 흐름 속에서 내면의 목마름이 드러나는 달입니다. 상반기 내내 달려온 결과가 보이기 시작하지만, 동시에 \'이렇게 계속 가도 괜찮을까\'라는 피로감이나 공허감이 올라올 수 있습니다. 재물운은 여전히 움직이지만, 이달에는 벌기보다 지키기와 정리가 더 중요합니다. 수익이 생겼다면 그 일부를 저축, 상환, 장기 자산, 자기관리 비용으로 나누어 두는 것이 좋습니다. 건강은 염증성 피로, 더위 먹음, 소화기 과열, 수면 부족 관리가 핵심입니다. 7월은 달리기 중간에 물 한 컵을 마시는 달입니다. 멈추는 것이 뒤처짐이 아니라, 오래 가기 위한 전략이 됩니다.' },
+    { month: 8,  label: '8월',  type: 'normal',
+      title: '바닥을 단단하게 굳히는 달',
+      fortune: '8월은 한결 현실감이 살아나는 달입니다. 무엇이 실제로 남았고 무엇이 겉돌았는지를 냉정하게 점검하게 됩니다. 선생님은 원국상 문서, 분석, 기획, 구조화 능력이 좋은 편이므로 이달에는 숫자와 데이터, 일정표, 계약서, 성과 지표를 중심으로 판단할수록 유리합니다. 재물운은 세금 정리, 통장 분리, 투자 비중 조정, 지출 구조 재편 같은 작업이 매우 중요합니다. 인간관계에서는 화려한 모임보다 적은 인원과의 깊은 대화가 더 큰 위로와 기회를 줍니다. 건강은 위장, 피부 건조, 목과 허리 긴장에 주의하시고, 수분과 수면의 질을 높이는 루틴이 필요합니다. 8월은 겉으로는 잔잔하지만, 바닥을 단단하게 굳히는 달입니다.' },
+    { month: 9,  label: '9월',  type: 'good',
+      title: '조용한 복이 스며드는 달',
+      fortune: '9월은 다시 한번 기회의 문이 열리는 달입니다. 8월에 정리한 것을 바탕으로 새 제안, 재협상, 확장 논의, 소개 연결이 들어올 수 있고, 그중 일부는 예상보다 좋은 방향으로 풀릴 수 있습니다. 선생님은 천을귀인, 암록 같은 보호성 기운이 있어 위기에서 길이 열리는 편인데, 9월에는 특히 \'숨은 연결\'이 살아나는 느낌이 강합니다. 예전 인맥, 한동안 멀어졌던 거래처, 조용히 지켜보던 사람이 기회를 들고 올 수 있습니다. 대인관계는 비교적 부드럽게 흐르며, 다툼이 있었던 관계도 대화의 계기를 잡기 좋습니다. 9월은 조용한 복이 스며드는 달이니, 과시하지 말고 실속 있게 챙기시면 좋습니다.' },
+    { month: 10, label: '10월', type: 'normal',
+      title: '본질을 다듬는 달',
+      fortune: '10월은 숨을 고르며 방향을 다시 잡는 달입니다. 한 해를 통틀어 보면 강한 화 기운 속에서 많은 일을 벌이고 성과를 냈을 가능성이 큰데, 이달에는 그 열기가 조금 가라앉으며 \'내가 진짜 원하는 것이 무엇인지\'가 더 선명해질 수 있습니다. 재물운은 공격보다 보수적 운영이 유리하며, 큰 투자나 무리한 확장보다 현금흐름 안정화가 우선입니다. 직장에서는 성과보다 평가와 평판 관리가 중요해지므로, 작은 약속도 정확하게 지키는 태도가 큰 신뢰로 이어집니다. 건강은 면역력, 기관지, 건조함 관리가 중요합니다. 10월은 화려함을 잠시 접고 본질을 다듬는 달입니다.' },
+    { month: 11, label: '11월', type: 'good',
+      title: '단단한 만족감의 달',
+      fortune: '11월은 선생님에게 비교적 숨통이 트이는 달이 될 가능성이 큽니다. 계절적으로도 차가운 기운이 들어오며, 원국에서 부족했던 수의 감각이 조금 보충되는 듯한 안정감이 생길 수 있습니다. 그동안 과열되었던 마음이 진정되고, 일의 우선순위도 더 또렷해집니다. 재물운은 저축, 상환, 분산, 장기 계획을 세우기에 적합합니다. 인간관계는 따뜻한 정서적 교류가 살아나기 쉬워, 오해를 풀거나 중요한 사람과 한 단계 더 깊어질 수 있습니다. 건강은 상대적으로 회복감이 있지만, 그동안 미뤄 둔 검사나 치료가 있다면 이때 챙기는 것이 좋습니다. 11월은 한 해의 성과를 편안하게 품에 안는 달입니다.' },
+    { month: 12, label: '12월', type: 'good',
+      title: '마무리와 재설계의 달',
+      fortune: '12월은 마무리와 재설계의 달입니다. 2026년 한 해가 선생님에게 많은 움직임과 성과, 긴장과 배움을 안겨주었다면, 이달은 그 모든 조각을 하나의 이야기로 정리하는 시간입니다. 직장에서는 연말 평가, 정산, 내년 역할 조정, 계약 연장 논의 같은 현실적인 이슈가 부각될 수 있고, 사업적으로는 올해 수익 구조를 분석하고 내년 전략을 세우기에 아주 좋습니다. 관계에서는 바쁠수록 소중한 사람을 챙기는 태도가 중요합니다. 작은 선물, 따뜻한 말, 감사 표현 하나가 내년의 관계운까지 좋게 이어 줍니다. 무엇보다 12월은 \'나는 올해 충분히 잘 해냈다\'고 스스로를 인정해 주는 달이어야 합니다.' },
+  ];
+
+  const typeLabel = { good: '길함', normal: '보통', caution: '주의' };
+  const typeColor = {
+    good:    { badge: 'background:#F0EEFF;color:#5956E9;', border: '#5956E9' },
+    normal:  { badge: 'background:#F3F4F6;color:#6B7280;', border: '#E5E7EB' },
+    caution: { badge: 'background:#FFF1F2;color:#EF4444;', border: '#EF4444' },
+  };
+
+  const list = document.getElementById('month-list');
+
+  monthlyFortunes.forEach((m, idx) => {
+    const tc = typeColor[m.type];
+    const item = document.createElement('div');
+    item.className = 'month-item';
+    item.innerHTML = `
+      <div class="month-badge ${m.type}">
+        <span class="month-num ${m.type}">${m.month}</span>
+        <span class="month-unit ${m.type}">월</span>
+      </div>
+      <div class="flex-1">
+        <div class="flex items-center gap-2 mb-1.5">
+          <span class="text-sm font-black text-gray-800">${m.title}</span>
+          <span class="text-xs px-2 py-0.5 rounded-full font-bold" style="${tc.badge}">${typeLabel[m.type]}</span>
+        </div>
+        <p class="month-text text-sm text-slate-500 leading-relaxed" id="text-${idx}">${m.fortune}</p>
+        <button class="month-toggle" id="toggle-${idx}" onclick="toggleMonth(${idx})">
+          더보기
+          <i data-lucide="chevron-down" style="width:12px;height:12px;"></i>
+        </button>
+      </div>
+    `;
+    list.appendChild(item);
+  });
+
+  lucide.createIcons();
+
+  function toggleMonth(idx) {
+    const text = document.getElementById('text-' + idx);
+    const btn  = document.getElementById('toggle-' + idx);
+    const expanded = text.classList.toggle('expanded');
+    btn.innerHTML = expanded
+      ? '접기 <i data-lucide="chevron-up" style="width:12px;height:12px;"></i>'
+      : '더보기 <i data-lucide="chevron-down" style="width:12px;height:12px;"></i>';
+    lucide.createIcons();
+  }
+
+  window.addEventListener('scroll', () => {
+    document.querySelector('.nav').style.boxShadow = window.scrollY > 20 ? '0 2px 12px rgba(0,0,0,0.08)' : '';
+  });
+</script>
+</body>
+</html>

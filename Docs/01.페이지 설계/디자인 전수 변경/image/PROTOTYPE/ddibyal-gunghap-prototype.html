@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SAJU:ME — 띠별궁합</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Malgun Gothic", "맑은 고딕", sans-serif;
+      background: #F4F2FC;
+      color: #111827;
+    }
+
+    /* ══════════════════════════════════════
+       NAV — today-fortune-prototype.html 동일
+    ══════════════════════════════════════ */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(255,255,255,0.97);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid #F3F4F6;
+      height: 56px;
+    }
+    .nav-inner {
+      max-width: 1152px; margin: 0 auto; padding: 0 24px;
+      height: 100%; display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+    .nav-logo-mark { font-weight: 900; font-size: 13px; letter-spacing: -0.5px; color: #111827; }
+    .nav-logo-sub { font-size: 9px; color: #9CA3AF; margin-top: -2px; }
+    .nav-links { display: flex; align-items: center; gap: 24px; list-style: none; }
+    .nav-links a {
+      font-size: 13px; font-weight: 500; color: #6B7280;
+      text-decoration: none; transition: color 0.15s;
+    }
+    .nav-links a:hover { color: #5956E9; }
+    .nav-links a.active {
+      color: #5956E9; font-weight: 700;
+      border-bottom: 2px solid #5956E9; padding-bottom: 1px;
+    }
+    .nav-actions { display: flex; align-items: center; gap: 12px; }
+    .nav-bell { width: 20px; height: 20px; color: #9CA3AF; cursor: pointer; }
+    .nav-avatar {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: linear-gradient(135deg, #93C5FD, #6366F1);
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 11px; font-weight: 700; cursor: pointer;
+    }
+
+    /* ══════════════════════════════════════
+       PAGE BODY
+    ══════════════════════════════════════ */
+    .page-body {
+      margin-top: 56px;
+      padding: 32px 24px 64px;
+      max-width: 1152px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .page-body { margin-top: 56px; }
+
+    /* ══════════════════════════════════════
+       배너
+    ══════════════════════════════════════ */
+    .banner {
+      border-radius: 32px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+      margin-bottom: 28px;
+    }
+    .banner-img {
+      width: 100%; display: block;
+      object-fit: cover;
+    }
+    .banner-overlay {
+      position: absolute; inset: 0;
+      padding: 40px 48px;
+      display: flex; flex-direction: column; justify-content: center;
+    }
+    .banner-badge {
+      display: inline-block; padding: 5px 14px; border-radius: 999px;
+      font-size: 11px; font-weight: 700;
+      background: rgba(255,255,255,0.85); color: #5956E9;
+      margin-bottom: 16px; width: fit-content;
+    }
+    .banner-title {
+      font-size: 26px; font-weight: 900; color: #fff;
+      line-height: 1.35; margin-bottom: 10px; letter-spacing: -0.5px;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.50), 0 1px 4px rgba(0,0,0,0.35);
+    }
+    .banner-desc {
+      font-size: 15px; color: #fff; font-weight: 700; line-height: 1.7;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.55), 0 1px 4px rgba(0,0,0,0.40);
+    }
+
+    /* ══════════════════════════════════════
+       내 띠 카드
+    ══════════════════════════════════════ */
+    .my-zodiac-card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 20px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      border: 1px solid #F3F4F6;
+      margin-bottom: 20px;
+    }
+    .my-zodiac-left {
+      display: flex; align-items: center; gap: 16px;
+    }
+    .my-zodiac-emoji {
+      width: 60px; height: 60px; border-radius: 18px;
+      background: #F0EEFF;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    .my-zodiac-emoji img {
+      width: 44px; height: 44px; object-fit: contain;
+      mix-blend-mode: multiply;
+    }
+    .my-zodiac-label {
+      font-size: 11px; color: #9CA3AF; font-weight: 600;
+      margin-bottom: 4px; letter-spacing: 0.05em;
+    }
+    .my-zodiac-name {
+      font-size: 22px; font-weight: 900; color: #111827; letter-spacing: -0.5px;
+    }
+    .my-zodiac-hanja {
+      font-size: 13px; color: #5956E9; font-weight: 700; margin-top: 2px;
+    }
+
+    /* 범례 */
+    .legend {
+      display: flex; align-items: center; gap: 16px;
+    }
+    .legend-item {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12px; font-weight: 600; color: #374151;
+    }
+    .legend-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+    }
+
+    /* ══════════════════════════════════════
+       12띠 그리드
+    ══════════════════════════════════════ */
+    .zodiac-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+    .zodiac-card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 20px 16px;
+      display: flex; flex-direction: column; align-items: center;
+      gap: 8px;
+      border: 1.5px solid #F3F4F6;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+      text-align: center;
+    }
+    .zodiac-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(89,86,233,0.12);
+      border-color: #C7C4F8;
+    }
+    .zodiac-card.grade-best  { background: #FFFBEB; border-color: #FDE68A; }
+    .zodiac-card.grade-good  { background: #F0FDF4; border-color: #BBF7D0; }
+    .zodiac-card.grade-bad   { background: #FFF1F2; border-color: #FECDD3; }
+    .zodiac-card.grade-caution { background: #FFF7ED; border-color: #FED7AA; }
+    .zodiac-card.grade-me    { background: #F0EEFF; border-color: #A5B4FC; }
+
+    .zodiac-animal { width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; }
+    .zodiac-animal img { width: 44px; height: 44px; object-fit: contain; mix-blend-mode: multiply; }
+    .zodiac-name   { font-size: 14px; font-weight: 800; color: #111827; }
+    .zodiac-hanja  { font-size: 12px; color: #9CA3AF; font-weight: 600; margin-top: -4px; }
+
+    /* grade bar */
+    .grade-bar-wrap {
+      width: 100%; height: 6px;
+      background: #F3F4F6; border-radius: 999px; overflow: hidden;
+      margin: 2px 0;
+    }
+    .grade-bar-fill { height: 100%; border-radius: 999px; }
+
+    .zodiac-score {
+      font-size: 22px; font-weight: 900; color: #111827; letter-spacing: -0.5px;
+    }
+    .zodiac-badge {
+      display: inline-block; padding: 3px 10px; border-radius: 999px;
+      font-size: 10px; font-weight: 700;
+    }
+    .zodiac-desc {
+      font-size: 10px; color: #6B7280; line-height: 1.5; word-break: keep-all;
+    }
+
+    /* 등급별 컬러 */
+    .c-best    { background: #FEF3C7; color: #92400E; }
+    .c-good    { background: #D1FAE5; color: #065F46; }
+    .c-neutral { background: #F3F4F6; color: #6B7280; }
+    .c-caution { background: #FFEDD5; color: #9A3412; }
+    .c-bad     { background: #FFE4E6; color: #9F1239; }
+    .c-me      { background: #EDE9FE; color: #5956E9; }
+
+    .fill-best    { background: #F59E0B; }
+    .fill-good    { background: #10B981; }
+    .fill-neutral { background: #D1D5DB; }
+    .fill-caution { background: #F97316; }
+    .fill-bad     { background: #EF4444; }
+    .fill-me      { background: #5956E9; }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════
+     NAV
+══════════════════════════════════════ -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+        <path d="M9 1L16 5V13L9 17L2 13V5L9 1Z" fill="#5956E9"/>
+      </svg>
+      <div>
+        <div class="nav-logo-mark">SAJU:ME</div>
+        <div class="nav-logo-sub">정통사주로 해석하는 나의 명식</div>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#">오늘의운세</a></li>
+      <li><a href="#">정통사주</a></li>
+      <li><a href="#">궁합</a></li>
+      <li><a href="#">타로</a></li>
+      <li><a href="#">커뮤니티</a></li>
+      <li><a href="#">마이페이지</a></li>
+    </ul>
+    <div class="nav-actions">
+      <svg class="nav-bell" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+      </svg>
+      <div class="nav-avatar">수</div>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════
+     MAIN
+══════════════════════════════════════ -->
+<main style="margin-top:56px; padding:32px 24px 64px; max-width:1152px; margin-left:auto; margin-right:auto;">
+
+  <!-- 배너 -->
+  <div class="banner">
+    <img class="banner-img" src="../PERSON/dog_cat.png" alt="띠별궁합 배너" />
+    <div class="banner-overlay">
+      <span class="banner-badge">띠별궁합</span>
+      <h2 class="banner-title">나의 띠로 알아보는<br>12간지 궁합</h2>
+      <p class="banner-desc">나와 잘 맞는 띠, 조심해야 할 띠를<br>사주가 알려드립니다.</p>
+    </div>
+  </div>
+
+  <!-- 내 띠 카드 -->
+  <div class="my-zodiac-card">
+    <div class="my-zodiac-left">
+      <div class="my-zodiac-emoji"><img src="../animals/chiken.png" alt="닭"></div>
+      <div>
+        <div class="my-zodiac-label">나의 띠</div>
+        <div class="my-zodiac-name">닭띠</div>
+        <div class="my-zodiac-hanja">酉 · 1993년생</div>
+      </div>
+    </div>
+    <div class="legend">
+      <div class="legend-item">
+        <div class="legend-dot" style="background:#F59E0B;"></div>최고
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background:#10B981;"></div>좋음
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background:#D1D5DB;"></div>무난
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background:#F97316;"></div>주의
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background:#EF4444;"></div>나쁨
+      </div>
+    </div>
+  </div>
+
+  <!-- 12띠 궁합 그리드 -->
+  <div class="zodiac-grid">
+
+    <!-- 쥐 — 무난 50 -->
+    <div class="zodiac-card">
+      <div class="zodiac-animal"><img src="../animals/rat.png" alt="쥐"></div>
+      <div class="zodiac-name">쥐띠</div>
+      <div class="zodiac-hanja">子</div>
+      <div class="grade-bar-wrap">
+        <div class="grade-bar-fill fill-neutral" style="width:50%;"></div>
+      </div>
+      <div class="zodiac-score">50</div>
+      <span class="zodiac-badge c-neutral">평(平)</span>
+      <div class="zodiac-desc">무난한 관계입니다.</div>
+    </div>
+
+    <!-- 소 — 최고 95 -->
+    <div class="zodiac-card grade-best">
+      <div class="zodiac-animal"><img src="../animals/cow.png" alt="소"></div>
+      <div class="zodiac-name">소띠</div>
+      <div class="zodiac-hanja">丑</div>
+      <div class="grade-bar-wrap">
+        <div class="grade-bar-fill fill-best" style="width:95%;"></div>
+      </div>
+      <div class="zodiac-score">95</div>
+      <span class="zodiac-badge c-best">삼합(三合)</span>
+      <div class="zodiac-desc">서로 부족한 점을 채워주는 최상의 궁합입니다.</div>
+    </div>
+
+    <!-- 호랑이 — 주의 40 -->
+    <div class="zodiac-card grade-caution">
+      <div class="zodiac-animal"><img src="../animals/tiger.png" alt="호랑이"></div>
+      <div class="zodiac-name">호랑이띠</div>
+      <div class="zodiac-hanja">寅</div>
+      <div class="grade-bar-wrap">
+        <div class="grade-bar-fill fill-caution" style="width:40%;"></div>
+      </div>
+      <div class="zodiac-score">40</div>
+      <span class="zodiac-badge c-caution">원진(怨嗔)</span>
+      <div class="zodiac-desc">이유 없이 오해가 생길 수 있어 주의가 필요합니다.</div>
+    </div>
+
+    <!-- 토끼 — 나쁨 20 -->
+    <div class="zodiac-card grade-bad">
+      <div class="zodiac-animal"><img src="../animals/rabbit.png" alt="토끼"></div>
+      <div class="zodiac-name">토끼띠</div>
+      <div class="zodiac-hanja">卯</div>
+      <div class="grade-bar-wrap">
+        <div class="grade-bar-fill fill-bad" style="width:20%;"></div>
+      </div>
+      <div class="zodiac-score">20</div>
+      <span class="zodiac-badge c-bad">충(沖)</span>
+      <div class="zodiac-desc">서로 부딪히는 기운으로 갈등에 주의가 필요합니다.</div>
+    </div>
+
+    <!-- 용 — 좋음 85 -->
+    <div class="zodiac-card grade-good">
+      <div class="zodiac-animal"><img src="../animals/dragon.png" alt="용"></div>
+      <div class="zodiac-name">용띠</div>
+      <div class="zodiac-hanja">辰</div>
+      <div class="grade-bar-wrap">
+        <div class="grade-bar-fill fill-good" style="width:85%;"></div>
+      </div>
+      <div class="zodiac-score">85</div>
+      <span class="zodiac-badge c-good">육합(六合)</span>
+      <div class="zodiac-desc">다정하고 합이 잘 맞는 좋은 관계입니다.</div>
+    </div>
+
+    <!-- 뱀 — 최고 95 -->
+    <div class="zodiac-card grade-best">
+      <div class="zodiac-animal"><img src="../animals/snake.png" alt="뱀"></div>
+      <div class="zodiac-name">뱀띠</div>
+      <div class="zodiac-hanja">巳</div>
+      <div class="grade-bar-wrap">
+        <div class="grade-bar-fill fill-best" style="width:95%;"></div>
+      </div>
+      <div class="zodiac-score">95</div>
+      <span class="zodiac-badge c-best">삼합(三合)</span>
+      <div class="zodiac-desc">서로 부족한 점을 채워주는 최상의 궁합입니다.</div>
+    </div>
+
+    <!-- 말 — 무난 50 -->
+    <div class="zodiac-card">
+      <div class="zodiac-animal"><img src="../animals/hors.png" alt="말"></div>
+      <div class="zodiac-name">말띠</div>
+      <div class="zodiac-hanja">午</div>
+      <div class="grade-bar-wrap">
+        <div class="grade-bar-fill fill-neutral" style="width:50%;"></div>
+      </div>
+      <div class="zodiac-score">50</div>
+      <span class="zodiac-badge c-neutral">평(平)</span>
+      <div class="zodiac-desc">무난한 관계입니다.</div>
+    </div>
+
+    <!-- 양 — 무난 50 -->
+    <div class="zodiac-card">
+      <div class="zodiac-animal"><img src="../animals/sheep.png" alt="양"></div>
+      <div class="zodiac-name">양띠</div>
+      <div class="zodiac-hanja">未</div>
+      <div class="grade-bar-wrap">
+        <div class="grade-bar-fill fill-neutral" style="width:50%;"></div>
+      </div>
+      <div class="zodiac-score">50</div>
+      <span class="zodiac-badge c-neutral">평(平)</span>
+      <div class="zodiac-desc">무난한 관계입니다.</div>
+    </div>
+
+    <!-- 원숭이 — 무난 55 -->
+    <div class="zodiac-card">
+      <div class="zodiac-animal"><img src="../animals/monkey.png" alt="원숭이"></div>
+      <div class="zodiac-name">원숭이띠</div>
+      <div class="zodiac-hanja">申</div>
+      <div class="grade-bar-wrap">
+        <div class="grade-bar-fill fill-neutral" style="width:55%;"></div>
+      </div>
+      <div class="zodiac-score">55</div>
+      <span class="zodiac-badge c-neutral">평(平)</span>
+      <div class="zodiac-desc">무난한 관계입니다.</div>
+    </div>
+
+    <!-- 닭 — 나 자신 -->
+    <div class="zodiac-card grade-me">
+      <div class="zodiac-animal"><img src="../animals/chiken.png" alt="닭"></div>
+      <div class="zodiac-name">닭띠</div>
+      <div class="zodiac-hanja">酉</div>
+      <div class="grade-bar-wrap">
+        <div class="grade-bar-fill fill-me" style="width:95%;"></div>
+      </div>
+      <div class="zodiac-score">95</div>
+      <span class="zodiac-badge c-me">나의 띠</span>
+      <div class="zodiac-desc">같은 기운을 가진 동띠입니다.</div>
+    </div>
+
+    <!-- 개 — 좋음 75 -->
+    <div class="zodiac-card grade-good">
+      <div class="zodiac-animal"><img src="../animals/dog.png" alt="개"></div>
+      <div class="zodiac-name">개띠</div>
+      <div class="zodiac-hanja">戌</div>
+      <div class="grade-bar-wrap">
+        <div class="grade-bar-fill fill-good" style="width:75%;"></div>
+      </div>
+      <div class="zodiac-score">75</div>
+      <span class="zodiac-badge c-good">방합(方合)</span>
+      <div class="zodiac-desc">같은 방향의 기운으로 잘 어울리는 관계입니다.</div>
+    </div>
+
+    <!-- 돼지 — 무난 50 -->
+    <div class="zodiac-card">
+      <div class="zodiac-animal"><img src="../animals/pig.png" alt="돼지"></div>
+      <div class="zodiac-name">돼지띠</div>
+      <div class="zodiac-hanja">亥</div>
+      <div class="grade-bar-wrap">
+        <div class="grade-bar-fill fill-neutral" style="width:50%;"></div>
+      </div>
+      <div class="zodiac-score">50</div>
+      <span class="zodiac-badge c-neutral">평(平)</span>
+      <div class="zodiac-desc">무난한 관계입니다.</div>
+    </div>
+
+  </div>
+  <!-- /12띠 그리드 -->
+
+</main>
+
+<!-- ══════════════════════════════════════
+     FOOTER
+══════════════════════════════════════ -->
+<footer style="background:#F9FAFB; border-top:1px solid #F3F4F6; padding:40px 32px; margin-top:32px;">
+  <div style="max-width:1152px; margin:0 auto; display:flex; align-items:center;
+              justify-content:space-between; flex-wrap:wrap; gap:20px;">
+    <div>
+      <div style="font-weight:800; font-size:15px; color:#111827; margin-bottom:4px;">SAJU:ME</div>
+      <div style="font-size:12px; color:#9CA3AF;">© 2026 SAJU:ME. All rights reserved.</div>
+    </div>
+    <div style="display:flex; gap:24px;">
+      <a href="#" style="font-size:13px; color:#9CA3AF; text-decoration:none;">Privacy Policy</a>
+      <a href="#" style="font-size:13px; color:#9CA3AF; text-decoration:none;">Terms of Service</a>
+      <a href="#" style="font-size:13px; color:#9CA3AF; text-decoration:none;">Contact Us</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  window.addEventListener('scroll', () => {
+    document.querySelector('.nav').style.boxShadow =
+      window.scrollY > 20 ? '0 2px 12px rgba(0,0,0,0.08)' : '';
+  });
+</script>
+
+</body>
+</html>

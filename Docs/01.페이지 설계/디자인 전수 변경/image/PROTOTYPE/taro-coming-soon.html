@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SAJU:ME — 타로</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Malgun Gothic", "맑은 고딕", sans-serif;
+      background: #F4F2FC;
+      color: #111827;
+    }
+
+    /* ══════════════════════════════════════
+       NAV
+    ══════════════════════════════════════ */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(255,255,255,0.97);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid #F3F4F6;
+      height: 56px;
+    }
+    .nav-inner {
+      max-width: 1152px; margin: 0 auto; padding: 0 24px;
+      height: 100%; display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+    .nav-logo-mark { font-weight: 900; font-size: 13px; letter-spacing: -0.5px; color: #111827; }
+    .nav-logo-sub { font-size: 9px; color: #9CA3AF; margin-top: -2px; }
+    .nav-links { display: flex; align-items: center; gap: 24px; list-style: none; }
+    .nav-links a {
+      font-size: 13px; font-weight: 500; color: #6B7280;
+      text-decoration: none; transition: color 0.15s;
+    }
+    .nav-links a:hover { color: #5956E9; }
+    .nav-links a.active {
+      color: #5956E9; font-weight: 700;
+      border-bottom: 2px solid #5956E9; padding-bottom: 1px;
+    }
+    .nav-actions { display: flex; align-items: center; gap: 12px; }
+    .nav-bell { width: 20px; height: 20px; color: #9CA3AF; cursor: pointer; }
+    .nav-avatar {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: linear-gradient(135deg, #93C5FD, #6366F1);
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 11px; font-weight: 700; cursor: pointer;
+    }
+
+    /* ══════════════════════════════════════
+       COMING SOON
+    ══════════════════════════════════════ */
+    .page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 24px 60px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 32px;
+      padding: 60px 48px;
+      max-width: 480px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 4px 32px rgba(89,86,233,0.10);
+      border: 1.5px solid #EDE9FF;
+    }
+
+    .taro-icon {
+      font-size: 64px;
+      margin-bottom: 24px;
+      display: block;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50%       { transform: translateY(-10px); }
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 5px 16px;
+      border-radius: 999px;
+      background: #F0EEFF;
+      color: #5956E9;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      margin-bottom: 20px;
+    }
+
+    .title {
+      font-size: 26px;
+      font-weight: 900;
+      color: #111827;
+      line-height: 1.4;
+      margin-bottom: 14px;
+      letter-spacing: -0.5px;
+    }
+
+    .title span {
+      background: linear-gradient(to right, #5956E9, #7C3AED);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .desc {
+      font-size: 14px;
+      color: #6B7280;
+      line-height: 1.8;
+      margin-bottom: 32px;
+    }
+
+    .divider {
+      width: 48px;
+      height: 3px;
+      border-radius: 99px;
+      background: linear-gradient(to right, #5956E9, #7C3AED);
+      margin: 0 auto 32px;
+    }
+
+    .notify-wrap {
+      display: flex;
+      gap: 8px;
+    }
+
+    .notify-input {
+      flex: 1;
+      height: 48px;
+      padding: 0 16px;
+      border: 1.5px solid #E5E7EB;
+      border-radius: 14px;
+      font-size: 13px;
+      font-family: "Malgun Gothic", sans-serif;
+      color: #111827;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    .notify-input:focus {
+      border-color: #5956E9;
+      box-shadow: 0 0 0 3px rgba(89,86,233,0.10);
+    }
+
+    .notify-input::placeholder { color: #D1D5DB; }
+
+    .notify-btn {
+      height: 48px;
+      padding: 0 20px;
+      border-radius: 14px;
+      background: linear-gradient(to right, #5956E9, #7C3AED);
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 800;
+      font-family: "Malgun Gothic", sans-serif;
+      white-space: nowrap;
+      box-shadow: 0 4px 16px rgba(89,86,233,0.28);
+      transition: opacity 0.2s;
+    }
+
+    .notify-btn:hover { opacity: 0.88; }
+
+    .notify-note {
+      font-size: 11px;
+      color: #9CA3AF;
+      margin-top: 10px;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 36px;
+    }
+
+    .feature-item {
+      background: #F4F2FC;
+      border-radius: 16px;
+      padding: 16px 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .feature-icon { font-size: 24px; }
+    .feature-text { font-size: 11px; font-weight: 700; color: #5956E9; text-align: center; line-height: 1.4; }
+
+    /* ══════════════════════════════════════
+       FOOTER
+    ══════════════════════════════════════ */
+    footer {
+      background: #F9FAFB;
+      border-top: 1px solid #F3F4F6;
+      padding: 40px 32px;
+    }
+    .footer-inner {
+      max-width: 1152px; margin: 0 auto;
+      display: flex; align-items: center;
+      justify-content: space-between; flex-wrap: wrap; gap: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════
+     NAV
+══════════════════════════════════════ -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+        <path d="M9 1L16 5V13L9 17L2 13V5L9 1Z" fill="#5956E9"/>
+      </svg>
+      <div>
+        <div class="nav-logo-mark">SAJU:ME</div>
+        <div class="nav-logo-sub">정통사주로 해석하는 나의 명식</div>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#">오늘의운세</a></li>
+      <li><a href="#">정통사주</a></li>
+      <li><a href="#">궁합</a></li>
+      <li><a href="#" class="active">타로</a></li>
+      <li><a href="#">커뮤니티</a></li>
+      <li><a href="#">마이페이지</a></li>
+    </ul>
+    <div class="nav-actions">
+      <svg class="nav-bell" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+      </svg>
+      <div class="nav-avatar">수</div>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════
+     COMING SOON
+══════════════════════════════════════ -->
+<main class="page">
+  <div class="card">
+
+    <span class="taro-icon">🃏</span>
+
+    <div class="badge">COMING SOON</div>
+
+    <h1 class="title">
+      타로 서비스를<br>
+      <span>준비하고 있어요</span>
+    </h1>
+
+    <div class="divider"></div>
+
+    <p class="desc">
+      사주와 연결된 나만의 타로 리딩 서비스를<br>
+      곧 선보일 예정이에요.<br>
+      오픈 알림을 신청하면 가장 먼저 알려드릴게요!
+    </p>
+
+    <div class="notify-wrap">
+      <input class="notify-input" type="email" placeholder="이메일 주소를 입력해주세요" />
+      <button class="notify-btn" onclick="handleNotify()">알림 신청</button>
+    </div>
+    <p class="notify-note">🔒 이메일은 오픈 알림 용도로만 사용돼요.</p>
+
+    <div class="features">
+      <div class="feature-item">
+        <span class="feature-icon">✨</span>
+        <span class="feature-text">사주 기반<br>타로 리딩</span>
+      </div>
+      <div class="feature-item">
+        <span class="feature-icon">🔮</span>
+        <span class="feature-text">오늘의<br>타로 카드</span>
+      </div>
+      <div class="feature-item">
+        <span class="feature-icon">💫</span>
+        <span class="feature-text">연애·진로<br>타로 상담</span>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- ══════════════════════════════════════
+     FOOTER
+══════════════════════════════════════ -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div style="font-weight:800; font-size:15px; color:#111827; margin-bottom:4px;">SAJU:ME</div>
+      <div style="font-size:12px; color:#9CA3AF;">© 2026 SAJU:ME. All rights reserved.</div>
+    </div>
+    <div style="display:flex; gap:24px;">
+      <a href="#" style="font-size:13px; color:#9CA3AF; text-decoration:none;">Privacy Policy</a>
+      <a href="#" style="font-size:13px; color:#9CA3AF; text-decoration:none;">Terms of Service</a>
+      <a href="#" style="font-size:13px; color:#9CA3AF; text-decoration:none;">Contact Us</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function handleNotify() {
+    const input = document.querySelector('.notify-input');
+    if (!input.value || !input.value.includes('@')) {
+      input.style.borderColor = '#F87171';
+      input.focus();
+      setTimeout(() => input.style.borderColor = '#E5E7EB', 1500);
+      return;
+    }
+    const btn = document.querySelector('.notify-btn');
+    btn.textContent = '신청 완료 ✓';
+    btn.style.background = '#10B981';
+    btn.style.boxShadow = '0 4px 16px rgba(16,185,129,0.28)';
+    input.value = '';
+    input.placeholder = '오픈 시 알려드릴게요 🎉';
+    input.disabled = true;
+    btn.disabled = true;
+  }
+
+  window.addEventListener('scroll', () => {
+    document.querySelector('.nav').style.boxShadow =
+      window.scrollY > 20 ? '0 2px 12px rgba(0,0,0,0.08)' : '';
+  });
+</script>
+
+</body>
+</html>

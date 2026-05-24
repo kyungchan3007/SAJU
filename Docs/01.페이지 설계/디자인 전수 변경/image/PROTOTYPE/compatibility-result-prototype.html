@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SAJU:ME — 짝궁합 결과</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    * { font-family: "Malgun Gothic", "맑은 고딕", sans-serif !important; }
+    body { background: #F4F2FC; color: #111827; }
+
+    /* NAV */
+    .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(255,255,255,0.97); backdrop-filter: blur(10px); border-bottom: 1px solid #F3F4F6; height: 56px; }
+    .nav-inner { max-width: 1152px; margin: 0 auto; padding: 0 24px; height: 100%; display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+    .nav-logo-mark { font-weight: 900; font-size: 13px; letter-spacing: -0.5px; color: #111827; }
+    .nav-logo-sub { font-size: 9px; color: #9CA3AF; margin-top: -2px; }
+    .nav-links { display: flex; align-items: center; gap: 24px; list-style: none; }
+    .nav-links a { font-size: 13px; font-weight: 500; color: #6B7280; text-decoration: none; }
+    .nav-links a:hover { color: #5956E9; }
+    .nav-links a.active { color: #5956E9; font-weight: 700; border-bottom: 2px solid #5956E9; padding-bottom: 1px; }
+    .nav-actions { display: flex; align-items: center; gap: 12px; }
+    .nav-avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #93C5FD, #6366F1); display: flex; align-items: center; justify-content: center; color: white; font-size: 11px; font-weight: 700; }
+
+    /* CONTEXT HEADER */
+    .ctx-header {
+      background: linear-gradient(135deg, #BE185D 0%, #F43F5E 45%, #E8718D 100%);
+      border-radius: 24px;
+      padding: 24px 20px 20px;
+      box-shadow: 0 8px 32px rgba(244,63,94,0.30);
+    }
+    .user-pill {
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 16px;
+      padding: 14px 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      flex: 1;
+    }
+    .user-avatar {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.25);
+      display: flex; align-items: center; justify-content: center;
+      border: 2px solid rgba(255,255,255,0.5);
+    }
+
+    /* SCORE RING */
+    .score-ring { position: relative; width: 140px; height: 140px; margin: 0 auto; }
+    .score-ring svg { transform: rotate(-90deg); }
+    .score-text { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+
+    /* SECTION TABS */
+    .section-tabs-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .section-tabs-wrap::-webkit-scrollbar { display: none; }
+    .section-tabs {
+      display: flex;
+      border-bottom: 1.5px solid #F3F4F6;
+      min-width: max-content;
+      width: 100%;
+    }
+    .section-tab {
+      flex-shrink: 0;
+      padding: 10px 14px;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: #9CA3AF;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      border-top: none; border-left: none; border-right: none;
+      background: none;
+      white-space: nowrap;
+      transition: all 0.18s;
+    }
+    .section-tab.active { color: #F43F5E; border-bottom-color: #F43F5E; }
+
+    .section-content { display: none; padding: 20px; }
+    .section-content.active { display: block; }
+
+    /* SCORE DOTS (1–5) */
+    .score-dots { display: flex; align-items: center; gap: 5px; }
+    .score-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: #F3F4F6;
+    }
+    .score-dot.filled { background: #F43F5E; }
+    .score-dot.filled-full { background: linear-gradient(135deg, #F43F5E, #E8718D); }
+
+    /* COMPAT BAR */
+    .compat-bar { height: 6px; border-radius: 999px; background: #F3F4F6; overflow: hidden; margin-top: 6px; }
+    .compat-bar-fill { height: 100%; border-radius: 999px; background: linear-gradient(to right, #F43F5E, #E8718D); }
+
+    /* TEXT CLAMP */
+    .section-text {
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
+      font-size: 13px;
+      color: #4B5563;
+      line-height: 1.75;
+    }
+    .section-text.expanded {
+      display: block;
+      -webkit-line-clamp: unset;
+    }
+    .toggle-btn {
+      margin-top: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #F43F5E;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 1L16 5V13L9 17L2 13V5L9 1Z" fill="#5956E9"/></svg>
+      <div><div class="nav-logo-mark">SAJU:ME</div><div class="nav-logo-sub">정통사주로 해석하는 나의 명식</div></div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#">오늘의운세</a></li>
+      <li><a href="#">정통사주</a></li>
+      <li><a href="#" class="active">궁합</a></li>
+      <li><a href="#">타로</a></li>
+      <li><a href="#">커뮤니티</a></li>
+      <li><a href="#">마이페이지</a></li>
+    </ul>
+    <div class="nav-actions">
+      <svg width="20" height="20" fill="none" stroke="#9CA3AF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+      <div class="nav-avatar">수</div>
+    </div>
+  </div>
+</nav>
+
+<main class="px-4 py-6 mt-14 max-w-2xl mx-auto flex flex-col gap-5">
+
+  <!-- ① 컨텍스트 헤더 — 두 사람 -->
+  <div class="ctx-header">
+    <div class="text-center mb-4">
+      <span class="text-xs font-bold text-white/70 tracking-widest uppercase">짝궁합 결과</span>
+    </div>
+    <div class="flex items-center gap-3">
+      <!-- userA -->
+      <div class="user-pill">
+        <div class="user-avatar">
+          <i data-lucide="user" style="width:22px;height:22px;color:#fff;"></i>
+        </div>
+        <div class="text-center">
+          <div class="text-xs font-black text-white">남성 · 1989년생</div>
+          <div class="text-xs text-white/70 mt-0.5">기사년 경오월</div>
+          <div class="text-xs text-white/70">임인일 갑진시</div>
+        </div>
+      </div>
+
+      <!-- VS -->
+      <div class="flex flex-col items-center gap-1.5 flex-shrink-0">
+        <div class="w-9 h-9 rounded-full bg-white/25 flex items-center justify-center">
+          <i data-lucide="heart" style="width:16px;height:16px;color:#fff;fill:#fff;"></i>
+        </div>
+        <span class="text-xs font-black text-white/90 tracking-widest">VS</span>
+      </div>
+
+      <!-- userB -->
+      <div class="user-pill">
+        <div class="user-avatar">
+          <i data-lucide="user" style="width:22px;height:22px;color:#fff;"></i>
+        </div>
+        <div class="text-center">
+          <div class="text-xs font-black text-white">여성 · 1994년생</div>
+          <div class="text-xs text-white/70 mt-0.5">갑술년 병자월</div>
+          <div class="text-xs text-white/70">신사일 무자시</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ② 종합 점수 카드 -->
+  <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm text-center">
+    <div class="flex items-center gap-2 justify-center mb-5">
+      <div class="w-8 h-8 rounded-full flex items-center justify-center" style="background:#FFF1F2;">
+        <i data-lucide="sparkles" style="width:15px;height:15px;color:#F43F5E;"></i>
+      </div>
+      <span class="font-black text-base">짝궁합 종합 점수</span>
+    </div>
+
+    <!-- 점수 링 (83/100) -->
+    <div class="score-ring mb-4">
+      <svg width="140" height="140" viewBox="0 0 140 140">
+        <circle cx="70" cy="70" r="58" fill="none" stroke="#FFF1F2" stroke-width="12"/>
+        <!-- dasharray=364, offset=364*(1-83/100)=61.9 -->
+        <circle cx="70" cy="70" r="58" fill="none" stroke="url(#pinkGrad)" stroke-width="12"
+          stroke-dasharray="364" stroke-dashoffset="62" stroke-linecap="round"/>
+        <defs>
+          <linearGradient id="pinkGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#F43F5E"/>
+            <stop offset="100%" stop-color="#E8718D"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <div class="score-text">
+        <span class="text-4xl font-black" style="color:#F43F5E;">83</span>
+        <span class="text-xs text-slate-400 mt-0.5">/ 100</span>
+      </div>
+    </div>
+
+    <!-- 키워드 배지 -->
+    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-4" style="background:#FFF1F2;">
+      <i data-lucide="zap" style="width:13px;height:13px;color:#F43F5E;fill:#F43F5E;"></i>
+      <span class="text-xs font-black" style="color:#F43F5E;">강한 끌림과 높은 성장성을 가진 전략형 커플</span>
+    </div>
+
+    <!-- 섹션별 점수 요약 그리드 -->
+    <div class="grid grid-cols-4 gap-2 mt-4 border-t border-slate-100 pt-4">
+      <div class="text-center">
+        <div class="text-xs text-slate-400 mb-1">연인</div>
+        <div class="text-base font-black" style="color:#F43F5E;">4/5</div>
+      </div>
+      <div class="text-center">
+        <div class="text-xs text-slate-400 mb-1">결혼</div>
+        <div class="text-base font-black" style="color:#F43F5E;">4/5</div>
+      </div>
+      <div class="text-center">
+        <div class="text-xs text-slate-400 mb-1">친구</div>
+        <div class="text-base font-black" style="color:#F43F5E;">5/5</div>
+      </div>
+      <div class="text-center">
+        <div class="text-xs text-slate-400 mb-1">직장</div>
+        <div class="text-base font-black" style="color:#F43F5E;">5/5</div>
+      </div>
+    </div>
+    <div class="grid grid-cols-3 gap-2 mt-2">
+      <div class="text-center">
+        <div class="text-xs text-slate-400 mb-1">성격</div>
+        <div class="text-base font-black" style="color:#F43F5E;">4/5</div>
+      </div>
+      <div class="text-center">
+        <div class="text-xs text-slate-400 mb-1">자녀</div>
+        <div class="text-base font-black" style="color:#F43F5E;">4/5</div>
+      </div>
+      <div class="text-center">
+        <div class="text-xs text-slate-400 mb-1">갈등</div>
+        <div class="text-base font-black" style="color:#E8718D;">3/5</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ③ 종합 요약 -->
+  <div class="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm">
+    <div class="flex items-center gap-2 mb-3">
+      <div class="w-7 h-7 rounded-full flex items-center justify-center" style="background:#FFF1F2;">
+        <i data-lucide="message-circle" style="width:13px;height:13px;color:#F43F5E;"></i>
+      </div>
+      <span class="font-black text-sm">종합 궁합 요약</span>
+    </div>
+    <p id="summary-text" class="section-text">두 사람은 처음에는 서로의 결이 달라 강하게 끌리기 쉬운 관계입니다. A님은 바깥으로 움직이며 판을 넓히는 타입이고, B님은 감각과 집중력으로 상황을 정교하게 읽어내는 타입이라 함께할 때 삶의 스케일과 완성도가 동시에 올라갑니다. 다만 감정 처리 방식과 피로를 푸는 방식이 꽤 다르기 때문에, 사랑이 깊어질수록 '나를 이해해 주겠지'라는 기대보다 '다르게 반응하는 이유를 배우는 태도'가 중요합니다. 잘 맞으면 서로의 약점을 덮는 관계가 아니라, 서로의 잠재력을 현실로 끌어내는 강한 파트너십이 됩니다. 즉, 이 궁합은 무난해서 편한 관계라기보다 서로를 한 단계 더 성숙하게 만드는 관계에 가깝습니다.</p>
+    <button class="toggle-btn" id="summary-btn" onclick="toggleSummary()">더보기 ···</button>
+  </div>
+
+  <!-- ④ 7개 섹션 상세 -->
+  <div class="bg-white rounded-2xl overflow-hidden border border-slate-100 shadow-sm">
+    <div class="section-tabs-wrap">
+      <div class="section-tabs" id="section-tabs">
+        <button class="section-tab active" onclick="switchSection(this, 0)">연인궁합</button>
+        <button class="section-tab" onclick="switchSection(this, 1)">결혼궁합</button>
+        <button class="section-tab" onclick="switchSection(this, 2)">친구궁합</button>
+        <button class="section-tab" onclick="switchSection(this, 3)">직장·동료</button>
+        <button class="section-tab" onclick="switchSection(this, 4)">성격궁합</button>
+        <button class="section-tab" onclick="switchSection(this, 5)">자녀</button>
+        <button class="section-tab" onclick="switchSection(this, 6)">갈등</button>
+      </div>
+    </div>
+
+    <!-- 1. 연인궁합 -->
+    <div class="section-content active" id="section-0">
+      <div class="flex items-start justify-between mb-3">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-xl flex items-center justify-center" style="background:#FFF1F2;">
+            <i data-lucide="heart" style="width:15px;height:15px;color:#F43F5E;fill:#F43F5E;"></i>
+          </div>
+          <div>
+            <div class="text-sm font-black">연인궁합</div>
+            <div class="text-xs text-slate-400">좋은 흐름의 단계</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-1 mt-1">
+          <div class="score-dot filled-full"></div>
+          <div class="score-dot filled-full"></div>
+          <div class="score-dot filled-full"></div>
+          <div class="score-dot filled-full"></div>
+          <div class="score-dot"></div>
+          <span class="text-xs font-black ml-1" style="color:#F43F5E;">4/5</span>
+        </div>
+      </div>
+      <div class="compat-bar mb-3"><div class="compat-bar-fill" style="width:80%;"></div></div>
+      <div class="px-3 py-2 rounded-xl mb-3" style="background:#FFF1F2;">
+        <span class="text-xs font-bold" style="color:#F43F5E;">심장은 뜨겁고 표현 방식은 다른 커플</span>
+      </div>
+      <p class="section-text" id="text-0">연인으로서 두 사람은 분명한 끌림이 있는 조합입니다. A님은 감정이 생기면 관계를 앞으로 밀고 나가고 싶어 하는 편이며, 좋아하면 행동으로 보여주고 함께 경험을 쌓으면서 애정을 확인하는 스타일에 가깝습니다. 반면 B님은 감정이 깊더라도 바로 다 쏟아내기보다 상대의 결, 말의 온도, 분위기의 미세한 차이까지 읽어보며 천천히 마음을 열어가는 편입니다. 그래서 초반에는 A님이 '왜 이렇게 확신을 안 주지?'라고 느낄 수 있고, B님은 '왜 이렇게 빠르게 다가오지?'라고 느낄 수 있습니다. 하지만 이 차이가 오히려 매력 포인트가 됩니다. A님은 B님에게 삶의 속도감과 설렘, 모험의 감각을 불어넣고, B님은 A님에게 감정의 밀도와 관계의 정교함을 가르쳐 줍니다. 쉽게 말해 A님이 관계에 불을 붙이는 사람이라면, B님은 그 불이 오래 예쁘게 타도록 공기와 온도를 조절하는 사람입니다. 데이트 스타일도 여행, 전시, 맛집 탐방, 새로운 프로젝트성 취미처럼 '같이 경험을 축적하는 연애'가 특히 좋습니다. 다만 갈등이 생겼을 때 A님은 빨리 풀고 앞으로 가고 싶어 하고, B님은 마음이 정리될 때까지 생각하는 시간이 필요합니다.</p>
+      <button class="toggle-btn" id="btn-0" onclick="toggleSection(0)">더보기 ···</button>
+    </div>
+
+    <!-- 2. 결혼궁합 -->
+    <div class="section-content" id="section-1">
+      <div class="flex items-start justify-between mb-3">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-xl flex items-center justify-center" style="background:#FFF1F2;">
+            <i data-lucide="home" style="width:15px;height:15px;color:#F43F5E;"></i>
+          </div>
+          <div>
+            <div class="text-sm font-black">결혼궁합</div>
+            <div class="text-xs text-slate-400">좋은 흐름의 단계</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-1 mt-1">
+          <div class="score-dot filled-full"></div>
+          <div class="score-dot filled-full"></div>
+          <div class="score-dot filled-full"></div>
+          <div class="score-dot filled-full"></div>
+          <div class="score-dot"></div>
+          <span class="text-xs font-black ml-1" style="color:#F43F5E;">4/5</span>
+        </div>
+      </div>
+      <div class="compat-bar mb-3"><div class="compat-bar-fill" style="width:80%;"></div></div>
+      <div class="px-3 py-2 rounded-xl mb-3" style="background:#FFF1F2;">
+        <span class="text-xs font-bold" style="color:#F43F5E;">생활 방식 조율이 되면 오래 가는 현실형 결혼 궁합</span>
+      </div>
+      <p class="section-text" id="text-1">결혼 관점에서 보면 두 사람은 감정만으로 버티는 부부라기보다, 역할 분담과 생활 설계를 잘하면 꽤 안정적으로 오래 갈 수 있는 조합입니다. A님은 인생을 크게 보고 움직이며 외부 기회, 일, 확장, 변화에 강한 편이라 집 안에만 머무는 삶보다는 계속 새로운 목표를 향해 나아갈 때 에너지가 살아납니다. B님은 생활의 디테일, 분위기, 질서, 감정의 결을 세심하게 살피는 힘이 강해서 가정의 완성도와 품질을 높이는 능력이 좋습니다. 쉽게 말하면 A님이 집의 외연을 넓히는 사람이라면, B님은 그 집의 내실을 탄탄하게 다지는 사람입니다. 다만 부부가 되면 연애 때는 매력으로 보이던 차이가 생활 습관에서는 불편함으로 느껴질 수 있습니다. A님은 일정이 유동적이거나 즉흥적 결정이 있을 수 있고, B님은 예측 가능성과 정리된 흐름이 있어야 마음이 편안해질 가능성이 큽니다. A님에게 가장 중요한 문장은 '당신을 믿어요', B님에게는 '당신 마음을 놓치지 않을게요'입니다.</p>
+      <button class="toggle-btn" id="btn-1" onclick="toggleSection(1)">더보기 ···</button>
+    </div>
+
+    <!-- 3. 친구궁합 -->
+    <div class="section-content" id="section-2">
+      <div class="flex items-start justify-between mb-3">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-xl flex items-center justify-center" style="background:#FFF1F2;">
+            <i data-lucide="users" style="width:15px;height:15px;color:#F43F5E;"></i>
+          </div>
+          <div>
+            <div class="text-sm font-black">친구궁합</div>
+            <div class="text-xs text-slate-400">매우 잘 맞는 단계</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-1 mt-1">
+          <div class="score-dot filled-full"></div>
+          <div class="score-dot filled-full"></div>
+          <div class="score-dot filled-full"></div>
+          <div class="score-dot filled-full"></div>
+          <div class="score-dot filled-full"></div>
+          <span class="text-xs font-black ml-1" style="color:#F43F5E;">5/5</span>
+        </div>
+      </div>
+      <div class="compat-bar mb-3"><div class="compat-bar-fill" style="width:100%;"></div></div>
+      <div class="px-3 py-2 rounded-xl mb-3" style="background:#FFF1F2;">
+        <span class="text-xs font-bold" style="color:#F43F5E;">서로의 시야를 넓혀주는 자극적인 베스트 프렌드형</span>
+      </div>
+      <p class="section-text" id="text-2">친구 궁합으로 보면 두 사람은 상당히 좋은 편입니다. 연인이나 부부로 만났더라도 기본 바탕에 '좋은 대화 상대'의 기운이 있어서, 시간이 지나도 할 말이 끊기지 않는 장점이 있습니다. A님은 행동 반경이 넓고 새로운 자극을 잘 끌어오는 타입이라 함께 있으면 정체되지 않는 재미가 있습니다. B님은 관찰력과 해석력이 좋아서 같은 상황을 더 깊고 흥미롭게 읽어내며, A님이 놓친 포인트를 날카롭고도 매력적으로 짚어줍니다. 두 분은 단순히 놀기만 하는 친구가 아니라, 서로의 세계관을 업데이트해 주는 친구에 가깝습니다. 특히 고민 상담을 할 때 시너지가 좋습니다. A님은 '일단 해보자'는 추진력을 주고, B님은 '어떻게 해야 덜 다칠지'를 정교하게 짚어줍니다. 이 관계는 연인이라는 틀을 벗겨도 충분히 남을 수 있는, 우정의 기반이 강한 궁합입니다.</p>
+      <button class="toggle-btn" id="btn-2" onclick="toggleSection(2)">더보기 ···</button>
+    </div>
+
+    <!-- 4. 직장/동료궁합 -->
+    <div class="section-content" id="section-3">
+      <div class="flex items-start justify-between mb-3">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-xl flex items-center justify-center" style="background:#FFF1F2;">
+            <i data-lucide="briefcase" style="width:15px;height:15px;color:#F43F5E;"></i>
+          </div>
+          <div>
+            <div class="text-sm font-black">직장 · 동료궁합</div>
+            <div class="text-xs text-slate-400">매우 잘 맞는 단계</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-1 mt-1">
+          <div class="score-dot filled-full"></div>
+          <div class="score-dot filled-full"></div>
+          <div class="score-dot filled-full"></div>
+          <div class="score-dot filled-full"></div>
+          <div class="score-dot filled-full"></div>
+          <span class="text-xs font-black ml-1" style="color:#F43F5E;">5/5</span>
+        </div>
+      </div>
+      <div class="compat-bar mb-3"><div class="compat-bar-fill" style="width:100%;"></div></div>
+      <div class="px-3 py-2 rounded-xl mb-3" style="background:#FFF1F2;">
+        <span class="text-xs font-bold" style="color:#F43F5E;">기획력과 실행력이 맞물리는 고성과 파트너십</span>
+      </div>
+      <p class="section-text" id="text-3">일이나 프로젝트 파트너로 만났다면 두 사람은 상당히 강한 조합입니다. A님은 판을 읽고 기회를 포착해 움직이는 감각이 좋고, 속도를 내야 할 때 결정을 미루지 않는 힘이 있습니다. 외부 네트워크, 추진력, 확장성, 현장 대응력 쪽에서 강점이 살아나는 편입니다. 반면 B님은 디테일, 검토, 구조화, 리스크 감지, 완성도 관리에 탁월합니다. 즉 A님이 '이걸 해보자'며 문을 여는 사람이라면, B님은 '어떻게 해야 제대로 성공하는지'를 설계하는 사람입니다. A님 혼자라면 속도는 빠르지만 허점이 생길 수 있고, B님 혼자라면 완성도는 높지만 결정이 늦어질 수 있습니다. 그런데 둘이 함께하면 속도와 정교함이 함께 살아납니다. 함께 일할 때는 역할 정의가 핵심입니다. A님은 대외 협상, 방향 제시, 실행 드라이브를 맡고, B님은 검토, 설계, 품질 관리, 데이터 정리를 맡는 방식이 효율적입니다.</p>
+      <button class="toggle-btn" id="btn-3" onclick="toggleSection(3)">더보기 ···</button>
+    </div>
+
+    <!-- 5. 성격궁합 -->
+    <div class="section-content" id="section-4">
+      <div class="flex items-start justify-between mb-3">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-xl flex items-center justify-center" style="background:#FFF1F2;">
+            <i data-lucide="user-round" style="width:15px;height:15px;color:#F43F5E;"></i>
+          </div>
+          <div>
+            <div class="text-sm font-black">성격궁합</div>
+            <div class="text-xs text-slate-400">좋은 흐름의 단계</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-1 mt-1">
+          <div class="score-dot filled-full"></div>
+          <div class="score-dot filled-full"></div>
+          <div class="score-dot filled-full"></div>
+          <div class="score-dot filled-full"></div>
+          <div class="score-dot"></div>
+          <span class="text-xs font-black ml-1" style="color:#F43F5E;">4/5</span>
+        </div>
+      </div>
+      <div class="compat-bar mb-3"><div class="compat-bar-fill" style="width:80%;"></div></div>
+      <div class="px-3 py-2 rounded-xl mb-3" style="background:#FFF1F2;">
+        <span class="text-xs font-bold" style="color:#F43F5E;">외향적 추진력과 내밀한 감각의 조화</span>
+      </div>
+      <p class="section-text" id="text-4">성격적으로 두 사람은 비슷해서 편한 타입이라기보다, 달라서 서로를 보완하는 타입입니다. A님은 기본적으로 움직임이 있어야 살아나는 성향입니다. 한곳에 오래 머무르기보다 변화, 도전, 바깥 세계와의 연결 속에서 자신감을 회복하는 편입니다. 반면 B님은 감각이 매우 예민하고 정교합니다. 사람의 말투, 분위기, 미묘한 거리감, 작은 모순까지 금방 읽어내며, 겉으로는 차분해 보여도 내면에서는 많은 정보를 빠르게 처리하고 있을 가능성이 큽니다. A님은 B님에게 '깊이 있는 사람'으로 보이고, B님은 A님에게 '생동감 있는 사람'으로 보입니다. A님은 스트레스를 받으면 일단 움직이거나 해결책을 찾고 싶어 하는 반면, B님은 충분히 느끼고 정리한 뒤 말하고 싶어 할 수 있습니다. 이런 차이는 성격 불일치가 아니라 처리 방식의 차이입니다. 성격적으로 아주 무난한 궁합은 아니지만, 서로를 이해하는 수준이 올라갈수록 누구보다 깊이 맞물릴 수 있는 조합입니다.</p>
+      <button class="toggle-btn" id="btn-4" onclick="toggleSection(4)">더보기 ···</button>
+    </div>
+
+    <!-- 6. 자녀 -->
+    <div class="section-content" id="section-5">
+      <div class="flex items-start justify-between mb-3">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-xl flex items-center justify-center" style="background:#FFF1F2;">
+            <i data-lucide="star" style="width:15px;height:15px;color:#F43F5E;fill:#F43F5E;"></i>
+          </div>
+          <div>
+            <div class="text-sm font-black">자녀</div>
+            <div class="text-xs text-slate-400">좋은 흐름의 단계</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-1 mt-1">
+          <div class="score-dot filled-full"></div>
+          <div class="score-dot filled-full"></div>
+          <div class="score-dot filled-full"></div>
+          <div class="score-dot filled-full"></div>
+          <div class="score-dot"></div>
+          <span class="text-xs font-black ml-1" style="color:#F43F5E;">4/5</span>
+        </div>
+      </div>
+      <div class="compat-bar mb-3"><div class="compat-bar-fill" style="width:80%;"></div></div>
+      <div class="px-3 py-2 rounded-xl mb-3" style="background:#FFF1F2;">
+        <span class="text-xs font-bold" style="color:#F43F5E;">자녀에게 넓은 세상과 섬세한 기준을 함께 주는 부모</span>
+      </div>
+      <p class="section-text" id="text-5">자녀 운과 양육 스타일의 조합을 보면 두 분은 아이에게 서로 다른 선물을 주는 부모가 될 가능성이 큽니다. A님은 아이가 세상을 두려워하지 않도록 바깥 경험을 넓혀주고, 스스로 해보는 힘을 길러주는 역할에 강합니다. 활동, 체험, 여행, 도전, 자율성 같은 키워드가 잘 맞는 부모입니다. 반면 B님은 아이의 감정선, 재능의 결, 공부 습관, 생활 리듬, 작은 신호를 세심하게 읽어내는 힘이 좋습니다. 쉽게 말하면 A님은 아이를 세상으로 데리고 나가는 부모이고, B님은 아이의 내면을 세심하게 돌보는 부모입니다. 이 두 역할이 균형을 이루면 아이는 안정감과 도전심을 함께 배울 수 있습니다. 양육에서 두 분이 특히 조심하면 좋은 부분은 역할 충돌입니다. 공부, 스마트폰, 생활 습관에 대한 기준을 미리 맞춰두면 아이도 훨씬 안정감을 느낍니다.</p>
+      <button class="toggle-btn" id="btn-5" onclick="toggleSection(5)">더보기 ···</button>
+    </div>
+
+    <!-- 7. 갈등 -->
+    <div class="section-content" id="section-6">
+      <div class="flex items-start justify-between mb-3">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-xl flex items-center justify-center" style="background:#FFF5F5;">
+            <i data-lucide="alert-triangle" style="width:15px;height:15px;color:#EF4444;"></i>
+          </div>
+          <div>
+            <div class="text-sm font-black">갈등</div>
+            <div class="text-xs text-slate-400">안정적으로 맞춰가는 단계</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-1 mt-1">
+          <div class="score-dot filled-full"></div>
+          <div class="score-dot filled-full"></div>
+          <div class="score-dot filled-full"></div>
+          <div class="score-dot"></div>
+          <div class="score-dot"></div>
+          <span class="text-xs font-black ml-1" style="color:#EF4444;">3/5</span>
+        </div>
+      </div>
+      <div class="compat-bar mb-3"><div class="compat-bar-fill" style="width:60%;background:linear-gradient(to right,#EF4444,#F87171);"></div></div>
+      <div class="px-3 py-2 rounded-xl mb-3" style="background:#FFF5F5;">
+        <span class="text-xs font-bold" style="color:#EF4444;">말보다 해석이 앞설 때 오해가 커지는 관계</span>
+      </div>
+      <p class="section-text" id="text-6">두 사람의 갈등 포인트는 사랑이 없어서가 아니라, 서로의 반응을 잘못 해석할 때 커집니다. A님은 문제가 생기면 빠르게 직면하고 정리하고 싶어 하는 편입니다. 마음이 답답하면 대화를 통해서든 행동을 통해서든 일단 흐름을 움직여야 편해집니다. 반면 B님은 감정이 흔들릴수록 더 예민하게 상황을 읽고, 말 하나의 뉘앙스까지 오래 곱씹을 수 있습니다. A님의 직선적인 표현은 B님에게 무심함이나 압박으로 느껴질 수 있고, B님의 신중함과 침묵은 A님에게 거리두기나 냉담함처럼 느껴질 수 있습니다. 해결 팁: ① 갈등이 생기면 공감 → 사실 확인 → 해결책 순으로 대화하세요. ② 문자로 길게 싸우지 않는 것이 중요합니다. ③ 감정이 격해진 날은 산책, 드라이브처럼 장소를 바꾸면 A님의 답답함도 풀리고 B님의 경직도 완화됩니다. 이 궁합의 갈등은 위험하다기보다 관리가 필요한 유형입니다.</p>
+      <button class="toggle-btn" id="btn-6" onclick="toggleSection(6)">더보기 ···</button>
+    </div>
+
+  </div>
+
+  <!-- ⑤ 하단 버튼 -->
+  <div class="flex gap-3">
+    <button class="flex-1 flex items-center justify-center gap-2 py-3.5 rounded-2xl border-2 border-slate-200 text-sm font-bold text-slate-500 hover:bg-slate-50 transition-all">
+      <i data-lucide="refresh-cw" style="width:15px;height:15px;"></i>
+      다시 선택
+    </button>
+    <button class="flex-[2] flex items-center justify-center gap-2 py-3.5 rounded-2xl text-sm font-bold text-white transition-all"
+      style="background:linear-gradient(to right,#F43F5E,#E8718D);box-shadow:0 4px 16px rgba(244,63,94,0.30);">
+      <i data-lucide="share-2" style="width:15px;height:15px;"></i>
+      결과 공유하기
+    </button>
+  </div>
+
+</main>
+
+<footer style="background:#F9FAFB;border-top:1px solid #F3F4F6;padding:40px 32px;margin-top:16px;">
+  <div style="max-width:1152px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;">
+    <div>
+      <div style="font-weight:800;font-size:15px;color:#111827;margin-bottom:4px;">SAJU:ME</div>
+      <div style="font-size:12px;color:#9CA3AF;">© 2026 SAJU:ME. All rights reserved.</div>
+    </div>
+    <div style="display:flex;gap:24px;">
+      <a href="#" style="font-size:13px;color:#9CA3AF;text-decoration:none;">Privacy Policy</a>
+      <a href="#" style="font-size:13px;color:#9CA3AF;text-decoration:none;">Terms of Service</a>
+      <a href="#" style="font-size:13px;color:#9CA3AF;text-decoration:none;">Contact Us</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  lucide.createIcons();
+
+  /* 탭 전환 */
+  function switchSection(btn, idx) {
+    document.querySelectorAll('.section-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.section-content').forEach(c => c.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('section-' + idx).classList.add('active');
+    lucide.createIcons();
+  }
+
+  /* 섹션 더보기/접기 */
+  function toggleSection(idx) {
+    const text = document.getElementById('text-' + idx);
+    const btn  = document.getElementById('btn-' + idx);
+    const expanded = text.classList.toggle('expanded');
+    btn.textContent = expanded ? '접기 ···' : '더보기 ···';
+  }
+
+  /* 종합 요약 더보기/접기 */
+  function toggleSummary() {
+    const text = document.getElementById('summary-text');
+    const btn  = document.getElementById('summary-btn');
+    const expanded = text.classList.toggle('expanded');
+    btn.textContent = expanded ? '접기 ···' : '더보기 ···';
+  }
+
+  /* NAV 스크롤 쉐도우 */
+  window.addEventListener('scroll', () => {
+    document.querySelector('.nav').style.boxShadow = window.scrollY > 20 ? '0 2px 12px rgba(0,0,0,0.08)' : '';
+  });
+</script>
+</body>
+</html>
