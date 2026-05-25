@@ -22,6 +22,7 @@ export type TouchedSteps = {
 
 export type HighlightedZodiac = {
   emoji: string;
+  img: string;
   name: string;
   hanja: string;
 };

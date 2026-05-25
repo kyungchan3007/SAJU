@@ -1,26 +1,9 @@
-"use client";
-
-import { GlobalNavView } from "@/domain/navigation";
-import { useGlobalNavItems } from "@/features/navigation/hooks/useGlobalNavItems";
+import { GlobalNavClient } from "@/widgets/global-nav/ui/global-nav.client";
 
 type GlobalNavProps = {
   isLoggedIn: boolean;
 };
 
 export function GlobalNav({ isLoggedIn }: GlobalNavProps) {
-  const { hidden, mainItems, mobileItems, profileItem } =
-    useGlobalNavItems(isLoggedIn);
-
-  if (hidden) {
-    return null;
-  }
-
-  return (
-    <GlobalNavView
-      isLoggedIn={isLoggedIn}
-      mainItems={mainItems}
-      mobileItems={mobileItems}
-      profileItem={profileItem}
-    />
-  );
+  return <GlobalNavClient isLoggedIn={isLoggedIn} />;
 }

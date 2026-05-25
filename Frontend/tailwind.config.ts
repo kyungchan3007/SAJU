@@ -29,13 +29,23 @@ const config: Config = {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        /* ── saju 브랜드 컬러 ── */
+        saju: {
+          primary: "#5956E9",    // 메인 퍼플
+          purple: "#7C3AED",     // 딥 퍼플
+          light: "#F0EEFF",      // 연보라 (배지·배경)
+          bg: "#F4F2FC",         // 페이지 배경
+          muted: "#6B7280",      // 보조 텍스트
+          subtle: "#9CA3AF",     // 3차 텍스트
+        },
+        /* ── sketch 클래스 하위 호환 ── */
         sketch: {
-          ink: "rgb(var(--sketch-ink) / <alpha-value>)",       // #000 — 메인 텍스트/테두리
-          paper: "rgb(var(--sketch-paper) / <alpha-value>)",   // #FAF8F2 — 배경
-          muted: "#6B6B6B",   // 보조 텍스트 (black/55 고정값)
-          subtle: "#9A9A9A",  // 3차 텍스트 (black/35 고정값)
-          active: "#0D0D0D",  // 활성 강조 (검정)
-          "active-bg": "#1A1A1A",  // 활성 배경
+          ink: "#5956E9",
+          paper: "#F4F2FC",
+          muted: "#6B7280",
+          subtle: "#9CA3AF",
+          active: "#5956E9",
+          "active-bg": "#F0EEFF",
         },
         primary: {
           DEFAULT: "hsl(var(--primary))",
@@ -63,19 +73,23 @@ const config: Config = {
         },
       },
       borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+        lg: "var(--radius)",               // 14px
+        md: "calc(var(--radius) - 2px)",   // 12px
+        sm: "calc(var(--radius) - 4px)",   // 10px
       },
       boxShadow: {
-        glow: "0 4px 0 #000",
-        "sketch-sm": "2px 2px 0 #000",
-        "sketch-md": "3px 3px 0 #000",
-        "sketch-lg": "5px 5px 0 #000",
-        "saju-primary": "3px 3px 0 #000",
+        /* ── saju 그림자 ── */
+        "saju-sm":   "0 1px 4px rgba(89,86,233,0.10)",
+        "saju-md":   "0 2px 12px rgba(89,86,233,0.12)",
+        "saju-lg":   "0 8px 32px rgba(89,86,233,0.20)",
+        "saju-card": "0 2px 8px rgba(0,0,0,0.06)",
+        "saju-btn":  "0 4px 14px rgba(89,86,233,0.35)",
+        /* ── 구 sketch 이름 하위 호환 ── */
+        "sketch-sm": "0 1px 4px rgba(89,86,233,0.10)",
       },
       backgroundImage: {
-        "sketch-paper": "none",
+        "saju-gradient": "linear-gradient(to right, #5956E9, #7C3AED)",
+        "saju-gradient-br": "linear-gradient(135deg, #5956E9, #7C3AED)",
       },
       keyframes: {
         wiggle: {

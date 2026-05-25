@@ -4,31 +4,33 @@
 
 @layer base {
   :root {
-    --background: 45 20% 97%;
-    --foreground: 0 0% 6%;
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 6%;
+    /* ── 색상 토큰 ── */
+    --background: 248 43% 97%;           /* #F4F2FC - 연보라 배경 */
+    --foreground: 221 39% 11%;           /* #111827 - 다크 텍스트 */
+    --card: 0 0% 100%;                   /* #FFFFFF */
+    --card-foreground: 221 39% 11%;      /* #111827 */
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 6%;
-    --primary: 0 0% 6%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 0 0% 96%;
-    --secondary-foreground: 0 0% 10%;
-    --muted: 0 0% 93%;
-    --muted-foreground: 0 0% 40%;
-    --accent: 0 0% 90%;
-    --accent-foreground: 0 0% 10%;
+    --popover-foreground: 221 39% 11%;
+    --primary: 241 77% 63%;              /* #5956E9 - 메인 퍼플 */
+    --primary-foreground: 0 0% 100%;     /* white */
+    --secondary: 247 100% 97%;           /* #F0EEFF - 연보라 */
+    --secondary-foreground: 241 77% 63%; /* #5956E9 */
+    --muted: 220 13% 91%;               /* #E5E7EB */
+    --muted-foreground: 220 9% 46%;     /* #6B7280 */
+    --accent: 247 100% 97%;             /* #F0EEFF */
+    --accent-foreground: 241 77% 63%;   /* #5956E9 */
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 12%;
-    --input: 0 0% 12%;
-    --ring: 0 0% 6%;
-    --radius: 0.375rem;
-    /* sketch 전용 토큰 */
-    --sketch-ink: 0 0 0;
-    --sketch-paper: 250 248 242;
-    --sketch-highlight-bg: 13 13 13;
-    --sketch-highlight-text: 255 255 255;
+    --border: 220 13% 91%;              /* #E5E7EB */
+    --input: 220 13% 91%;               /* #E5E7EB */
+    --ring: 241 77% 63%;                /* #5956E9 */
+    --radius: 0.875rem;                 /* 14px */
+
+    /* ── saju 전용 RGB 토큰 ── */
+    --saju-primary: 89 86 233;          /* #5956E9 */
+    --saju-purple: 124 58 237;          /* #7C3AED */
+    --saju-light: 240 238 255;          /* #F0EEFF */
+    --saju-bg: 244 242 252;             /* #F4F2FC */
   }
 
   * {
@@ -36,29 +38,28 @@
   }
 
   body {
-    background-color: rgb(250 248 242);
-    color: rgb(13 13 13);
+    background-color: #F4F2FC;
+    color: #111827;
   }
 
-  /* Scrollbar — sketch 스타일 (심플 흑백) */
+  /* ── 스크롤바 ── */
   ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
   }
 
   ::-webkit-scrollbar-track {
-    background: rgb(240 238 232);
-    border-left: 1px solid rgb(200 198 192);
+    background: transparent;
   }
 
   ::-webkit-scrollbar-thumb {
     min-height: 36px;
-    background: rgb(60 60 60);
-    border-radius: 2px;
+    background: #C7C4F8;
+    border-radius: 999px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: rgb(20 20 20);
+    background: #5956E9;
   }
 
   html::-webkit-scrollbar-corner,
@@ -73,95 +74,76 @@
     @apply container py-10 sm:py-10;
   }
 
-  .page-grid {
-    @apply grid gap-6 lg:grid-cols-[minmax(0,1.05fr)_minmax(22rem,0.95fr)];
-  }
-
-  /* sketch 카드 패널 */
+  /* 히어로 패널 */
   .hero-panel {
-    @apply rounded-sm border-2 border-black bg-white p-8;
-    box-shadow: 4px 4px 0 #000;
+    @apply rounded-2xl bg-white p-8;
+    box-shadow: 0 2px 16px rgba(89, 86, 233, 0.12);
   }
 
-  /* sketch 버튼 기반 */
+  /* 버튼 기반 */
   .btn-saju {
-    @apply cursor-pointer rounded-sm px-6 py-2.5 text-sm font-semibold transition focus-visible:outline-none;
+    @apply cursor-pointer rounded-xl px-6 py-2.5 text-sm font-semibold transition focus-visible:outline-none;
   }
 
-  /* Primary: 검은 채움 + 흰 글씨 */
+  /* Primary: 보라 그라디언트 */
   .btn-saju-primary {
-    @apply border-2 border-black bg-black text-white;
-    box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.25);
+    @apply border-0 text-white;
+    background: linear-gradient(to right, #5956E9, #7C3AED);
+    box-shadow: 0 4px 14px rgba(89, 86, 233, 0.35);
   }
 
   .btn-saju-primary:hover {
-    box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.25);
-    transform: translate(2px, 2px);
+    box-shadow: 0 6px 20px rgba(89, 86, 233, 0.45);
+    transform: translateY(-1px);
   }
 
-  /* Secondary: 투명 + 검은 테두리 */
+  /* Secondary: 보라 테두리 */
   .btn-saju-secondary {
-    @apply border-2 border-black bg-transparent text-black;
-    box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.15);
+    @apply border border-[#5956E9] bg-white text-[#5956E9];
+    box-shadow: 0 2px 8px rgba(89, 86, 233, 0.10);
   }
 
   .btn-saju-secondary:hover {
-    @apply bg-black/5;
-    box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.15);
-    transform: translate(2px, 2px);
+    @apply bg-[#F0EEFF];
+    box-shadow: 0 4px 12px rgba(89, 86, 233, 0.15);
   }
 
-  /* 카드 배경 (스케치 화이트) */
+  /* 카드 */
   .card-saju-primary {
-    @apply border-2 border-black bg-white;
-    box-shadow: 4px 4px 0 #000;
+    @apply rounded-2xl border border-slate-100 bg-white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
   }
 
-  /* ── Sketch 유틸리티 ── */
+  /* ── sketch 클래스 → 새 디자인 전환 (이름 유지) ── */
 
-  /* 손으로 그린 듯한 오프셋 테두리 */
   .sketch-border {
-    position: relative;
-    border: 2px solid #0d0d0d;
-    border-radius: 3px;
-    box-shadow: 3px 3px 0 #0d0d0d;
+    border: 1px solid #E5E7EB;
+    border-radius: 14px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
   }
 
-  .sketch-border::before {
-    content: "";
-    position: absolute;
-    inset: -4px;
-    border: 1.5px solid rgba(0, 0, 0, 0.12);
-    border-radius: 5px;
-    transform: rotate(0.4deg);
-    pointer-events: none;
-  }
-
-  /* 검은 박스 + 흰 글씨 강조 */
   .sketch-highlight {
     display: inline-block;
-    background: #0d0d0d;
+    background: #5956E9;
     color: #ffffff;
     padding: 0 0.3em 0.05em;
-    transform: rotate(-0.8deg);
-    border-radius: 2px;
+    border-radius: 4px;
   }
 
-  /* 스케치 인풋 */
   .sketch-input {
-    @apply border-2 border-black bg-transparent px-4 py-2.5 text-sm text-black;
-    border-radius: 3px;
+    @apply border border-[#E5E7EB] bg-white px-4 py-2.5 text-sm text-[#111827];
+    border-radius: 10px;
     outline: none;
-    box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.1);
-    transition: box-shadow 0.15s, transform 0.15s;
+    transition: border-color 0.15s, box-shadow 0.15s;
   }
 
   .sketch-input:focus {
-    box-shadow: 3px 3px 0 #0d0d0d;
+    border-color: #5956E9;
+    box-shadow: 0 0 0 3px rgba(89, 86, 233, 0.15);
   }
 
   .sketch-input::placeholder {
-    color: rgba(0, 0, 0, 0.35);
+    color: #9CA3AF;
   }
 }
 
@@ -207,12 +189,6 @@
   70%       { transform: scale(0.9) rotate(135deg); opacity: 0.7; }
 }
 
-/* water: 파문 퍼짐 */
-@keyframes ripple {
-  0%   { transform: scale(0.3); opacity: 0.7; }
-  100% { transform: scale(1.8); opacity: 0; }
-}
-
 /* water: 물결 흐름 */
 @keyframes wave-flow {
   0%   { transform: translateX(0); }
@@ -229,16 +205,6 @@
 @keyframes boat-rock {
   0%, 100% { transform: translateX(-50%) rotate(-3deg) translateY(0); }
   50%       { transform: translateX(-50%) rotate(3deg) translateY(-5px); }
-}
-
-/* water: 고래 좌우 헤엄 + 방향 전환 */
-/* top: 68% = 136px, 수면 45% = 90px, 고래 높이 52px → Y ±10px 이내 */
-@keyframes fish-swim {
-  0%   { transform: translate(-50px, -26px) scaleX(1); }
-  45%  { transform: translate(10px,  -36px) scaleX(1); }
-  50%  { transform: translate(10px,  -36px) scaleX(-1); }
-  95%  { transform: translate(-50px, -26px) scaleX(-1); }
-  100% { transform: translate(-50px, -26px) scaleX(1); }
 }
 
 /* water: 거품 올라오기 */

@@ -5,17 +5,17 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/shared/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-sm text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ring-offset-background",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ring-offset-background",
   {
     variants: {
       variant: {
         default:
-          "border-2 border-black bg-black text-white [box-shadow:3px_3px_0_#000] hover:[box-shadow:1px_1px_0_#000] hover:translate-x-[2px] hover:translate-y-[2px]",
+          "border-0 text-white [background:linear-gradient(to_right,#5956E9,#7C3AED)] [box-shadow:0_4px_14px_rgba(89,86,233,0.35)] hover:[box-shadow:0_6px_20px_rgba(89,86,233,0.45)] hover:-translate-y-0.5",
         secondary:
-          "border-2 border-black bg-transparent text-black [box-shadow:3px_3px_0_rgba(0,0,0,0.15)] hover:bg-black/5 hover:[box-shadow:1px_1px_0_rgba(0,0,0,0.15)] hover:translate-x-[2px] hover:translate-y-[2px]",
+          "border border-[#5956E9] bg-white text-[#5956E9] [box-shadow:0_2px_8px_rgba(89,86,233,0.10)] hover:bg-[#F0EEFF] hover:[box-shadow:0_4px_12px_rgba(89,86,233,0.15)]",
         outline:
-          "border-2 border-black bg-transparent text-black hover:bg-black/5",
-        ghost: "hover:bg-black/5 hover:text-black",
+          "border border-[#E5E7EB] bg-white text-[#374151] hover:border-[#5956E9] hover:text-[#5956E9]",
+        ghost: "hover:bg-[#F0EEFF] hover:text-[#5956E9]",
       },
       size: {
         default: "h-10 px-5 py-2",

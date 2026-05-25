@@ -4,7 +4,7 @@ import Script from "next/script";
 import type { ReactNode } from "react";
 import { cookies } from "next/headers";
 import { env } from "@/shared/config";
-import { Providers } from "@/shared/ui";
+import { Footer, Providers } from "@/shared/ui";
 import { GlobalNav } from "@/widgets/global-nav";
 import "./globals.css";
 
@@ -74,7 +74,6 @@ export default async function RootLayout({ children }: RootLayoutProps) {
     <html lang="ko" suppressHydrationWarning>
       <body
         className={`${notoSansKr.variable} ${jua.variable} min-h-dvh font-sans text-foreground antialiased md:pt-14 pb-16 md:pb-0`}
-        style={{ backgroundColor: "rgb(250 248 242)" }}
       >
         {env.NEXT_PUBLIC_ADSENSE_CLIENT_ID ? (
           <Script
@@ -87,6 +86,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
         <Providers>
           <GlobalNav isLoggedIn={isLoggedIn} />
           {children}
+          <Footer />
         </Providers>
       </body>
     </html>

@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { env } from "@/shared/config";
 import { WelcomSection } from "@/widgets/welcom-section/ui/welcom-section";
 
@@ -53,7 +55,10 @@ const homeStructuredData = {
   },
 };
 
-export default function HomePage() {
+export default async function HomePage() {
+  const isLoggedIn = !!(await cookies()).get("saju_access_token")?.value;
+  if (isLoggedIn) redirect("/home");
+
   return (
     <>
       <script
