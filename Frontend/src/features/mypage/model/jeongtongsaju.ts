@@ -10,6 +10,7 @@ export type JeongtongsajuViewModel = {
   fiveElements: FiveElements;
   twelveGrowthInfo: TwelveGrowthInfo;
   bigLuck: DaewoonItem[];
+  sectionDescriptions: Record<string, string>;
 };
 
 export function toJeongtongsajuViewModel(
@@ -21,6 +22,7 @@ export function toJeongtongsajuViewModel(
     fiveElements: toFiveElements(saju?.fiveElements),
     twelveGrowthInfo: toObject<TwelveGrowthInfo>(saju?.twelveGrowthInfo),
     bigLuck: toArray<DaewoonItem>(saju?.bigLuck),
+    sectionDescriptions: toStringRecord(saju?.sectionDescriptions),
   };
 }
 

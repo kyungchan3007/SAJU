@@ -21,9 +21,15 @@ export function MypageLayoutShell({
   }
 
   return (
-    <div className="grid gap-5 lg:grid-cols-[300px_1fr] lg:items-start lg:gap-6">
-      <MypageSidebar user={initialProfile} />
-      <div className="min-w-0">{children}</div>
+    <div className="bg-white">
+      <div className="mx-auto max-w-[1152px] px-4 py-8 md:px-8">
+        <div className="flex flex-col gap-8 lg:flex-row lg:items-start">
+          <aside className="w-full lg:sticky lg:top-24 lg:w-80 lg:shrink-0">
+            <MypageSidebar user={initialProfile} />
+          </aside>
+          <div className="min-w-0 flex-1">{children}</div>
+        </div>
+      </div>
     </div>
   );
 }

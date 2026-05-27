@@ -1,18 +1,16 @@
 import type { Metadata } from "next";
-import { TraditionalFortuneSection } from "@/features/traditional-fortune/ui/traditional-fortune-section";
+import { JeongtongsajuAndFortuneSection } from "@/widgets/mypage/ui/jeongtongsaju-and-fortune-section";
 
 export const metadata: Metadata = {
-  title: "정통사주 풀이",
-  description: "정통사주 기반 연간 운세 풀이를 확인합니다.",
+  title: "정통사주",
+  description: "AI가 해석한 나의 명식 리포트와 연간 운세 풀이를 확인합니다.",
   robots: { index: false, follow: false },
 };
 
 export default function TraditionalFortunePage() {
   return (
-    <main className="">
-      <div className="mx-auto max-w-[720px]">
-        <TraditionalFortuneSection />
-      </div>
+    <main>
+      <JeongtongsajuAndFortuneSection />
     </main>
   );
 }

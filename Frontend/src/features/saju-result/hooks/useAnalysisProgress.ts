@@ -2,37 +2,16 @@
 
 import { useEffect, useState } from "react";
 
-type AnalysisProgressState = {
-  progress: number;
-  shouldShowPending: boolean;
-};
-
-export function useAnalysisProgress(isLoading: boolean): AnalysisProgressState {
+export function useAnalysisProgress(isLoading: boolean): number {
   const [progress, setProgress] = useState(isLoading ? 8 : 100);
-  const [shouldShowPending, setShouldShowPending] = useState(isLoading);
 
   useEffect(() => {
     if (!isLoading) {
-      if (!shouldShowPending) {
-        return;
-      }
-
-      const completeTimer = window.setTimeout(() => {
-        setProgress(100);
-      }, 0);
-      const doneTimer = window.setTimeout(() => {
-        setShouldShowPending(false);
-      }, 450);
-
-      return () => {
-        window.clearTimeout(completeTimer);
-        window.clearTimeout(doneTimer);
-      };
+      return;
     }
 
     const startTimer = window.setTimeout(() => {
-      setShouldShowPending(true);
-      setProgress((current) => Math.max(current, 8));
+      setProgress(8);
     }, 0);
 
     const progressTimer = window.setInterval(() => {
@@ -61,10 +40,7 @@ export function useAnalysisProgress(isLoading: boolean): AnalysisProgressState {
       window.clearTimeout(startTimer);
       window.clearInterval(progressTimer);
     };
-  }, [isLoading, shouldShowPending]);
+  }, [isLoading]);
 
-  return {
-    progress,
-    shouldShowPending,
-  };
+  return isLoading ? progress : 100;
 }

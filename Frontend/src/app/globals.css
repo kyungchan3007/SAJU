@@ -5,7 +5,7 @@
 @layer base {
   :root {
     /* ── 색상 토큰 ── */
-    --background: 248 43% 97%;           /* #F4F2FC - 연보라 배경 */
+    --background: 0 0% 98%;               /* #FAFAFA - 오프화이트 배경 */
     --foreground: 221 39% 11%;           /* #111827 - 다크 텍스트 */
     --card: 0 0% 100%;                   /* #FFFFFF */
     --card-foreground: 221 39% 11%;      /* #111827 */
@@ -30,7 +30,7 @@
     --saju-primary: 89 86 233;          /* #5956E9 */
     --saju-purple: 124 58 237;          /* #7C3AED */
     --saju-light: 240 238 255;          /* #F0EEFF */
-    --saju-bg: 244 242 252;             /* #F4F2FC */
+    --saju-bg: 250 250 250;             /* #FAFAFA */
   }
 
   * {
@@ -38,7 +38,7 @@
   }
 
   body {
-    background-color: #F4F2FC;
+    background-color: #FAFAFA;
     color: #111827;
   }
 

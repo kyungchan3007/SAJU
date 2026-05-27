@@ -1,5 +1,6 @@
 "use client";
 
+import type { TraditionalFortuneResponse } from "@/generated/api";
 import { useTraditionalFortune } from "@/features/traditional-fortune/hooks/useTraditionalFortune";
 import { useTraditionalFortuneSectionState } from "@/features/traditional-fortune/hooks/useTraditionalFortuneSectionState";
 import { TraditionalFortuneCautionCard } from "@/features/traditional-fortune/ui/components/traditional-fortune-caution-card";
@@ -8,12 +9,19 @@ import { TraditionalFortuneEmptyState } from "@/features/traditional-fortune/ui/
 import { TraditionalFortuneHeader } from "@/features/traditional-fortune/ui/components/traditional-fortune-header";
 import { TraditionalFortuneHeroBanner } from "@/features/traditional-fortune/ui/components/traditional-fortune-hero-banner";
 import { TraditionalFortuneOverallCard } from "@/features/traditional-fortune/ui/components/traditional-fortune-overall-card";
+import type { ApiEnvelope } from "@/shared/api";
 import { useAdGate } from "@/shared/hooks/use-ad-gate";
 import { AdProgressGate } from "@/shared/ui/ad-progress-gate.client";
 
-export function TraditionalFortuneSection() {
+type TraditionalFortuneSectionProps = {
+  initialData?: ApiEnvelope<TraditionalFortuneResponse | undefined>;
+};
+
+export function TraditionalFortuneSection({
+  initialData,
+}: TraditionalFortuneSectionProps) {
   const { isLoading, isError, errorMessage, data, domains } =
-    useTraditionalFortune();
+    useTraditionalFortune({ initialData });
   const { activeDomain, setActiveDomain, activeDomainData } =
     useTraditionalFortuneSectionState({ domains });
   const isContentReady = !isLoading && Boolean(data);
@@ -40,8 +48,11 @@ export function TraditionalFortuneSection() {
   if (!data) return null;
 
   return (
-    <div className="flex flex-col gap-4">
-      <TraditionalFortuneHeader targetYear={data.targetYear} />
+    <div className="flex flex-col gap-4 pb-6 pt-6">
+      <TraditionalFortuneHeader
+        targetYear={data.targetYear}
+        yearDescription={data.yearDescription}
+      />
       <TraditionalFortuneHeroBanner data={data} />
       {(data.overallFortune ||
         data.favorablePeriods ||

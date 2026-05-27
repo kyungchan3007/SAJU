@@ -73,7 +73,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="ko" suppressHydrationWarning>
       <body
-        className={`${notoSansKr.variable} ${jua.variable} min-h-dvh font-sans text-foreground antialiased md:pt-14 pb-16 md:pb-0`}
+        className={`${notoSansKr.variable} ${jua.variable} flex min-h-dvh flex-col font-sans text-foreground antialiased md:pt-14 pb-16 md:pb-0`}
       >
         {env.NEXT_PUBLIC_ADSENSE_CLIENT_ID ? (
           <Script
@@ -85,7 +85,9 @@ export default async function RootLayout({ children }: RootLayoutProps) {
         ) : null}
         <Providers>
           <GlobalNav isLoggedIn={isLoggedIn} />
-          {children}
+          <main className="flex-1">
+            {children}
+          </main>
           <Footer />
         </Providers>
       </body>

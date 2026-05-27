@@ -1,7 +1,10 @@
 import "server-only";
 
 import type { SajuProfileResponse } from "@/generated/api";
-import { authenticatedBackendFetch } from "@/shared/api/auth/authenticatedBackendFetch";
+import {
+  authenticatedBackendFetch,
+  type AuthenticatedBackendFetchOptions,
+} from "@/shared/api/auth/authenticatedBackendFetch";
 import { parseBackendApiResponse } from "@/shared/api/backend/parseBackendApiResponse";
 
 const SAJU_ME_PATH = "/api/saju/me";
@@ -17,12 +20,20 @@ type GetSajuProfileFailure = {
   message: string;
 };
 
-export type GetSajuProfileResult = GetSajuProfileSuccess | GetSajuProfileFailure;
+export type GetSajuProfileResult =
+  | GetSajuProfileSuccess
+  | GetSajuProfileFailure;
 
-export async function getSajuProfileOnServer(): Promise<GetSajuProfileResult> {
-  const result = await authenticatedBackendFetch(SAJU_ME_PATH, {
-    method: "GET",
-  });
+export async function getSajuProfileOnServer(
+  authOptions?: AuthenticatedBackendFetchOptions,
+): Promise<GetSajuProfileResult> {
+  const result = await authenticatedBackendFetch(
+    SAJU_ME_PATH,
+    {
+      method: "GET",
+    },
+    authOptions,
+  );
 
   const parsed = await parseBackendApiResponse<SajuProfileResponse>(
     result.response,

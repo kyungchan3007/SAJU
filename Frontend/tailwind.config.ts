@@ -31,17 +31,21 @@ const config: Config = {
         foreground: "hsl(var(--foreground))",
         /* ── saju 브랜드 컬러 ── */
         saju: {
-          primary: "#5956E9",    // 메인 퍼플
-          purple: "#7C3AED",     // 딥 퍼플
-          light: "#F0EEFF",      // 연보라 (배지·배경)
-          bg: "#F4F2FC",         // 페이지 배경
+          primary: "#5956E9",    // 메인 퍼플 — 버튼, 강조 텍스트
+          purple: "#7C3AED",     // 딥 퍼플 — 그라디언트 끝
+          accent: "#A5A3F7",     // 연보라 텍스트 — 어두운 배경 위
+          border: "#E0DAFF",     // 퍼플 테두리
+          tint: "#EDE9FF",       // 매우 연한 보라 bg
+          soft: "#F5F3FF",       // 소프트 보라 bg
+          light: "#F0EEFF",      // 배지·아이콘 bg
+          bg: "#FAFAFA",         // 페이지 배경 (오프화이트)
           muted: "#6B7280",      // 보조 텍스트
           subtle: "#9CA3AF",     // 3차 텍스트
         },
         /* ── sketch 클래스 하위 호환 ── */
         sketch: {
           ink: "#5956E9",
-          paper: "#F4F2FC",
+          paper: "#FAFAFA",
           muted: "#6B7280",
           subtle: "#9CA3AF",
           active: "#5956E9",
@@ -100,10 +104,15 @@ const config: Config = {
           "0%, 100%": { transform: "scale(1)" },
           "50%": { transform: "scale(1.18)" },
         },
+        float: {
+          "0%, 100%": { transform: "translateY(0px)" },
+          "50%": { transform: "translateY(-10px)" },
+        },
       },
       animation: {
         wiggle: "wiggle 0.5s ease-in-out infinite alternate",
         heartbeat: "heartbeat 1.2s ease-in-out infinite",
+        float: "float 3s ease-in-out infinite",
       },
     },
   },

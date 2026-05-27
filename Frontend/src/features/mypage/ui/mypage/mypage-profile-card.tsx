@@ -7,41 +7,61 @@ export function MypageProfileCard({ user }: Props) {
   const zodiac = findZodiacByLabel(user.summaryZodiac);
 
   return (
-    <div className="card-saju-primary flex items-center gap-4 p-5 lg:flex-col lg:py-8 lg:text-center">
-      <div
-        className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full border-2 border-black bg-[#0d0d0d] text-3xl lg:h-20 lg:w-20 lg:text-4xl"
-        style={{ boxShadow: "3px 3px 0 #0d0d0d" }}
-      >
-        {zodiac ? <span>{zodiac.emoji}</span> : user.summaryZodiac}
-      </div>
-
-      <div className="flex flex-1 flex-col gap-1.5 lg:items-center">
-        <span
-          className="inline-block w-fit rounded-full border border-black bg-yellow-300 px-3 py-0.5 text-[11px] font-bold"
-          style={{ boxShadow: "2px 2px 0 #0d0d0d" }}
+    <section className="flex flex-col items-center rounded-3xl border border-slate-100 bg-white p-8 text-center shadow-sm">
+      {/* 아바타 */}
+      <div className="relative mb-4">
+        <div
+          className="flex h-28 w-28 items-center justify-center overflow-hidden rounded-full border-4 border-slate-50 bg-[#1a1a1a] text-5xl"
+          style={{ boxShadow: "0 0 0 2px rgba(89,86,233,0.10)" }}
         >
-          {/*{user.memberType}*/}
-        </span>
-        <span className="font-bold text-[#0d0d0d] lg:text-xl">
-          {user.email}
-        </span>
+          {zodiac ? <span>{zodiac.emoji}</span> : <span>🐯</span>}
+        </div>
+        <button
+          className="absolute bottom-1 right-1 flex items-center justify-center rounded-full border-2 border-white p-1.5 text-white shadow-md"
+          style={{ background: "#5956E9" }}
+          aria-label="프로필 수정"
+        >
+          <svg
+            fill="none"
+            height="14"
+            stroke="currentColor"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            viewBox="0 0 24 24"
+            width="14"
+          >
+            <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
+            <path d="m15 5 4 4" />
+          </svg>
+        </button>
       </div>
 
-      {/* 모바일: 우측 링크 */}
+      {/* 이름/이메일 */}
+      <h2 className="mb-1 text-xl font-bold text-slate-800">회원</h2>
+      <p className="mb-6 text-sm text-slate-400">{user.email}</p>
+
+      {/* CTA */}
       <a
         href="/mypage/jeongtongsaju"
-        className="shrink-0 text-xs text-[#0d0d0d]/50 underline hover:text-[#0d0d0d] lg:hidden"
+        className="flex w-full items-center justify-center gap-2 rounded-2xl py-3 px-4 text-sm font-bold text-white transition hover:opacity-90"
+        style={{ background: "linear-gradient(to right, #5956E9, #7C3AED)" }}
       >
         정통사주 보기
+        <svg
+          fill="none"
+          height="16"
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2"
+          viewBox="0 0 24 24"
+          width="16"
+        >
+          <path d="M5 12h14" />
+          <path d="m12 5 7 7-7 7" />
+        </svg>
       </a>
-
-      {/* 웹: 하단 버튼 */}
-      <a
-        href="/mypage/jeongtongsaju"
-        className="btn-saju btn-saju-secondary hidden rounded-full px-5 py-1.5 text-xs lg:inline-block"
-      >
-        정통사주 보기 →
-      </a>
-    </div>
+    </section>
   );
 }

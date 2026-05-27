@@ -53,12 +53,8 @@ function getGanjiParts(ganji: string | null | undefined) {
 export function formatBigLuckGanjiSummary(ganji: string | null | undefined) {
   const parts = getGanjiParts(ganji);
 
-  if (!parts) {
-    return "10년 흐름";
-  }
-
-  if (!parts.stemInfo || !parts.branchInfo) {
-    return "천간과 지지가 만난 흐름";
+  if (!parts || !parts.stemInfo || !parts.branchInfo) {
+    return null;
   }
 
   return `${parts.stemInfo.symbol} · ${parts.branchInfo.symbol}`;

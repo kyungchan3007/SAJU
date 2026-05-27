@@ -26,6 +26,26 @@ description: 비주얼 컨셉, 스타일 소스, 레이아웃/해상도 규칙, 
 - 기존 공용 클래스와 패턴을 우선 사용한다: `page-shell`, `page-grid`, `hero-panel`, `btn-saju-*`, `card-saju-primary`, `sketch-border`, `sketch-highlight`, `sketch-input`.
 - 공용 버튼은 `src/shared/ui/button.tsx`의 `Button` 변형을 먼저 검토한다.
 
+## 페이지 콘텐츠 레이아웃
+
+- home과 루트(/) 페이지를 제외한 모든 페이지는 `PageContentLayout`을 사용한다.
+- `PageContentLayout`은 `src/shared/ui/page-content-layout.tsx`에 위치하며 `@/shared/ui`로 임포트한다.
+- 구조: `bg-white` 풀 와이드 배경 → `mx-auto max-w-[1152px] px-4 md:px-8` 내부 컨테이너.
+- 전역 페이지 배경 토큰은 최신 코드 기준 `#FAFAFA`이며, `PageContentLayout` 내부 콘텐츠 밴드는 현재 `bg-white`를 사용한다.
+- 도메인 위젯/피처에서 배경색이나 max-width를 직접 지정하지 않는다.
+
+```tsx
+import { PageContentLayout } from "@/shared/ui";
+
+return (
+  <PageContentLayout>
+    <div className="flex flex-col gap-8">
+      {/* 페이지 콘텐츠 */}
+    </div>
+  </PageContentLayout>
+);
+```
+
 ## 레이아웃 규칙
 
 - 모바일 우선으로 구성하되 데스크탑에서는 정보 구조가 자연스럽게 확장되도록 한다.

@@ -2,41 +2,99 @@ import type { ManagementItem } from "../../type/types";
 
 type Props = { items: ManagementItem[] };
 
+const MANAGEMENT_ICONS = [
+  /* 계정 관리 */
+  <svg
+    key="account"
+    fill="none"
+    height="24"
+    stroke="currentColor"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    strokeWidth="2"
+    viewBox="0 0 24 24"
+    width="24"
+  >
+    <circle cx="18" cy="15" r="3" />
+    <circle cx="9" cy="7" r="4" />
+    <path d="M10 15H6a4 4 0 0 0-4 4v2" />
+    <path d="m21.7 16.4-.9-.3" />
+    <path d="m15.2 13.9-.9-.3" />
+    <path d="m16.6 18.7.3-.9" />
+    <path d="m19.1 12.2.3-.9" />
+    <path d="m19.6 18.7-.4-1" />
+    <path d="m16.8 12.3-.4-1" />
+    <path d="m14.3 16.6 1-.4" />
+    <path d="m20.7 13.4 1-.4" />
+  </svg>,
+  /* 사주정보 관리 */
+  <svg
+    key="saju"
+    fill="none"
+    height="24"
+    stroke="currentColor"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    strokeWidth="2"
+    viewBox="0 0 24 24"
+    width="24"
+  >
+    <rect height="4" rx="1" ry="1" width="8" x="8" y="2" />
+    <path d="M10.42 12.61a2.1 2.1 0 1 1 2.97 2.97L7.95 21 4 22l1-3.95 5.42-5.44Z" />
+    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-5.5" />
+    <path d="M4 15V6a2 2 0 0 1 2-2h2" />
+  </svg>,
+];
+
+const ChevronRight = () => (
+  <svg
+    className="text-slate-300 transition-colors group-hover:text-[#5956E9]"
+    fill="none"
+    height="16"
+    stroke="currentColor"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    strokeWidth="2"
+    viewBox="0 0 24 24"
+    width="16"
+  >
+    <path d="m9 18 6-6-6-6" />
+  </svg>
+);
+
 export function MypageManagement({ items }: Props) {
   return (
-    <div className="card-saju-primary overflow-hidden">
-      <div className="border-b-2 border-black bg-[rgb(240_238_232)] px-5 py-3.5">
-        <span className="font-bold text-[#0d0d0d]">관리</span>
-      </div>
-      <ul>
+    <section
+      className="flex flex-col border border-slate-100 bg-white p-8 shadow-sm"
+      style={{ borderRadius: 24 }}
+    >
+      <h3 className="mb-6 text-lg font-bold text-slate-800">관리</h3>
+      <div className="space-y-4">
         {items.map((item, i) => (
-          <li
+          <a
             key={item.label}
-            className={i < items.length - 1 ? "border-b border-black/10" : ""}
+            href={item.href}
+            className="group flex cursor-pointer items-center justify-between rounded-2xl border border-transparent p-4 transition-all hover:border-slate-100"
+            style={{ background: "rgba(248,250,252,0.5)" }}
           >
-            <a
-              href={item.href}
-              className="flex items-center gap-3.5 px-5 py-4 transition hover:bg-[rgb(240_238_232)]"
-            >
+            <div className="flex items-center gap-4">
               <div
-                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-sm border-2 border-black bg-[rgb(250_248_242)] text-base"
-                style={{ boxShadow: "2px 2px 0 #0d0d0d" }}
+                className="flex h-12 w-12 items-center justify-center rounded-xl"
+                style={{ background: "#F0EEFF", color: "#5956E9" }}
               >
-                {item.icon}
+                {MANAGEMENT_ICONS[i] ?? null}
               </div>
-              <span className="flex-1 text-sm font-semibold text-[#0d0d0d]">
-                {item.label}
-              </span>
-              {item.sub && (
-                <span className="rounded-full border border-black/20 bg-yellow-50 px-2.5 py-0.5 text-xs font-medium text-[#0d0d0d]/60">
-                  {item.sub}
-                </span>
-              )}
-              <span className="text-base text-[#0d0d0d]/30">›</span>
-            </a>
-          </li>
+              <div>
+                <h4 className="text-sm font-bold text-slate-800">{item.label}</h4>
+                {item.desc && (
+                  <p className="mt-0.5 text-[11px] text-slate-400">{item.desc}</p>
+                )}
+              </div>
+            </div>
+            <ChevronRight />
+          </a>
         ))}
-      </ul>
-    </div>
+      </div>
+    </section>
   );
 }

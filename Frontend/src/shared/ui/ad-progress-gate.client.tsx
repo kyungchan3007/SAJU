@@ -1,150 +1,175 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
 import type { ReactNode } from "react";
+import { CheckCircle, Circle, Loader2, Sparkles } from "lucide-react";
+import {
+  useAdProgressGate,
+  type AdProgressNoteState,
+} from "@/shared/hooks/use-ad-progress-gate";
 import { AdSlot } from "@/shared/ui/ad-slot.client";
 
 type AdProgressGateProps = {
   progress: number;
   isComplete?: boolean;
   onRevealResult?: () => void;
-  minGateDurationMs?: number;
+  onRewardedRevealResult?: () => void;
+  revealButtonLabel?: string;
+  rewardedRevealButtonLabel?: string;
+  isRewardedReady?: boolean;
 };
 
 export function AdProgressGate({
   progress,
   isComplete = false,
   onRevealResult,
-  minGateDurationMs = 10_000,
+  onRewardedRevealResult,
+  revealButtonLabel = "사주결과 보기",
+  rewardedRevealButtonLabel = "짧은 광고를 보고 사주결과 열기",
+  isRewardedReady = false,
 }: AdProgressGateProps) {
-  const startedAtRef = useRef<number | null>(null);
-  const [elapsedMs, setElapsedMs] = useState(0);
-
-  useEffect(() => {
-    startedAtRef.current = Date.now();
-
-    const timer = window.setInterval(() => {
-      if (startedAtRef.current === null) {
-        return;
-      }
-
-      setElapsedMs(Date.now() - startedAtRef.current);
-    }, 120);
-
-    return () => window.clearInterval(timer);
-  }, []);
-
-  const minDurationReached = elapsedMs >= minGateDurationMs;
-
-  const roundedProgress = useMemo(() => {
-    const timeRatio = Math.min(elapsedMs / minGateDurationMs, 1);
-    const timedProgress = Math.round(timeRatio * 95);
-
-    if (!minDurationReached) {
-      return timedProgress;
-    }
-
-    if (isComplete) {
-      return 100;
-    }
-
-    const bounded = Math.min(100, Math.max(0, Math.round(progress)));
-    return Math.min(Math.max(bounded, 95), 99);
-  }, [elapsedMs, isComplete, minDurationReached, minGateDurationMs, progress]);
-
-  const canRevealResult = isComplete && minDurationReached;
+  const { canRevealResult, label, noteStates, roundedProgress } =
+    useAdProgressGate({
+      progress,
+      isComplete,
+    });
+  const [n1State, n2State, n3State] = noteStates;
+  const handleRevealResult =
+    isRewardedReady && onRewardedRevealResult
+      ? onRewardedRevealResult
+      : onRevealResult;
+  const buttonLabel = isRewardedReady
+    ? rewardedRevealButtonLabel
+    : revealButtonLabel;
 
   return (
-    <section className="mx-auto flex min-h-[calc(100dvh-5rem)] w-full max-w-[560px] flex-col px-0 pb-28 pt-4 sm:pt-6 md:min-h-0 md:pb-0">
-      <div className="space-y-5">
-        <header className="space-y-3 text-center">
-          <p className="font-display text-2xl leading-tight text-black sm:text-3xl">
-            사주 운세를 분석하고 있어.
-          </p>
-          <div className="hidden md:block">
-            <AnalysisProgressBar progress={roundedProgress} variant="inline" />
-          </div>
-        </header>
-
-        <div className="space-y-2">
-          <p className="text-center text-xs font-medium text-black/45">
-            Advertisements
-          </p>
-          <AdSlot />
-        </div>
-
-        <div className="space-y-3">
-          <StatusNote>오늘 많은 분들이 사주 운세를 확인하고 있어.</StatusNote>
-          <StatusNote>
-            <span className="mr-1 rounded-full border border-black bg-black px-2 py-0.5 text-[10px] font-bold text-white">
-              Tip
-            </span>
-            광고가 끝나면 결과를 확인할 수 있어.
-          </StatusNote>
-          <StatusNote>
-            {canRevealResult
-              ? "분석이 완료됐어. 사주 운세를 확인해."
-              : "잠시 후 분석 결과로 이동해."}
-          </StatusNote>
-        </div>
-
-        {canRevealResult && onRevealResult ? (
-          <button
-            type="button"
-            className="btn-saju btn-saju-primary min-h-11 w-full"
-            onClick={onRevealResult}
+    <section className="mx-auto flex w-full max-w-lg flex-col gap-5 px-4 py-6">
+      <div
+        className="rounded-3xl p-6 text-center"
+        style={{
+          background: "linear-gradient(135deg, #5956E9 0%, #7C3AED 100%)",
+          boxShadow: "0 8px 32px rgba(89,86,233,0.28)",
+        }}
+      >
+        <div className="mb-3 flex items-center justify-center gap-2">
+          {canRevealResult ? (
+            <CheckCircle size={20} style={{ color: "rgba(255,255,255,0.9)" }} />
+          ) : (
+            <Loader2
+              size={20}
+              className="animate-spin"
+              style={{ color: "rgba(255,255,255,0.8)" }}
+            />
+          )}
+          <span
+            className="text-xs font-bold uppercase tracking-widest"
+            style={{ color: "rgba(255,255,255,0.7)" }}
           >
-            사주결과 보기
-          </button>
-        ) : null}
+            분석 중
+          </span>
+        </div>
+        <p className="mb-1 text-xl font-black text-white">
+          사주 운세를 분석하고 있어요
+        </p>
+        <p className="text-sm" style={{ color: "rgba(255,255,255,0.7)" }}>
+          잠시만 기다려 주세요
+        </p>
+
+        {/* 프로그레스 바 */}
+        <div className="mt-4">
+          <div className="mb-2 flex items-center justify-between">
+            <span
+              className="text-xs font-bold"
+              style={{ color: "rgba(255,255,255,0.7)" }}
+            >
+              {label}
+            </span>
+            <span className="text-sm font-black text-white">
+              {roundedProgress}%
+            </span>
+          </div>
+          <div
+            className="h-[10px] w-full overflow-hidden rounded-full"
+            style={{ background: "rgba(255,255,255,0.25)" }}
+            role="progressbar"
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-valuenow={roundedProgress}
+          >
+            <div
+              className="h-full rounded-full bg-white transition-[width] duration-500 ease-out"
+              style={{ width: `${roundedProgress}%` }}
+            />
+          </div>
+        </div>
       </div>
 
-      <div className="fixed inset-x-0 bottom-0 z-20 border-t-2 border-black bg-[rgb(250,248,242)] px-4 py-4 shadow-[0_-3px_0_rgba(0,0,0,0.12)] md:hidden">
-        <AnalysisProgressBar progress={roundedProgress} variant="bottom" />
+      <AdSlot />
+
+      <div className="flex flex-col gap-2.5">
+        <StatusNote state="done">사주 정보를 확인했어요</StatusNote>
+        <StatusNote state={n1State}>오행 기운을 분석하고 있어요</StatusNote>
+        <StatusNote state={n2State}>오늘의 운세를 계산하고 있어요</StatusNote>
+        <StatusNote state={n3State}>결과를 정리하고 있어요</StatusNote>
       </div>
+
+      {canRevealResult && handleRevealResult ? (
+        <button
+          type="button"
+          onClick={handleRevealResult}
+          className="flex h-[54px] w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[#5956E9] to-[#7C3AED] text-base font-black text-white shadow-[0_4px_20px_rgba(89,86,233,0.32)] transition-all duration-300"
+        >
+          <Sparkles size={18} />
+          {buttonLabel}
+        </button>
+      ) : null}
     </section>
   );
 }
 
-function StatusNote({ children }: { children: ReactNode }) {
-  return (
-    <div className="rounded-sm border-2 border-black bg-white px-4 py-3 text-sm font-medium leading-relaxed text-black shadow-sketch-sm">
-      {children}
-    </div>
-  );
-}
-
-function AnalysisProgressBar({
-  progress,
-  variant,
+function StatusNote({
+  state,
+  children,
 }: {
-  progress: number;
-  variant: "bottom" | "inline";
+  state: AdProgressNoteState;
+  children: ReactNode;
 }) {
+  const styles: Record<
+    AdProgressNoteState,
+    { bg: string; border: string; color: string }
+  > = {
+    pending: { bg: "#fff", border: "#F3F4F6", color: "#374151" },
+    active: { bg: "#F0EEFF", border: "#C7C4F8", color: "#5956E9" },
+    done: { bg: "#F0FDF4", border: "#BBF7D0", color: "#166534" },
+  };
+  const s = styles[state];
+
   return (
     <div
-      className={
-        variant === "bottom"
-          ? "mx-auto w-full max-w-[560px]"
-          : "rounded-sm border-2 border-black bg-white p-4 text-left shadow-sketch-sm"
-      }
-      role="progressbar"
-      aria-valuemin={0}
-      aria-valuemax={100}
-      aria-valuenow={progress}
+      className="flex items-start gap-2.5 rounded-[14px] border px-4 py-3 text-[13px] font-semibold transition-all duration-300"
+      style={{ background: s.bg, borderColor: s.border, color: s.color }}
     >
-      <div className="mb-2 flex items-center justify-between gap-3 text-sm font-bold text-black">
-        <span>
-          {progress >= 100 ? "사주 분석이 완료됐어." : "운세를 준비하고 있어."}
-        </span>
-        <span>{progress}%</span>
-      </div>
-      <div className="h-3 overflow-hidden rounded-sm border-2 border-black bg-white">
-        <div
-          className="h-full bg-[#f8ea4d] transition-[width] duration-500 ease-out"
-          style={{ width: `${progress}%` }}
+      {state === "done" ? (
+        <CheckCircle
+          size={16}
+          className="mt-px shrink-0"
+          style={{ color: "#16A34A" }}
         />
-      </div>
+      ) : null}
+      {state === "active" ? (
+        <Loader2
+          size={16}
+          className="mt-px shrink-0 animate-spin"
+          style={{ color: "#5956E9" }}
+        />
+      ) : null}
+      {state === "pending" ? (
+        <Circle
+          size={16}
+          className="mt-px shrink-0"
+          style={{ color: "#D1D5DB" }}
+        />
+      ) : null}
+      <span>{children}</span>
     </div>
   );
 }

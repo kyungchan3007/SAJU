@@ -1,7 +1,10 @@
 import { DailyEnergyResponse } from "@/generated/api";
 import { parseBackendApiResponse } from "@/shared/api/backend/parseBackendApiResponse";
 import { SAJU_DAILY_ENDPOINT_PATH } from "@/shared/config/endPoint";
-import { authenticatedBackendFetch } from "@/shared/api/auth/authenticatedBackendFetch";
+import {
+  authenticatedBackendFetch,
+  type AuthenticatedBackendFetchOptions,
+} from "@/shared/api/auth/authenticatedBackendFetch";
 
 type SajuDailyGetSuccess = {
   success: true;
@@ -16,10 +19,16 @@ type SajuDailyGetFailure = {
 
 type SajuDailyGetResult = SajuDailyGetSuccess | SajuDailyGetFailure;
 
-export async function onSajuDailyGetOnServer(): Promise<SajuDailyGetResult> {
-  const result = await authenticatedBackendFetch(SAJU_DAILY_ENDPOINT_PATH, {
-    method: "GET",
-  });
+export async function onSajuDailyGetOnServer(
+  authOptions?: AuthenticatedBackendFetchOptions,
+): Promise<SajuDailyGetResult> {
+  const result = await authenticatedBackendFetch(
+    SAJU_DAILY_ENDPOINT_PATH,
+    {
+      method: "GET",
+    },
+    authOptions,
+  );
 
   const parsed = await parseBackendApiResponse<DailyEnergyResponse>(
     result.response,

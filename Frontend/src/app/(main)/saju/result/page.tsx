@@ -1,7 +1,9 @@
-import { SajuResult } from "@/widgets/saju-result";
+import { AnalysisPendingGate } from "@/features/saju-result/ui/analysis-pending-gate.client";
+import { SajuResult } from "@/widgets/saju-result/ui/saju-result";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { Metadata } from "next";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "사주 결과 미리보기",
@@ -23,8 +25,10 @@ export default async function SajuResultPage() {
   }
 
   return (
-    <main className="page-shell">
-      <SajuResult />
+    <main>
+      <Suspense fallback={<AnalysisPendingGate />}>
+        <SajuResult />
+      </Suspense>
     </main>
   );
 }

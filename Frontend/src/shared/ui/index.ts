@@ -8,3 +8,4 @@ export {
   LoadingStateCard,
   StateCard,
 } from "@/shared/ui/state-card/state-card";
+export { PageContentLayout } from "@/shared/ui/page-content-layout";

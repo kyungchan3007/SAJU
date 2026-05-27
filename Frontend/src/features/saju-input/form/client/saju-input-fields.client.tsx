@@ -256,7 +256,7 @@ export function SajuInputFields({
         {/* ── 띠 미리보기 ── */}
         <div
           className="mt-5 flex items-center gap-3.5 rounded-2xl px-4 py-4"
-          style={{ background: "#F4F2FC" }}
+          style={{ background: "#FAFAFA" }}
         >
           <div
             className="flex h-14 w-14 shrink-0 items-center justify-center rounded-[14px] bg-white"

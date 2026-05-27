@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export function Footer() {
   return (
-    <footer className="border-t border-gray-100 bg-gray-50 px-8 py-10">
+    <footer className="hidden bg-white px-8 py-10 md:block">
       <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-5">
         {/* 브랜드 */}
         <div>

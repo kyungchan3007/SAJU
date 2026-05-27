@@ -4,68 +4,95 @@ type Props = {
   data: TraditionalFortuneResponse;
 };
 
+const CIRCUMFERENCE = 2 * Math.PI * 44; // ≈ 276.5
+
 export function TraditionalFortuneHeroBanner({ data }: Props) {
   const score = data.yearScore ?? 0;
-  const stars = Math.round((score / 100) * 5);
+  const offset = CIRCUMFERENCE * (1 - score / 100);
 
   return (
-    <div
-      className="relative overflow-hidden rounded-md border-2 border-black bg-[#0d0d0d] text-white"
-      style={{ boxShadow: "4px 4px 0 #0d0d0d" }}
-    >
-      <div
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(ellipse at 80% 15%,rgba(34,197,94,.18),transparent 40%), radial-gradient(ellipse at 15% 85%,rgba(253,224,71,.14),transparent 38%), radial-gradient(ellipse at 50% 55%,rgba(139,92,246,.08),transparent 50%)",
-        }}
-      />
-      <div className="relative z-10 grid grid-cols-[1fr_auto] items-center gap-6 p-5 sm:p-6">
-        <div>
-          <div className="mb-2.5 inline-block rounded-full border-[1.5px] border-[rgba(34,197,94,.45)] bg-[rgba(34,197,94,.08)] px-2.5 py-0.5 text-[10px] font-bold tracking-widest text-[#86efac]">
-            정통사주 해설
-          </div>
-          <div className="mb-2 font-display text-[clamp(18px,4vw,26px)] leading-tight">
-            {data.yearDescription ? (
-              <>
-                올해에게 주는 말
-                <br />
-                <span className="text-[#FDE047]">{data.yearDescription}</span>
-              </>
-            ) : (
-              "올해에게 주는 말"
-            )}
-          </div>
-          {data.fiveElementsSummary && (
-            <p className="text-[12px] leading-relaxed text-[rgba(255,255,255,.5)]">
-              {data.fiveElementsSummary}
-            </p>
-          )}
-        </div>
-        <div className="flex shrink-0 flex-col items-center gap-1 text-center">
-          <div className="mb-1 text-[18px] tracking-[3px]">
-            {"★".repeat(Math.max(1, stars))}
-          </div>
-          <span
-            className="font-display text-[48px] leading-none"
-            style={{
-              background: "linear-gradient(135deg,#86efac 20%,#22C55E 80%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
-            }}
+    <div className="rounded-2xl border border-slate-100 bg-white p-4 shadow-sm">
+      <div className="flex items-center gap-3">
+        {/* 점수 링 */}
+        <div className="relative h-[110px] w-[110px] shrink-0">
+          <svg
+            width="110"
+            height="110"
+            viewBox="0 0 110 110"
+            style={{ transform: "rotate(-90deg)" }}
           >
-            {score}
-          </span>
-          <div className="mt-1 flex flex-col items-center gap-1">
-            <span className="rounded-full border-[1.5px] border-[rgba(34,197,94,.3)] bg-[rgba(34,197,94,.15)] px-2.5 py-0.5 text-[12px] font-black text-[#86efac]">
-              기운 점수
+            <circle
+              cx="55"
+              cy="55"
+              r="44"
+              fill="none"
+              stroke="#F0EEFF"
+              strokeWidth="10"
+            />
+            <circle
+              cx="55"
+              cy="55"
+              r="44"
+              fill="none"
+              stroke="url(#brandGrad)"
+              strokeWidth="10"
+              strokeDasharray={String(CIRCUMFERENCE)}
+              strokeDashoffset={String(offset)}
+              strokeLinecap="round"
+            />
+            <defs>
+              <linearGradient id="brandGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#5956E9" />
+                <stop offset="100%" stopColor="#7C3AED" />
+              </linearGradient>
+            </defs>
+          </svg>
+          <div className="absolute inset-0 flex flex-col items-center justify-center">
+            <span className="text-[28px] font-black leading-none text-[#5956E9]">
+              {score}
             </span>
-            {data.topPercentage && (
-              <span className="text-[10px] text-[rgba(255,255,255,.38)]">
-                {data.topPercentage}
+            <span className="text-[11px] text-slate-400">/ 100</span>
+          </div>
+        </div>
+
+        {/* 텍스트 영역 */}
+        <div className="flex-1">
+          {data.topPercentage && (
+            <div
+              className="mb-2 inline-flex items-center gap-1.5 rounded-full px-3 py-1.5"
+              style={{ background: "#F0EEFF" }}
+            >
+              <span className="text-[11px] font-black text-[#5956E9]">
+                🏆 {data.topPercentage}
               </span>
-            )}
+            </div>
+          )}
+          <div className="mb-2 text-[13px] font-black text-gray-800">
+            {data.targetYear
+              ? `${data.targetYear}년 (${data.yearDescription ?? ""})`
+              : data.yearDescription ?? "올해 운세"}
+          </div>
+          {/* 도메인 점수 미니 그리드 */}
+          <div className="grid grid-cols-2 gap-1.5">
+            {[
+              { label: "재물운", score: data.wealth?.score },
+              { label: "애정운", score: data.love?.score },
+              { label: "직업운", score: data.career?.score },
+              { label: "건강운", score: data.health?.score },
+            ]
+              .filter(({ score }) => score != null)
+              .map(({ label, score: s }) => (
+                <div
+                  key={label}
+                  className="rounded-xl p-1.5 text-center"
+                  style={{ background: "#F9F8FF" }}
+                >
+                  <div className="text-[10px] text-slate-400">{label}</div>
+                  <div className="text-[13px] font-black text-[#5956E9]">
+                    {s}점
+                  </div>
+                </div>
+              ))}
           </div>
         </div>
       </div>

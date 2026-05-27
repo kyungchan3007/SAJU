@@ -13,10 +13,16 @@ type AuthenticatedBackendFetchResult =
   | { success: true; response: Response; accessToken: string }
   | { success: false; response: Response };
 
+export type AuthenticatedBackendFetchOptions = {
+  refreshOnUnauthorized?: boolean;
+};
+
 export async function authenticatedBackendFetch(
   path: string,
   init: RequestInit = {},
+  options: AuthenticatedBackendFetchOptions = {},
 ): Promise<AuthenticatedBackendFetchResult> {
+  const { refreshOnUnauthorized = true } = options;
   const cookieStore = await cookies();
   const accessToken = cookieStore.get(ACCESS_TOKEN_COOKIE_KEY)?.value;
   const refreshToken = cookieStore.get(REFRESH_TOKEN_COOKIE_KEY)?.value;
@@ -41,7 +47,7 @@ export async function authenticatedBackendFetch(
     };
   }
 
-  if (!refreshToken) {
+  if (!refreshOnUnauthorized || !refreshToken) {
     return {
       success: false,
       response: firstResponse,

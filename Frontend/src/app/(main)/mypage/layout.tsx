@@ -23,7 +23,7 @@ export default async function MypageLayout({
   };
 
   return (
-    <main className="page-shell">
+    <main>
       <MypageLayoutShell initialProfile={initialProfile}>
         {children}
       </MypageLayoutShell>
