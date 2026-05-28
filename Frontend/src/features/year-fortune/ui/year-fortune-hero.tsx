@@ -1,88 +1,68 @@
+import type { UserInfoDisplay } from "@/features/year-fortune/model/yearFortune";
+
 type Props = {
   yearLabel: string;
   targetYear: number;
-  generalTitle: string | undefined;
+  userInfo: UserInfoDisplay;
 };
 
-export function YearFortuneHero({
-  yearLabel,
-  targetYear,
-  generalTitle,
-}: Props) {
+export function YearFortuneHero({ yearLabel, targetYear, userInfo }: Props) {
+  const { manse, gender, birthYear, daeun } = userInfo;
+
+  const metaLine = [
+    manse,
+    birthYear ? `${birthYear}년생` : undefined,
+    gender,
+  ]
+    .filter(Boolean)
+    .join(" · ");
+
   return (
-    <div>
-      <h2 className="mb-4 flex items-center gap-2.5 font-display text-[22px]">
-        신년운세
-        <span className="h-0.5 flex-1 bg-black" />
-      </h2>
-
-      <div
-        className="relative overflow-hidden rounded-md border-2 border-[#0d0d0d] text-white"
-        style={{ background: "#06060f", boxShadow: "4px 4px 0 #0d0d0d" }}
+    <div
+      className="relative overflow-hidden rounded-3xl p-7 md:p-8"
+      style={{
+        background:
+          "linear-gradient(135deg, #5956E9 0%, #7C3AED 60%, #A855F7 100%)",
+        boxShadow: "0 4px 24px rgba(89,86,233,0.28)",
+      }}
+    >
+      {/* 연도 워터마크 */}
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute -right-2 -top-3 select-none font-black leading-none"
+        style={{ fontSize: 110, color: "rgba(255,255,255,0.06)" }}
       >
-        <div
-          className="pointer-events-none absolute inset-0"
-          style={{
-            background: `
-            radial-gradient(ellipse at 80% 15%, rgba(99,102,241,.28), transparent 40%),
-            radial-gradient(ellipse at 15% 80%, rgba(253,224,71,.14), transparent 40%),
-            radial-gradient(ellipse at 50% 50%, rgba(139,92,246,.12), transparent 55%)
-          `,
-          }}
-        />
-        <div className="relative z-10 p-6">
-          <span
-            className="mb-2.5 inline-block rounded-full px-2.5 py-0.5 text-[10px] font-bold tracking-[.08em]"
-            style={{
-              border: "1.5px solid rgba(99,102,241,.5)",
-              color: "#a5b4fc",
-              background: "rgba(99,102,241,.1)",
-            }}
-          >
-            ✦ {yearLabel} 신년운세 풀이
-          </span>
+        {targetYear}
+      </span>
 
-          <div className="flex items-center justify-between gap-4">
-            <div>
-              <p
-                className="font-display text-[clamp(20px,4vw,28px)] leading-tight"
-                style={{ letterSpacing: "-.02em" }}
-              >
-                <span style={{ color: "#FDE047" }}>{targetYear}년</span>은
-                <br />
-                {generalTitle ?? "새로운 한 해"}
-              </p>
-              <p className="mt-2 text-[12px] leading-[1.7] text-[rgba(255,255,255,.5)]">
-                {yearLabel}
-              </p>
-            </div>
-            <div className="shrink-0 text-center">
-              <p
-                className="font-display text-[42px] leading-none"
-                style={{
-                  background:
-                    "linear-gradient(135deg, #a5b4fc 20%, #6366f1 80%)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
-                }}
-              >
-                {targetYear}
-              </p>
-              <span
-                className="mt-1 inline-block rounded-full px-2.5 py-0.5 text-[11px] font-black"
-                style={{
-                  background: "rgba(99,102,241,.15)",
-                  border: "1.5px solid rgba(99,102,241,.3)",
-                  color: "#a5b4fc",
-                }}
-              >
-                신년운세
-              </span>
-            </div>
-          </div>
-        </div>
+      {/* 뱃지 */}
+      <div className="mb-3 flex items-center gap-2">
+        <span className="rounded-full bg-white/20 px-3 py-1 text-[11px] font-bold text-white">
+          신년운세
+        </span>
       </div>
+
+      {/* 연도 */}
+      <div
+        className="mb-1 text-[30px] font-black leading-tight text-white"
+        style={{ letterSpacing: "-0.5px" }}
+      >
+        {yearLabel}
+      </div>
+
+      {/* 만세력 · 출생년 · 성별 */}
+      {metaLine && (
+        <div className="mb-4 text-[13px] font-bold text-white/80">
+          {metaLine}
+        </div>
+      )}
+
+      {/* 대운 */}
+      {daeun && (
+        <div className="inline-flex items-center gap-2 rounded-2xl bg-white/15 px-4 py-2">
+          <span className="text-[12px] font-bold text-white">{daeun}</span>
+        </div>
+      )}
     </div>
   );
 }

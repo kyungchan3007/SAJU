@@ -21,8 +21,18 @@ export type DomainDisplay = {
   content: string | undefined;
 };
 
+export type UserInfoDisplay = {
+  manse: string | undefined;
+  gender: string | undefined;
+  birthYear: number | undefined;
+  daeun: string | undefined;
+};
+
+export type MonthType = "good" | "normal" | "caution";
+
 export type MonthDisplay = {
   month: number;
+  type: MonthType;
   tagText: string;
   emoji: string;
   fortune: string;
@@ -32,6 +42,7 @@ export type YearFortuneDisplay = {
   status: YearFortuneStatus;
   targetYear: number;
   yearLabel: string;
+  userInfo: UserInfoDisplay;
   domains: DomainDisplay[];
   months: MonthDisplay[];
 };
@@ -93,9 +104,24 @@ function getTagText(label: string | undefined): string {
   return "🟡 평";
 }
 
+function getMonthType(label: string | undefined): MonthType {
+  if (!label) return "normal";
+  if (label.includes("길")) return "good";
+  if (label.includes("주의") || label.includes("흉")) return "caution";
+  return "normal";
+}
+
+function normalizeGender(gender: string | undefined): string | undefined {
+  if (!gender) return undefined;
+  if (gender === "MALE" || gender === "male") return "남성";
+  if (gender === "FEMALE" || gender === "female") return "여성";
+  return gender;
+}
+
 function toMonthDisplay(m: YearMonthlyFortune): MonthDisplay {
   return {
     month: m.month ?? 0,
+    type: getMonthType(m.label),
     tagText: getTagText(m.label),
     emoji: MONTH_EMOJIS[m.month ?? 0] ?? "📅",
     fortune: m.fortune ?? "",
@@ -109,6 +135,13 @@ export function toYearFortuneDisplay(
   const status = normalizeStatus(backendStatus);
   const year = data?.targetYear ?? new Date().getFullYear();
   const yearLabel = data?.yearLabel ?? `${year}년`;
+
+  const userInfo: UserInfoDisplay = {
+    manse: data?.userInfo?.manse,
+    gender: normalizeGender(data?.userInfo?.gender),
+    birthYear: data?.userInfo?.birthYear,
+    daeun: data?.userInfo?.daeun,
+  };
 
   const domains = DOMAIN_ORDER.map((key): DomainDisplay => {
     const meta = DOMAIN_META[key];
@@ -133,6 +166,7 @@ export function toYearFortuneDisplay(
     status,
     targetYear: year,
     yearLabel,
+    userInfo,
     domains,
     months,
   };

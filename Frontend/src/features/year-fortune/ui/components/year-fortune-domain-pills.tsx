@@ -8,7 +8,7 @@ type Props = {
 
 export function YearFortuneDomainPills({ domains, activeIdx, onSelect }: Props) {
   return (
-    <div className="flex gap-[5px] overflow-x-auto border-b-2 border-[#0d0d0d] px-[14px] py-[10px] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+    <div className="mb-6 flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
       {domains.map((d, i) => {
         const isActive = i === activeIdx;
         return (
@@ -16,17 +16,11 @@ export function YearFortuneDomainPills({ domains, activeIdx, onSelect }: Props) 
             key={d.key}
             type="button"
             onClick={() => onSelect(i)}
-            className="inline-flex shrink-0 cursor-pointer items-center gap-1 rounded-full border-2 border-[#0d0d0d] px-3 py-[5px] text-[11px] font-bold whitespace-nowrap transition-all"
-            style={
+            className={`inline-flex shrink-0 cursor-pointer items-center gap-1.5 rounded-full px-5 py-[9px] text-[13px] font-bold whitespace-nowrap transition-all ${
               isActive
-                ? {
-                    background: "#0d0d0d",
-                    color: "white",
-                    transform: "translate(-1px,-1px)",
-                    boxShadow: "2px 2px 0 #0d0d0d",
-                  }
-                : { background: "#FFFEF9", boxShadow: "2px 2px 0 #0d0d0d" }
-            }
+                ? "bg-[#5956E9] text-white shadow-[0_4px_12px_rgba(89,86,233,0.25)]"
+                : "border-[1.5px] border-[#E5E7EB] bg-white text-[#6B7280] hover:border-[#5956E9] hover:text-[#5956E9]"
+            }`}
           >
             {d.icon} {d.label}
           </button>

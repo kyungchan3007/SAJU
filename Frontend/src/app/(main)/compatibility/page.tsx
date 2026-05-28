@@ -9,10 +9,8 @@ export const metadata: Metadata = {
 
 export default function CompatibilityPage() {
   return (
-    <main className="page-shell">
-      <div className="mx-auto max-w-[720px]">
-        <CompatibilitySection />
-      </div>
+    <main>
+      <CompatibilitySection />
     </main>
   );
 }

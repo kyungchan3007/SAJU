@@ -9,9 +9,11 @@ export const metadata: Metadata = {
 
 export default function CommunityPage() {
   return (
-    <main className="page-shell">
-      <div className="mx-auto max-w-[860px]">
-        <CommunitySection />
+    <main className="bg-white">
+      <div className="mx-auto max-w-[1152px] px-4 py-8 md:px-8">
+        <div className="min-w-0">
+          <CommunitySection />
+        </div>
       </div>
     </main>
   );

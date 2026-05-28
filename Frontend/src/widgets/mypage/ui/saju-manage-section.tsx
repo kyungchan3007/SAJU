@@ -8,20 +8,24 @@ import { SajuManageSummary } from "@/features/mypage/ui/manage/saju-manage-summa
 import { SajuManageForm } from "@/features/mypage/ui/manage/saju-manage-form";
 import { SajuCardList } from "@/features/mypage/ui/manage/saju-card-list";
 import { PartnerAddModal } from "@/features/mypage/ui/manage/partner-add-modal";
-import { PartnerDeleteModal } from "@/features/mypage/ui/manage/partner-delete-modal";
-import { SajuManageStatusMessage } from "@/features/mypage/ui/manage/saju-manage-status-message";
 import { SajuManagePartnerPanel } from "@/features/mypage/ui/manage/saju-manage-partner-panel";
+import { ConfirmModal, StatusMessage } from "@/shared/ui";
 
 export function SajuManageSection() {
   const sajuManage = useSajuManage();
   const partners = useSajuManagePartnersController();
 
-  return (
-    <div className="flex flex-col gap-4">
-      <h2 className="flex items-center gap-2.5 font-display text-[22px]">
-        사주 관리 <span className="h-0.5 flex-1 bg-black" />
-      </h2>
+  const myProfile = sajuManage.initialValues
+    ? {
+        birthYear: sajuManage.initialValues.birthYear,
+        gender: sajuManage.initialValues.gender,
+        summaryZodiac: sajuManage.summary.summaryZodiac,
+        yongshinPrimary: sajuManage.summary.yongshinPrimary,
+      }
+    : undefined;
 
+  return (
+    <div className="flex flex-col gap-5">
       {sajuManage.isLoading && <SajuManageLoadingState />}
 
       {!sajuManage.isLoading && !sajuManage.isRegistered && (
@@ -30,8 +34,9 @@ export function SajuManageSection() {
 
       {!sajuManage.isLoading && sajuManage.isRegistered && (
         <>
-          {/* 등록된 사주 카드 목록 */}
+          {/* 카드 목록 */}
           <SajuCardList
+            myProfile={myProfile}
             partners={partners.partners}
             selectedTarget={partners.selectedTarget}
             onSelect={partners.selectTarget}
@@ -41,7 +46,7 @@ export function SajuManageSection() {
           />
 
           {/* 성공/에러 메시지 */}
-          <SajuManageStatusMessage
+          <StatusMessage
             message={
               partners.selectedTarget === "me"
                 ? sajuManage.successMessage
@@ -49,7 +54,7 @@ export function SajuManageSection() {
             }
           />
 
-          {/* 나의 사주 요약 (나 선택 시) */}
+          {/* 나의 사주 요약 + 수정 폼 (나 선택 시) */}
           {partners.selectedTarget === "me" && sajuManage.initialValues && (
             <>
               <SajuManageSummary {...sajuManage.summary} />
@@ -84,8 +89,19 @@ export function SajuManageSection() {
         onConfirm={partners.confirmAdd}
       />
 
-      <PartnerDeleteModal
-        partnerName={partners.deleteTarget?.name ?? null}
+      <ConfirmModal
+        isOpen={Boolean(partners.deleteTarget)}
+        title={`'${partners.deleteTarget?.name ?? ""}' 사주를 삭제할까요?`}
+        description={
+          <>
+            해당 사주 정보가 영구 삭제됩니다.
+            <br />
+            이 작업은 되돌릴 수 없습니다.
+          </>
+        }
+        variant="destructive"
+        confirmLabel="삭제하기"
+        pendingLabel="삭제 중..."
         isPending={partners.isPendingDelete}
         onClose={partners.closeDeleteModal}
         onConfirm={partners.confirmDelete}

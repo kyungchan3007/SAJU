@@ -1,42 +1,113 @@
 "use client";
 
 import { useState } from "react";
-import type { MonthDisplay } from "@/features/year-fortune/model/yearFortune";
-import { YearFortuneMonthlyDetail } from "@/features/year-fortune/ui/components/year-fortune-monthly-detail";
-import { YearFortuneMonthlyGrid } from "@/features/year-fortune/ui/components/year-fortune-monthly-grid";
+import type {
+  MonthDisplay,
+  MonthType,
+} from "@/features/year-fortune/model/yearFortune";
 
 type Props = {
   months: MonthDisplay[];
   targetYear: number;
 };
 
-export function YearFortuneMonthly({ months, targetYear }: Props) {
-  const firstMonth = months[0]?.month ?? 1;
-  const [activeMonth, setActiveMonth] = useState(firstMonth);
+const MONTH_NUM_COLOR: Record<MonthType, string> = {
+  good: "text-[#5956E9]",
+  normal: "text-[#6B7280]",
+  caution: "text-[#EF4444]",
+};
+
+const MONTH_TAG_STYLE: Record<
+  MonthType,
+  { background: string; color: string }
+> = {
+  good: { background: "#F0EEFF", color: "#5956E9" },
+  normal: { background: "#F3F4F6", color: "#6B7280" },
+  caution: { background: "#FFF1F2", color: "#EF4444" },
+};
+
+const MONTH_TAG_LABEL: Record<MonthType, string> = {
+  good: "길함",
+  normal: "보통",
+  caution: "주의",
+};
+
+export function YearFortuneMonthly({ months }: Props) {
+  const [expanded, setExpanded] = useState<Set<number>>(new Set());
 
   if (!months.length) return null;
 
-  const active = months.find((m) => m.month === activeMonth) ?? months[0];
+  function toggle(month: number) {
+    setExpanded((prev) => {
+      const next = new Set(prev);
+      if (next.has(month)) {
+        next.delete(month);
+      } else {
+        next.add(month);
+      }
+      return next;
+    });
+  }
 
   return (
-    <div
-      className="overflow-hidden rounded-md border-2 border-[#0d0d0d] bg-[#FFFEF9]"
-      style={{ boxShadow: "3px 3px 0 #0d0d0d" }}
-    >
-      <div className="flex items-center justify-between border-b-2 border-[#0d0d0d] bg-[rgb(240,238,232)] px-[18px] py-[13px]">
-        <h3 className="font-display text-[14px]">🗓 {targetYear}년 월별 운세</h3>
-        <span className="text-[11px] text-[rgba(13,13,13,.45)]">
-          월을 클릭해 상세보기
+    <div className="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
+      <div className="mb-5 flex items-center gap-2">
+        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#F0EEFF]">
+          <span className="text-[15px]">📅</span>
+        </div>
+        <span className="text-base font-black">월별 운세</span>
+        <span className="ml-auto text-[12px] text-slate-400">
+          항목을 눌러 전체 내용을 확인하세요
         </span>
       </div>
 
-      <div className="flex flex-col gap-3 p-[18px]">
-        <YearFortuneMonthlyGrid
-          months={months}
-          activeMonth={activeMonth}
-          onSelectMonth={setActiveMonth}
-        />
-        {active && <YearFortuneMonthlyDetail active={active} />}
+      <div>
+        {months.map((m, idx) => {
+          const isExpanded = expanded.has(m.month);
+          const numColor = MONTH_NUM_COLOR[m.type];
+          const tagStyle = MONTH_TAG_STYLE[m.type];
+          const tagLabel = MONTH_TAG_LABEL[m.type];
+          const isLast = idx === months.length - 1;
+
+          return (
+            <div
+              key={m.month}
+              className={`py-[18px] ${!isLast ? "border-b border-[#F3F4F6]" : ""}`}
+            >
+              <div className="flex flex-col">
+                <div className="mb-2 flex flex-wrap items-center gap-2">
+                  <span className={`text-[24px] font-black leading-none ${numColor}`}>
+                    {m.month}월
+                  </span>
+                  <span
+                    className="rounded-full px-2 py-0.5 text-[11px] font-bold"
+                    style={tagStyle}
+                  >
+                    {tagLabel}
+                  </span>
+                </div>
+
+                <p
+                  className={`text-[13px] leading-[1.75] text-[#4B5563] ${
+                    !isExpanded ? "line-clamp-3" : ""
+                  }`}
+                >
+                  {m.fortune}
+                </p>
+
+                {m.fortune && (
+                  <button
+                    type="button"
+                    onClick={() => toggle(m.month)}
+                    className="mt-1.5 inline-flex cursor-pointer items-center gap-1 text-[11px] font-bold text-[#5956E9] hover:opacity-75"
+                  >
+                    {isExpanded ? "접기 ↑" : "더보기 ↓"}
+                  </button>
+                )}
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

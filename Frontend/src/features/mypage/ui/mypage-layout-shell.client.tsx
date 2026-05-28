@@ -1,7 +1,4 @@
-"use client";
-
-import { usePathname } from "next/navigation";
-import { MypageSidebar } from "@/features/mypage";
+import { MypageSidebar } from "@/features/mypage/ui/mypage/mypage-sidebar";
 import type { MypageUser } from "../type/types";
 
 export function MypageLayoutShell({
@@ -11,15 +8,6 @@ export function MypageLayoutShell({
   children: React.ReactNode;
   initialProfile: MypageUser;
 }) {
-  const pathname = usePathname();
-  const isAdGateFullscreenPage =
-    pathname === "/mypage/year-fortune" ||
-    pathname === "/mypage/traditional-fortune";
-
-  if (isAdGateFullscreenPage) {
-    return <div>{children}</div>;
-  }
-
   return (
     <div className="bg-white">
       <div className="mx-auto max-w-[1152px] px-4 py-8 md:px-8">

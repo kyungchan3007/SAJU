@@ -11,27 +11,30 @@ type Props = {
 
 export function YearFortuneDomainTabs({ domains }: Props) {
   const [activeIdx, setActiveIdx] = useState(0);
-  const active = domains[activeIdx];
+  const safeActiveIdx =
+    domains.length === 0 ? 0 : Math.min(activeIdx, domains.length - 1);
+  const active = domains[safeActiveIdx];
 
   if (!active) return null;
 
   return (
-    <div
-      className="overflow-hidden rounded-md border-2 border-[#0d0d0d] bg-[#FFFEF9]"
-      style={{ boxShadow: "3px 3px 0 #0d0d0d" }}
-    >
-      <div className="flex items-center justify-between border-b-2 border-[#0d0d0d] bg-[rgb(240,238,232)] px-[18px] py-[13px]">
-        <h3 className="font-display text-[14px]">올해 분야별 상세 운세</h3>
-        <span className="text-[10px] text-[rgba(13,13,13,.45)]">
-          탭을 선택해 확인하세요
-        </span>
+    <div className="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
+      {/* 섹션 헤더 */}
+      <div className="mb-5 flex items-center gap-2">
+        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#F0EEFF]">
+          <span className="text-[15px]">⊞</span>
+        </div>
+        <span className="text-base font-black">영역별 운세</span>
       </div>
 
+      {/* 탭 필 */}
       <YearFortuneDomainPills
         domains={domains}
-        activeIdx={activeIdx}
+        activeIdx={safeActiveIdx}
         onSelect={setActiveIdx}
       />
+
+      {/* 내용 */}
       <YearFortuneDomainContent active={active} />
     </div>
   );

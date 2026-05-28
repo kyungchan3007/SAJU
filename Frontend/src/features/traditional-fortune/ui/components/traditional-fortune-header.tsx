@@ -3,7 +3,10 @@ type Props = {
   yearDescription?: string;
 };
 
-export function TraditionalFortuneHeader({ targetYear, yearDescription }: Props) {
+export function TraditionalFortuneHeader({
+  targetYear,
+  yearDescription,
+}: Props) {
   return (
     <div
       className="rounded-3xl p-5 shadow-[0_4px_20px_rgba(89,86,233,0.25)]"
@@ -20,10 +23,12 @@ export function TraditionalFortuneHeader({ targetYear, yearDescription }: Props)
             )}
           </div>
           <div className="text-[17px] font-black text-white">
-            {targetYear ? `${targetYear}년 연간 운세 풀이` : "연간 운세 풀이"}
+            {targetYear ? `${targetYear}년 정통사주 풀이` : "정통사주 풀이 "}
           </div>
           {yearDescription && (
-            <div className="mt-0.5 text-[13px] text-white/70">{yearDescription}</div>
+            <div className="mt-0.5 text-[13px] text-white/70">
+              {yearDescription}
+            </div>
           )}
         </div>
         <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/15 text-[22px]">

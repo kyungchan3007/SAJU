@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useRef } from "react";
 
+const RELATIONS = ["가족", "친구", "연인"] as const;
+
 type Props = {
   isOpen: boolean;
   isPending: boolean;
@@ -16,6 +18,7 @@ export function PartnerAddModal({
   onConfirm,
 }: Props) {
   const [name, setName] = useState("");
+  const [relation, setRelation] = useState<(typeof RELATIONS)[number]>("가족");
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -26,6 +29,7 @@ export function PartnerAddModal({
 
   function handleClose() {
     setName("");
+    setRelation("가족");
     onClose();
   }
 
@@ -36,6 +40,7 @@ export function PartnerAddModal({
       return;
     }
     setName("");
+    setRelation("가족");
     onConfirm(trimmed);
   }
 
@@ -43,51 +48,75 @@ export function PartnerAddModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-[rgba(13,13,13,0.45)] backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm"
       onClick={(e) => {
         if (e.target === e.currentTarget) handleClose();
       }}
     >
       <div
-        className="mx-5 w-full max-w-[360px] rounded-lg border-2 border-black bg-[#FDFCF8] p-6"
-        style={{ boxShadow: "4px 4px 0 #0d0d0d" }}
+        className="mx-5 w-full max-w-[380px] rounded-[24px] bg-white p-8"
+        style={{ boxShadow: "0 8px 40px rgba(0,0,0,0.16)" }}
       >
-        <div className="mb-4 flex items-center justify-between font-display text-[17px]">
-          <span>사주 추가</span>
+        {/* 헤더 */}
+        <div className="mb-6 flex items-center justify-between">
+          <h3 className="text-lg font-black text-gray-900">사주 추가</h3>
           <button
             type="button"
             onClick={handleClose}
-            className="flex h-7 w-7 items-center justify-center rounded-sm border-2 border-black bg-[#F0EDE6] text-[14px]"
+            className="flex h-8 w-8 items-center justify-center rounded-full text-lg text-slate-400 hover:bg-slate-100"
           >
             ✕
           </button>
         </div>
 
-        <div className="mb-3.5 flex flex-col gap-1.5">
-          <label className="text-[12px] font-bold text-[#7a7570]">
-            이름 (별칭)
-          </label>
-          <input
-            ref={inputRef}
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") handleConfirm();
-            }}
-            placeholder="예: 아빠, 친구, 홍길동"
-            maxLength={8}
-            className="rounded-sm border-2 border-black bg-[#FDFCF8] px-3 py-2.5 text-[14px] font-semibold outline-none focus:[box-shadow:4px_4px_0_#0d0d0d]"
-            style={{ boxShadow: "2px 2px 0 #0d0d0d" }}
-          />
+        <div className="flex flex-col gap-5">
+          {/* 이름 */}
+          <div className="flex flex-col gap-2">
+            <label className="text-xs font-bold text-slate-500">
+              이름 (별칭) <span className="text-[#5956E9]">*</span>
+            </label>
+            <input
+              ref={inputRef}
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleConfirm();
+              }}
+              placeholder="예: 아빠, 친구, 홍길동"
+              maxLength={8}
+              className="h-[46px] rounded-xl border border-[#E5E7EB] px-4 text-[13px] text-gray-900 outline-none transition-colors placeholder:text-[#D1D5DB] focus:border-[#5956E9] focus:shadow-[0_0_0_3px_rgba(89,86,233,0.10)]"
+            />
+          </div>
+
+          {/* 관계 */}
+          <div className="flex flex-col gap-2">
+            <label className="text-xs font-bold text-slate-500">관계</label>
+            <div className="flex gap-2">
+              {RELATIONS.map((rel) => (
+                <button
+                  key={rel}
+                  type="button"
+                  onClick={() => setRelation(rel)}
+                  className={`flex-1 rounded-xl border-2 py-2.5 text-sm font-bold transition-all ${
+                    relation === rel
+                      ? "border-[#5956E9] bg-[#F0EEFF] text-[#5956E9]"
+                      : "border-slate-200 text-slate-400 hover:border-[#5956E9] hover:text-[#5956E9]"
+                  }`}
+                >
+                  {rel}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
 
-        <div className="mt-5 flex gap-2">
+        <div className="mt-7 flex gap-2">
           <button
             type="button"
             onClick={handleClose}
             disabled={isPending}
-            className="flex-1 rounded-sm border-2 border-black bg-[#F0EDE6] py-2.5 font-display text-[14px] disabled:opacity-50"
+            className="flex-1 rounded-xl border-2 border-slate-200 py-3 text-sm font-bold text-slate-400 hover:bg-slate-50 disabled:opacity-50"
           >
             취소
           </button>
@@ -95,8 +124,11 @@ export function PartnerAddModal({
             type="button"
             onClick={handleConfirm}
             disabled={isPending || !name.trim()}
-            className="flex-[2] rounded-sm border-2 border-black bg-[#0d0d0d] py-2.5 font-display text-[14px] text-white disabled:opacity-50"
-            style={{ boxShadow: "2px 2px 0 #0d0d0d" }}
+            className="flex-[2] rounded-xl py-3 text-sm font-bold text-white disabled:opacity-50"
+            style={{
+              background: "linear-gradient(to right,#5956E9,#7C3AED)",
+              boxShadow: "0 4px 14px rgba(89,86,233,0.25)",
+            }}
           >
             {isPending ? "추가 중..." : "다음 — 사주 입력 →"}
           </button>

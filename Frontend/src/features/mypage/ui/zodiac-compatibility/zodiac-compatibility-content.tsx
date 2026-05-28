@@ -1,100 +1,207 @@
+import Image from "next/image";
 import {
   buildZodiacCompatibilityEntries,
   findMyZodiacEntry,
   ZODIAC_COMPATIBILITY_GRADE_STYLES,
   ZODIAC_COMPATIBILITY_LEGEND_ITEMS,
+  ZODIAC_COMPATIBILITY_ME_STYLE,
 } from "@/features/mypage/model/zodiacCompatibility";
 
 type Props = {
   data: Record<string, unknown> | Array<unknown>;
   myZodiac?: string | null;
+  birthYear?: string | null;
 };
 
-export function ZodiacCompatibilityContent({ data, myZodiac }: Props) {
+export function ZodiacCompatibilityContent({
+  data,
+  myZodiac,
+  birthYear,
+}: Props) {
   const entries = buildZodiacCompatibilityEntries(data);
   const myEntry = findMyZodiacEntry(myZodiac);
 
   return (
-    <div className="flex flex-col gap-4">
-      {/* 나의 띠 + 범례 */}
+    <div className="flex flex-col gap-5">
+      {/* ── 배너 ── */}
       <div
-        className="rounded-sm border-2 border-black bg-[#FDFCF8] p-4"
-        style={{ boxShadow: "4px 4px 0 #0d0d0d" }}
+        className="relative overflow-hidden rounded-[2rem]"
+        style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.10)", minHeight: 200 }}
       >
-        <div className="flex flex-wrap items-center gap-4">
-          {/* 나의 띠 */}
-          <div className="flex items-center gap-3">
-            <div
-              className="flex h-14 w-14 items-center justify-center rounded-full border-2 border-black bg-[#fef9c3] text-3xl"
-              style={{ boxShadow: "2px 2px 0 #0d0d0d" }}
-            >
-              {myEntry?.animal ?? "🔮"}
-            </div>
-            <div>
-              <p className="text-[11px] font-bold tracking-widest text-[#7a7570]">
-                나의 띠
-              </p>
-              <p className="font-['Jua',sans-serif] text-[22px]">
-                {myZodiac ?? "–"}
-              </p>
-            </div>
-          </div>
-
-          {/* 범례 */}
-          <div className="ml-auto flex flex-wrap gap-3">
-            {ZODIAC_COMPATIBILITY_LEGEND_ITEMS.map(({ grade, color }) => (
-              <div
-                key={grade}
-                className="flex items-center gap-1.5 text-[11px] font-semibold"
-              >
-                <span
-                  className={`inline-block h-2.5 w-2.5 rounded-full border border-black/20 ${color}`}
-                />
-                {ZODIAC_COMPATIBILITY_GRADE_STYLES[grade].label}
-              </div>
-            ))}
-          </div>
+        <div
+          className="pointer-events-none absolute bottom-0 left-0 top-0 w-[90%] rounded-2xl xs:w-[82%] md:w-[56%]"
+          style={{
+            background:
+              "radial-gradient(90% 120% at 0% 50%, rgba(0,0,0,0.42) 0%, rgba(0,0,0,0.26) 45%, rgba(0,0,0,0.10) 72%, rgba(0,0,0,0) 100%)",
+            filter: "blur(1px)",
+          }}
+        />
+        <Image
+          src="/image/animals/dog_cat.png"
+          alt="띠별궁합 배너"
+          width={1152}
+          height={320}
+          sizes="(max-width: 640px) 100vw, 1152px"
+          className="block h-full w-full object-contain"
+          style={{ minHeight: 200 }}
+        />
+        <div className="absolute inset-0 flex flex-col justify-center px-10 py-10">
+          <span
+            className="mb-4 inline-block w-fit rounded-full px-3.5 py-1 text-[11px] font-bold text-[#5956E9]"
+            style={{ background: "rgba(255,255,255,0.85)" }}
+          >
+            띠별궁합
+          </span>
+          <h2
+            className="mb-2 text-[26px] font-black leading-[1.35] text-white"
+            style={{
+              letterSpacing: "-0.5px",
+              textShadow:
+                "0 2px 12px rgba(0,0,0,0.50), 0 1px 4px rgba(0,0,0,0.35)",
+            }}
+          >
+            나의 띠로 알아보는
+            <br />
+            12간지 궁합
+          </h2>
+          <p
+            className="text-[15px] font-bold leading-[1.7] text-white"
+            style={{
+              textShadow:
+                "0 2px 10px rgba(0,0,0,0.55), 0 1px 4px rgba(0,0,0,0.40)",
+            }}
+          >
+            나와 잘 맞는 띠, 조심해야 할 띠를
+            <br />
+            사주가 알려드립니다.
+          </p>
         </div>
       </div>
 
-      {/* 12 띠 그리드 */}
-      <div className="grid grid-cols-4 gap-2.5 sm:grid-cols-4">
+      {/* ── 나의 띠 카드 + 범례 ── */}
+      <div
+        className="flex flex-wrap items-center justify-between gap-4 rounded-[1.25rem] border border-[#F3F4F6] bg-white p-5"
+        style={{ boxShadow: "0 2px 12px rgba(0,0,0,0.06)" }}
+      >
+        {/* 나의 띠 */}
+        <div className="flex items-center gap-4">
+          <div className="flex h-[60px] w-[60px] items-center justify-center overflow-hidden rounded-[18px] bg-[#F0EEFF]">
+            {myEntry ? (
+              <Image
+                src={`/image/animals/${myEntry.img}`}
+                alt={myEntry.name}
+                width={44}
+                height={44}
+                className="object-contain"
+                style={{ mixBlendMode: "multiply" }}
+              />
+            ) : (
+              <span className="text-3xl">🔮</span>
+            )}
+          </div>
+          <div>
+            <p
+              className="mb-1 text-[11px] font-semibold text-[#9CA3AF]"
+              style={{ letterSpacing: "0.05em" }}
+            >
+              나의 띠
+            </p>
+            <p
+              className="text-[22px] font-black leading-tight text-[#111827]"
+              style={{ letterSpacing: "-0.5px" }}
+            >
+              {myEntry?.name ?? myZodiac ?? "–"}
+            </p>
+            <p className="mt-0.5 text-[13px] font-bold text-[#5956E9]">
+              {myEntry?.branch ?? ""}
+              {birthYear ? ` · ${birthYear}년생` : ""}
+            </p>
+          </div>
+        </div>
+
+        {/* 범례 */}
+        <div className="flex flex-wrap items-center gap-4">
+          {ZODIAC_COMPATIBILITY_LEGEND_ITEMS.map(({ grade, color }) => (
+            <div
+              key={grade}
+              className="flex items-center gap-1.5 text-[12px] font-semibold text-[#374151]"
+            >
+              <span
+                className={`inline-block h-2.5 w-2.5 rounded-full ${color}`}
+              />
+              {ZODIAC_COMPATIBILITY_GRADE_STYLES[grade].label}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* ── 12띠 궁합 그리드 ── */}
+      <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-4">
         {entries.map((entry) => {
-          const style = ZODIAC_COMPATIBILITY_GRADE_STYLES[entry.grade];
+          const isMe = myEntry?.key === entry.key;
+          const style = isMe
+            ? ZODIAC_COMPATIBILITY_ME_STYLE
+            : ZODIAC_COMPATIBILITY_GRADE_STYLES[entry.grade];
+
           return (
             <div
               key={entry.key}
-              className={`flex flex-col items-center gap-1.5 rounded-sm border-2 border-black p-3 text-center ${style.card} cursor-default transition hover:-translate-x-px hover:-translate-y-px`}
-              style={{ boxShadow: "2px 2px 0 #0d0d0d" }}
+              className={`flex flex-col items-center gap-2 rounded-[1.25rem] border-[1.5px] p-4 text-center transition hover:-translate-y-0.5 hover:shadow-md ${style.card}`}
+              style={{ boxShadow: "0 2px 10px rgba(0,0,0,0.05)" }}
             >
-              <div className="text-[26px]">{entry.animal}</div>
-              <div className="text-[12px] font-bold leading-tight text-[#0d0d0d]">
+              {/* 동물 이미지 */}
+              <div className="flex h-12 w-12 items-center justify-center">
+                <Image
+                  src={`/image/animals/${entry.img}`}
+                  alt={entry.name}
+                  width={44}
+                  height={44}
+                  className="object-contain"
+                  style={{ mixBlendMode: "multiply" }}
+                />
+              </div>
+
+              {/* 이름 + 지지 */}
+              <div className="text-[14px] font-extrabold text-[#111827]">
                 {entry.name}
               </div>
-              <div className="text-[11px] text-[#7a7570]">{entry.branch}</div>
+              <div
+                className="text-[12px] font-semibold text-[#9CA3AF]"
+                style={{ marginTop: -6 }}
+              >
+                {entry.branch}
+              </div>
 
-              {/* grade 바 */}
-              <div className="h-1 w-full overflow-hidden rounded-full border border-black/20 bg-[#F0EDE6]">
+              {/* 점수 바 */}
+              <div className="h-1.5 w-full overflow-hidden rounded-full bg-[#F3F4F6]">
                 <div
                   className={`h-full rounded-full ${style.bar}`}
                   style={{ width: `${entry.score}%` }}
                 />
               </div>
 
-              <div className="font-['Jua',sans-serif] text-[18px]">
+              {/* 점수 */}
+              <div
+                className="text-[22px] font-black leading-none text-[#111827]"
+                style={{ letterSpacing: "-0.5px" }}
+              >
                 {entry.score}
               </div>
 
               {/* 관계 뱃지 */}
-              <div
-                className={`rounded-full border px-2 py-0.5 text-[10px] font-bold ${style.badge}`}
+              <span
+                className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold ${style.badge}`}
               >
-                {entry.relation}
-              </div>
+                {isMe ? "나의 띠" : entry.relation}
+              </span>
 
-              <div className="mt-0.5 text-[10px] leading-snug text-[#7a7570]">
-                {entry.description}
-              </div>
+              {/* 설명 */}
+              <p
+                className="text-[10px] leading-[1.5] text-[#6B7280]"
+                style={{ wordBreak: "keep-all" }}
+              >
+                {isMe ? "같은 기운을 가진 동띠입니다." : entry.description}
+              </p>
             </div>
           );
         })}

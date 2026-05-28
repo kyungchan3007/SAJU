@@ -10,6 +10,7 @@ export type ZodiacCompatibilityGradeKey =
 export type ZodiacCompatibilityEntry = {
   key: string;
   animal: string;
+  img: string;
   name: string;
   branch: string;
   score: number;
@@ -21,6 +22,7 @@ export type ZodiacCompatibilityEntry = {
 const ZODIAC_COMPATIBILITY_ITEMS = ZODIAC_LIST.map((zodiac) => ({
   key: zodiac.key,
   animal: zodiac.emoji,
+  img: zodiac.img,
   name: `${zodiac.name}띠`,
   branch: zodiac.hanja,
 }));
@@ -30,33 +32,33 @@ export const ZODIAC_COMPATIBILITY_GRADE_STYLES: Record<
   { card: string; bar: string; badge: string; label: string }
 > = {
   best: {
-    card: "bg-[#fffbeb]",
-    bar: "bg-[#fbbf24]",
-    badge: "border-[#f59e0b] bg-[#fbbf24] text-[#92400e]",
+    card: "bg-[#FFFBEB] border-[#FDE68A]",
+    bar: "bg-[#F59E0B]",
+    badge: "bg-[#FEF3C7] text-[#92400E]",
     label: "최고",
   },
   good: {
-    card: "bg-[#FDFCF8]",
-    bar: "bg-[#4ade80]",
-    badge: "border-[#16a34a] bg-[#bbf7d0] text-[#14532d]",
+    card: "bg-[#F0FDF4] border-[#BBF7D0]",
+    bar: "bg-[#10B981]",
+    badge: "bg-[#D1FAE5] text-[#065F46]",
     label: "좋음",
   },
   neutral: {
-    card: "bg-[#FDFCF8]",
-    bar: "bg-[#d1d5db]",
-    badge: "border-[#d4d0c8] bg-[#F0EDE6] text-[#7a7570]",
+    card: "bg-white border-[#F3F4F6]",
+    bar: "bg-[#D1D5DB]",
+    badge: "bg-[#F3F4F6] text-[#6B7280]",
     label: "무난",
   },
   caution: {
-    card: "bg-[#FDFCF8]",
-    bar: "bg-[#fb923c]",
-    badge: "border-[#d97706] bg-[#fde68a] text-[#92400e]",
+    card: "bg-[#FFF7ED] border-[#FED7AA]",
+    bar: "bg-[#F97316]",
+    badge: "bg-[#FFEDD5] text-[#9A3412]",
     label: "주의",
   },
   bad: {
-    card: "bg-[#FDFCF8]",
-    bar: "bg-[#f87171]",
-    badge: "border-[#dc2626] bg-[#fecaca] text-[#7f1d1d]",
+    card: "bg-[#FFF1F2] border-[#FECDD3]",
+    bar: "bg-[#EF4444]",
+    badge: "bg-[#FFE4E6] text-[#9F1239]",
     label: "나쁨",
   },
 };
@@ -65,12 +67,19 @@ export const ZODIAC_COMPATIBILITY_LEGEND_ITEMS: Array<{
   grade: ZodiacCompatibilityGradeKey;
   color: string;
 }> = [
-  { grade: "best", color: "bg-[#fbbf24]" },
-  { grade: "good", color: "bg-[#4ade80]" },
-  { grade: "neutral", color: "bg-[#d1d5db]" },
-  { grade: "caution", color: "bg-[#fb923c]" },
-  { grade: "bad", color: "bg-[#f87171]" },
+  { grade: "best", color: "bg-[#F59E0B]" },
+  { grade: "good", color: "bg-[#10B981]" },
+  { grade: "neutral", color: "bg-[#D1D5DB]" },
+  { grade: "caution", color: "bg-[#F97316]" },
+  { grade: "bad", color: "bg-[#EF4444]" },
 ];
+
+export const ZODIAC_COMPATIBILITY_ME_STYLE = {
+  card: "bg-[#F0EEFF] border-[#A5B4FC]",
+  bar: "bg-[#5956E9]",
+  badge: "bg-[#EDE9FE] text-[#5956E9]",
+  label: "나의 띠",
+};
 
 export function buildZodiacCompatibilityEntries(
   data: Record<string, unknown> | Array<unknown>,
@@ -135,7 +144,11 @@ function toZodiacCompatibilityEntry(
   raw: unknown,
 ): ZodiacCompatibilityEntry {
   const base: ZodiacCompatibilityEntry = {
-    ...staticItem,
+    key: staticItem.key,
+    animal: staticItem.animal,
+    img: staticItem.img,
+    name: staticItem.name,
+    branch: staticItem.branch,
     score: 50,
     grade: "neutral",
     relation: "평(平)",
@@ -163,7 +176,17 @@ function toZodiacCompatibilityEntry(
       ? String(record.description ?? record.desc)
       : base.description;
 
-  return { ...staticItem, score, grade, relation, description };
+  return {
+    key: staticItem.key,
+    animal: staticItem.animal,
+    img: staticItem.img,
+    name: staticItem.name,
+    branch: staticItem.branch,
+    score,
+    grade,
+    relation,
+    description,
+  };
 }
 
 function normalizeScore(value: unknown, fallback: number) {

@@ -4,7 +4,6 @@ import { useYearFortune } from "@/features/year-fortune/hooks/useYearFortune";
 import { YearFortuneDomainTabs } from "@/features/year-fortune/ui/year-fortune-domain-tabs";
 import { YearFortuneHero } from "@/features/year-fortune/ui/year-fortune-hero";
 import { YearFortuneMonthly } from "@/features/year-fortune/ui/year-fortune-monthly";
-import { YearFortuneOverview } from "@/features/year-fortune/ui/year-fortune-overview";
 import { useAdGate } from "@/shared/hooks/use-ad-gate";
 import { AdProgressGate } from "@/shared/ui/ad-progress-gate.client";
 
@@ -34,20 +33,12 @@ export function YearFortuneSection() {
 
   if (!display) return null;
 
-  const generalDomain = display.domains.find((d) => d.key === "general");
-
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 pb-6 pt-6">
       <YearFortuneHero
         yearLabel={display.yearLabel}
         targetYear={display.targetYear}
-        generalTitle={generalDomain?.title}
-      />
-
-      <YearFortuneOverview
-        title={generalDomain?.title}
-        content={generalDomain?.content}
-        targetYear={display.targetYear}
+        userInfo={display.userInfo}
       />
 
       <YearFortuneDomainTabs domains={display.domains} />

@@ -94,3 +94,43 @@ export function formatGender(gender?: string): string {
   if (gender === "MALE") return "남성";
   return "";
 }
+
+// ── 이미지 매핑 ──────────────────────────────────────
+
+const PARTNER_FEMALE_IMAGES = [
+  "/image/compatibility/avatar-FEMALE-1.png",
+  "/image/compatibility/avatar-FEMALE-2.png",
+  "/image/compatibility/avatar-FEMALE-3.png",
+  "/image/compatibility/avatar-FEMALE-4.png",
+] as const;
+
+const PARTNER_MALE_IMAGES = [
+  "/image/compatibility/avatar-MALE-1.png",
+  "/image/compatibility/avatar-MALE-2.png",
+  "/image/compatibility/avatar-MALE-3.png",
+  "/image/compatibility/avatar-MALE-4.png",
+] as const;
+
+/** 내 프로필 아바타 이미지 (gender → me/ 폴더) */
+export function getMyAvatarSrc(gender?: string | null): string {
+  if (gender === "MALE")
+    return "/image/compatibility/me/avatar-MALE.png";
+  return "/image/compatibility/me/avatar-FEMALE.png";
+}
+
+/** 상대방 아바타 이미지 (gender + stable index → compatibility/ 폴더) */
+export function getPartnerAvatarSrc(
+  gender?: string | null,
+  index: number = 0,
+): string {
+  const imgs =
+    gender === "MALE" ? PARTNER_MALE_IMAGES : PARTNER_FEMALE_IMAGES;
+  return imgs[index % imgs.length] ?? imgs[0];
+}
+
+/** 오늘 날짜 한국어 포맷 (클라이언트 전용) */
+export function formatTodayKo(): string {
+  const days = ["일", "월", "화", "수", "목", "금", "토"] as const;
+  const d = new Date();
+  return `${d.getFullYear()}년 ${d.getMonth() + 1}월 ${d.getDate()}일 (${days[d.getDay()]})`;
+}

@@ -4,22 +4,22 @@ type Props = {
 
 export function AccountWithdrawRow({ onWithdraw }: Props) {
   return (
-    <div className="card-saju-primary overflow-hidden">
-      <div className="border-b-2 border-black bg-[rgb(240_238_232)] px-5 py-3.5">
-        <span className="font-bold text-[#0d0d0d]">⚠️ 회원탈퇴</span>
+    <div className="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm">
+      <div className="border-b border-slate-100 bg-[#F9F8FF] px-5 py-3">
+        <span className="text-sm font-bold text-gray-900">회원탈퇴</span>
       </div>
-      <div className="flex flex-col items-start gap-3 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col items-start gap-4 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex flex-col gap-0.5">
           <span className="text-sm font-bold text-red-500">회원탈퇴</span>
-          <span className="text-xs text-[#0d0d0d]/50">
+          <span className="text-xs text-slate-400">
             탈퇴 시 모든 운세 데이터와 코인이 영구 삭제됩니다.
-            <br />이 작업은 되돌릴 수 없습니다.
+            <br />
+            이 작업은 되돌릴 수 없습니다.
           </span>
         </div>
         <button
           onClick={onWithdraw}
-          className="btn-saju w-full shrink-0 rounded-sm border-2 border-black bg-red-500 px-5 py-2 text-sm font-bold text-white sm:w-auto"
-          style={{ boxShadow: "3px 3px 0 #0d0d0d" }}
+          className="w-full shrink-0 rounded-xl bg-red-500 px-5 py-2.5 text-sm font-bold text-white transition hover:bg-red-600 sm:w-auto"
         >
           회원탈퇴
         </button>
