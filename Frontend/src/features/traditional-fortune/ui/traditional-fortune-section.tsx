@@ -50,8 +50,7 @@ export function TraditionalFortuneSection({
   return (
     <div className="flex flex-col gap-4 pb-6 pt-6">
       <TraditionalFortuneHeader
-        targetYear={data.targetYear}
-        yearDescription={data.yearDescription}
+        yearDescription={data.description}
       />
       <TraditionalFortuneHeroBanner data={data} />
       {(data.overallFortune ||

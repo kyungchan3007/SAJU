@@ -8,6 +8,8 @@ import {
 } from "@/shared/hooks/use-ad-progress-gate";
 import { AdSlot } from "@/shared/ui/ad-slot.client";
 
+// [DS] 역할: 결과 공개 전 광고 슬롯과 분석 진행률을 함께 보여주는 게이트 UI.
+// [DS] 현재 사용처: 사주 결과 대기/보상형 공개, 궁합/신년운세/정통사주 결과 공개 흐름.
 type AdProgressGateProps = {
   progress: number;
   isComplete?: boolean;

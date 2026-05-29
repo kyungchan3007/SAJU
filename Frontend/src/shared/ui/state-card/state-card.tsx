@@ -1,6 +1,8 @@
 import Link from "next/link";
 import type { ComponentProps, ReactNode } from "react";
 
+// [DS] 역할: loading/empty/error 상태를 카드 형태로 보여주는 레거시 상태 표시 컴포넌트.
+// [DS] 현재 사용처: 마이페이지 사주 관리, 띠별 궁합, 정통사주/운세 섹션의 상태 화면.
 type LinkHref = ComponentProps<typeof Link>["href"];
 
 type StateCardProps = {

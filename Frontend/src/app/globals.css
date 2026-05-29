@@ -26,11 +26,37 @@
     --ring: 241 77% 63%;                /* #5956E9 */
     --radius: 0.875rem;                 /* 14px */
 
-    /* ── saju 전용 RGB 토큰 ── */
-    --saju-primary: 89 86 233;          /* #5956E9 */
-    --saju-purple: 124 58 237;          /* #7C3AED */
-    --saju-light: 240 238 255;          /* #F0EEFF */
-    --saju-bg: 250 250 250;             /* #FAFAFA */
+    /* ── saju 브랜드 RGB 토큰 ── */
+    --saju-primary: 89 86 233;          /* #5956E9 - primary CTA, active, focus ring */
+    --saju-purple: 124 58 237;          /* #7C3AED - primary gradient end, premium accent */
+    --saju-accent: 165 163 247;         /* #A5A3F7 - dark purple surface 위 보조 텍스트 */
+    --saju-border: 224 218 255;         /* #E0DAFF - selected card, purple border */
+    --saju-tint: 237 233 255;           /* #EDE9FF - light purple panel background */
+    --saju-soft: 245 243 255;           /* #F5F3FF - hover/soft selected background */
+    --saju-light: 240 238 255;          /* #F0EEFF - badge, icon tile background */
+    --saju-bg: 250 250 250;             /* #FAFAFA - app background */
+
+    /* ── saju semantic RGB 토큰 ── */
+    --saju-surface-card: 255 255 255;   /* #FFFFFF - card, modal, sheet surface */
+    --saju-text-primary: 17 24 39;      /* #111827 - headings, primary text */
+    --saju-text-secondary: 55 65 81;    /* #374151 - body text */
+    --saju-text-muted: 107 114 128;     /* #6B7280 - helper text */
+    --saju-text-subtle: 156 163 175;    /* #9CA3AF - labels, placeholders */
+    --saju-border-neutral: 229 231 235; /* #E5E7EB - neutral border/input */
+
+    /* ── 상태 RGB 토큰 ── */
+    --saju-danger: 239 68 68;           /* #EF4444 - destructive action, error */
+    --saju-success: 22 163 74;          /* #16A34A - success/done state */
+    --saju-warning: 245 158 11;         /* #F59E0B - warning/medium score */
+    --saju-info: 6 182 212;             /* #06B6D4 - info/secondary score */
+
+    /* ── layout/z-index 토큰 ── */
+    --saju-layout-content: 1152px;      /* 일반 콘텐츠 페이지 max-width */
+    --saju-layout-reading: 720px;       /* 결과/리딩형 상세 페이지 max-width */
+    --saju-z-nav: 50;                   /* global navigation */
+    --saju-z-overlay: 190;              /* modal/dialog backdrop */
+    --saju-z-modal: 200;                /* modal/dialog content */
+    --saju-z-toast: 300;                /* toast/urgent feedback */
   }
 
   * {
@@ -116,12 +142,6 @@
 
   /* ── sketch 클래스 → 새 디자인 전환 (이름 유지) ── */
 
-  .sketch-border {
-    border: 1px solid #E5E7EB;
-    border-radius: 14px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  }
-
   .sketch-highlight {
     display: inline-block;
     background: #5956E9;
@@ -129,86 +149,4 @@
     padding: 0 0.3em 0.05em;
     border-radius: 4px;
   }
-
-  .sketch-input {
-    @apply border border-[#E5E7EB] bg-white px-4 py-2.5 text-sm text-[#111827];
-    border-radius: 10px;
-    outline: none;
-    transition: border-color 0.15s, box-shadow 0.15s;
-  }
-
-  .sketch-input:focus {
-    border-color: #5956E9;
-    box-shadow: 0 0 0 3px rgba(89, 86, 233, 0.15);
-  }
-
-  .sketch-input::placeholder {
-    color: #9CA3AF;
-  }
-}
-
-/* ── 오행 애니메이션 keyframes ── */
-
-/* wood: 잎 흔들림 */
-@keyframes leaf-sway {
-  0%, 100% { transform: rotate(-12deg) translateX(0); }
-  50%       { transform: rotate(12deg) translateX(2px); }
-}
-
-/* wood: 잎 떨어짐 */
-@keyframes leaf-fall {
-  0%   { transform: translateY(-10px) rotate(0deg);   opacity: 1; }
-  100% { transform: translateY(70px)  rotate(200deg); opacity: 0; }
-}
-
-/* fire: 불꽃 흔들림 */
-@keyframes flicker {
-  0%, 100% { transform: scaleX(1)    scaleY(1)    rotate(0deg); }
-  20%       { transform: scaleX(0.92) scaleY(1.08) rotate(-2deg); }
-  50%       { transform: scaleX(1.06) scaleY(0.94) rotate(2deg); }
-  75%       { transform: scaleX(0.96) scaleY(1.04) rotate(-1deg); }
-}
-
-/* earth: 줄기 자라남 */
-@keyframes grow-stem {
-  0%   { height: 0;    opacity: 0; }
-  100% { height: 36px; opacity: 1; }
-}
-
-/* earth: 꽃잎 피어남 */
-@keyframes bloom {
-  0%   { transform: scale(0) rotate(-60deg); opacity: 0; }
-  60%  { transform: scale(1.15) rotate(5deg); opacity: 1; }
-  100% { transform: scale(1) rotate(0deg);   opacity: 1; }
-}
-
-/* metal: 반짝임 */
-@keyframes sparkle {
-  0%, 100% { transform: scale(0) rotate(0deg);    opacity: 0; }
-  40%       { transform: scale(1.2) rotate(90deg); opacity: 1; }
-  70%       { transform: scale(0.9) rotate(135deg); opacity: 0.7; }
-}
-
-/* water: 물결 흐름 */
-@keyframes wave-flow {
-  0%   { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-
-/* water: 찰랑찰랑 좌우 기울임 */
-@keyframes water-slosh {
-  0%, 100% { transform: rotate(-2deg) translateY(0); }
-  50%       { transform: rotate(2deg) translateY(-4px); }
-}
-
-/* water: 배 둥실둥실 */
-@keyframes boat-rock {
-  0%, 100% { transform: translateX(-50%) rotate(-3deg) translateY(0); }
-  50%       { transform: translateX(-50%) rotate(3deg) translateY(-5px); }
-}
-
-/* water: 거품 올라오기 */
-@keyframes bubble-rise {
-  0%   { transform: translateY(0);    opacity: 0.8; }
-  100% { transform: translateY(-40px); opacity: 0; }
 }

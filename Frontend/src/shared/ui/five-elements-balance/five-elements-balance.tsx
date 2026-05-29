@@ -6,6 +6,8 @@ import {
 } from "@/shared/model/five-elements/utils";
 import { SajuSectionHeading } from "@/shared/ui/saju-section-heading/saju-section-heading";
 
+// [DS] 역할: 오행 비율과 용신 정보를 카드 형태로 보여주는 사주 도메인 공용 표시 컴포넌트.
+// [DS] 현재 사용처: 사주/운세 결과에서 오행 균형 정보를 재사용할 때 쓰는 shared 후보.
 type Props = {
   fiveElements: FiveElementsBalance;
 };

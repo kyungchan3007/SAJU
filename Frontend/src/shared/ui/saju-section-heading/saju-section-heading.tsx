@@ -3,6 +3,8 @@ import { Info } from "lucide-react";
 import { type SajuSectionHelpKey } from "@/shared/model/saju-section-help/model";
 import { getSajuSectionHelp } from "@/shared/model/saju-section-help/utils";
 
+// [DS] 역할: 사주 결과 섹션의 제목과 도움말 툴팁을 함께 보여주는 레거시 섹션 헤더.
+// [DS] 현재 사용처: 오행 균형 등 사주 결과 카드의 설명 가능한 섹션 제목.
 type Props = {
   helpKey: SajuSectionHelpKey;
 };

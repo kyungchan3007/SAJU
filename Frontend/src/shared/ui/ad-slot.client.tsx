@@ -10,6 +10,8 @@ declare global {
   }
 }
 
+// [DS] 역할: AdSense 설정이 있으면 광고를 렌더링하고, 없으면 개발용 광고 자리 표시자를 보여준다.
+// [DS] 현재 사용처: AdProgressGate 내부에서 결과 공개 대기 화면의 광고 영역으로 사용.
 export function AdSlot() {
   const clientId = env.NEXT_PUBLIC_ADSENSE_CLIENT_ID;
   const slotId = env.NEXT_PUBLIC_ADSENSE_SAJU_LOADING_SLOT;

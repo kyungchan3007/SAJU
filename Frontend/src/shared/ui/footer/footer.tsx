@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+// [DS] 역할: 데스크톱 하단 브랜드/정책 링크 영역을 제공하는 전역 푸터.
+// [DS] 현재 사용처: app layout에서 전역 페이지 하단에 렌더링.
 export function Footer() {
   return (
     <footer className="hidden bg-white px-8 py-10 md:block">

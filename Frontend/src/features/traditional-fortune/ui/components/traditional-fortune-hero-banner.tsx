@@ -4,16 +4,15 @@ type Props = {
   data: TraditionalFortuneResponse;
 };
 
-const CIRCUMFERENCE = 2 * Math.PI * 44; // ≈ 276.5
+const CIRCUMFERENCE = 2 * Math.PI * 44;
 
 export function TraditionalFortuneHeroBanner({ data }: Props) {
-  const score = data.yearScore ?? 0;
+  const score = data.score ?? 0;
   const offset = CIRCUMFERENCE * (1 - score / 100);
 
   return (
     <div className="rounded-2xl border border-slate-100 bg-white p-4 shadow-sm">
       <div className="flex items-center gap-3">
-        {/* 점수 링 */}
         <div className="relative h-[110px] w-[110px] shrink-0">
           <svg
             width="110"
@@ -55,7 +54,6 @@ export function TraditionalFortuneHeroBanner({ data }: Props) {
           </div>
         </div>
 
-        {/* 텍스트 영역 */}
         <div className="flex-1">
           {data.topPercentage && (
             <div
@@ -63,25 +61,22 @@ export function TraditionalFortuneHeroBanner({ data }: Props) {
               style={{ background: "#F0EEFF" }}
             >
               <span className="text-[11px] font-black text-[#5956E9]">
-                🏆 {data.topPercentage}
+                상위 {data.topPercentage}
               </span>
             </div>
           )}
           <div className="mb-2 text-[13px] font-black text-gray-800">
-            {data.targetYear
-              ? `${data.targetYear}년 (${data.yearDescription ?? ""})`
-              : data.yearDescription ?? "올해 운세"}
+            {data.description ?? "올해 운세"}
           </div>
-          {/* 도메인 점수 미니 그리드 */}
           <div className="grid grid-cols-2 gap-1.5">
             {[
               { label: "재물운", score: data.wealth?.score },
-              { label: "애정운", score: data.love?.score },
+              { label: "연애운", score: data.love?.score },
               { label: "직업운", score: data.career?.score },
               { label: "건강운", score: data.health?.score },
             ]
-              .filter(({ score }) => score != null)
-              .map(({ label, score: s }) => (
+              .filter(({ score: itemScore }) => itemScore != null)
+              .map(({ label, score: itemScore }) => (
                 <div
                   key={label}
                   className="rounded-xl p-1.5 text-center"
@@ -89,7 +84,7 @@ export function TraditionalFortuneHeroBanner({ data }: Props) {
                 >
                   <div className="text-[10px] text-slate-400">{label}</div>
                   <div className="text-[13px] font-black text-[#5956E9]">
-                    {s}점
+                    {itemScore}점
                   </div>
                 </div>
               ))}

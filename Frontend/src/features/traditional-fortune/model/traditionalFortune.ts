@@ -26,10 +26,10 @@ export const DOMAIN_META: Record<
   DomainKey,
   { icon: string; label: string; color: string; bg: string; headerLabel: string }
 > = {
-  wealth:  { icon: "💰", label: "재물운", color: "#F59E0B", bg: "#FEF9C3", headerLabel: "올해 재물운은" },
-  love:    { icon: "💕", label: "애정운", color: "#EC4899", bg: "#FCE7F3", headerLabel: "올해 애정운은" },
-  career:  { icon: "💼", label: "직업운", color: "#3B82F6", bg: "#DBEAFE", headerLabel: "올해 직업운은" },
-  health:  { icon: "🌿", label: "건강운", color: "#22C55E", bg: "#DCFCE7", headerLabel: "올해 건강운은" },
+  wealth:  { icon: "TrendingUp", label: "재물운", color: "#F59E0B", bg: "#FEF9C3", headerLabel: "올해 재물운은" },
+  love:    { icon: "Heart",       label: "애정운", color: "#EC4899", bg: "#FCE7F3", headerLabel: "올해 애정운은" },
+  career:  { icon: "Briefcase",   label: "직업운", color: "#3B82F6", bg: "#DBEAFE", headerLabel: "올해 직업운은" },
+  health:  { icon: "Leaf",        label: "건강운", color: "#22C55E", bg: "#DCFCE7", headerLabel: "올해 건강운은" },
 };
 
 function wealthSections(d: TraditionalFortuneWealthFortune): DomainSection[] {

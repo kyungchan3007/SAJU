@@ -25,6 +25,9 @@ export function CompatibilitySection() {
     isResultReady &&
     Boolean(compat.result) &&
     Boolean(compat.selectedPartner);
+  const contentMaxWidthClass = compat.isInResultView
+    ? "max-w-[720px]"
+    : "max-w-[1152px]";
 
   return (
     <div>
@@ -37,7 +40,7 @@ export function CompatibilitySection() {
 
       {/* 본문 — bg-white 공통 레이아웃 */}
       <div className="bg-white">
-        <div className="mx-auto max-w-[1152px] px-4 py-8 md:px-8">
+        <div className={`mx-auto ${contentMaxWidthClass} px-4 py-8 md:px-8`}>
 
           {/* 에러 */}
           {compat.resultError && compat.isInResultView && (
@@ -67,6 +70,7 @@ export function CompatibilitySection() {
           {/* 결과 화면 */}
           {shouldShowResult && compat.result && compat.selectedPartner && (
             <CompatibilityResultView
+              myProfile={compat.myProfile}
               partner={compat.selectedPartner}
               result={compat.result}
               onReset={compat.handleReset}

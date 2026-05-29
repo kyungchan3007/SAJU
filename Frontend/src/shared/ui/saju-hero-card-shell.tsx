@@ -1,3 +1,5 @@
+// [DS] 역할: 사주/운세 계열 히어로에서 공통으로 쓰는 이미지 배경 카드 shell.
+// [DS] 현재 사용처: 사주 미리보기 히어로, 궁합 히어로, 정통사주 히어로.
 type SajuHeroCardShellProps = {
   imageSrc?: string | null;
   imageAlt: string;

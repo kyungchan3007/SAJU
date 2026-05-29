@@ -1,11 +1,32 @@
+import { Award, Droplets, Flame, Gem, Leaf, Mountain, TrendingDown, TrendingUp } from "lucide-react";
 import { type FiveElementsBalance } from "@/shared/model/five-elements/model";
 import {
   getJeongtongsajuHeroImageSrc,
   getOrderedHeroElements,
   getYongshinDisplayInfo,
 } from "@/features/mypage/model/jeongtongsaju-hero";
+import { findZodiacByLabel } from "@/shared/model/zodiac/utils";
 import { SajuHeroCardShell } from "@/shared/ui/saju-hero-card-shell";
 import { TraitMiniCard } from "@/shared/ui/trait-mini-card";
+
+function StrengthIcon({ value }: { value: string }) {
+  const isStrong = value.includes("신강");
+  return isStrong
+    ? <TrendingUp size={13} color="#D97706" strokeWidth={2.5} />
+    : <TrendingDown size={13} color="#D97706" strokeWidth={2.5} />;
+}
+
+function FiveElementIcon({ ko, color }: { ko: string; color: string }) {
+  const props = { size: 14, color, strokeWidth: 2 };
+  switch (ko) {
+    case "금": return <Gem {...props} />;
+    case "목": return <Leaf {...props} />;
+    case "토": return <Mountain {...props} />;
+    case "화": return <Flame {...props} />;
+    case "수": return <Droplets {...props} />;
+    default:   return <Gem {...props} />;
+  }
+}
 
 type Traits = {
   summaryZodiac?: string;
@@ -64,6 +85,7 @@ export function JeongtongsajuHero({
                 label="신강/신약"
                 value={traits.summaryStrength}
                 bg="#FEF3C7"
+                icon={<StrengthIcon value={traits.summaryStrength} />}
                 className="border border-white/40 bg-white/25 backdrop-blur-md"
                 variant="dark"
               />
@@ -76,6 +98,11 @@ export function JeongtongsajuHero({
                     label="띠"
                     value={traits.summaryZodiac}
                     bg="#FFF3E8"
+                    icon={
+                      <span className="text-[13px] leading-none">
+                        {findZodiacByLabel(traits.summaryZodiac)?.emoji}
+                      </span>
+                    }
                     className="border border-white/40 bg-white/25 backdrop-blur-md"
                     variant="dark"
                   />
@@ -85,6 +112,7 @@ export function JeongtongsajuHero({
                     label="격국"
                     value={traits.geokguk}
                     bg="#F1F5F9"
+                    icon={<Award size={13} color="#5956E9" strokeWidth={2} />}
                     className="border border-white/40 bg-white/25 backdrop-blur-md"
                     variant="dark"
                   />
@@ -109,10 +137,10 @@ export function JeongtongsajuHero({
               {primaryInfo && (
                 <div className="flex flex-1 items-center gap-2 rounded-lg border border-white/40 bg-white/25 px-3 py-2.5 backdrop-blur-md">
                   <div
-                    className="flex h-7 w-7 shrink-0 items-center justify-center rounded text-[13px]"
+                    className="flex h-7 w-7 shrink-0 items-center justify-center rounded"
                     style={{ background: primaryInfo.bg }}
                   >
-                    {primaryInfo.emoji}
+                    <FiveElementIcon ko={primaryInfo.ko} color={primaryInfo.color} />
                   </div>
                   <div>
                     <div className="text-[10px] text-white/60">용신</div>
@@ -125,10 +153,10 @@ export function JeongtongsajuHero({
               {secondaryInfo && (
                 <div className="flex flex-1 items-center gap-2 rounded-lg border border-white/40 bg-white/25 px-3 py-2.5 backdrop-blur-md">
                   <div
-                    className="flex h-7 w-7 shrink-0 items-center justify-center rounded text-[13px]"
+                    className="flex h-7 w-7 shrink-0 items-center justify-center rounded"
                     style={{ background: secondaryInfo.bg }}
                   >
-                    {secondaryInfo.emoji}
+                    <FiveElementIcon ko={secondaryInfo.ko} color={secondaryInfo.color} />
                   </div>
                   <div>
                     <div className="text-[10px] text-white/60">보조 용신</div>

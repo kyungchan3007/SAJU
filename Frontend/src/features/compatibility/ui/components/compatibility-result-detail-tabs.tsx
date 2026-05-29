@@ -1,4 +1,30 @@
+"use client";
+
+import {
+  Brain,
+  Gem,
+  Handshake,
+  Heart,
+  MessageCircle,
+  Shield,
+  TrendingUp,
+  Zap,
+} from "lucide-react";
 import type { CompatibilitySectionDisplay } from "@/features/compatibility/model/compatibility";
+
+function SectionIcon({ icon, color }: { icon: string; color: string }) {
+  const props = { size: 12, style: { color }, strokeWidth: 2 };
+  switch (icon) {
+    case "💘": return <Heart {...props} />;
+    case "🧠": return <Brain {...props} />;
+    case "🗣️": return <MessageCircle {...props} />;
+    case "🤝": return <Handshake {...props} />;
+    case "💍": return <Gem {...props} />;
+    case "💰": return <TrendingUp {...props} />;
+    case "⚡": return <Zap {...props} />;
+    default:   return <Shield {...props} />;
+  }
+}
 
 type Props = {
   sections: CompatibilitySectionDisplay[];
@@ -14,8 +40,24 @@ export function CompatibilityResultDetailTabs({
   onSelectSection,
 }: Props) {
   return (
-    <div className="mt-4 overflow-hidden rounded-sm border-2 border-black bg-[#FFFEF9]">
-      <div className="flex gap-[6px] overflow-x-auto border-b-2 border-black px-3 py-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+    <div className="rounded-3xl border border-slate-100 bg-white shadow-sm overflow-hidden">
+      {/* 헤더 */}
+      <div className="border-b border-slate-100 px-6 py-4">
+        <div className="flex items-center gap-2">
+          <div
+            className="flex h-8 w-8 items-center justify-center rounded-xl"
+            style={{ background: "#F0EEFF" }}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5956E9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+            </svg>
+          </div>
+          <span className="text-[15px] font-extrabold text-[#111827]">분야별 상세 풀이</span>
+        </div>
+      </div>
+
+      {/* 탭 버튼 */}
+      <div className="flex gap-2 overflow-x-auto px-5 pt-4 pb-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {sections.map((section, i) => {
           const isActive = i === activeSectionIndex;
           return (
@@ -23,44 +65,47 @@ export function CompatibilityResultDetailTabs({
               key={`${section.label}-${i}`}
               type="button"
               onClick={() => onSelectSection(i)}
-              className="inline-flex shrink-0 cursor-pointer items-center gap-1 whitespace-nowrap rounded-full border-2 border-black px-3 py-[5px] text-[11px] font-bold transition-all"
+              className="inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full px-3.5 py-1.5 text-[12px] font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5956E9] focus-visible:ring-offset-2"
               style={
                 isActive
                   ? {
-                      background: "#0d0d0d",
+                      background: "#5956E9",
                       color: "white",
-                      transform: "translate(-1px,-1px)",
-                      boxShadow: "2px 2px 0 #0d0d0d",
                     }
                   : {
-                      background: "#FFFEF9",
-                      boxShadow: "2px 2px 0 #0d0d0d",
+                      background: "#F3F4F6",
+                      color: "#6B7280",
                     }
               }
             >
-              {section.icon} {section.label}
+              <SectionIcon icon={section.icon} color={isActive ? "white" : section.color} />
+              <span>{section.label}</span>
             </button>
           );
         })}
       </div>
 
-      <div className="p-3.5">
+      {/* 내용 */}
+      <div className="p-5">
         {activeSection?.content ? (
           <div
-            className="rounded-sm border-2 border-black bg-[rgb(253,251,240)] p-[12px_14px]"
-            style={{ boxShadow: "2px 2px 0 #0d0d0d" }}
+            className="rounded-2xl border p-4"
+            style={{ background: "#F9F8FF", borderColor: "#E0DAFF" }}
           >
             {activeSection.keyword && (
-              <div className="mb-1.5 text-[10px] font-bold tracking-[.1em] text-[rgba(13,13,13,.45)]">
+              <span
+                className="mb-2 inline-block rounded-full px-2.5 py-0.5 text-[11px] font-bold"
+                style={{ background: "#E0DAFF", color: "#5956E9" }}
+              >
                 {activeSection.keyword}
-              </div>
+              </span>
             )}
-            <p className="whitespace-pre-line text-[13px] leading-[1.8] text-[rgba(13,13,13,.72)]">
+            <p className="whitespace-pre-line text-[13px] leading-[1.85] text-[#374151]">
               {activeSection.content}
             </p>
           </div>
         ) : (
-          <p className="text-[13px] text-[rgba(13,13,13,.45)]">아직 상세 풀이가 없어요.</p>
+          <p className="text-[13px] text-slate-400">아직 상세 풀이가 없어요.</p>
         )}
       </div>
     </div>

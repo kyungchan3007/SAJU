@@ -1,5 +1,7 @@
 import { cn } from "@/shared/lib/utils";
 
+// [DS] 역할: 저장/삭제/수정 같은 액션 결과를 success/error/info/warning 상태로 보여주는 피드백 메시지.
+// [DS] 현재 사용처: 마이페이지 사주 관리 성공/에러 메시지, 향후 폼 제출 결과 표시.
 type StatusMessageVariant = "success" | "error" | "info" | "warning";
 
 type Props = {

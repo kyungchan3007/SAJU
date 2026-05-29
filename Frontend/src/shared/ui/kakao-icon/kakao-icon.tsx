@@ -1,5 +1,7 @@
 import type { SVGProps } from "react";
 
+// [DS] 역할: 카카오 로그인/프로필 진입 UI에서 쓰는 카카오 말풍선 아이콘.
+// [DS] 현재 사용처: 로그인 패널, 프로필 진입 버튼, 웰컴 섹션 카카오 CTA.
 type KakaoIconProps = SVGProps<SVGSVGElement> & {
   size?: number;
 };

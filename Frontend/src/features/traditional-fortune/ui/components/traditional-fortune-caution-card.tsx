@@ -1,3 +1,4 @@
+import { AlertTriangle } from "lucide-react";
 import { splitParagraphs } from "@/features/traditional-fortune/ui/utils/split-paragraphs";
 
 type Props = {
@@ -11,7 +12,7 @@ export function TraditionalFortuneCautionCard({ text }: Props) {
     <div className="rounded-2xl border border-slate-100 bg-white p-4 shadow-sm">
       <div className="mb-3 flex items-center gap-2">
         <div className="flex h-7 w-7 items-center justify-center rounded-full bg-red-50">
-          <span className="text-[13px]">⚠️</span>
+          <AlertTriangle size={13} className="text-red-500" />
         </div>
         <span className="text-[13px] font-black">주의 사항</span>
       </div>

@@ -1,4 +1,9 @@
-import type { CompatibilityResponse, CompatibilitySection } from "@/generated/api";
+import type {
+  CompatibilityResponse,
+  CompatibilitySection,
+  PartnerResponse,
+  SajuProfileResponse,
+} from "@/generated/api";
 
 export type CompatibilityStatus = "COMPLETE" | "PENDING" | "UNKNOWN";
 
@@ -20,7 +25,10 @@ export type CompatibilityResultDisplay = {
   tags: string[];
 };
 
-const SECTION_META: Record<string, { icon: string; color: string; label: string }> = {
+const SECTION_META: Record<
+  string,
+  { icon: string; color: string; label: string }
+> = {
   love: { icon: "💘", color: "#EC4899", label: "연인궁합" },
   personality: { icon: "🧠", color: "#8B5CF6", label: "성격궁합" },
   communication: { icon: "🗣️", color: "#06B6D4", label: "소통궁합" },
@@ -95,6 +103,44 @@ export function formatGender(gender?: string): string {
   return "";
 }
 
+export const COMPATIBILITY_ANALYSIS_LABELS = [
+  "성격 궁합",
+  "연애 궁합",
+  "결혼 궁합",
+  "재물 궁합",
+  "대화 궁합",
+  "미래 흐름",
+] as const;
+
+export function formatProfileSummary(
+  profile?: Pick<SajuProfileResponse, "birthDate" | "gender"> | null,
+): string {
+  const birthYear = profile?.birthDate?.split("-")[0];
+  const gender = profile?.gender ? formatGender(profile.gender) : null;
+
+  return [birthYear ? `${birthYear}년생` : null, gender]
+    .filter(Boolean)
+    .join(" · ");
+}
+
+export function formatPartnerSummary(
+  partner?: Pick<PartnerResponse, "birthDate" | "gender"> | null,
+): string {
+  const birthYear = partner?.birthDate?.split("-")[0];
+  const gender = partner?.gender ? formatGender(partner.gender) : null;
+
+  return [birthYear ? `${birthYear}년생` : null, gender]
+    .filter(Boolean)
+    .join(" · ");
+}
+
+export function getPartnerSelectCtaLabel(
+  partner?: PartnerResponse | null,
+): string {
+  if (!partner) return "상대를 선택해주세요";
+  return `${partner.name}${koreanParticle(partner.name ?? "", "과", "와")} 궁합 보기`;
+}
+
 // ── 이미지 매핑 ──────────────────────────────────────
 
 const PARTNER_FEMALE_IMAGES = [
@@ -113,8 +159,7 @@ const PARTNER_MALE_IMAGES = [
 
 /** 내 프로필 아바타 이미지 (gender → me/ 폴더) */
 export function getMyAvatarSrc(gender?: string | null): string {
-  if (gender === "MALE")
-    return "/image/compatibility/me/avatar-MALE.png";
+  if (gender === "MALE") return "/image/compatibility/me/avatar-MALE.png";
   return "/image/compatibility/me/avatar-FEMALE.png";
 }
 
@@ -123,9 +168,40 @@ export function getPartnerAvatarSrc(
   gender?: string | null,
   index: number = 0,
 ): string {
-  const imgs =
-    gender === "MALE" ? PARTNER_MALE_IMAGES : PARTNER_FEMALE_IMAGES;
+  const imgs = gender === "MALE" ? PARTNER_MALE_IMAGES : PARTNER_FEMALE_IMAGES;
   return imgs[index % imgs.length] ?? imgs[0];
+}
+
+/** MyProfileCard용 매칭 이미지 (gender → matching/ 폴더) */
+export function getMatchingImageSrc(gender?: string | null): string {
+  return gender === "MALE"
+    ? "/image/compatibility/matching/avatar-MALE_TIN.png"
+    : "/image/compatibility/matching/avatar-FEMALE_TIN.png";
+}
+
+/** SelectedPartnerCard용 TIN 이미지 (gender → matching/ 폴더) */
+export function getPartnerTinImageSrc(gender?: string | null): string {
+  return gender === "MALE"
+    ? "/image/compatibility/matching/matching_MALE.png"
+    : "/image/compatibility/matching/matching_FEMALE.png";
+}
+
+/** 이름 첫 글자 추출 */
+export function getInitial(name?: string | null): string {
+  if (!name) return "?";
+  return name.charAt(0);
+}
+
+/** 한국어 조사 선택 (받침 유무 기준) */
+export function koreanParticle(
+  word: string,
+  withBatchim: string,
+  withoutBatchim: string,
+): string {
+  if (!word) return withoutBatchim;
+  const code = word.charCodeAt(word.length - 1);
+  if (code < 0xac00 || code > 0xd7a3) return withoutBatchim;
+  return (code - 0xac00) % 28 !== 0 ? withBatchim : withoutBatchim;
 }
 
 /** 오늘 날짜 한국어 포맷 (클라이언트 전용) */
