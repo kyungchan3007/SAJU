@@ -15,6 +15,7 @@ import {
   MINUTE_OPTIONS,
   MONTH_OPTIONS,
 } from "@/shared/model/date-time-options/model";
+import { Button, Card, FormMessage, Select } from "@/shared/ui";
 
 type Props = {
   initialValues: SajuManageFormValues;
@@ -33,7 +34,7 @@ export function SajuManageForm({
     useSajuManageForm({ initialValues, onSave });
 
   return (
-    <div className="rounded-2xl border border-slate-100 bg-white shadow-sm">
+    <Card className="overflow-hidden rounded-2xl border-slate-100 shadow-sm">
       <div className="border-b border-slate-100 bg-[#F9F8FF] px-5 py-3">
         <span className="text-sm font-bold text-gray-900">사주 정보 수정</span>
       </div>
@@ -92,21 +93,17 @@ export function SajuManageForm({
                   opts: DAY_OPTIONS,
                 },
               ].map(({ id, val, field, opts }) => (
-                <div key={id} className="relative">
-                  <select
+                <div key={id}>
+                  <Select
                     value={val}
                     onChange={(e) => updateField(field, e.target.value)}
-                    className="h-[46px] w-full appearance-none rounded-xl border border-[#E5E7EB] bg-white px-3 pr-7 text-[13px] text-gray-900 outline-none transition-colors focus:border-[#5956E9] focus:shadow-[0_0_0_3px_rgba(89,86,233,0.10)]"
                   >
                     {opts.map((o) => (
                       <option key={o.value} value={o.value}>
                         {o.label}
                       </option>
                     ))}
-                  </select>
-                  <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-[11px] text-slate-400">
-                    ▾
-                  </span>
+                  </Select>
                 </div>
               ))}
             </div>
@@ -139,21 +136,17 @@ export function SajuManageForm({
                   opts: MINUTE_OPTIONS,
                 },
               ].map(({ id, val, field, opts }) => (
-                <div key={id} className="relative">
-                  <select
+                <div key={id}>
+                  <Select
                     value={val}
                     onChange={(e) => updateField(field, e.target.value)}
-                    className="h-[46px] w-full appearance-none rounded-xl border border-[#E5E7EB] bg-white px-3 pr-7 text-[13px] text-gray-900 outline-none transition-colors focus:border-[#5956E9] focus:shadow-[0_0_0_3px_rgba(89,86,233,0.10)]"
                   >
                     {opts.map((o) => (
                       <option key={o.value} value={o.value}>
                         {o.label}
                       </option>
                     ))}
-                  </select>
-                  <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-[11px] text-slate-400">
-                    ▾
-                  </span>
+                  </Select>
                 </div>
               ))}
             </div>
@@ -207,21 +200,17 @@ export function SajuManageForm({
             <label className="text-xs font-bold text-slate-500">
               태어난 도시
             </label>
-            <div className="relative">
-              <select
+            <div>
+              <Select
                 value={formState.city}
                 onChange={(e) => updateField("city", e.target.value)}
-                className="h-[46px] w-full appearance-none rounded-xl border border-[#E5E7EB] bg-white px-3 pr-7 text-[13px] text-gray-900 outline-none transition-colors focus:border-[#5956E9] focus:shadow-[0_0_0_3px_rgba(89,86,233,0.10)]"
               >
                 {CITY_OPTIONS.map((o) => (
                   <option key={o.value} value={o.value}>
                     {o.label}
                   </option>
                 ))}
-              </select>
-              <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-[11px] text-slate-400">
-                ▾
-              </span>
+              </Select>
             </div>
             <p className="text-[11px] text-slate-400">
               출생 도시는 사주의 지역 보정값 계산에 사용됩니다.
@@ -232,32 +221,28 @@ export function SajuManageForm({
           <div className="h-px bg-slate-100" />
 
           {/* 안내 */}
-          <p className="rounded-xl border border-amber-200 bg-[#FFFBEB] px-3 py-2.5 text-[11px] leading-relaxed text-amber-700">
+          <FormMessage variant="warning" className="text-[11px] font-medium">
             저장하기를 누르면 상대방과 궁합을 볼수 있어요!
-          </p>
+          </FormMessage>
 
           {/* 에러 */}
           {errorMessage && (
-            <p className="rounded-xl border border-red-200 bg-red-50 px-3 py-2.5 text-[12px] font-semibold text-red-600">
+            <FormMessage variant="error">
               {errorMessage}
-            </p>
+            </FormMessage>
           )}
 
           {/* 저장 버튼 */}
-          <button
+          <Button
             type="button"
             onClick={submit}
             disabled={isPending || !isSubmittable}
-            className="w-full rounded-xl py-3.5 text-[15px] font-black text-white disabled:opacity-40"
-            style={{
-              background: "linear-gradient(to right,#5956E9,#7C3AED)",
-              boxShadow: "0 4px 14px rgba(89,86,233,0.25)",
-            }}
+            className="h-[50px] w-full text-[15px] font-black disabled:opacity-40"
           >
             {isPending ? "수정 중..." : "저장하기"}
-          </button>
+          </Button>
         </div>
       </div>
-    </div>
+    </Card>
   );
 }

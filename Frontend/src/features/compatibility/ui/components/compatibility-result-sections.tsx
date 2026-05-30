@@ -1,5 +1,6 @@
 import {
   Brain,
+  ChartColumn,
   Gem,
   Handshake,
   Heart,
@@ -9,6 +10,7 @@ import {
   Zap,
 } from "lucide-react";
 import type { CompatibilitySectionDisplay } from "@/features/compatibility/model/compatibility";
+import { Badge, IconBadge, ProgressBar } from "@/shared/ui";
 
 type Props = {
   sections: CompatibilitySectionDisplay[];
@@ -33,16 +35,9 @@ export function CompatibilityResultSections({ sections }: Props) {
     <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-sm">
       {/* 헤더 */}
       <div className="mb-5 flex items-center gap-2">
-        <div
-          className="flex h-8 w-8 items-center justify-center rounded-xl"
-          style={{ background: "#F0EEFF" }}
-        >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5956E9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <line x1="18" y1="20" x2="18" y2="10" />
-            <line x1="12" y1="20" x2="12" y2="4" />
-            <line x1="6" y1="20" x2="6" y2="14" />
-          </svg>
-        </div>
+        <IconBadge size="sm">
+          <ChartColumn size={16} />
+        </IconBadge>
         <span className="text-[15px] font-extrabold text-[#111827]">분야별 궁합</span>
       </div>
 
@@ -52,32 +47,30 @@ export function CompatibilityResultSections({ sections }: Props) {
           <div key={i} className="flex flex-col gap-1.5">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <div
-                  className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg"
+                <IconBadge
+                  className="h-6 w-6 rounded-lg"
                   style={{ background: `${section.color}18` }}
                 >
                   <SectionIcon icon={section.icon} color={section.color} />
-                </div>
+                </IconBadge>
                 <span className="text-[13px] font-bold text-[#111827]">{section.label}</span>
                 {section.keyword && (
-                  <span
-                    className="rounded-full px-2 py-0.5 text-[10px] font-bold"
+                  <Badge
+                    className="px-2 py-0.5 text-[10px]"
                     style={{ background: `${section.color}18`, color: section.color }}
                   >
                     {section.keyword}
-                  </span>
+                  </Badge>
                 )}
               </div>
               <span className="text-[13px] font-extrabold" style={{ color: section.color }}>
                 {section.score}
               </span>
             </div>
-            <div className="h-2 overflow-hidden rounded-full bg-slate-100">
-              <div
-                className="h-full rounded-full transition-all duration-700"
-                style={{ width: `${section.score}%`, background: section.color }}
-              />
-            </div>
+            <ProgressBar
+              value={section.score}
+              indicatorStyle={{ background: section.color }}
+            />
           </div>
         ))}
       </div>

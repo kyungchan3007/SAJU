@@ -85,7 +85,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
         ) : null}
         <Providers>
           <GlobalNav isLoggedIn={isLoggedIn} />
-          <main className="flex-1">
+          <main className="flex flex-1 flex-col bg-white">
             {children}
           </main>
           <Footer />

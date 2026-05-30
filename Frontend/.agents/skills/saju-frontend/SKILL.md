@@ -3,7 +3,7 @@ name: saju-frontend
 description: >-
   이 저장소의 사주 프론트엔드 구현 또는 변경 요청에 사용한다. Next.js App Router
   페이지와 흐름(/saju, /saju/result, /home, /mypage, /mypage/jeongtongsaju,
-  /mypage/year-fortune, /compatibility, /location, /login),
+  /mypage/year-fortune, /compatibility, /community, /location, /login),
   인증 인식 UX, 사주 입력 임시저장 동작, React Query 사용/캐싱,
   OpenAPI 생성 프론트엔드 클라이언트 연동, UI 상태 및 컴포넌트 레이어 결정 작업이
   해당된다. 사용자가 라우트나 기술명을 명시하지 않아도 해당 영역이면 사용한다.
@@ -29,6 +29,7 @@ description: >-
 - `/mypage/jeongtongsaju` 또는 정통사주 상세 조회 작업이면 `references/jeongtongsaju.md`를 읽는다.
 - `/mypage/year-fortune` 또는 신년운세 조회·생성형 풀이 작업이면 `references/year-fortune.md`를 읽는다.
 - `/compatibility` 또는 파트너 궁합 풀이 조회·선택 흐름 작업이면 `references/compatibility.md`를 읽는다.
+- `/community` 또는 커뮤니티 관심 신청, 기수 현황 조회, 참가 신청 흐름 작업이면 `references/api.md`를 읽고 BFF 경계를 우선한다.
 - `/mypage/saju-manage` 또는 내 사주 기본 정보 조회·수정 작업이면 `references/saju-manage.md`를 읽는다.
 - `/mypage/zodiac-compatibility` 또는 띠별 궁합 조회·점수 매핑 작업이면 `references/zodiac-compatibility.md`를 읽는다.
 - `/home` 작업이면 `references/home.md`를 읽는다.

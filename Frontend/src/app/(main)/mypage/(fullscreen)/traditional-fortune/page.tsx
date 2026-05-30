@@ -8,10 +8,6 @@ export const metadata: Metadata = {
 };
 
 export default function TraditionalFortunePage() {
-  return (
-    <main>
-      <JeongtongsajuAndFortuneSection />
-    </main>
-  );
+  return <JeongtongsajuAndFortuneSection />;
 }
 

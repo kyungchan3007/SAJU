@@ -1,4 +1,5 @@
 import { COMPATIBILITY_ANALYSIS_LABELS } from "@/features/compatibility/model/compatibility";
+import { Badge } from "@/shared/ui";
 
 export function CompatibilityAnalysisInfo() {
   return (
@@ -9,13 +10,9 @@ export function CompatibilityAnalysisInfo() {
         </p>
         <div className="flex flex-wrap gap-2">
           {COMPATIBILITY_ANALYSIS_LABELS.map((label) => (
-            <span
-              key={label}
-              className="rounded-full px-3 py-1 text-[12px] font-bold"
-              style={{ background: "#F0EEFF", color: "#5956E9" }}
-            >
+            <Badge key={label} variant="primary" className="px-3 py-1 text-[12px]">
               {label}
-            </span>
+            </Badge>
           ))}
         </div>
       </div>

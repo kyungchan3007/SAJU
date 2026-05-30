@@ -1,7 +1,8 @@
 import Link from "next/link";
 import type { ComponentProps, ReactNode } from "react";
+import { AlertCircle, Inbox, Loader2 } from "lucide-react";
 
-// [DS] 역할: loading/empty/error 상태를 카드 형태로 보여주는 레거시 상태 표시 컴포넌트.
+// [DS] 역할: loading/empty/error 상태를 카드 형태로 보여주는 공용 상태 표시 컴포넌트.
 // [DS] 현재 사용처: 마이페이지 사주 관리, 띠별 궁합, 정통사주/운세 섹션의 상태 화면.
 type LinkHref = ComponentProps<typeof Link>["href"];
 
@@ -25,12 +26,15 @@ export function StateCard({
 }: StateCardProps) {
   return (
     <div
-      className={`rounded-sm border-2 border-black bg-[#FDFCF8] p-10 text-center ${className}`}
-      style={{ boxShadow: "4px 4px 0 #0d0d0d" }}
+      className={`rounded-3xl border border-slate-100 bg-white px-6 py-10 text-center shadow-sm ${className}`}
     >
-      {title && <p className="mb-2 font-bold">{title}</p>}
+      {title && (
+        <p className="mb-2 text-[15px] font-bold text-gray-900">{title}</p>
+      )}
       {description && (
-        <p className="mb-5 text-[13px] text-[#7a7570]">{description}</p>
+        <p className="mb-5 text-[13px] leading-relaxed text-gray-500">
+          {description}
+        </p>
       )}
       {children}
     </div>
@@ -39,7 +43,10 @@ export function StateCard({
 
 export function LoadingStateCard({ message }: { message: string }) {
   return (
-    <StateCard className="text-[14px] text-[#7a7570]">{message}</StateCard>
+    <div className="flex flex-col items-center gap-3 rounded-3xl border border-slate-100 bg-white px-6 py-10 text-center shadow-sm">
+      <Loader2 size={28} className="animate-spin text-[#5956E9]" />
+      <p className="text-[14px] text-gray-500">{message}</p>
+    </div>
   );
 }
 
@@ -50,17 +57,25 @@ export function EmptyStateCard({
   actionLabel,
 }: ActionStateCardProps) {
   return (
-    <StateCard title={title} description={description}>
+    <div className="flex flex-col items-center gap-3 rounded-3xl border border-slate-100 bg-white px-6 py-10 text-center shadow-sm">
+      <div className="flex h-14 w-14 items-center justify-center rounded-[18px] bg-slate-50">
+        <Inbox size={26} className="text-slate-400" />
+      </div>
+      {title && (
+        <p className="text-[15px] font-bold text-gray-900">{title}</p>
+      )}
+      {description && (
+        <p className="text-[13px] leading-relaxed text-gray-500">{description}</p>
+      )}
       {actionHref && actionLabel && (
         <Link
           href={actionHref}
-          className="inline-block rounded-full border-2 border-black bg-yellow-300 px-5 py-2 text-[13px] font-bold"
-          style={{ boxShadow: "2px 2px 0 #0d0d0d" }}
+          className="mt-1 inline-block rounded-full bg-[#5956E9] px-5 py-2.5 text-[13px] font-bold text-white transition-opacity hover:opacity-90"
         >
           {actionLabel}
         </Link>
       )}
-    </StateCard>
+    </div>
   );
 }
 
@@ -71,16 +86,24 @@ export function ErrorStateCard({
   actionLabel,
 }: ActionStateCardProps) {
   return (
-    <StateCard title={title} description={description}>
+    <div className="flex flex-col items-center gap-3 rounded-3xl border border-slate-100 bg-white px-6 py-10 text-center shadow-sm">
+      <div className="flex h-14 w-14 items-center justify-center rounded-[18px] bg-red-50">
+        <AlertCircle size={26} className="text-red-400" />
+      </div>
+      {title && (
+        <p className="text-[15px] font-bold text-gray-900">{title}</p>
+      )}
+      {description && (
+        <p className="text-[13px] leading-relaxed text-gray-500">{description}</p>
+      )}
       {actionHref && actionLabel && (
         <Link
           href={actionHref}
-          className="inline-block rounded-full border-2 border-black bg-yellow-300 px-5 py-2 text-[13px] font-bold"
-          style={{ boxShadow: "2px 2px 0 #0d0d0d" }}
+          className="mt-1 inline-block rounded-full bg-[#5956E9] px-5 py-2.5 text-[13px] font-bold text-white transition-opacity hover:opacity-90"
         >
           {actionLabel}
         </Link>
       )}
-    </StateCard>
+    </div>
   );
 }

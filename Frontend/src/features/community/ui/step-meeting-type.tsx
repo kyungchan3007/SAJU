@@ -1,5 +1,5 @@
 import Image from "next/image";
-import type { MeetingType } from "../hooks/use-community-flow";
+import type { MeetingType } from "@/features/community/model/community";
 
 type Props = {
   selectedType: MeetingType;

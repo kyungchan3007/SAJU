@@ -6,6 +6,7 @@ import { CompatibilityResultView } from "@/features/compatibility/ui/compatibili
 import { PartnerSelectView } from "@/features/compatibility/ui/partner-select-view";
 import { useAdGate } from "@/shared/hooks/use-ad-gate";
 import { AdProgressGate } from "@/shared/ui/ad-progress-gate.client";
+import { FortuneGateLayout } from "@/shared/ui/fortune-page-layout";
 import { PageContentLayout } from "@/shared/ui/page-content-layout";
 
 export function CompatibilitySection() {
@@ -38,7 +39,7 @@ export function CompatibilitySection() {
         </PageContentLayout>
       )}
 
-      {/* 본문 — bg-white 공통 레이아웃 */}
+      {/* 본문 */}
       <div className="bg-white">
         <div className={`mx-auto ${contentMaxWidthClass} px-4 py-8 md:px-8`}>
 
@@ -60,11 +61,13 @@ export function CompatibilitySection() {
 
           {/* 광고 게이트 */}
           {adGate.shouldShowGate && (
-            <AdProgressGate
-              progress={isResultReady ? 100 : 80}
-              isComplete={isResultReady}
-              onRevealResult={adGate.unlock}
-            />
+            <FortuneGateLayout>
+              <AdProgressGate
+                progress={isResultReady ? 100 : 80}
+                isComplete={isResultReady}
+                onRevealResult={adGate.unlock}
+              />
+            </FortuneGateLayout>
           )}
 
           {/* 결과 화면 */}

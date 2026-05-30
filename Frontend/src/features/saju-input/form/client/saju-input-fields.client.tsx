@@ -17,11 +17,7 @@ import type {
   SajuFormValues,
   TouchedSteps,
 } from "@/features/saju-input/type/type";
-
-/** 공통 input / select 스타일 */
-const fieldCls =
-  "h-[50px] w-full appearance-none rounded-[14px] border border-[#E5E7EB] bg-white px-4 text-[13px] text-gray-900 outline-none transition-all cursor-pointer " +
-  "focus:border-[#5956E9] focus:shadow-[0_0_0_3px_rgba(89,86,233,0.10)]";
+import { Button, Input, Select } from "@/shared/ui";
 
 type SajuInputFieldsProps = {
   formValues: SajuFormValues;
@@ -74,25 +70,21 @@ export function SajuInputFields({
             <span className="text-xs font-bold text-gray-700">
               출생 연도 <span style={{ color: "#5956E9" }}>*</span>
             </span>
-            <div className="relative">
-              <select
+            <div>
+              <Select
                 value={formValues.birthYear}
                 onChange={(e) => onChangeField("birthYear", e.target.value)}
                 onBlur={() => onTouchStep("birthDate")}
                 name="birthYear"
                 autoComplete="off"
-                className={fieldCls}
-                style={{ paddingRight: "36px" }}
+                className="h-[50px] rounded-[14px] px-4 pr-9"
               >
                 {birthYearOptions.map((year) => (
                   <option key={year} value={year}>
                     {year}
                   </option>
                 ))}
-              </select>
-              <span className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-xs text-gray-400">
-                ▾
-              </span>
+              </Select>
             </div>
           </label>
 
@@ -101,7 +93,7 @@ export function SajuInputFields({
             <span className="text-xs font-bold text-gray-700">
               출생 월 / 일 <span style={{ color: "#5956E9" }}>*</span>
             </span>
-            <input
+            <Input
               type="text"
               name="birthDate"
               autoComplete="off"
@@ -109,7 +101,7 @@ export function SajuInputFields({
               value={formValues.birthDate}
               onChange={(e) => onChangeField("birthDate", e.target.value)}
               onBlur={() => onTouchStep("birthDate")}
-              className={fieldCls}
+              className="h-[50px] rounded-[14px] px-4"
             />
           </label>
 
@@ -118,25 +110,21 @@ export function SajuInputFields({
             <span className="text-xs font-bold text-gray-700">
               양력 / 음력 <span style={{ color: "#5956E9" }}>*</span>
             </span>
-            <div className="relative">
-              <select
+            <div>
+              <Select
                 value={formValues.calendarType}
                 onChange={(e) => onChangeField("calendarType", e.target.value)}
                 onBlur={() => onTouchStep("birthDate")}
                 name="calendarType"
                 autoComplete="off"
-                className={fieldCls}
-                style={{ paddingRight: "36px" }}
+                className="h-[50px] rounded-[14px] px-4 pr-9"
               >
                 {calendarTypeOptions.map((o) => (
                   <option key={o.value} value={o.value}>
                     {o.label}
                   </option>
                 ))}
-              </select>
-              <span className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-xs text-gray-400">
-                ▾
-              </span>
+              </Select>
             </div>
           </label>
 
@@ -145,79 +133,64 @@ export function SajuInputFields({
             <span className="text-xs font-bold text-gray-700">
               성별 <span style={{ color: "#5956E9" }}>*</span>
             </span>
-            <div className="relative">
-              <select
+            <div>
+              <Select
                 value={formValues.gender}
                 onChange={(e) => onChangeField("gender", e.target.value)}
                 onBlur={() => onTouchStep("gender")}
                 name="gender"
                 autoComplete="off"
-                className={fieldCls}
-                style={{ paddingRight: "36px" }}
+                className="h-[50px] rounded-[14px] px-4 pr-9"
               >
                 {genderOptions.map((o) => (
                   <option key={o.value} value={o.value}>
                     {o.label}
                   </option>
                 ))}
-              </select>
-              <span className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-xs text-gray-400">
-                ▾
-              </span>
+              </Select>
             </div>
           </label>
 
           {/* 출생 시간 */}
           <label className="flex flex-col gap-1.5">
             <span className="text-xs font-bold text-gray-700">출생 시간</span>
-            <div className="relative">
-              <select
+            <div>
+              <Select
                 value={formValues.birthTime}
                 onChange={(e) => onChangeField("birthTime", e.target.value)}
                 onBlur={() => onTouchStep("birthTime")}
                 disabled={isTimeUnknown}
                 name="birthTime"
                 autoComplete="off"
-                className={fieldCls}
-                style={{
-                  paddingRight: "36px",
-                  opacity: isTimeUnknown ? 0.4 : 1,
-                }}
+                className="h-[50px] rounded-[14px] px-4 pr-9"
               >
                 {birthTimeOptions.map((o) => (
                   <option key={o.value || "empty"} value={o.value}>
                     {o.label}
                   </option>
                 ))}
-              </select>
-              <span className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-xs text-gray-400">
-                ▾
-              </span>
+              </Select>
             </div>
           </label>
 
           {/* 출생 도시 */}
           <label className="flex flex-col gap-1.5">
             <span className="text-xs font-bold text-gray-700">출생 도시</span>
-            <div className="relative">
-              <select
+            <div>
+              <Select
                 value={formValues.city}
                 onChange={(e) => onChangeField("city", e.target.value)}
                 onBlur={() => onTouchStep("birthDate")}
                 name="city"
                 autoComplete="off"
-                className={fieldCls}
-                style={{ paddingRight: "36px" }}
+                className="h-[50px] rounded-[14px] px-4 pr-9"
               >
                 {cityOptions.map((o) => (
                   <option key={o.value || "empty"} value={o.value}>
                     {o.label}
                   </option>
                 ))}
-              </select>
-              <span className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-xs text-gray-400">
-                ▾
-              </span>
+              </Select>
             </div>
           </label>
         </div>
@@ -302,17 +275,12 @@ export function SajuInputFields({
         <ZodiacList highlightedIndex={highlightedZodiacIndex} />
 
         {/* ── 제출 버튼 ── */}
-        <button
+        <Button
           type="submit"
-          className="mt-5 w-full rounded-2xl border-none text-base font-black text-white transition-opacity hover:opacity-90"
-          style={{
-            height: "54px",
-            background: "linear-gradient(to right, #5956E9, #7C3AED)",
-            boxShadow: "0 4px 20px rgba(89,86,233,0.32)",
-          }}
+          className="mt-5 h-[54px] w-full rounded-2xl text-base font-black"
         >
           ✨ 사주 분석 시작하기
-        </button>
+        </Button>
         <p className="mt-2.5 text-center text-[11px] text-gray-400">
           🔒 입력된 정보는 사주 분석 목적으로만 사용됩니다.
         </p>

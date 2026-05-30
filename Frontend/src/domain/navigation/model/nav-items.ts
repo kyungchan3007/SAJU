@@ -4,6 +4,7 @@ import {
   Sparkles,
   User,
   Users,
+  UtensilsCrossed,
   Wand2,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
@@ -18,12 +19,13 @@ export type ResolvedNavItem = NavItem & {
   active: boolean;
 };
 
-/** 전체 메뉴 — 순서: 오늘의 운세 / 정통사주 / 궁합 / 타로 / 커뮤니티 / 마이 */
+/** 전체 메뉴 — 순서: 오늘의 운세 / 정통사주 / 궁합 / 타로 / 오늘의 메뉴 / 커뮤니티 / 마이 */
 export const NAV_ITEMS: NavItem[] = [
   { href: "/saju", label: "오늘의 운세", icon: Sparkles },
   { href: "/mypage/traditional-fortune", label: "정통사주", icon: BookOpen },
   { href: "/compatibility", label: "궁합", icon: Heart },
   { href: "/taro", label: "타로", icon: Wand2 },
+  { href: "/food", label: "오늘의 메뉴", icon: UtensilsCrossed },
   { href: "/community", label: "커뮤니티", icon: Users },
   { href: "/mypage", label: "마이", icon: User },
 ];
@@ -34,6 +36,7 @@ export const MOBILE_TAB_ITEMS: NavItem[] = [
   { href: "/mypage/traditional-fortune", label: "정통사주", icon: BookOpen },
   { href: "/compatibility", label: "궁합", icon: Heart },
   { href: "/taro", label: "타로", icon: Wand2 },
+  { href: "/food", label: "오늘의 메뉴", icon: UtensilsCrossed },
   { href: "/community", label: "커뮤니티", icon: Users },
   { href: "/mypage", label: "마이", icon: User },
 ];

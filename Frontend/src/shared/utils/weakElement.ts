@@ -1,30 +1,16 @@
-const WEAK_ELEMENT_LABEL_MAP: Record<string, string> = {
-  wood: "목(木)",
-  fire: "화(火)",
-  earth: "토(土)",
-  metal: "금(金)",
-  water: "수(水)",
-};
-
-const WEAK_ELEMENT_DISPLAY_MAP: Record<
-  string,
-  { ko: string; hanja: string; color: string }
-> = {
-  water: { ko: "수", hanja: "水", color: "#3B82F6" },
-  fire: { ko: "화", hanja: "火", color: "#EF4444" },
-  wood: { ko: "목", hanja: "木", color: "#10B981" },
-  metal: { ko: "금", hanja: "金", color: "#6B7280" },
-  earth: { ko: "토", hanja: "土", color: "#F59E0B" },
-};
+import { YONGSHIN_DISPLAY_BY_IMAGE_KEY } from "@/shared/model/five-elements/model";
+import { normalizeYongshinImageKey } from "@/shared/model/five-elements/utils";
 
 export function formatWeakElementLabel(
   weakElement: string | null | undefined,
 ): string {
-  if (!weakElement) {
-    return "-";
-  }
+  if (!weakElement) return "-";
 
-  return WEAK_ELEMENT_LABEL_MAP[weakElement] ?? weakElement;
+  const key = normalizeYongshinImageKey(weakElement);
+  if (!key) return weakElement;
+
+  const info = YONGSHIN_DISPLAY_BY_IMAGE_KEY[key];
+  return `${info.ko}(${info.hanja})`;
 }
 
 export function getWeakElementDisplayInfo(
@@ -32,5 +18,8 @@ export function getWeakElementDisplayInfo(
 ) {
   if (!weakElement) return null;
 
-  return WEAK_ELEMENT_DISPLAY_MAP[weakElement] ?? null;
+  const key = normalizeYongshinImageKey(weakElement);
+  if (!key) return null;
+
+  return YONGSHIN_DISPLAY_BY_IMAGE_KEY[key];
 }

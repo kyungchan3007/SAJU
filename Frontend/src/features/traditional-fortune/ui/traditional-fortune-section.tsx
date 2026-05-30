@@ -12,6 +12,7 @@ import { TraditionalFortuneOverallCard } from "@/features/traditional-fortune/ui
 import type { ApiEnvelope } from "@/shared/api";
 import { useAdGate } from "@/shared/hooks/use-ad-gate";
 import { AdProgressGate } from "@/shared/ui/ad-progress-gate.client";
+import { FortuneGateLayout, FortunePageLayout } from "@/shared/ui/fortune-page-layout";
 
 type TraditionalFortuneSectionProps = {
   initialData?: ApiEnvelope<TraditionalFortuneResponse | undefined>;
@@ -37,18 +38,21 @@ export function TraditionalFortuneSection({
 
   if (adGate.shouldShowGate) {
     return (
-      <AdProgressGate
-        progress={isContentReady ? 100 : 80}
-        isComplete={isContentReady}
-        onRevealResult={adGate.unlock}
-      />
+      <FortuneGateLayout>
+        <AdProgressGate
+          progress={isContentReady ? 100 : 80}
+          isComplete={isContentReady}
+          onRevealResult={adGate.unlock}
+        />
+      </FortuneGateLayout>
     );
   }
 
   if (!data) return null;
 
   return (
-    <div className="flex flex-col gap-4 pb-6 pt-6">
+    <FortunePageLayout>
+    <div className="flex flex-col gap-4">
       <TraditionalFortuneHeader
         yearDescription={data.description}
       />
@@ -68,5 +72,6 @@ export function TraditionalFortuneSection({
         <TraditionalFortuneCautionCard text={data.yearCautions} />
       )}
     </div>
+    </FortunePageLayout>
   );
 }

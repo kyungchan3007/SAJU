@@ -48,6 +48,7 @@ export function TraditionalSajuMarketingSection() {
                 src="/image/hero/marketingjueongtong.png"
                 alt="정통사주 분석"
                 fill
+                loading="eager"
                 sizes="360px"
                 className="object-cover object-center"
               />

@@ -2,15 +2,25 @@ type Props = {
   step: number;
   totalSteps: number;
   stepNote: string;
+  errorMessage?: string | null;
+  isSubmitting?: boolean;
   onNext: () => void;
   onPrev: () => void;
 };
 
-export function CommunityBottomBar({ step, totalSteps, stepNote, onNext, onPrev }: Props) {
+export function CommunityBottomBar({
+  step,
+  totalSteps,
+  stepNote,
+  errorMessage,
+  isSubmitting = false,
+  onNext,
+  onPrev,
+}: Props) {
   const isLast = step === totalSteps;
 
   return (
-    <div className="border-t border-gray-100 px-6">
+    <div className="px-6">
       <div className="mx-auto flex max-w-[860px] items-center justify-center gap-3">
         {step > 1 && (
           <button
@@ -24,12 +34,23 @@ export function CommunityBottomBar({ step, totalSteps, stepNote, onNext, onPrev 
         <button
           type="button"
           onClick={onNext}
-          className="h-[52px] min-w-[300px] max-w-[400px] flex-1 rounded-2xl bg-gradient-to-r from-[#5956E9] to-violet-700 text-[15px] font-extrabold text-white shadow-[0_4px_20px_rgba(89,86,233,0.30)] transition-opacity hover:opacity-90"
+          disabled={isSubmitting}
+          className="h-[52px] min-w-[300px] max-w-[400px] flex-1 rounded-2xl bg-gradient-to-r from-[#5956E9] to-violet-700 text-[15px] font-extrabold text-white shadow-[0_4px_20px_rgba(89,86,233,0.30)] transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {isLast ? "관심 남기고 알림 받기 🔔" : "다음으로 →"}
+          {isSubmitting
+            ? "신청 중..."
+            : isLast
+              ? "관심 남기고 알림 받기 🔔"
+              : "다음으로 →"}
         </button>
       </div>
-      <p className="mt-1.5 text-center text-[11px] text-gray-400">{stepNote}</p>
+      <p
+        className={`mt-1.5 text-center text-[11px] ${
+          errorMessage ? "font-bold text-red-500" : "text-gray-400"
+        }`}
+      >
+        {errorMessage ?? stepNote}
+      </p>
     </div>
   );
 }

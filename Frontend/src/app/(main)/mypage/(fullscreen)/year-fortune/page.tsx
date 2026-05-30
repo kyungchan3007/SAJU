@@ -8,12 +8,6 @@ export const metadata: Metadata = {
 };
 
 export default function YearFortunePage() {
-  return (
-    <main>
-      <div className="mx-auto max-w-[720px]">
-        <YearFortuneSection />
-      </div>
-    </main>
-  );
+  return <YearFortuneSection />;
 }
 

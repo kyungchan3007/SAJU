@@ -6,6 +6,7 @@ import {
   ZODIAC_COMPATIBILITY_LEGEND_ITEMS,
   ZODIAC_COMPATIBILITY_ME_STYLE,
 } from "@/features/mypage/model/zodiacCompatibility";
+import { Badge, ProgressBar } from "@/shared/ui";
 
 type Props = {
   data: Record<string, unknown> | Array<unknown>;
@@ -44,14 +45,16 @@ export function ZodiacCompatibilityContent({
           sizes="(max-width: 640px) 100vw, 1152px"
           className="block h-full w-full object-contain"
           style={{ minHeight: 200 }}
+          priority
         />
         <div className="absolute inset-0 flex flex-col justify-center px-10 py-10">
-          <span
-            className="mb-4 inline-block w-fit rounded-full px-3.5 py-1 text-[11px] font-bold text-[#5956E9]"
+          <Badge
+            variant="primary"
+            className="mb-4 w-fit bg-white/85 px-3.5 py-1"
             style={{ background: "rgba(255,255,255,0.85)" }}
           >
             띠별궁합
-          </span>
+          </Badge>
           <h2
             className="mb-2 text-[26px] font-black leading-[1.35] text-white"
             style={{
@@ -173,12 +176,11 @@ export function ZodiacCompatibilityContent({
               </div>
 
               {/* 점수 바 */}
-              <div className="h-1.5 w-full overflow-hidden rounded-full bg-[#F3F4F6]">
-                <div
-                  className={`h-full rounded-full ${style.bar}`}
-                  style={{ width: `${entry.score}%` }}
-                />
-              </div>
+              <ProgressBar
+                value={entry.score}
+                className="h-1.5 bg-[#F3F4F6]"
+                indicatorClassName={style.bar}
+              />
 
               {/* 점수 */}
               <div
@@ -189,11 +191,9 @@ export function ZodiacCompatibilityContent({
               </div>
 
               {/* 관계 뱃지 */}
-              <span
-                className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold ${style.badge}`}
-              >
+              <Badge className={`px-2.5 py-0.5 text-[10px] ${style.badge}`}>
                 {isMe ? "나의 띠" : entry.relation}
-              </span>
+              </Badge>
 
               {/* 설명 */}
               <p

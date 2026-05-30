@@ -1,4 +1,4 @@
-import type { HTMLAttributes } from "react";
+import type { CSSProperties, HTMLAttributes } from "react";
 
 import { cn } from "@/shared/lib/utils";
 
@@ -12,6 +12,7 @@ type ProgressBarProps = HTMLAttributes<HTMLDivElement> & {
   tone?: ProgressBarTone;
   trackClassName?: string;
   indicatorClassName?: string;
+  indicatorStyle?: CSSProperties;
 };
 
 const progressBarToneClassNames: Record<ProgressBarTone, string> = {
@@ -34,6 +35,7 @@ export function ProgressBar({
   className,
   trackClassName,
   indicatorClassName,
+  indicatorStyle,
   ...props
 }: ProgressBarProps) {
   const percent = getProgressPercent(value, max);
@@ -57,7 +59,7 @@ export function ProgressBar({
           progressBarToneClassNames[tone],
           indicatorClassName,
         )}
-        style={{ width: `${percent}%` }}
+        style={{ ...indicatorStyle, width: `${percent}%` }}
       />
     </div>
   );

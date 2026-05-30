@@ -6,6 +6,7 @@ import { YearFortuneHero } from "@/features/year-fortune/ui/year-fortune-hero";
 import { YearFortuneMonthly } from "@/features/year-fortune/ui/year-fortune-monthly";
 import { useAdGate } from "@/shared/hooks/use-ad-gate";
 import { AdProgressGate } from "@/shared/ui/ad-progress-gate.client";
+import { FortuneGateLayout, FortunePageLayout } from "@/shared/ui/fortune-page-layout";
 
 export function YearFortuneSection() {
   const { isLoading, isError, errorMessage, isPending, display } =
@@ -23,32 +24,36 @@ export function YearFortuneSection() {
 
   if (adGate.shouldShowGate) {
     return (
-      <AdProgressGate
-        progress={isContentReady ? 100 : 80}
-        isComplete={isContentReady}
-        onRevealResult={adGate.unlock}
-      />
+      <FortuneGateLayout>
+        <AdProgressGate
+          progress={isContentReady ? 100 : 80}
+          isComplete={isContentReady}
+          onRevealResult={adGate.unlock}
+        />
+      </FortuneGateLayout>
     );
   }
 
   if (!display) return null;
 
   return (
-    <div className="flex flex-col gap-4 pb-6 pt-6">
-      <YearFortuneHero
-        yearLabel={display.yearLabel}
-        targetYear={display.targetYear}
-        userInfo={display.userInfo}
-      />
-
-      <YearFortuneDomainTabs domains={display.domains} />
-
-      {display.months.length > 0 && (
-        <YearFortuneMonthly
-          months={display.months}
+    <FortunePageLayout>
+      <div className="flex flex-col gap-4">
+        <YearFortuneHero
+          yearLabel={display.yearLabel}
           targetYear={display.targetYear}
+          userInfo={display.userInfo}
         />
-      )}
-    </div>
+
+        <YearFortuneDomainTabs domains={display.domains} />
+
+        {display.months.length > 0 && (
+          <YearFortuneMonthly
+            months={display.months}
+            targetYear={display.targetYear}
+          />
+        )}
+      </div>
+    </FortunePageLayout>
   );
 }
