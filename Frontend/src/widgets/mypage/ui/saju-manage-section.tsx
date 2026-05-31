@@ -1,15 +1,21 @@
 "use client";
 
+import Link from "next/link";
+
 import { useSajuManage } from "@/features/mypage/hooks/useSajuManage";
 import { useSajuManagePartnersController } from "@/features/mypage/hooks/useSajuManagePartnersController";
-import { SajuManageLoadingState } from "@/features/mypage/ui/manage/saju-manage-loading-state";
-import { SajuManageEmptyState } from "@/features/mypage/ui/manage/saju-manage-empty-state";
 import { SajuManageSummary } from "@/features/mypage/ui/manage/saju-manage-summary";
 import { SajuManageForm } from "@/features/mypage/ui/manage/saju-manage-form";
 import { SajuCardList } from "@/features/mypage/ui/manage/saju-card-list";
 import { PartnerAddModal } from "@/features/mypage/ui/manage/partner-add-modal";
 import { SajuManagePartnerPanel } from "@/features/mypage/ui/manage/saju-manage-partner-panel";
-import { ConfirmModal, StatusMessage } from "@/shared/ui";
+import {
+  Button,
+  ConfirmModal,
+  EmptyStateCard,
+  LoadingStateCard,
+  StatusMessage,
+} from "@/shared/ui";
 
 export function SajuManageSection() {
   const sajuManage = useSajuManage();
@@ -26,10 +32,20 @@ export function SajuManageSection() {
 
   return (
     <div className="flex flex-col gap-5">
-      {sajuManage.isLoading && <SajuManageLoadingState />}
+      {sajuManage.isLoading && (
+        <LoadingStateCard message="사주 정보를 불러오는 중..." />
+      )}
 
       {!sajuManage.isLoading && !sajuManage.isRegistered && (
-        <SajuManageEmptyState />
+        <EmptyStateCard
+          title="아직 사주 정보가 없어요"
+          description="생년월일·시간·성별을 입력하면 나만의 사주 분석을 시작할 수 있어요."
+          action={
+            <Button asChild size="sm" className="rounded-full">
+              <Link href="/saju">사주 입력하기</Link>
+            </Button>
+          }
+        />
       )}
 
       {!sajuManage.isLoading && sajuManage.isRegistered && (

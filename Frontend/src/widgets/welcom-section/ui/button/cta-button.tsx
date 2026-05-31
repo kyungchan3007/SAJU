@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import { Button } from "@/shared/ui";
+
 export const CtaButton = () => {
   return (
     <>
@@ -8,19 +10,18 @@ export const CtaButton = () => {
         aria-label="주요 서비스 바로가기"
         className="flex flex-col items-center gap-3 sm:flex-row"
       >
-        <Link
-          href="/saju"
-          className="btn-saju btn-saju-primary inline-flex min-h-[48px] items-center justify-center px-8 text-base"
-        >
-          무료 사주 보기
-        </Link>
+        <Button asChild size="lg" className="min-h-[48px] px-8 text-base">
+          <Link href="/saju">무료 사주 보기</Link>
+        </Button>
 
-        <Link
-          href="/compatibility"
-          className="btn-saju btn-saju-secondary inline-flex min-h-[48px] items-center justify-center px-8 text-base"
+        <Button
+          asChild
+          size="lg"
+          variant="secondary"
+          className="min-h-[48px] px-8 text-base"
         >
-          무료 궁합 확인
-        </Link>
+          <Link href="/compatibility">무료 궁합 확인</Link>
+        </Button>
       </nav>
 
       <p className="mt-5 text-xs tracking-widest text-black/40">

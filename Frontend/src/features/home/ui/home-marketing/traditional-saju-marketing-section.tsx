@@ -9,13 +9,16 @@ export function TraditionalSajuMarketingSection() {
     <section className="overflow-hidden border-t border-[#E8E4F8] bg-white py-20">
       <div className="mx-auto max-w-6xl px-6">
         <div className="grid grid-cols-1 items-center gap-16 md:grid-cols-[1fr_420px]">
-
           {/* 좌: 텍스트 + 기능 카드 */}
           <div className="flex flex-col gap-8">
             <div className="flex flex-col gap-4">
-              <div className="text-sm font-bold" style={{ color: "#5956E9" }}>01</div>
-              <div className="text-xs text-gray-400">가장 깊이 있는 나를 만나는 시간</div>
-              <h2 className="text-3xl font-black leading-snug text-gray-900">정통사주 분석</h2>
+              {/*<div className="text-sm font-bold" style={{ color: "#5956E9" }}>01</div>*/}
+              <div className="text-xs text-gray-400">
+                가장 깊이 있는 나를 만나는 시간
+              </div>
+              <h2 className="text-3xl font-black leading-snug text-gray-900">
+                정통사주 분석
+              </h2>
               <p className="text-sm leading-relaxed text-gray-500">
                 사주팔자, 오행, 심성, 격국, 대운까지
                 <br />
@@ -82,7 +85,6 @@ export function TraditionalSajuMarketingSection() {
               </div>
             </div>
           </div>
-
         </div>
       </div>
     </section>

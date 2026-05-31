@@ -13,7 +13,7 @@ export function CommunityHero() {
           priority
         />
         <div className="absolute inset-0 bg-gradient-to-r from-black/52 via-black/20 to-transparent" />
-        <div className="absolute inset-0 flex max-w-[560px] flex-col justify-center px-12 py-12">
+        <div className="absolute inset-0 flex max-w-[560px] flex-col justify-center px-6 py-8 sm:px-12 sm:py-12">
           <span className="mb-4 inline-block w-fit rounded-full bg-white/90 px-4 py-1 text-[11px] font-bold text-[#5956E9]">
             커뮤니티
           </span>

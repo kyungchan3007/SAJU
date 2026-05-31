@@ -33,7 +33,7 @@ export function StepMeetingType({ selectedType, onSelect }: Props) {
       </div>
       <p className="mb-5 ml-10 text-[13px] text-gray-400">참여하고 싶은 만남 유형을 선택해주세요.</p>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         {TYPES.map(({ id, image, title, desc }) => {
           const selected = selectedType === id;
           return (

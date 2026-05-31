@@ -1,13 +1,13 @@
 "use client";
 
+import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import { useZodiacCompatibility } from "@/features/mypage/hooks/useZodiacCompatibility";
 import { useJeongtongsaju } from "@/features/mypage/hooks/useJeongtongsaju";
 import { fetchSajuProfileOnClient } from "@/entities/saju/client/fetchSajuProfileOnClient";
 import { SAJU_PROFILE_QUERY_KEY } from "@/features/mypage/hooks/useSajuManage";
-import { ZodiacCompatibilityLoadingState } from "@/features/mypage/ui/zodiac-compatibility/zodiac-compatibility-loading-state";
-import { ZodiacCompatibilityEmptyState } from "@/features/mypage/ui/zodiac-compatibility/zodiac-compatibility-empty-state";
 import { ZodiacCompatibilityContent } from "@/features/mypage/ui/zodiac-compatibility/zodiac-compatibility-content";
+import { Button, EmptyStateCard, LoadingStateCard } from "@/shared/ui";
 
 export function ZodiacCompatibilitySection() {
   const { isLoading, data } = useZodiacCompatibility();
@@ -41,9 +41,21 @@ export function ZodiacCompatibilitySection() {
 
   return (
     <div className="flex flex-col gap-4">
-      {isLoading && <ZodiacCompatibilityLoadingState />}
+      {isLoading && (
+        <LoadingStateCard message="띠별 궁합을 불러오는 중..." />
+      )}
 
-      {!isLoading && !compatibility && <ZodiacCompatibilityEmptyState />}
+      {!isLoading && !compatibility && (
+        <EmptyStateCard
+          title="아직 사주 정보가 없어요"
+          description="생년월일·시간·성별을 입력하면 나의 띠별 궁합을 확인할 수 있어요."
+          action={
+            <Button asChild size="sm" className="rounded-full">
+              <Link href="/saju">사주 입력하기</Link>
+            </Button>
+          }
+        />
+      )}
 
       {!isLoading && compatibility && (
         <ZodiacCompatibilityContent

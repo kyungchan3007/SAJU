@@ -1,5 +1,6 @@
 import type { ContactForm } from "@/features/community/model/community";
 import { COMMUNITY_AGE_GROUP_OPTIONS } from "@/features/community/model/community";
+import { Input, Select } from "@/shared/ui";
 
 type Props = {
   form: ContactForm;
@@ -32,7 +33,7 @@ export function StepContactForm({ form, onChange }: Props) {
       </div>
       <p className="mb-5 ml-10 text-[13px] text-gray-400">정확한 안내를 위해 정보를 입력해주세요.</p>
 
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         {FIELDS.map(({ key, label, placeholder, type }) => (
           <div key={key} className="flex flex-col gap-1.5">
             <label
@@ -41,13 +42,13 @@ export function StepContactForm({ form, onChange }: Props) {
             >
               {label}
             </label>
-            <input
+            <Input
               id={`community-${key}`}
               type={type}
               value={form[key]}
               onChange={(e) => onChange(key, e.target.value)}
               placeholder={placeholder}
-              className="h-12 rounded-2xl border-[1.5px] border-gray-200 bg-white px-4 text-[13px] text-gray-900 outline-none transition-all placeholder:text-gray-300 focus:border-[#5956E9] focus:shadow-[0_0_0_3px_rgba(89,86,233,0.10)]"
+              className="h-12 rounded-2xl border-[1.5px] border-gray-200 px-4 text-gray-900 placeholder:text-gray-300"
             />
           </div>
         ))}
@@ -59,11 +60,11 @@ export function StepContactForm({ form, onChange }: Props) {
           >
             연령대
           </label>
-          <select
+          <Select
             id="community-ageGroup"
             value={form.ageGroup}
             onChange={(e) => onChange("ageGroup", e.target.value)}
-            className="h-12 rounded-2xl border-[1.5px] border-gray-200 bg-white px-4 text-[13px] text-gray-900 outline-none transition-all focus:border-[#5956E9] focus:shadow-[0_0_0_3px_rgba(89,86,233,0.10)]"
+            className="h-12 rounded-2xl border-[1.5px] border-gray-200 px-4 text-gray-900"
           >
             <option value="">선택</option>
             {COMMUNITY_AGE_GROUP_OPTIONS.map((ageGroup) => (
@@ -71,7 +72,7 @@ export function StepContactForm({ form, onChange }: Props) {
                 {ageGroup}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
 
         <div className="flex flex-col gap-1.5">
@@ -81,13 +82,13 @@ export function StepContactForm({ form, onChange }: Props) {
           >
             휴대폰 번호
           </label>
-          <input
+          <Input
             id="community-phone"
             type="tel"
             value={form.phone}
             onChange={(e) => onChange("phone", e.target.value)}
             placeholder="예) 010-1234-5678"
-            className="h-12 rounded-2xl border-[1.5px] border-gray-200 bg-white px-4 text-[13px] text-gray-900 outline-none transition-all placeholder:text-gray-300 focus:border-[#5956E9] focus:shadow-[0_0_0_3px_rgba(89,86,233,0.10)]"
+            className="h-12 rounded-2xl border-[1.5px] border-gray-200 px-4 text-gray-900 placeholder:text-gray-300"
           />
         </div>
       </div>

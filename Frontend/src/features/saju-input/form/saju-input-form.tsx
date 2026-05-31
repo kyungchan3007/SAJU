@@ -4,7 +4,7 @@ import { SajuInputFieldsContainer } from "@/features/saju-input/form/client/saju
 
 export function SajuInputForm() {
   return (
-    <div className="mx-auto flex max-w-[860px] flex-col gap-8 px-6 py-8">
+    <div className="mx-auto flex max-w-[860px] flex-col gap-8 px-4 py-8 sm:px-6">
       {/* ── 히어로 ── */}
       <section
         className="relative overflow-hidden rounded-3xl shadow-lg"
@@ -27,7 +27,7 @@ export function SajuInputForm() {
           }}
         />
         {/* 텍스트 */}
-        <div className="absolute inset-0 flex max-w-[560px] flex-col justify-center px-12 py-12">
+        <div className="absolute inset-0 flex max-w-[560px] flex-col justify-center px-6 py-8 sm:px-12 sm:py-12">
           <span
             className="mb-4 w-fit rounded-full px-3.5 py-1.5 text-xs font-bold"
             style={{ background: "rgba(255,255,255,0.90)", color: "#5956E9" }}
@@ -58,7 +58,7 @@ export function SajuInputForm() {
 
       {/* ── 입력 카드 ── */}
       <section
-        className="rounded-[28px] bg-white px-9 py-9"
+        className="rounded-[28px] bg-white px-5 py-7 sm:px-9 sm:py-9"
         style={{
           border: "1.5px solid #EDE9FF",
           boxShadow: "0 2px 16px rgba(89,86,233,0.08)",

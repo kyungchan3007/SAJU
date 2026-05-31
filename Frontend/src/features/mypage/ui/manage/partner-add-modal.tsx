@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useRef } from "react";
 
+import { Button, Input } from "@/shared/ui";
+
 const RELATIONS = ["가족", "친구", "연인"] as const;
 
 type Props = {
@@ -75,7 +77,7 @@ export function PartnerAddModal({
             <label className="text-xs font-bold text-slate-500">
               이름 (별칭) <span className="text-[#5956E9]">*</span>
             </label>
-            <input
+            <Input
               ref={inputRef}
               type="text"
               value={name}
@@ -85,7 +87,7 @@ export function PartnerAddModal({
               }}
               placeholder="예: 아빠, 친구, 홍길동"
               maxLength={8}
-              className="h-[46px] rounded-xl border border-[#E5E7EB] px-4 text-[13px] text-gray-900 outline-none transition-colors placeholder:text-[#D1D5DB] focus:border-[#5956E9] focus:shadow-[0_0_0_3px_rgba(89,86,233,0.10)]"
+              className="rounded-xl border-[#E5E7EB] px-4 text-gray-900 placeholder:text-[#D1D5DB]"
             />
           </div>
 
@@ -112,26 +114,23 @@ export function PartnerAddModal({
         </div>
 
         <div className="mt-7 flex gap-2">
-          <button
+          <Button
             type="button"
+            variant="outline"
             onClick={handleClose}
             disabled={isPending}
-            className="flex-1 rounded-xl border-2 border-slate-200 py-3 text-sm font-bold text-slate-400 hover:bg-slate-50 disabled:opacity-50"
+            className="h-auto flex-1 rounded-xl border-2 border-slate-200 py-3 text-sm font-bold text-slate-400 hover:bg-slate-50 disabled:opacity-50"
           >
             취소
-          </button>
-          <button
+          </Button>
+          <Button
             type="button"
             onClick={handleConfirm}
             disabled={isPending || !name.trim()}
-            className="flex-[2] rounded-xl py-3 text-sm font-bold text-white disabled:opacity-50"
-            style={{
-              background: "linear-gradient(to right,#5956E9,#7C3AED)",
-              boxShadow: "0 4px 14px rgba(89,86,233,0.25)",
-            }}
+            className="h-auto flex-[2] rounded-xl py-3 text-sm font-bold disabled:opacity-50"
           >
             {isPending ? "추가 중..." : "다음 — 사주 입력 →"}
-          </button>
+          </Button>
         </div>
       </div>
     </div>

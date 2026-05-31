@@ -21,7 +21,7 @@ const SERVICES = [
 
 export function ServiceCards() {
   return (
-    <div className="mt-10 grid w-full max-w-2xl grid-cols-3 gap-3">
+    <div className="mt-10 grid w-full max-w-2xl grid-cols-1 gap-3 sm:grid-cols-3">
       {SERVICES.map((s) => (
         <div
           key={s.title}

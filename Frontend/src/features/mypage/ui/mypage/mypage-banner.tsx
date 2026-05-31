@@ -12,7 +12,6 @@ export function MypageBanner() {
           alt="커뮤니티 배너"
           width={900}
           height={400}
-          // className="block h-[420px] w-full object-cover xs:h-[440px] md:h-full"
           priority
         />
 
@@ -25,9 +24,9 @@ export function MypageBanner() {
           }}
         />
 
-        <div className="absolute inset-0 flex flex-col justify-end px-4 py-5 xs:px-5 xs:py-6 md:justify-center md:px-12 md:py-6">
+        <div className="absolute inset-0 flex flex-col justify-center px-4 xs:px-5 md:px-12 md:py-6">
           <h2
-            className="mb-2 text-[18px] font-black leading-snug tracking-tight text-white xs:text-[20px] md:mb-3 md:text-[26px]"
+            className="mb-2 text-[15px] font-black leading-snug tracking-tight text-white xs:text-[17px] md:mb-3 md:text-[26px]"
             style={{
               textShadow:
                 "0 2px 12px rgba(0,0,0,0.55), 0 1px 4px rgba(0,0,0,0.40)",
@@ -38,7 +37,7 @@ export function MypageBanner() {
             친구를 만나보세요
           </h2>
           <p
-            className="mb-5 text-[12px] font-bold leading-relaxed text-white xs:mb-6 xs:text-[13px] md:mb-3 md:text-[15px]"
+            className="text-[12px] font-bold leading-relaxed text-white md:mb-3 md:text-[15px]"
             style={{
               textShadow:
                 "0 2px 10px rgba(0,0,0,0.60), 0 1px 4px rgba(0,0,0,0.50)",

@@ -1,56 +1,58 @@
 "use client";
 
 import { useRestoreAccount } from "@/features/auth/hooks/useRestoreAccount";
+import { Button, FormMessage } from "@/shared/ui";
 
 export function RestoreAccountPanel() {
   const { isPending, error, handleRestore, handleSkip } = useRestoreAccount();
 
   return (
-    <div className="card-saju-primary overflow-hidden">
-      <div className="border-b-2 border-black bg-[#F0EDE6] px-6 py-3.5">
-        <span className="font-display text-base">🔮 사주</span>
+    <div className="overflow-hidden rounded-[28px] border border-slate-100 bg-white shadow-[0_8px_32px_rgba(89,86,233,0.10)]">
+      <div className="border-b border-slate-100 bg-[#F9F8FF] px-6 py-4">
+        <span className="text-sm font-extrabold text-[#5956E9]">계정 복구</span>
       </div>
 
       <div className="flex flex-col items-center px-7 pb-7 pt-9 text-center">
-        <div className="mb-6 flex h-[72px] w-[72px] items-center justify-center rounded-full border-2 border-black bg-[#FFE500] text-[34px] [box-shadow:2px_2px_0_#0d0d0d]">
-          🔓
+        <div className="mb-5 flex h-[72px] w-[72px] items-center justify-center rounded-[24px] bg-[#F0EEFF] text-[#5956E9]">
+          <span className="text-[34px] leading-none">🔓</span>
         </div>
 
-        <div className="mb-4 inline-flex items-center gap-1.5 rounded-full border-2 border-black bg-[#FFE500] px-3.5 py-1 text-xs font-bold [box-shadow:2px_2px_0_#0d0d0d]">
+        <div className="mb-4 inline-flex items-center gap-1.5 rounded-full bg-[#F0EEFF] px-3.5 py-1.5 text-xs font-bold text-[#5956E9]">
           ⏳ 탈퇴 후 30일 이내
         </div>
 
-        <div className="mb-5 w-full rounded-sm border-[1.5px] border-[#d4d0c8] bg-[#F0EDE6] px-4 py-3 text-left text-[13px] leading-[1.8] text-[#7a7570]">
-          탈퇴 후{" "}
-          <strong className="font-bold text-[#0d0d0d]">30일 이전</strong>에
-          다시 로그인하면
-          <br />
-          기존 데이터를 복구할 수 있어요.
-        </div>
-
-        <p className="mb-7 font-display text-xl">계정을 복구하시겠어요?</p>
+        <h1 className="mb-2 text-[22px] font-black text-gray-900">
+          계정을 복구하시겠어요?
+        </h1>
+        <p className="mb-5 text-[13px] leading-relaxed text-gray-500">
+          탈퇴 후 <strong className="font-bold text-gray-900">30일 이전</strong>에
+          다시 로그인하면 기존 데이터를 복구할 수 있어요.
+        </p>
 
         {error && (
-          <p className="mb-4 w-full rounded-sm border-2 border-red-400 bg-red-50 px-4 py-2.5 text-sm text-red-600">
+          <FormMessage variant="error" className="mb-4 w-full text-left">
             {error}
-          </p>
+          </FormMessage>
         )}
 
         <div className="flex w-full flex-col gap-2.5">
-          <button
-            className="btn-saju btn-saju-primary w-full py-3.5 font-display text-base disabled:cursor-not-allowed disabled:opacity-50"
+          <Button
+            type="button"
+            className="h-12 w-full rounded-2xl text-base font-extrabold disabled:cursor-not-allowed disabled:opacity-50"
             onClick={handleRestore}
             disabled={isPending}
           >
-            {isPending ? "복구 중..." : "🔓 계정 복구"}
-          </button>
-          <button
-            className="btn-saju btn-saju-secondary w-full py-3 text-sm font-semibold text-[#7a7570] disabled:cursor-not-allowed disabled:opacity-50"
+            {isPending ? "복구 중..." : "계정 복구"}
+          </Button>
+          <Button
+            type="button"
+            variant="secondary"
+            className="h-11 w-full rounded-2xl text-sm font-bold disabled:cursor-not-allowed disabled:opacity-50"
             onClick={handleSkip}
             disabled={isPending}
           >
             복구하지 않기
-          </button>
+          </Button>
         </div>
       </div>
     </div>

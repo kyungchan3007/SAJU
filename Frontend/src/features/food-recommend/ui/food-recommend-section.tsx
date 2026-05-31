@@ -1,6 +1,7 @@
 "use client";
 
 import { UtensilsCrossed } from "lucide-react";
+import Link from "next/link";
 
 import { useFoodRecommend } from "@/features/food-recommend/hooks/useFoodRecommend";
 import { getFoodContextViewModel } from "@/features/food-recommend/model/food-recommend";
@@ -9,7 +10,12 @@ import { FoodContextHeader } from "@/features/food-recommend/ui/components/food-
 import { FoodGroceryList } from "@/features/food-recommend/ui/components/food-grocery-list";
 import { FoodHeroCard } from "@/features/food-recommend/ui/components/food-hero-card";
 import { FoodRankList } from "@/features/food-recommend/ui/components/food-rank-list";
-import { EmptyStateCard, ErrorStateCard, LoadingStateCard } from "@/shared/ui";
+import {
+  Button,
+  EmptyStateCard,
+  ErrorStateCard,
+  LoadingStateCard,
+} from "@/shared/ui";
 
 export function FoodRecommendSection() {
   const {
@@ -33,8 +39,11 @@ export function FoodRecommendSection() {
       <ErrorStateCard
         title="메뉴 추천을 불러오지 못했어요"
         description={errorMessage ?? "잠시 후 다시 확인해 주세요."}
-        actionHref="/food"
-        actionLabel="다시 확인하기"
+        action={
+          <Button asChild size="sm" className="rounded-full">
+            <Link href="/food">다시 확인하기</Link>
+          </Button>
+        }
       />
     );
   }

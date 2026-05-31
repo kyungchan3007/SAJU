@@ -103,6 +103,13 @@ export const YEAR_FORTUNE_FEATURE_CARDS: HomeMarketingFeatureCard[] = [
   },
 ];
 
+export const TAROT_COMMUNITY_FEATURE_CARDS: HomeMarketingFeatureCard[] = [
+  { icon: "🔮", title: "타로 상담", desc: "연애, 고민, 직장, 재물\n지금 필요한 힌트를 얻어보세요." },
+  { icon: "💬", title: "커뮤니티", desc: "같은 고민을 가진 사람들과\n이야기하고 공감해요." },
+  { icon: "🌙", title: "오늘의 타로", desc: "매일 새로운 타로 카드로\n하루의 흐름을 확인해요." },
+  { icon: "🤝", title: "함께 나누기", desc: "사주·운세 경험을 서로\n공유하고 댓글로 소통해요." },
+];
+
 export const TAROT_CARDS: HomeTarotCard[] = [
   {
     label: "THE STAR",

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import type {
@@ -20,6 +21,7 @@ import { JeongtongsajuTwelveGrowth } from "@/features/mypage/ui/jeongtongsaju/je
 import { TraditionalFortuneSection } from "@/features/traditional-fortune/ui/traditional-fortune-section";
 import type { ApiEnvelope } from "@/shared/api";
 import { PageContentLayout } from "@/shared/ui/page-content-layout";
+import { Button } from "@/shared/ui";
 import {
   EmptyStateCard,
   ErrorStateCard,
@@ -76,8 +78,11 @@ export function JeongtongsajuAndFortuneSectionClient({
       <ErrorStateCard
         title="사주 정보를 불러오지 못했습니다"
         description="잠시 후 다시 확인해 주세요."
-        actionHref="/mypage"
-        actionLabel="마이페이지로 돌아가기"
+        action={
+          <Button asChild size="sm" className="rounded-full">
+            <Link href="/mypage">마이페이지로 돌아가기</Link>
+          </Button>
+        }
       />
     );
   }
@@ -87,8 +92,11 @@ export function JeongtongsajuAndFortuneSectionClient({
       <EmptyStateCard
         title="사주 정보가 없습니다"
         description="사주를 먼저 입력해 주세요."
-        actionHref="/saju"
-        actionLabel="사주 입력하기 →"
+        action={
+          <Button asChild size="sm" className="rounded-full">
+            <Link href="/saju">사주 입력하기 →</Link>
+          </Button>
+        }
       />
     );
   }

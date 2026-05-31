@@ -79,7 +79,7 @@ export function StepTopics({ selectedType, selectedTopics, onToggle }: Props) {
       </div>
       <p className="mb-5 ml-10 text-[13px] text-gray-400">관심 있는 주제를 선택해주세요. (복수 선택 가능)</p>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         {/* 친구 모임 주제 */}
         <div className="relative overflow-hidden rounded-[20px] border-[1.5px] border-[#E0DAFF] bg-[#F9F8FF] p-5">
           <div className="mb-4 border-b border-gray-100 pb-3 text-center text-[13px] font-extrabold text-[#5956E9]">

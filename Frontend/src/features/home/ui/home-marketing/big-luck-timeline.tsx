@@ -7,7 +7,7 @@ import type { HomeBigLuckStep } from "@/features/home/type/type";
 export function BigLuckTimeline() {
   return (
     <div className="flex flex-col gap-3">
-      <div className="relative flex items-center px-6">
+      <div className="relative hidden items-center px-6 sm:flex">
         <div
           className="absolute inset-x-0 h-px"
           style={{
@@ -26,7 +26,18 @@ export function BigLuckTimeline() {
         </div>
       </div>
 
-      <div className="flex gap-2 overflow-x-auto pb-1">
+      {/* 모바일: 3열 그리드 */}
+      <div className="grid grid-cols-2 gap-2 sm:hidden">
+        {BIG_LUCK_STEPS.map((step) => (
+          <BigLuckCard key={step.age} step={step} />
+        ))}
+        <div className="flex items-center justify-center rounded-xl border border-[#E8E4F8] bg-white py-4">
+          <span className="text-lg font-bold text-gray-200">···</span>
+        </div>
+      </div>
+
+      {/* sm+: 기존 가로 스크롤 */}
+      <div className="hidden gap-2 overflow-x-auto pb-1 sm:flex">
         {BIG_LUCK_STEPS.map((step) => (
           <BigLuckCard key={step.age} step={step} />
         ))}
@@ -71,7 +82,7 @@ function BigLuckCard({ step }: { step: HomeBigLuckStep }) {
   if (step.active) {
     return (
       <div
-        className="relative min-w-[80px] flex-1 rounded-xl px-3 py-4 text-center shadow-lg"
+        className="relative flex-1 rounded-xl px-2 py-4 text-center shadow-lg sm:min-w-[80px]"
         style={{ background: "#5956E9" }}
       >
         <div className="mb-2 mt-1 text-[10px] text-white/70">{step.age}</div>
@@ -86,7 +97,7 @@ function BigLuckCard({ step }: { step: HomeBigLuckStep }) {
 
   return (
     <div
-      className="min-w-[72px] flex-1 rounded-xl border border-[#E8E4F8] bg-white px-3 py-4 text-center"
+      className="flex-1 rounded-xl border border-[#E8E4F8] bg-white px-2 py-4 text-center sm:min-w-[72px]"
       style={{ opacity: step.opacity ? step.opacity / 100 : 1 }}
     >
       <div className="mb-2 text-[10px] text-gray-400">{step.age}</div>

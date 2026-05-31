@@ -143,6 +143,14 @@ export async function mockCurrentProjectApis(
     });
   });
 
+  await page.route("**/api/food/recommend", async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify(foodRecommend),
+    });
+  });
+
   await page.route("**/api/saju/me/compatibility/*", async (route) => {
     await route.fulfill({
       status: 200,
@@ -379,6 +387,39 @@ const compatibilityResult = {
         content: "중요한 이야기를 차분히 풀어가기 좋습니다.",
       },
     ],
+  },
+  error: null,
+};
+
+const foodRecommend = {
+  success: true,
+  data: {
+    rankedFoods: [
+      {
+        rank: 1,
+        name: "비빔밥",
+        reason: "다양한 재료가 오늘의 토 기운을 안정적으로 채워줘요.",
+        category: "한식",
+        fiveElement: "토",
+      },
+      {
+        rank: 2,
+        name: "우동",
+        reason: "따뜻한 국물이 수 기운의 차분함을 보완해줘요.",
+        category: "일식",
+        fiveElement: "수",
+      },
+      {
+        rank: 3,
+        name: "토마토 파스타",
+        reason: "가벼운 산미가 화 기운을 부드럽게 살려줘요.",
+        category: "양식",
+        fiveElement: "화",
+      },
+    ],
+    avoidFoods: ["튀김", "찬 음료"],
+    groceryList: ["나물", "달걀", "토마토"],
+    dailyFiveElements: { 목: 12, 화: 18, 토: 30, 금: 10, 수: 16 },
   },
   error: null,
 };

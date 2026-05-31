@@ -106,34 +106,6 @@
     box-shadow: 0 2px 16px rgba(89, 86, 233, 0.12);
   }
 
-  /* 버튼 기반 */
-  .btn-saju {
-    @apply cursor-pointer rounded-xl px-6 py-2.5 text-sm font-semibold transition focus-visible:outline-none;
-  }
-
-  /* Primary: 보라 그라디언트 */
-  .btn-saju-primary {
-    @apply border-0 text-white;
-    background: linear-gradient(to right, #5956E9, #7C3AED);
-    box-shadow: 0 4px 14px rgba(89, 86, 233, 0.35);
-  }
-
-  .btn-saju-primary:hover {
-    box-shadow: 0 6px 20px rgba(89, 86, 233, 0.45);
-    transform: translateY(-1px);
-  }
-
-  /* Secondary: 보라 테두리 */
-  .btn-saju-secondary {
-    @apply border border-[#5956E9] bg-white text-[#5956E9];
-    box-shadow: 0 2px 8px rgba(89, 86, 233, 0.10);
-  }
-
-  .btn-saju-secondary:hover {
-    @apply bg-[#F0EEFF];
-    box-shadow: 0 4px 12px rgba(89, 86, 233, 0.15);
-  }
-
   /* 카드 */
   .card-saju-primary {
     @apply rounded-2xl border border-slate-100 bg-white;

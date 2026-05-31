@@ -1,3 +1,5 @@
+import { Button } from "@/shared/ui";
+
 type Props = {
   step: number;
   totalSteps: number;
@@ -23,26 +25,27 @@ export function CommunityBottomBar({
     <div className="px-6">
       <div className="mx-auto flex max-w-[860px] items-center justify-center gap-3">
         {step > 1 && (
-          <button
+          <Button
             type="button"
+            variant="ghost"
             onClick={onPrev}
-            className="flex h-[52px] shrink-0 items-center gap-1 rounded-2xl bg-[#FAFAFA] px-5 text-[13px] font-bold text-gray-500 transition-opacity hover:opacity-80"
+            className="h-[52px] shrink-0 rounded-2xl bg-[#FAFAFA] px-5 text-[13px] font-bold text-gray-500 hover:text-gray-500 hover:opacity-80"
           >
             ← 이전
-          </button>
+          </Button>
         )}
-        <button
+        <Button
           type="button"
           onClick={onNext}
           disabled={isSubmitting}
-          className="h-[52px] min-w-[300px] max-w-[400px] flex-1 rounded-2xl bg-gradient-to-r from-[#5956E9] to-violet-700 text-[15px] font-extrabold text-white shadow-[0_4px_20px_rgba(89,86,233,0.30)] transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+          className="h-[52px] min-w-0 max-w-[400px] flex-1 rounded-2xl text-[15px] font-extrabold shadow-[0_4px_20px_rgba(89,86,233,0.30)] hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
         >
           {isSubmitting
             ? "신청 중..."
             : isLast
               ? "관심 남기고 알림 받기 🔔"
               : "다음으로 →"}
-        </button>
+        </Button>
       </div>
       <p
         className={`mt-1.5 text-center text-[11px] ${

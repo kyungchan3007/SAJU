@@ -53,10 +53,10 @@ export function CompatibilityResultSections({ sections }: Props) {
                 >
                   <SectionIcon icon={section.icon} color={section.color} />
                 </IconBadge>
-                <span className="text-[13px] font-bold text-[#111827]">{section.label}</span>
+                <span className="whitespace-nowrap text-[11px] font-bold text-[#111827] sm:text-[13px]">{section.label}</span>
                 {section.keyword && (
                   <Badge
-                    className="px-2 py-0.5 text-[10px]"
+                    className="hidden max-w-[160px] truncate px-2 py-0.5 text-[10px] sm:inline-flex"
                     style={{ background: `${section.color}18`, color: section.color }}
                   >
                     {section.keyword}

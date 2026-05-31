@@ -9,7 +9,7 @@ const FEATURES = [
 export function TaroComingSoonSection() {
   return (
     <div className="flex items-center justify-center px-6 py-16">
-      <div className="w-full max-w-[480px] rounded-[32px] border-[1.5px] border-[#EDE9FF] bg-white px-12 py-16 text-center shadow-[0_4px_32px_rgba(89,86,233,0.10)]">
+      <div className="w-full max-w-[480px] rounded-[32px] border-[1.5px] border-[#EDE9FF] bg-white px-6 py-16 text-center shadow-[0_4px_32px_rgba(89,86,233,0.10)] sm:px-12">
         <span className="mb-6 block animate-float text-[64px]">
           🃏
         </span>

@@ -26,7 +26,7 @@ export function ZodiacCompatibilityContent({
     <div className="flex flex-col gap-5">
       {/* ── 배너 ── */}
       <div
-        className="relative overflow-hidden rounded-[2rem]"
+        className="relative overflow-hidden rounded-[2rem] xs:hidden"
         style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.10)", minHeight: 200 }}
       >
         <div
@@ -47,16 +47,16 @@ export function ZodiacCompatibilityContent({
           style={{ minHeight: 200 }}
           priority
         />
-        <div className="absolute inset-0 flex flex-col justify-center px-10 py-10">
+        <div className="absolute inset-0 flex flex-col justify-center px-5 py-8 sm:px-10 sm:py-10">
           <Badge
             variant="primary"
-            className="mb-4 w-fit bg-white/85 px-3.5 py-1"
+            className="mb-4 w-fit bg-white/85 px-3.5 py-1 xs:p-1 xs:text-xs"
             style={{ background: "rgba(255,255,255,0.85)" }}
           >
             띠별궁합
           </Badge>
           <h2
-            className="mb-2 text-[26px] font-black leading-[1.35] text-white"
+            className="mb-2 text-[26px] font-black leading-[1.35] text-white xs:text-xl"
             style={{
               letterSpacing: "-0.5px",
               textShadow:

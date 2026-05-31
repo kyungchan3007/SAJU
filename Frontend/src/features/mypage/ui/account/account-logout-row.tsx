@@ -1,3 +1,5 @@
+import { Button } from "@/shared/ui";
+
 type Props = {
   onLogout: () => void;
 };
@@ -15,12 +17,14 @@ export function AccountLogoutRow({ onLogout }: Props) {
             현재 기기에서 로그아웃합니다. 언제든지 다시 로그인할 수 있습니다.
           </span>
         </div>
-        <button
+        <Button
+          type="button"
+          variant="outline"
           onClick={onLogout}
-          className="w-full shrink-0 rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-sm font-bold text-slate-700 transition hover:bg-slate-50 sm:w-auto"
+          className="w-full shrink-0 rounded-xl border-slate-200 px-5 py-2.5 text-sm font-bold text-slate-700 hover:bg-slate-50 sm:w-auto"
         >
           로그아웃
-        </button>
+        </Button>
       </div>
     </div>
   );

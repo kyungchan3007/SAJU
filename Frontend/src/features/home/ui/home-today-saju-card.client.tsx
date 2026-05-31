@@ -4,6 +4,7 @@ import Link from "next/link";
 import type { Route } from "next";
 
 import { useHomeTodaySajuCard } from "@/features/home/hooks/useHomeTodaySajuCard";
+import { Button } from "@/shared/ui";
 import { formatWeakElementLabel } from "@/shared/utils/weakElement";
 
 export function HomeTodaySajuCard() {
@@ -29,12 +30,9 @@ export function HomeTodaySajuCard() {
             ? error.message
             : "데이터를 불러오지 못했어요."}
         </p>
-        <Link
-          href={"/saju/result" as Route}
-          className="btn-saju btn-saju-primary text-center text-sm"
-        >
-          결과 다시 확인하기
-        </Link>
+        <Button asChild size="sm" className="w-full rounded-xl text-sm">
+          <Link href={"/saju/result" as Route}>결과 다시 확인하기</Link>
+        </Button>
       </div>
     );
   }

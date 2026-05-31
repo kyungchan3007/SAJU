@@ -9,19 +9,20 @@ export function YearFortuneMarketingSection() {
     <section className="overflow-hidden border-t border-[#E8E4F8] bg-[#FAFAFA] py-20">
       <div className="mx-auto max-w-6xl px-6">
         <div className="grid grid-cols-1 items-center gap-16 md:grid-cols-[1fr_420px]">
-
           {/* 좌: 텍스트 + 기능 카드 */}
           <div className="flex flex-col gap-8">
             <div className="flex flex-col gap-4">
-              <div className="text-sm font-bold" style={{ color: "#5956E9" }}>04</div>
-              <div className="text-xs text-gray-400">새해를 준비하는 가장 현명한 방법</div>
-              <h2 className="text-3xl font-black leading-snug text-gray-900">신년운세</h2>
+              <div className="text-xs text-gray-400">
+                새해를 준비하는 가장 현명한 방법
+              </div>
+              <h2 className="text-3xl font-black leading-snug text-gray-900">
+                신년운세
+              </h2>
               <p className="text-sm leading-relaxed text-gray-500">
                 한 해의 전체 흐름부터 월별 운세,
                 <br />
                 분야별 운세까지, 2026년을
-                <br />
-                더 현명하게 준비하세요.
+                <br />더 현명하게 준비하세요.
               </p>
               <Link
                 href="/mypage/year-fortune"
@@ -81,7 +82,6 @@ export function YearFortuneMarketingSection() {
               </div>
             </div>
           </div>
-
         </div>
       </div>
     </section>

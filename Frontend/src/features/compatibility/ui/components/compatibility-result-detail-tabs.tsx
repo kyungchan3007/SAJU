@@ -57,7 +57,7 @@ export function CompatibilityResultDetailTabs({
       </div>
 
       {/* 탭 버튼 */}
-      <div className="flex gap-2 overflow-x-auto px-5 pt-4 pb-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <div className="grid grid-cols-3 gap-2 px-5 pb-0 pt-4 sm:grid-cols-4">
         {sections.map((section, i) => {
           const isActive = i === activeSectionIndex;
           return (
@@ -65,7 +65,7 @@ export function CompatibilityResultDetailTabs({
               key={`${section.label}-${i}`}
               type="button"
               onClick={() => onSelectSection(i)}
-              className="inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full px-3.5 py-1.5 text-[12px] font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5956E9] focus-visible:ring-offset-2"
+              className="inline-flex w-full items-center justify-center gap-1.5 whitespace-nowrap rounded-full px-2 py-1.5 text-[11px] font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5956E9] focus-visible:ring-offset-2 sm:text-[12px]"
               style={
                 isActive
                   ? {

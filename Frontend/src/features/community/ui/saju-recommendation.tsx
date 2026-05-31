@@ -38,7 +38,7 @@ export function SajuRecommendation() {
       </div>
       <p className="mb-5 ml-10 text-[13px] text-gray-400">당신에게 잘 맞는 만남 분위기를 추천드려요.</p>
 
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <RecoCard
           bg="#F0F9FF"
           border="#BFDBFE"

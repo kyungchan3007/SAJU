@@ -2,7 +2,7 @@ import { RestoreAccountPanel } from "@/features/auth/ui/restore-account-panel.cl
 
 export default function RestorePage() {
   return (
-    <main className="container flex min-h-dvh items-center justify-center py-10">
+    <main className="flex min-h-dvh items-center justify-center bg-white px-4 py-10">
       <div className="w-full max-w-[400px]">
         <RestoreAccountPanel />
       </div>

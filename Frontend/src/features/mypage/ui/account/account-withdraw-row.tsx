@@ -1,3 +1,5 @@
+import { Button } from "@/shared/ui";
+
 type Props = {
   onWithdraw: () => void;
 };
@@ -17,12 +19,14 @@ export function AccountWithdrawRow({ onWithdraw }: Props) {
             이 작업은 되돌릴 수 없습니다.
           </span>
         </div>
-        <button
+        <Button
+          type="button"
+          variant="ghost"
           onClick={onWithdraw}
-          className="w-full shrink-0 rounded-xl bg-red-500 px-5 py-2.5 text-sm font-bold text-white transition hover:bg-red-600 sm:w-auto"
+          className="w-full shrink-0 rounded-xl bg-red-500 px-5 py-2.5 text-sm font-bold text-white hover:bg-red-600 hover:text-white sm:w-auto"
         >
           회원탈퇴
-        </button>
+        </Button>
       </div>
     </div>
   );

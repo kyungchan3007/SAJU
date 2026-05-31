@@ -35,8 +35,63 @@ export function JeongtongsajuDaewoon({ bigLuck, description }: Props) {
         )}
       </div>
 
-      {/* 스크롤 대운 목록 */}
-      <div className="overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      {/* 모바일: 2열 카드 그리드 */}
+      <div className="grid grid-cols-2 gap-2 sm:hidden">
+        {bigLuck.map((item, i) => {
+          const summary = formatBigLuckGanjiSummary(item.pillar);
+          const isCurrent = item.isCurrentDaeun;
+
+          return (
+            <div
+              key={i}
+              className={`flex flex-col items-center rounded-2xl border px-3 py-4 text-center ${
+                isCurrent
+                  ? "border-[#C4BAFF] bg-[#F0EEFF]/30"
+                  : "border-gray-100 bg-gray-50/50"
+              }`}
+            >
+              {isCurrent && (
+                <span className="mb-1.5 rounded-full bg-[#5956E9] px-2 py-0.5 text-[10px] font-bold text-white">
+                  현재 대운
+                </span>
+              )}
+              <span
+                className={`mb-1 text-[11px] ${
+                  isCurrent ? "font-bold text-[#5956E9]" : "text-gray-500"
+                }`}
+              >
+                {item.age_range}
+              </span>
+              <div
+                className={`mb-1 font-bold text-gray-800 ${
+                  isCurrent ? "text-[24px] text-gray-900" : "text-[20px]"
+                }`}
+              >
+                {item.pillar}
+              </div>
+              {summary && (
+                <div
+                  className={`mb-0.5 text-gray-600 ${
+                    isCurrent ? "text-[13px] font-bold text-gray-800" : "text-[12px]"
+                  }`}
+                >
+                  {summary}
+                </div>
+              )}
+              <div
+                className={`text-[10px] ${
+                  isCurrent ? "font-bold text-[#5956E9]" : "text-gray-400"
+                }`}
+              >
+                {item.year_range}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* 태블릿+: 기존 가로 스크롤 */}
+      <div className="hidden overflow-x-auto [scrollbar-width:none] sm:block [&::-webkit-scrollbar]:hidden">
         <div className="flex gap-2 pb-3" style={{ paddingTop: 36 }}>
           {bigLuck.map((item, i) => {
             const summary = formatBigLuckGanjiSummary(item.pillar);
