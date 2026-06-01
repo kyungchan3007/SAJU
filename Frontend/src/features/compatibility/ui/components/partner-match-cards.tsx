@@ -128,11 +128,13 @@ function EmptyPartnerCard({ onClick }: { onClick: () => void }) {
       {/* 정보 */}
       <div className="flex flex-1 flex-col justify-between px-5 py-4 text-left">
         <div>
-          <p className="text-[13px] font-bold text-[#9CA3AF] transition group-hover:text-[#5956E9]">
+          <p className="text-sm font-bold text-[#9CA3AF] transition group-hover:text-[#5956E9] sm:text-[13px]">
             상대방 정보
           </p>
-          <p className="mt-1 text-[17px] font-bold text-slate-300 transition group-hover:text-[#5956E9]">
-            상대를 선택해주세요
+          <p className="mt-1 text-sm font-bold text-slate-300 transition group-hover:text-[#5956E9] sm:text-[17px]">
+            상대를
+            <br />
+            선택해주세요
           </p>
         </div>
         <span

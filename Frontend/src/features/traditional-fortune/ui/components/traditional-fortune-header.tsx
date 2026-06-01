@@ -17,9 +17,9 @@ export function TraditionalFortuneHeader({ yearDescription }: Props) {
               정통사주 분석
             </span>
           </div>
-          <div className="text-[17px] font-black text-white">정통사주 풀이</div>
+          <div className="text-saju-section font-black text-white">정통사주 풀이</div>
           {yearDescription && (
-            <div className="mt-0.5 text-[13px] text-white/70">
+            <div className="mt-0.5 text-saju-body text-white/70">
               {yearDescription}
             </div>
           )}

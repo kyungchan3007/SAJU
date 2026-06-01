@@ -32,8 +32,7 @@ export function SajuHeroCardShell({
           <img
             src={imageSrc}
             alt={imageAlt}
-            className="absolute inset-0 h-full w-full object-cover"
-            style={{ objectPosition: "60% 10%" }}
+            className="absolute inset-0 h-full w-full object-cover object-center md:object-[60%_10%]"
           />
         )}
 

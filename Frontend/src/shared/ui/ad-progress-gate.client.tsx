@@ -69,10 +69,13 @@ export function AdProgressGate({
             분석 중
           </span>
         </div>
-        <p className="mb-1 text-xl font-black text-white">
+        <p className="xs sm:texdt-xl mb-1 text-sm font-black text-white">
           사주 운세를 분석하고 있어요
         </p>
-        <p className="text-sm" style={{ color: "rgba(255,255,255,0.7)" }}>
+        <p
+          className="text-xs sm:text-sm"
+          style={{ color: "rgba(255,255,255,0.7)" }}
+        >
           잠시만 기다려 주세요
         </p>
 

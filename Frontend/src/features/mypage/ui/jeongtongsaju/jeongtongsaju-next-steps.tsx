@@ -40,9 +40,6 @@ export function JeongtongsajuNextSteps() {
     <div>
       <div className="mb-4 flex items-baseline gap-2 px-1">
         <h2 className="text-[16px] font-bold text-gray-900">다음 단계</h2>
-        <span className="text-[13px] text-gray-400">
-          더 깊이 있는 분석과 인사이트를 확인해보세요.
-        </span>
       </div>
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
         <StepCard

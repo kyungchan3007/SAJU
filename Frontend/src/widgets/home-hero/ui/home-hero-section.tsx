@@ -46,7 +46,7 @@ export function HomeHeroSection({
 
           <h1
             id={headingId}
-            className="font-display text-[2rem] font-black leading-snug text-gray-900"
+            className="font-display text-saju-hero font-black leading-snug text-gray-900"
           >
             정통사주로 해석하는
             <br />

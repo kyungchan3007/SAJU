@@ -41,7 +41,7 @@ export function CompatibilitySection() {
 
       {/* 본문 */}
       <div className="bg-white">
-        <div className={`mx-auto ${contentMaxWidthClass} px-4 py-8 md:px-8`}>
+        <div className={`mx-auto ${contentMaxWidthClass} ${adGate.shouldShowGate ? "" : "px-4 py-8 md:px-8"}`}>
 
           {/* 에러 */}
           {compat.resultError && compat.isInResultView && (

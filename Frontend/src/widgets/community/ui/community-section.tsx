@@ -71,6 +71,10 @@ export function CommunitySection() {
             <StepTopics
               selectedType={flow.selectedType}
               selectedTopics={flow.selectedTopics}
+              friendTopics={flow.friendTopics}
+              meetingTopics={flow.meetingTopics}
+              isLoadingTopics={flow.isLoadingTopics}
+              topicsError={flow.topicsError}
               onToggle={flow.toggleTopic}
             />
           )}
@@ -83,6 +87,7 @@ export function CommunitySection() {
         stepNote={flow.stepNote}
         errorMessage={flow.errorMessage}
         isSubmitting={flow.isSubmitting}
+        isCommunityJoined={flow.isCommunityJoined}
         onNext={flow.goNext}
         onPrev={flow.goPrev}
       />

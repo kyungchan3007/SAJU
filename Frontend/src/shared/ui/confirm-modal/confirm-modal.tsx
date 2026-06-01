@@ -30,14 +30,14 @@ type Props = {
 
 const confirmButtonClassNames: Record<ConfirmModalVariant, string> = {
   default:
-    "bg-[#5956E9] text-white hover:bg-[#4B49D3] focus-visible:ring-[#5956E9]",
+    "bg-saju-primary text-white hover:bg-saju-purple focus-visible:ring-saju-primary",
   destructive:
-    "bg-red-500 text-white hover:bg-red-600 focus-visible:ring-red-500",
+    "bg-status-danger text-white hover:bg-red-600 focus-visible:ring-status-danger",
 };
 
 const iconClassNames: Record<ConfirmModalVariant, string> = {
-  default: "bg-[#F0EEFF] text-[#5956E9]",
-  destructive: "bg-red-50 text-red-500",
+  default: "bg-saju-light text-saju-primary",
+  destructive: "bg-red-50 text-status-danger",
 };
 
 export function ConfirmModal({
@@ -72,15 +72,15 @@ export function ConfirmModal({
       }}
     >
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm" />
+        <Dialog.Overlay className="fixed inset-0 z-overlay bg-black/40 backdrop-blur-sm" />
         <Dialog.Content
           className={cn(
-            "fixed left-1/2 top-1/2 z-50 mx-5 w-[calc(100%-40px)] max-w-[360px] -translate-x-1/2 -translate-y-1/2 rounded-[24px] bg-white p-8 text-center shadow-[0_8px_40px_rgba(0,0,0,0.16)]",
+            "fixed left-1/2 top-1/2 z-modal mx-5 w-[calc(100%-40px)] max-w-saju-modal -translate-x-1/2 -translate-y-1/2 rounded-saju-panel bg-surface-card p-8 text-center shadow-saju-modal",
             "focus:outline-none",
           )}
         >
           <Dialog.Close
-            className="absolute right-5 top-5 flex h-8 w-8 items-center justify-center rounded-full text-slate-400 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5956E9] disabled:pointer-events-none disabled:opacity-50"
+            className="absolute right-5 top-5 flex h-8 w-8 items-center justify-center rounded-full text-content-subtle hover:bg-surface-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-saju-primary disabled:pointer-events-none disabled:opacity-50"
             disabled={pending}
             aria-label="닫기"
           >
@@ -96,13 +96,13 @@ export function ConfirmModal({
             {icon ?? <AlertTriangle className="h-6 w-6" aria-hidden="true" />}
           </div>
 
-          <Dialog.Title className="mb-2 text-[17px] font-black text-gray-900">
+          <Dialog.Title className="mb-2 text-saju-title font-black text-content-primary">
             {title}
           </Dialog.Title>
 
           {description ? (
             <Dialog.Description asChild>
-              <div className="mb-6 text-[13px] leading-relaxed text-slate-400">
+              <div className="mb-6 text-saju-body leading-relaxed text-content-subtle">
                 {description}
               </div>
             </Dialog.Description>
@@ -113,7 +113,7 @@ export function ConfirmModal({
               type="button"
               onClick={onClose}
               disabled={pending}
-              className="flex-1 rounded-xl border-2 border-slate-200 py-3 text-[14px] font-bold text-slate-400 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5956E9] disabled:opacity-50"
+              className="flex-1 rounded-xl border-2 border-surface-border py-3 text-saju-section font-bold text-content-subtle hover:bg-surface-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-saju-primary disabled:opacity-50"
             >
               {cancelLabel}
             </button>
@@ -122,7 +122,7 @@ export function ConfirmModal({
               onClick={onConfirm}
               disabled={pending}
               className={cn(
-                "flex-[2] rounded-xl py-3 text-[14px] font-bold focus-visible:outline-none focus-visible:ring-2 disabled:opacity-50",
+                "flex-[2] rounded-xl py-3 text-saju-section font-bold focus-visible:outline-none focus-visible:ring-2 disabled:opacity-50",
                 confirmButtonClassNames[normalizedVariant],
               )}
             >
@@ -131,7 +131,7 @@ export function ConfirmModal({
           </div>
 
           {errorMessage ? (
-            <p className="mt-3 text-[12px] font-medium text-red-500">
+            <p className="mt-3 text-saju-label font-medium text-status-danger">
               {errorMessage}
             </p>
           ) : null}

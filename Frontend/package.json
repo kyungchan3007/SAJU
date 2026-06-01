@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Saju frontend bootstrap with Next.js App Router and FSD hybrid architecture.",
   "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "dev": "next dev",
     "build": "next build",

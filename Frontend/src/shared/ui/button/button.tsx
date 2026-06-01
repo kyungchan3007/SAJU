@@ -12,12 +12,12 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "border-0 text-white [background:linear-gradient(to_right,#5956E9,#7C3AED)] [box-shadow:0_4px_14px_rgba(89,86,233,0.35)] hover:[box-shadow:0_6px_20px_rgba(89,86,233,0.45)] hover:-translate-y-0.5",
+          "border-0 bg-saju-gradient text-white shadow-saju-btn hover:-translate-y-0.5 hover:shadow-saju-lg",
         secondary:
-          "border border-[#5956E9] bg-white text-[#5956E9] [box-shadow:0_2px_8px_rgba(89,86,233,0.10)] hover:bg-[#F0EEFF] hover:[box-shadow:0_4px_12px_rgba(89,86,233,0.15)]",
+          "border border-saju-primary bg-white text-saju-primary shadow-saju-sm hover:bg-saju-light hover:shadow-saju-md",
         outline:
-          "border border-[#E5E7EB] bg-white text-[#374151] hover:border-[#5956E9] hover:text-[#5956E9]",
-        ghost: "hover:bg-[#F0EEFF] hover:text-[#5956E9]",
+          "border border-surface-border bg-white text-content-secondary hover:border-saju-primary hover:text-saju-primary",
+        ghost: "hover:bg-saju-light hover:text-saju-primary",
       },
       size: {
         default: "h-10 px-5 py-2",
@@ -38,6 +38,9 @@ export interface ButtonProps
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
 }
+
+export type ButtonVariant = VariantProps<typeof buttonVariants>["variant"];
+export type ButtonSize = VariantProps<typeof buttonVariants>["size"];
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, ...props }, ref) => {

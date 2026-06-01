@@ -3,8 +3,9 @@ import { Jua, Noto_Sans_KR } from "next/font/google";
 import Script from "next/script";
 import type { ReactNode } from "react";
 import { cookies } from "next/headers";
+import { Providers } from "@/shared/app-infra/query-provider/query-providers";
 import { env } from "@/shared/config";
-import { Footer, Providers } from "@/shared/ui";
+import { Footer } from "@/shared/ui";
 import { GlobalNav } from "@/widgets/global-nav";
 import "./globals.css";
 

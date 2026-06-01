@@ -32,7 +32,7 @@ export function MypageBanner() {
                 "0 2px 12px rgba(0,0,0,0.55), 0 1px 4px rgba(0,0,0,0.40)",
             }}
           >
-            나와 맞는 사주의
+            나와 맞는 사주로
             <br />
             친구를 만나보세요
           </h2>
@@ -43,16 +43,15 @@ export function MypageBanner() {
                 "0 2px 10px rgba(0,0,0,0.60), 0 1px 4px rgba(0,0,0,0.50)",
             }}
           >
-            궁합 맞는 친구·연인,
+            궁합 맞는 친구와 연인,
             <br />
             사주가 찾아드립니다!
           </p>
 
           <a
             href="/community"
-            className="hidden w-fit items-center gap-2 rounded-full px-6 py-2.5 text-[13px] font-bold text-[#5956E9] transition hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5956E9]/70 focus-visible:ring-offset-2 md:flex"
+            className="hidden w-fit items-center gap-2 rounded-full bg-white px-6 py-2.5 text-[13px] font-bold text-[#5956E9] transition hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5956E9]/70 focus-visible:ring-offset-2 md:flex"
             style={{
-              background: "#fff",
               boxShadow: "0 4px 16px rgba(0,0,0,0.15)",
             }}
           >
@@ -77,11 +76,8 @@ export function MypageBanner() {
       <div className="flex justify-center px-4 md:hidden">
         <a
           href="/community"
-          className="flex w-fit items-center gap-2 rounded-full px-4 py-2.5 text-[11px] font-bold text-[#5956E9] transition hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5956E9]/70 focus-visible:ring-offset-2 xs:px-5 xs:py-3 xs:text-[12px]"
-          style={{
-            background: "#fff",
-            boxShadow: "0 4px 16px rgba(0,0,0,0.15)",
-          }}
+          className="flex w-fit items-center gap-2 rounded-full bg-white px-4 py-2.5 text-[11px] font-bold text-[#5956E9] transition hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5956E9]/70 focus-visible:ring-offset-2 xs:px-5 xs:py-3 xs:text-[12px]"
+          style={{ boxShadow: "0 4px 16px rgba(0,0,0,0.15)" }}
         >
           커뮤니티 바로가기
           <svg

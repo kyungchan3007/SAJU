@@ -12,10 +12,33 @@ type Partner = {
 
 type ApiMockOptions = {
   partners?: Partner[];
+  notifications?: NotificationMock[];
+  communityInterests?: CommunityInterestMock[];
+  communityInterestsStatus?: number;
+  communityInterestsErrorMessage?: string;
   onMySajuUpdate?: (payload: unknown) => void;
   onPartnerCreate?: (payload: unknown) => void;
   onPartnerUpdate?: (partnerId: number, payload: unknown) => void;
   onPartnerDelete?: (partnerId: number) => void;
+  onNotificationRead?: (notificationId: number) => void;
+  onCommunityJoin?: (payload: unknown) => void;
+};
+
+export type NotificationMock = {
+  id: number;
+  title: string;
+  content: string;
+  type: "ANNOUNCEMENT" | "NEW_SERVICE";
+  createdAt: string;
+  read: boolean;
+};
+
+export type CommunityInterestMock = {
+  type: string;
+  options: Array<{
+    name: string;
+    element?: string;
+  }>;
 };
 
 export const mySajuProfile = {
@@ -40,6 +63,44 @@ export const defaultPartners: Partner[] = [
   },
 ];
 
+export const defaultNotifications: NotificationMock[] = [
+  {
+    id: 301,
+    title: "새 기능이 열렸어요",
+    content: "오늘의 음식 추천을 확인해보세요.",
+    type: "NEW_SERVICE",
+    createdAt: "2026-06-01T09:00:00.000Z",
+    read: false,
+  },
+  {
+    id: 302,
+    title: "서비스 점검 안내",
+    content: "안정적인 이용을 위해 새벽 점검이 예정되어 있어요.",
+    type: "ANNOUNCEMENT",
+    createdAt: "2026-05-31T12:00:00.000Z",
+    read: true,
+  },
+];
+
+export const defaultCommunityInterests: CommunityInterestMock[] = [
+  {
+    type: "친구모임",
+    options: [
+      { name: "한강 산책", element: "수" },
+      { name: "연애 고민", element: "목" },
+      { name: "운동하기", element: "화" },
+    ],
+  },
+  {
+    type: "소개팅",
+    options: [
+      { name: "카페에서 가볍게 대화", element: "금" },
+      { name: "취향으로 가까워지는 소개팅", element: "목" },
+      { name: "밸런스 게임 대화 소개팅", element: "화" },
+    ],
+  },
+];
+
 export async function addAuthCookies(
   context: BrowserContext,
   baseURL?: string,
@@ -57,6 +118,9 @@ export async function mockCurrentProjectApis(
   options: ApiMockOptions = {},
 ) {
   let partners = options.partners ?? [...defaultPartners];
+  let notifications = options.notifications ?? [...defaultNotifications];
+  const communityInterests =
+    options.communityInterests ?? defaultCommunityInterests;
 
   await page.route("**/api/users/me", async (route) => {
     await route.fulfill({
@@ -148,6 +212,133 @@ export async function mockCurrentProjectApis(
       status: 200,
       contentType: "application/json",
       body: JSON.stringify(foodRecommend),
+    });
+  });
+
+  await page.route("**/api/community/interests", async (route) => {
+    const status = options.communityInterestsStatus ?? 200;
+
+    if (status >= 400) {
+      await route.fulfill({
+        status,
+        contentType: "application/json",
+        body: JSON.stringify({
+          success: false,
+          data: null,
+          error: {
+            code: "COMMUNITY_INTERESTS_GET_FAILED",
+            message:
+              options.communityInterestsErrorMessage ??
+              "관심 주제 목록을 불러오지 못했어요.",
+          },
+        }),
+      });
+      return;
+    }
+
+    await route.fulfill({
+      status,
+      contentType: "application/json",
+      body: JSON.stringify({
+        success: true,
+        data: communityInterests,
+        error: null,
+      }),
+    });
+  });
+
+  await page.route("**/api/community/join", async (route) => {
+    const payload = route.request().postDataJSON();
+    options.onCommunityJoin?.(payload);
+
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        success: true,
+        data: {
+          memberId: 55,
+          cohortId: 1,
+          joinDate: "2026년 05월 30일",
+          message: "커뮤니티에 참가 신청이 완료되었습니다.",
+        },
+        error: null,
+      }),
+    });
+  });
+
+  await page.route("**/api/community/cohorts", async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        success: true,
+        data: [{ cohortId: 1, name: "1기", capacity: 30, currentCount: 23 }],
+        error: null,
+      }),
+    });
+  });
+
+  await page.route("**/api/notifications/unread-count", async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        success: true,
+        data: notifications.filter((notification) => !notification.read).length,
+        error: null,
+      }),
+    });
+  });
+
+  await page.route("**/api/notifications/*/read", async (route) => {
+    const url = new URL(route.request().url());
+    const idMatch = url.pathname.match(/\/api\/notifications\/(\d+)\/read$/);
+    const notificationId = idMatch ? Number(idMatch[1]) : null;
+
+    if (!notificationId) {
+      await route.fulfill({
+        status: 400,
+        contentType: "application/json",
+        body: JSON.stringify({
+          success: false,
+          data: null,
+          error: {
+            code: "INVALID_NOTIFICATION_ID",
+            message: "Notification id must be a number.",
+          },
+        }),
+      });
+      return;
+    }
+
+    options.onNotificationRead?.(notificationId);
+    notifications = notifications.map((notification) =>
+      notification.id === notificationId
+        ? { ...notification, read: true }
+        : notification,
+    );
+
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        success: true,
+        data: { read: true },
+        error: null,
+      }),
+    });
+  });
+
+  await page.route("**/api/notifications", async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        success: true,
+        data: notifications,
+        error: null,
+      }),
     });
   });
 

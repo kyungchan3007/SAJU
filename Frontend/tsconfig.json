@@ -20,7 +20,9 @@
     ],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@saju/design-tokens": ["./packages/design-tokens/src/index.ts"],
+      "@saju/ui": ["./packages/ui/src/index.ts"]
     }
   },
   "include": [

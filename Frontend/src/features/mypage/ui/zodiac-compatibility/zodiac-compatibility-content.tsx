@@ -26,7 +26,7 @@ export function ZodiacCompatibilityContent({
     <div className="flex flex-col gap-5">
       {/* ── 배너 ── */}
       <div
-        className="relative overflow-hidden rounded-[2rem] xs:hidden"
+        className="relative overflow-hidden rounded-[2rem] xs:hidden sm:block"
         style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.10)", minHeight: 200 }}
       >
         <div

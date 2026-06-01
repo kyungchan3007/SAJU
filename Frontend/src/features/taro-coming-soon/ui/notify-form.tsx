@@ -20,7 +20,7 @@ export function NotifyForm() {
   if (status === "done") {
     return (
       <div className="flex flex-col gap-2">
-        <div className="flex h-12 items-center justify-center rounded-2xl bg-emerald-500 font-bold text-[13px] text-white shadow-[0_4px_16px_rgba(16,185,129,0.28)]">
+        <div className="flex h-12 items-center justify-center rounded-2xl bg-emerald-500 text-[13px] font-bold text-white shadow-[0_4px_16px_rgba(16,185,129,0.28)]">
           신청 완료 ✓
         </div>
         <p className="text-center text-[11px] text-gray-400">
@@ -32,14 +32,14 @@ export function NotifyForm() {
 
   return (
     <div className="flex flex-col gap-2">
-      <div className="flex gap-2">
+      <div className="flex flex-col gap-2 sm:flex-row">
         <Input
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="이메일 주소를 입력해주세요"
           status={status === "error" ? "error" : "default"}
-          className="h-12 flex-1 rounded-2xl border-gray-200 px-4 text-gray-900 placeholder:text-gray-300"
+          className="h-12 rounded-2xl border-gray-200 px-4 text-gray-900 placeholder:text-gray-300 sm:flex-1"
         />
         <Button
           type="button"

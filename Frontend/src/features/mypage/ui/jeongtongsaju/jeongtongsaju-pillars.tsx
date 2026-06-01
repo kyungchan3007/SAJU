@@ -26,7 +26,7 @@ export function JeongtongsajuPillars({ pillars }: Props) {
       </div>
 
       {/* 카드 그리드 — 모바일 2×2 / 데스크톱 4열 */}
-      <div className="mb-5 grid grid-cols-2 gap-3 md:grid-cols-4">
+      <div className="mb-5 grid grid-cols-1 gap-3 md:grid-cols-4">
         {ordered.map((pillar, i) => {
           const type = getSajuPillarTypeAt(i);
           const isDay = isDayPillar(type);
@@ -87,9 +87,9 @@ export function JeongtongsajuPillars({ pillars }: Props) {
             : `${SAJU_PILLAR_LABEL_MAP[type]}는 천간과 지지가 결합된 사주 기둥입니다.`;
 
           return (
-            <div key={type} className="flex gap-3 px-4 py-3.5">
+            <div key={type} className="gap-3 px-4 py-3.5 sm:flex">
               <span
-                className={`mt-0.5 shrink-0 rounded-md p-3 text-[11px] font-bold ${
+                className={`mt-0.5 shrink-0 rounded-md p-2 text-[11px] font-bold sm:p-3 ${
                   isDay
                     ? "bg-[#EAE7FF] text-[#5956E9]"
                     : "bg-gray-200 text-gray-600"
@@ -97,7 +97,7 @@ export function JeongtongsajuPillars({ pillars }: Props) {
               >
                 {SAJU_PILLAR_LABEL_MAP[type]}
               </span>
-              <p className="text-[13px] leading-relaxed text-gray-600">
+              <p className="mt-4 text-[13px] leading-relaxed text-gray-600">
                 {description}
               </p>
             </div>

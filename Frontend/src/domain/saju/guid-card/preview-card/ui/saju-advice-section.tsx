@@ -75,11 +75,11 @@ export function SajuAdviceSection({ dailyResult }: SajuPreviewSectionProps) {
               >
                 <polyline points="20 6 9 17 4 12" />
               </svg>
-              <span className="text-[10px] font-bold tracking-[0.04em] text-saju-primary">
+              <span className="text-[10px] font-bold tracking-[0.04em] text-saju-primary xs:text-xs">
                 {box.label}
               </span>
             </div>
-            <p className="text-[14px] font-bold leading-[1.5] text-gray-900">
+            <p className="text-[14px] font-bold leading-[1.5] text-gray-900 xs:text-xs">
               {box.value}
             </p>
           </div>

@@ -104,7 +104,7 @@ export function CompatibilityPartnerModal({
                   </div>
 
                   {/* 정보 */}
-                  <div className="flex-1 min-w-0">
+                  <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-1.5 text-[14px] font-bold text-gray-900">
                       {p.name}
                       {isSelected && (
@@ -156,7 +156,7 @@ export function CompatibilityPartnerModal({
             <div className="text-[13px] font-bold text-gray-900">
               {selectedPartner?.name ?? "선택한 상대"}
             </div>
-            <div className="mt-0.5 text-[11px] text-slate-400">
+            <div className="mt-0.5 text-slate-400 sm:text-[11px]">
               {selectedPartner
                 ? partnerDesc(selectedPartner)
                 : "상대를 선택해주세요."}

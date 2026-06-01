@@ -57,6 +57,23 @@
     --saju-z-overlay: 190;              /* modal/dialog backdrop */
     --saju-z-modal: 200;                /* modal/dialog content */
     --saju-z-toast: 300;                /* toast/urgent feedback */
+
+    /* ── 반응형 폰트 크기 변수 (모바일 기본값) ── */
+    --fs-hero: 1.25rem;      /* 20px - 히어로 h1 */
+    --fs-title: 1.125rem;    /* 18px - 카드/섹션 주요 제목 */
+    --fs-section: 0.875rem;  /* 14px - 섹션 헤더 */
+    --fs-body: 0.8125rem;    /* 13px - 본문 (불변) */
+    --fs-label: 0.75rem;     /* 12px - 라벨 (불변) */
+    --fs-badge: 0.6875rem;   /* 11px - 배지/작은 텍스트 (불변) */
+  }
+
+  @media (min-width: 640px) {
+    :root {
+      /* ── 반응형 폰트 크기 변수 (데스크탑) ── */
+      --fs-hero: 1.75rem;      /* 28px */
+      --fs-title: 1.375rem;    /* 22px */
+      --fs-section: 0.9375rem; /* 15px */
+    }
   }
 
   * {
@@ -66,6 +83,7 @@
   body {
     background-color: #FAFAFA;
     color: #111827;
+    word-break: keep-all;
   }
 
   /* ── 스크롤바 ── */

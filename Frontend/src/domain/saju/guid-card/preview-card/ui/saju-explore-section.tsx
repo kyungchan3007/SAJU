@@ -99,7 +99,7 @@ export function SajuExploreSection() {
   return (
     <div>
       <h3 className="mb-3 text-[14px] font-bold text-gray-900">탐색하기</h3>
-      <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+      <div className="grid grid-cols-1 gap-3 md:grid-cols-4">
         {EXPLORE_CARDS.map((card) => (
           <Link
             key={card.title}
@@ -107,7 +107,9 @@ export function SajuExploreSection() {
             className="flex flex-col gap-2.5 rounded-[14px] border border-gray-100 bg-white p-4 transition-all duration-150 hover:-translate-y-0.5 hover:border-saju-border hover:shadow-md"
             style={{ boxShadow: "0 1px 6px rgba(0,0,0,0.06)" }}
           >
-            <div className={`flex h-10 w-10 items-center justify-center rounded-full ${card.iconBg}`}>
+            <div
+              className={`flex h-10 w-10 items-center justify-center rounded-full ${card.iconBg}`}
+            >
               {card.icon}
             </div>
             <div>

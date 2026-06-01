@@ -13,7 +13,7 @@ export function GlobalNavLogo() {
         <div className="text-sm font-black leading-tight tracking-tight text-gray-900">
           SAJU:ME
         </div>
-        <div className="text-[9px] leading-none text-gray-400">
+        <div className="text-[10px] leading-none text-gray-400 sm:text-[11px]">
           정통사주로 해석하는 나의 명식
         </div>
       </div>

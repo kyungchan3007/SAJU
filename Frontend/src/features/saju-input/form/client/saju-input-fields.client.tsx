@@ -257,13 +257,19 @@ export function SajuInputFields({
               </svg>
             )}
           </div>
-          <div>
-            <p className="text-sm font-black text-gray-900">
+          <div className="min-w-0 flex-1">
+            <p
+              className="text-sm font-black text-gray-900 xs:text-xs"
+              style={{ wordBreak: "keep-all" }}
+            >
               {highlightedZodiac
                 ? `${formValues.birthYear}년생 · ${highlightedZodiac.name}띠`
                 : "출생 연도를 선택하면 띠가 자동으로 표시됩니다"}
             </p>
-            <p className="mt-1 text-[11px] text-gray-400">
+            <p
+              className="mt-1 text-[11px] text-gray-400"
+              style={{ wordBreak: "keep-all" }}
+            >
               {highlightedZodiac
                 ? "12간지에서 자동으로 강조 표시됩니다."
                 : "예: 2000년 → 용띠"}

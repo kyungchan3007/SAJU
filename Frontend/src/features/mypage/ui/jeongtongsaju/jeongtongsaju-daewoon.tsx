@@ -36,7 +36,7 @@ export function JeongtongsajuDaewoon({ bigLuck, description }: Props) {
       </div>
 
       {/* 모바일: 2열 카드 그리드 */}
-      <div className="grid grid-cols-2 gap-2 sm:hidden">
+      <div className="grid grid-cols-1 gap-2 sm:hidden">
         {bigLuck.map((item, i) => {
           const summary = formatBigLuckGanjiSummary(item.pillar);
           const isCurrent = item.isCurrentDaeun;
@@ -72,7 +72,9 @@ export function JeongtongsajuDaewoon({ bigLuck, description }: Props) {
               {summary && (
                 <div
                   className={`mb-0.5 text-gray-600 ${
-                    isCurrent ? "text-[13px] font-bold text-gray-800" : "text-[12px]"
+                    isCurrent
+                      ? "text-[13px] font-bold text-gray-800"
+                      : "text-[12px]"
                   }`}
                 >
                   {summary}

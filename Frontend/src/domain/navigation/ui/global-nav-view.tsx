@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Bell } from "lucide-react";
+import type { ReactNode } from "react";
 
 import type { ResolvedNavItem } from "@/domain/navigation/model/nav-items";
 import { GlobalNavLogo } from "@/domain/navigation/ui/navLogo/GlobalNavLogo";
@@ -11,6 +11,7 @@ type GlobalNavViewProps = {
   desktopItems: ResolvedNavItem[];
   mobileItems: ResolvedNavItem[];
   profileItem?: ResolvedNavItem;
+  notificationSlot?: ReactNode;
 };
 
 export function GlobalNavView({
@@ -18,6 +19,7 @@ export function GlobalNavView({
   desktopItems,
   mobileItems,
   profileItem,
+  notificationSlot,
 }: GlobalNavViewProps) {
   return (
     <>
@@ -32,6 +34,7 @@ export function GlobalNavView({
           <DesktopNavActions
             isLoggedIn={isLoggedIn}
             profileItem={profileItem}
+            notificationSlot={notificationSlot}
           />
         </div>
       </header>
@@ -42,7 +45,11 @@ export function GlobalNavView({
         style={{ boxShadow: "0 1px 3px rgba(0,0,0,0.04)" }}
       >
         <GlobalNavLogo />
-        <DesktopNavActions isLoggedIn={isLoggedIn} profileItem={profileItem} />
+        <DesktopNavActions
+          isLoggedIn={isLoggedIn}
+          profileItem={profileItem}
+          notificationSlot={notificationSlot}
+        />
       </header>
 
       <MobileTabBar items={mobileItems} />
@@ -53,9 +60,11 @@ export function GlobalNavView({
 function DesktopNavActions({
   isLoggedIn,
   profileItem,
+  notificationSlot,
 }: {
   isLoggedIn: boolean;
   profileItem?: ResolvedNavItem;
+  notificationSlot?: ReactNode;
 }) {
   if (!isLoggedIn) {
     return (
@@ -76,13 +85,7 @@ function DesktopNavActions({
 
   return (
     <div className="flex items-center gap-3">
-      <button
-        type="button"
-        className="flex h-8 w-8 items-center justify-center rounded-full text-gray-400 transition-colors hover:bg-gray-100"
-        aria-label="알림"
-      >
-        <Bell size={17} strokeWidth={1.8} />
-      </button>
+      {notificationSlot}
       <Link
         href={{ pathname: "/mypage" }}
         className="flex h-8 w-8 items-center justify-center rounded-full bg-saju-gradient-br text-xs font-bold text-white"

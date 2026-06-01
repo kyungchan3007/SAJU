@@ -74,31 +74,35 @@ export function SajuFlowRow({
 
   return (
     <div
-      className={`flex gap-3 py-[11px] ${!isLast ? "border-b border-gray-100" : ""}`}
+      className={`flex flex-col gap-1.5 py-[11px] ${!isLast ? "border-b border-gray-100" : ""}`}
     >
-      <div
-        className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full"
-        style={{ background: bg, color }}
-      >
-        {icon}
+      {/* 아이콘 + 타이틀 */}
+      <div className="flex items-center gap-2">
+        <div
+          className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full"
+          style={{ background: bg, color }}
+        >
+          {icon}
+        </div>
+        <p className="text-[12px] font-semibold text-gray-900">{title}</p>
       </div>
-      <div className="flex-1">
-        <p className="mb-1 text-[12px] font-semibold text-gray-900">{title}</p>
-        <ul className="list-inside list-disc">
-          {items.length > 0 ? (
-            items.map((item, index) => (
-              <li
-                key={index}
-                className="text-[11.5px] leading-[1.55] text-gray-400"
-              >
-                {item}
-              </li>
-            ))
-          ) : (
-            <li className="text-[11.5px] text-gray-300">-</li>
-          )}
-        </ul>
-      </div>
+
+      {/* 항목 리스트 */}
+      <ul className="list-inside list-disc pl-9">
+        {items.length > 0 ? (
+          items.map((item, index) => (
+            <li
+              key={index}
+              className="text-[11.5px] leading-[1.55] text-gray-400"
+              style={{ wordBreak: "keep-all" }}
+            >
+              {item}
+            </li>
+          ))
+        ) : (
+          <li className="text-[11.5px] text-gray-300">-</li>
+        )}
+      </ul>
     </div>
   );
 }

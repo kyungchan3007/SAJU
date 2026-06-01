@@ -4,13 +4,17 @@ import { useMemo, useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 import { fetchCommunityCohortsOnClient } from "@/entities/community/client/fetchCommunityCohortsOnClient";
+import { fetchCommunityInterestsOnClient } from "@/entities/community/client/fetchCommunityInterestsOnClient";
 import { joinCommunityOnClient } from "@/entities/community/client/joinCommunityOnClient";
+import { fetchSajuProfileOnClient } from "@/entities/saju/client/fetchSajuProfileOnClient";
 import {
   buildCommunityJoinPayload,
   canSelectCommunityTopic,
   getCommunityJoinedCount,
   isCommunityContactFormValid,
   isCommunityInterestSelectionValid,
+  mapCommunityTopicsByMeetingType,
+  resolveCommunityInterestType,
   shouldShowCommunityJoinedCount,
   type ContactForm,
   type MeetingType,
@@ -20,6 +24,8 @@ export type { ContactForm, MeetingType };
 
 const TOTAL_STEPS = 3;
 const COMMUNITY_COHORTS_QUERY_KEY = ["community-cohorts"] as const;
+const COMMUNITY_INTERESTS_QUERY_KEY = ["community-interests"] as const;
+const SAJU_PROFILE_QUERY_KEY = ["saju-profile", "community-joined"] as const;
 
 export function useCommunityFlow() {
   const [step, setStep] = useState(1);
@@ -34,10 +40,43 @@ export function useCommunityFlow() {
   const [submitted, setSubmitted] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+  const sajuProfileQuery = useQuery({
+    queryKey: SAJU_PROFILE_QUERY_KEY,
+    queryFn: fetchSajuProfileOnClient,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
+    retry: false,
+  });
+  const isCommunityJoined = Boolean(
+    sajuProfileQuery.data?.success && sajuProfileQuery.data.data?.communityJoined,
+  );
+  const shouldDisableCommunityAction =
+    sajuProfileQuery.isLoading ||
+    sajuProfileQuery.isError ||
+    !sajuProfileQuery.data?.success ||
+    isCommunityJoined;
+
+  const interestsQuery = useQuery({
+    queryKey: COMMUNITY_INTERESTS_QUERY_KEY,
+    queryFn: fetchCommunityInterestsOnClient,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
+    retry: 1,
+  });
+
   const joinMutation = useMutation({
     mutationFn: () =>
       joinCommunityOnClient(
-        buildCommunityJoinPayload(form, selectedType, selectedTopics),
+        buildCommunityJoinPayload(
+          form,
+          selectedType,
+          selectedTopics,
+          undefined,
+          resolveCommunityInterestType(
+            interestsQuery.data?.success ? interestsQuery.data.data : undefined,
+            selectedType,
+          ),
+        ),
       ),
     onSuccess: () => {
       setSubmitted(true);
@@ -45,7 +84,7 @@ export function useCommunityFlow() {
     },
     onError: (error) => {
       setErrorMessage(
-        error instanceof Error ? error.message : "관심 신청에 실패했어요.",
+        error instanceof Error ? error.message : "커뮤니티 요청에 실패했어요.",
       );
     },
   });
@@ -58,6 +97,14 @@ export function useCommunityFlow() {
     gcTime: 5 * 60 * 1000,
     retry: 1,
   });
+
+  const { friendTopics, meetingTopics } = useMemo(
+    () =>
+      mapCommunityTopicsByMeetingType(
+        interestsQuery.data?.success ? interestsQuery.data.data : undefined,
+      ),
+    [interestsQuery.data],
+  );
 
   const joinedCount = useMemo(
     () =>
@@ -72,15 +119,28 @@ export function useCommunityFlow() {
   function goNext() {
     setErrorMessage(null);
 
+    if (sajuProfileQuery.isLoading) {
+      setErrorMessage("참가 상태를 확인 중이에요.");
+      return;
+    }
+
+    if (sajuProfileQuery.isError || !sajuProfileQuery.data?.success) {
+      setErrorMessage("참가 상태를 확인하지 못했어요. 잠시 후 다시 시도해주세요.");
+      return;
+    }
+
+    if (isCommunityJoined) {
+      setErrorMessage("이미 커뮤니티 참가가 완료되었어요.");
+      return;
+    }
+
     if (step === 1 && !selectedType) {
-      setErrorMessage("참여하고 싶은 만남 유형을 선택해 주세요.");
+      setErrorMessage("참여할 만남 유형을 선택해주세요.");
       return;
     }
 
     if (step === 2 && !isCommunityContactFormValid(form)) {
-      setErrorMessage(
-        "닉네임, 연령대, 휴대폰 번호 입력과 개인정보 수집·이용 동의가 필요해요.",
-      );
+      setErrorMessage("닉네임/연령대/연락처/개인정보 동의를 확인해주세요.");
       return;
     }
 
@@ -90,7 +150,7 @@ export function useCommunityFlow() {
     }
 
     if (!isCommunityInterestSelectionValid(selectedType, selectedTopics)) {
-      setErrorMessage("관심 주제를 1개 이상, 최대 2개까지 선택해 주세요.");
+      setErrorMessage("관심 주제를 1~2개 선택해주세요.");
       return;
     }
 
@@ -121,9 +181,9 @@ export function useCommunityFlow() {
   }
 
   const stepNotes = [
-    "만남 유형을 선택한 뒤 다음으로 넘어가세요.",
-    "정보를 입력한 뒤 다음으로 넘어가세요.",
-    "관심 주제를 선택하고 알림을 신청해보세요!",
+    "만남 유형을 고르면 다음 단계로 넘어가요.",
+    "기본 정보를 입력하면 다음 단계로 넘어가요.",
+    "관심 주제를 고르고 신청해주세요.",
   ];
 
   return {
@@ -132,6 +192,13 @@ export function useCommunityFlow() {
     selectedType,
     setSelectedType,
     selectedTopics,
+    friendTopics,
+    meetingTopics,
+    isLoadingTopics: interestsQuery.isLoading,
+    topicsError:
+      interestsQuery.isError || !interestsQuery.data?.success
+        ? "관심 주제 목록을 불러오지 못했어요."
+        : null,
     toggleTopic,
     form,
     updateForm,
@@ -140,9 +207,12 @@ export function useCommunityFlow() {
     shouldShowJoinedCount,
     isLoadingJoinedCount: cohortsQuery.isLoading,
     isSubmitting: joinMutation.isPending,
+    isCommunityJoined: shouldDisableCommunityAction,
     errorMessage,
     goNext,
     goPrev,
-    stepNote: stepNotes[step - 1],
+    stepNote: isCommunityJoined
+      ? "이미 커뮤니티에 참가한 상태예요."
+      : stepNotes[step - 1],
   };
 }
