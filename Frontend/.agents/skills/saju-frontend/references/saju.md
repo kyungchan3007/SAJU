@@ -11,11 +11,11 @@ description: /saju 관련 경로, 폼·draft 작업 규칙, 체크리스트
 
 ## 관련 경로
 
-- `src/app/(main)/saju`
-- `src/features/saju-input`
-- `src/widgets/saju-input`
-- `src/entities/saju`
-- `src/app/api/saju/route.ts`
+- `apps/web/src/app/(main)/saju`
+- `apps/web/src/features/saju-input`
+- `apps/web/src/widgets/saju-input`
+- `apps/web/src/entities/saju`
+- `apps/web/src/app/api/saju/route.ts`
 
 ## 작업 규칙
 

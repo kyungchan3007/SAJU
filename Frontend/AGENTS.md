@@ -13,8 +13,9 @@
 ## 작업 범위
 
 - 이 파일은 `Frontend` 하위 전체에 적용된다.
+- Next.js 앱 코드는 `apps/web` 아래에 있고, 루트 npm scripts는 해당 workspace로 위임된다.
 - 소스코드 변경 요청이 아닌 문서 정리 작업에서는 `.md` 파일만 수정한다.
-- `src/generated/api` 아래 생성 파일은 직접 수정하지 않는다.
+- `apps/web/src/generated/api` 아래 생성 파일은 직접 수정하지 않는다.
 
 ## 응답 형식
 

@@ -5,7 +5,7 @@
 ## 1. 목적
 
 - 화면마다 다른 색상, radius, shadow, 카드/버튼 패턴을 하나의 기준으로 수렴한다.
-- `src/shared` 내부 디자인 시스템 레이어에서 시작하고, 안정화 이후 `packages/design-tokens`, `packages/ui` 분리를 검토한다.
+- `apps/web/src/shared`는 앱 호환 레이어로 유지하고, 공용 토큰/무상태 UI는 `packages/design-tokens`, `packages/ui`에서 관리한다.
 - FSD 구조(`app`, `widgets`, `features`, `entities`, `shared`)를 유지한다.
 
 ## 2. Visual Direction
@@ -121,18 +121,18 @@
 
 | Candidate | Current Location | Used / Repeated In | Action |
 | --- | --- | --- | --- |
-| `Button` | `src/shared/ui/button/button.tsx` | payment, welcome CTA, auth/home button patterns | variant를 현재 디자인 토큰 기준으로 안정화 |
-| `ConfirmModal` | `src/shared/ui/confirm-modal/confirm-modal.tsx`, `src/shared/ui/confirm-modal.tsx` | account logout/withdraw, saju-manage delete | 중복 구현 2개를 하나로 합치기 |
-| `StatusMessage` | `src/shared/ui/status-message/status-message.tsx` | saju-manage feedback, future form feedback | success/error/info/warning 기준 유지 |
-| `PageContentLayout` | `src/shared/ui/page-content-layout.tsx` | compatibility, traditional fortune flow | general `1152px` 컨테이너로 유지 |
+| `Button` | `apps/web/src/shared/ui/button/button.tsx` | payment, welcome CTA, auth/home button patterns | variant를 현재 디자인 토큰 기준으로 안정화 |
+| `ConfirmModal` | `apps/web/src/shared/ui/confirm-modal/confirm-modal.tsx`, `apps/web/src/shared/ui/confirm-modal.tsx` | account logout/withdraw, saju-manage delete | 중복 구현 2개를 하나로 합치기 |
+| `StatusMessage` | `apps/web/src/shared/ui/status-message/status-message.tsx` | saju-manage feedback, future form feedback | success/error/info/warning 기준 유지 |
+| `PageContentLayout` | `apps/web/src/shared/ui/page-content-layout.tsx` | compatibility, traditional fortune flow | general `1152px` 컨테이너로 유지 |
 | `PageContainer` | not created | result/detail pages need `720px` | `general`, `reading`, `modal` width variant 설계 |
 | `Card` | not created | compatibility, mypage, traditional/year fortune cards | default/interactive/selected/result variants 설계 |
 | `Badge` | not created | compatibility tags, zodiac score labels, hero labels | neutral/primary/status/score variants 설계 |
-| `FormMessage` | `src/shared/ui/form-message/form-message.tsx` | saju manage, auth restore, future forms | error/warning/info helper text 통일 |
-| `ProgressBar` | `src/shared/ui/progress-bar/progress-bar.tsx` | compatibility score sections, zodiac score, home today card, jeongtongsaju hero | `value`, `max`, `tone` primitive부터 시작 |
-| `IconBadge` | `src/shared/ui/icon-badge/icon-badge.tsx` | section headers, hero stat chips, empty states | icon container 색상/radius/size만 공용화 |
-| `Input` | `src/shared/ui/input/input.tsx` | saju input, community contact, taro notify, saju manage form, partner add modal | native input primitive부터 시작, 기존 화면은 점진 치환 |
-| `Select` | `src/shared/ui/select/select.tsx` | saju input, saju manage form | native select primitive부터 시작, radix 전환은 추후 판단 |
+| `FormMessage` | `apps/web/src/shared/ui/form-message/form-message.tsx` | saju manage, auth restore, future forms | error/warning/info helper text 통일 |
+| `ProgressBar` | `apps/web/src/shared/ui/progress-bar/progress-bar.tsx` | compatibility score sections, zodiac score, home today card, jeongtongsaju hero | `value`, `max`, `tone` primitive부터 시작 |
+| `IconBadge` | `apps/web/src/shared/ui/icon-badge/icon-badge.tsx` | section headers, hero stat chips, empty states | icon container 색상/radius/size만 공용화 |
+| `Input` | `apps/web/src/shared/ui/input/input.tsx` | saju input, community contact, taro notify, saju manage form, partner add modal | native input primitive부터 시작, 기존 화면은 점진 치환 |
+| `Select` | `apps/web/src/shared/ui/select/select.tsx` | saju input, saju manage form | native select primitive부터 시작, radix 전환은 추후 판단 |
 
 ### 5.2 Promote After Pattern Stabilizes
 
@@ -174,8 +174,8 @@
 ### 5.4 First Cleanup Targets
 
 1. `ConfirmModal` 중복 제거
-   - `src/shared/ui/confirm-modal/confirm-modal.tsx`를 canonical로 삼을지 결정
-   - `src/shared/ui/confirm-modal.tsx` 직접 import 사용처 제거
+   - `apps/web/src/shared/ui/confirm-modal/confirm-modal.tsx`를 canonical로 삼을지 결정
+   - `apps/web/src/shared/ui/confirm-modal.tsx` 직접 import 사용처 제거
    - account, saju-manage delete modal을 같은 API로 통일
 2. `PageContainer` 추가
    - `variant="content"` -> `max-w-saju-content`
@@ -193,20 +193,22 @@
 
 ## 6. Structure Plan
 
-Initial internal structure:
+Current workspace structure:
 
 ```txt
-src/shared/design-tokens/
-src/shared/ui/primitives/
-src/shared/ui/components/
-src/shared/ui/patterns/
+apps/web/src/shared/design-tokens/
+apps/web/src/shared/ui/
+packages/design-tokens/
+packages/ui/
 ```
 
 Current practical mapping:
 
-- `tailwind.config.ts`: Tailwind theme tokens.
-- `src/app/globals.css`: CSS variables and compatibility utility classes.
-- `src/shared/ui`: shared React UI components.
+- `apps/web/tailwind.config.ts`: Tailwind theme tokens.
+- `apps/web/src/app/globals.css`: CSS variables and compatibility utility classes.
+- `packages/design-tokens`: reusable design token source.
+- `packages/ui`: reusable stateless UI primitives.
+- `apps/web/src/shared/ui`: app-facing compatibility exports and app-specific shared UI.
 - `.agents/skills/saju-frontend/references/ui-style.md`: Agent execution rules.
 
 Implemented token groups:
@@ -221,26 +223,20 @@ Implemented token groups:
 - `fontSize.saju-*`: title, section, body, label, badge text sizes.
 - `zIndex`: nav, overlay, modal, toast layers.
 
-Future package split:
-
-```txt
-packages/design-tokens/
-packages/ui/
-```
-
-Do not start package extraction until shared components stabilize across multiple domains.
+Package extraction has started. Keep the public API narrow and move only domain-free, reusable UI into `packages/ui`.
 
 ## 7. Import Rules
 
-- Domain code imports reusable UI from `@/shared/ui`.
-- `shared/ui` must not import from `features`, `widgets`, or `app`.
-- `shared/ui` may import `shared/lib`, `shared/config`, and external UI libraries.
+- Domain code imports app-facing reusable UI from `@/shared/ui`.
+- New domain-free UI can be exported from `@saju/ui` and re-exported through `apps/web/src/shared/ui` while migration is in progress.
+- `shared/ui` and `packages/ui` must not import from `features`, `widgets`, `entities`, or `app`.
+- `shared/ui` may import `shared/lib`, `shared/config`, `@saju/ui`, `@saju/design-tokens`, and external UI libraries.
 - API/query/domain-specific logic stays in `features` or `entities`.
 - Data transformation for display stays in feature `model` unless reused across domains.
 
 ## 8. Implementation Rules
 
-- Prefer tokens from `tailwind.config.ts` and `globals.css` over new hardcoded values.
+- Prefer tokens from `apps/web/tailwind.config.ts` and `globals.css` over new hardcoded values.
 - Add `focus-visible` states to interactive elements.
 - Keep touch targets at least `44px` where practical.
 - Use `transition-colors`, `transition-shadow`, `transition-[width]` instead of `transition-all`.

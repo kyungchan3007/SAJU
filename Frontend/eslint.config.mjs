@@ -9,11 +9,16 @@ const config = [
   {
     ignores: [
       ".next/**",
+      "apps/*/.next/**",
       "node_modules/**",
       "coverage/**",
+      "apps/*/coverage/**",
       "out/**",
+      "apps/*/out/**",
       "public/**",
       "src/generated/**",
+      "apps/web/src/generated/**",
+      "packages/*/dist/**",
     ],
   },
 ];

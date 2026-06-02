@@ -11,10 +11,10 @@ description: 홈 화면 정보 구조, 관련 경로, 작업 규칙, 체크리�
 
 ## 관련 경로
 
-- `src/app/(main)/home`
-- `src/features/home`
-- `src/widgets/homeSection`
-- `src/widgets/welcom-section`
+- `apps/web/src/app/(main)/home`
+- `apps/web/src/features/home`
+- `apps/web/src/widgets/homeSection`
+- `apps/web/src/widgets/welcom-section`
 - 디자인 전수 시안: `Docs/01.페이지 설계/디자인 전수 변경/home-design.html`
 - 디자인 전수 시안(비로그인): `Docs/01.페이지 설계/디자인 전수 변경/home-design-guest.html`
 

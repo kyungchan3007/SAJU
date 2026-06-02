@@ -11,11 +11,11 @@ description: /mypage 관련 경로, 사용자 정보·관리 화면 작업 규�
 
 ## 관련 경로
 
-- `src/app/(main)/mypage`
-- `src/features/mypage`
-- `src/widgets/mypage`
-- `src/entities/user`
-- `src/entities/saju`
+- `apps/web/src/app/(main)/mypage`
+- `apps/web/src/features/mypage`
+- `apps/web/src/widgets/mypage`
+- `apps/web/src/entities/user`
+- `apps/web/src/entities/saju`
 
 ## 작업 규칙
 

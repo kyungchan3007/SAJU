@@ -11,16 +11,16 @@ description: /mypage/year-fortune 신년운세 생성형 풀이 조회 화면과
 
 ## 관련 경로
 
-- `src/app/(main)/mypage/year-fortune`
-- `src/app/api/saju/me/year`
-- `src/widgets/year-fortune/ui/year-fortune-section.tsx`
-- `src/features/year-fortune/hooks/useYearFortune.ts`
-- `src/features/year-fortune/model/yearFortune.ts`
-- `src/features/year-fortune/ui/*`
-- `src/entities/saju/client/fetchYearFortuneOnClient.ts`
-- `src/entities/saju/server/getMyYearFortuneOnServer.ts`
-- `src/shared/api/backend/parseGeneratedInterpretationResponse.ts`
-- `src/shared/config/endPoint.ts`
+- `apps/web/src/app/(main)/mypage/year-fortune`
+- `apps/web/src/app/api/saju/me/year`
+- `apps/web/src/widgets/year-fortune/ui/year-fortune-section.tsx`
+- `apps/web/src/features/year-fortune/hooks/useYearFortune.ts`
+- `apps/web/src/features/year-fortune/model/yearFortune.ts`
+- `apps/web/src/features/year-fortune/ui/*`
+- `apps/web/src/entities/saju/client/fetchYearFortuneOnClient.ts`
+- `apps/web/src/entities/saju/server/getMyYearFortuneOnServer.ts`
+- `apps/web/src/shared/api/backend/parseGeneratedInterpretationResponse.ts`
+- `apps/web/src/shared/config/endPoint.ts`
 
 ## 작업 규칙
 

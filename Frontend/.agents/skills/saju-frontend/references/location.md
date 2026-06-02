@@ -11,12 +11,12 @@ description: /location 관련 경로와 위치 추천/지도 작업 규칙
 
 ## 관련 경로
 
-- `src/app/(main)/location`
-- `src/features/location-search`
-- `src/widgets/location-map`
-- `src/entities/location`
-- `src/app/api/location/route.ts`
-- `src/app/api/location/search/route.ts`
+- `apps/web/src/app/(main)/location`
+- `apps/web/src/features/location-search`
+- `apps/web/src/widgets/location-map`
+- `apps/web/src/entities/location`
+- `apps/web/src/app/api/location/route.ts`
+- `apps/web/src/app/api/location/search/route.ts`
 
 ## 작업 규칙
 

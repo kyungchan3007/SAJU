@@ -5,7 +5,7 @@
 ## 범위
 
 - Unit Test: `Vitest`
-- E2E Test: 추후 `Playwright` 사용
+- E2E Test: `Playwright`
 
 ## 기본 원칙
 
@@ -18,13 +18,21 @@
 - 테스트 파일명: `*.test.ts` 또는 `*.test.tsx`
 - 기본 위치: 대상 코드 폴더 아래 `test/` 하위
 - 예시:
-  - `src/shared/utils/BirthDate.ts` → `src/shared/utils/test/BirthDate.test.ts`
-  - `src/features/saju-input/model/utils.ts` → `src/features/saju-input/model/test/utils.test.ts`
+  - `apps/web/src/shared/utils/BirthDate.ts` → `apps/web/src/shared/utils/test/BirthDate.test.ts`
+  - `apps/web/src/features/saju-input/model/utils.ts` → `apps/web/src/features/saju-input/model/test/utils.test.ts`
 
 ## Unit Test 실행
 
 - 1회 실행: `npm run test:unit`
 - watch 모드: `npm run test:unit:watch`
+
+루트 명령은 `apps/web` workspace로 위임된다. 앱 내부에서 직접 실행할 때는 `npm run test:unit -w @saju/web`을 사용할 수 있다.
+
+## E2E Test 실행
+
+- 전체 실행: `npm run test:e2e`
+- 특정 파일 실행: `npm run test:e2e -- community.spec.ts --project=chromium`
+- 테스트 파일 위치: `apps/web/e2e`
 
 ## Unit Test 작성 우선순위
 
@@ -35,4 +43,5 @@
 ## PR 전 체크
 
 - `npm run test:unit`이 통과해야 한다.
+- 주요 사용자 플로우 변경 시 관련 `npm run test:e2e -- <spec> --project=chromium`도 확인한다.
 - 변경된 핵심 로직에 대응하는 테스트가 포함되어야 한다.

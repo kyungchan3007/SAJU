@@ -11,15 +11,15 @@ description: /mypage/zodiac-compatibility 띠별 궁합 조회 화면과 배열 
 
 ## 관련 경로
 
-- `src/app/(main)/mypage/zodiac-compatibility`
-- `src/app/api/saju/zodiac-compatibility`
-- `src/widgets/mypage/ui/zodiac-compatibility-section.tsx`
-- `src/features/mypage/hooks/useZodiacCompatibility.ts`
-- `src/features/mypage/model/zodiacCompatibility.ts`
-- `src/features/mypage/ui/zodiac-compatibility/*`
-- `src/entities/saju/client/fetchZodiacCompatibilityOnClient.ts`
-- `src/entities/saju/server/getZodiacCompatibilityOnServer.ts`
-- `src/shared/config/endPoint.ts`
+- `apps/web/src/app/(main)/mypage/zodiac-compatibility`
+- `apps/web/src/app/api/saju/zodiac-compatibility`
+- `apps/web/src/widgets/mypage/ui/zodiac-compatibility-section.tsx`
+- `apps/web/src/features/mypage/hooks/useZodiacCompatibility.ts`
+- `apps/web/src/features/mypage/model/zodiacCompatibility.ts`
+- `apps/web/src/features/mypage/ui/zodiac-compatibility/*`
+- `apps/web/src/entities/saju/client/fetchZodiacCompatibilityOnClient.ts`
+- `apps/web/src/entities/saju/server/getZodiacCompatibilityOnServer.ts`
+- `apps/web/src/shared/config/endPoint.ts`
 
 ## 작업 규칙
 
@@ -32,4 +32,4 @@ description: /mypage/zodiac-compatibility 띠별 궁합 조회 화면과 배열 
 - 객체 응답 호환이 필요하면 영문 key, 한국어 띠 이름, 띠 suffix 없는 이름, 지지 branch alias를 함께 처리한다.
 - 응답 가공과 grade/style 결정은 UI JSX가 아니라 `features/mypage/model/zodiacCompatibility.ts`에 둔다.
 - UI 컴포넌트에는 카드 렌더링과 얕은 이벤트만 남긴다.
-- 매핑 로직 변경 시 `src/features/mypage/model/test/zodiacCompatibility.test.ts`를 함께 갱신한다.
+- 매핑 로직 변경 시 `apps/web/src/features/mypage/model/test/zodiacCompatibility.test.ts`를 함께 갱신한다.

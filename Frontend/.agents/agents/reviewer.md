@@ -26,3 +26,6 @@
 - `MERGE: PASS` 또는 `MERGE: HOLD`
 - 이슈는 `Critical > High > Medium > Low`
 - 각 이슈에 영향/근거(파일:라인)/재현조건/수정제안 포함
+
+## 명령어
+- $codex-review-workflow reviewer.md 순서대로 이번 변경분 배포 전 최종 리뷰해줘. MERGE: PASS/HOLD로.

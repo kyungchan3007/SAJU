@@ -46,7 +46,11 @@ export function StateCard({
 export function LoadingStateCard({ message }: { message: string }) {
   return (
     <div className="flex flex-col items-center gap-3 rounded-saju-panel border border-surface-border bg-surface-card px-6 py-10 text-center shadow-saju-sm">
-      <Loader2 size={28} className="animate-spin text-saju-primary" />
+      <Loader2
+        size={28}
+        className="animate-spin text-saju-primary"
+        aria-hidden="true"
+      />
       <p className="text-saju-section text-content-muted">{message}</p>
     </div>
   );
@@ -60,7 +64,7 @@ export function EmptyStateCard({
   return (
     <div className="flex flex-col items-center gap-3 rounded-saju-panel border border-surface-border bg-surface-card px-6 py-10 text-center shadow-saju-sm">
       <div className="flex h-14 w-14 items-center justify-center rounded-saju-card bg-surface-soft">
-        <Inbox size={26} className="text-content-subtle" />
+        <Inbox size={26} className="text-content-subtle" aria-hidden="true" />
       </div>
       {title && (
         <p className="text-saju-section font-bold text-content-primary">{title}</p>
@@ -83,7 +87,11 @@ export function ErrorStateCard({
   return (
     <div className="flex flex-col items-center gap-3 rounded-saju-panel border border-surface-border bg-surface-card px-6 py-10 text-center shadow-saju-sm">
       <div className="flex h-14 w-14 items-center justify-center rounded-saju-card bg-red-50">
-        <AlertCircle size={26} className="text-status-danger" />
+        <AlertCircle
+          size={26}
+          className="text-status-danger"
+          aria-hidden="true"
+        />
       </div>
       {title && (
         <p className="text-saju-section font-bold text-content-primary">{title}</p>

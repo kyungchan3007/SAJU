@@ -29,10 +29,10 @@ AdSense, 광고 슬롯, Rewarded Ads, `/saju/result` 분석 대기 광고, 결�
 
 ## Rewarded Ads 연동 후 바꿀 부분
 
-- `src/features/saju-result/ui/analysis-progress-screen.client.tsx`
+- `apps/web/src/features/saju-result/ui/analysis-progress-screen.client.tsx`
   - Rewarded 광고가 준비된 경우에만 버튼 문구를 `광고 보고 사주풀이 보기`로 바꾼다.
   - 완료 안내 문구를 `광고를 시청하면 사주풀이를 확인할 수 있어요.`처럼 명확히 바꾼다.
-- `src/widgets/saju-result/ui/saju-result.tsx`
+- `apps/web/src/widgets/saju-result/ui/saju-result.tsx`
   - 현재 버튼 클릭 즉시 결과 공개를 Rewarded Ads 완료 이벤트 기반으로 교체한다.
   - 예: `rewardedSlotGranted` 수신 후 `setIsResultRevealed(true)`.
 - Rewarded 광고가 준비되지 않았거나 로드 실패한 경우에는 일반 `사주풀이 보기` fallback을 유지한다.

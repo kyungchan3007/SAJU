@@ -40,14 +40,15 @@ description: >-
 
 ## 공통 규칙
 
-- `src/generated/api` 아래 파일은 직접 수정하지 않는다.
+- Next.js 앱 루트는 `apps/web`이며, 루트 npm scripts는 `@saju/web` workspace로 위임된다.
+- `apps/web/src/generated/api` 아래 파일은 직접 수정하지 않는다.
 - API 관련 판단에서는 Next.js 일반론보다 `references/api.md`의 프로젝트 기조를 우선한다.
-- 백엔드 직접 호출, 인증 쿠키 처리, token refresh, 서버 전용 환경변수 사용은 먼저 `src/app/api/**/route.ts` BFF 경계를 통과하는 구조로 판단한다.
+- 백엔드 직접 호출, 인증 쿠키 처리, token refresh, 서버 전용 환경변수 사용은 먼저 `apps/web/src/app/api/**/route.ts` BFF 경계를 통과하는 구조로 판단한다.
 - 페이지 파일은 라우트 엔트리와 조립 역할에 가깝게 유지한다.
-- 재사용되거나 복잡한 상태, 검증, 제출, 조회 흐름은 커스텀 훅으로 만들고 `features/*/hooks`에 둔다.
+- 재사용되거나 복잡한 상태, 검증, 제출, 조회 흐름은 커스텀 훅으로 만들고 `apps/web/src/features/*/hooks`에 둔다.
 - `useQuery`와 `useMutation`은 widget/domain 컴포넌트에 직접 두지 말고 feature 커스텀 훅으로 감싼다.
 - API 응답 가공은 UI 컴포넌트에서 직접 처리하지 않는다.
-- 기존 `app`, `widgets`, `features`, `entities`, `shared` 구조를 먼저 따른다.
+- 앱 코드는 기존 `app`, `widgets`, `features`, `entities`, `shared` 구조를 먼저 따르고, 도메인 없는 공용 UI/토큰만 `packages/*`로 올린다.
 - 관련 없는 `.md` 파일은 읽지 않는다.
 
 ## 갱신 규칙

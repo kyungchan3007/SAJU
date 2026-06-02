@@ -79,11 +79,11 @@ export function SajuInputFields({
 
 ## 파일 배치 판단
 
-- 화면 조립만 한다: `src/app` 또는 `src/widgets`
-- 사용자 행동 흐름이 있다: `src/features/<feature>`
-- 도메인 카드/정적 표현이다: `src/domain/<domain>`
-- API 타입/통신 경계다: `src/entities/<entity>`
-- 여러 도메인에서 반복된다: `src/shared`
+- 화면 조립만 한다: `apps/web/src/app` 또는 `apps/web/src/widgets`
+- 사용자 행동 흐름이 있다: `apps/web/src/features/<feature>`
+- 도메인 카드/정적 표현이다: `apps/web/src/domain/<domain>`
+- API 타입/통신 경계다: `apps/web/src/entities/<entity>`
+- 여러 도메인에서 반복된다: `apps/web/src/shared`
 
 ## 작업 전 체크리스트
 

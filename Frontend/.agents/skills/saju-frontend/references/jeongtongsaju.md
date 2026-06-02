@@ -11,15 +11,15 @@ description: /mypage/jeongtongsaju 정통사주 상세 조회 화면과 BFF 작�
 
 ## 관련 경로
 
-- `src/app/(main)/mypage/jeongtongsaju`
-- `src/app/api/saju/traditional`
-- `src/app/api/saju/traditional-fortune`
-- `src/widgets/mypage/ui/jeongtongsaju-section.tsx`
-- `src/features/mypage/hooks/useJeongtongsaju.ts`
-- `src/features/mypage/ui/jeongtongsaju-*`
-- `src/features/traditional-fortune`
-- `src/entities/saju/server/onSajuTraditionalGetOnServer.ts`
-- `src/entities/saju/client/fetchSajuTraditionalOnClient.ts`
+- `apps/web/src/app/(main)/mypage/jeongtongsaju`
+- `apps/web/src/app/api/saju/traditional`
+- `apps/web/src/app/api/saju/traditional-fortune`
+- `apps/web/src/widgets/mypage/ui/jeongtongsaju-section.tsx`
+- `apps/web/src/features/mypage/hooks/useJeongtongsaju.ts`
+- `apps/web/src/features/mypage/ui/jeongtongsaju-*`
+- `apps/web/src/features/traditional-fortune`
+- `apps/web/src/entities/saju/server/onSajuTraditionalGetOnServer.ts`
+- `apps/web/src/entities/saju/client/fetchSajuTraditionalOnClient.ts`
 
 ## 용어 규칙
 
@@ -89,6 +89,6 @@ type TraditionalFortuneResponse = {
 - 정통사주 풀이는 `/api/saju/traditional-fortune` BFF를 통한다.
 - BFF는 `onSajuTraditionalGetOnServer`로 위임하고, 백엔드 호출은 `authenticatedBackendFetch`를 사용한다.
 - 정통사주 응답 가공과 타입 좁히기는 UI 컴포넌트에 과하게 두지 말고 feature/entity model 분리를 검토한다.
-- API route를 바꾸면 `src/app/api/saju/traditional/test/route.test.ts`를 함께 갱신한다.
-- generated 타입은 참고만 하고 `src/generated/api` 아래 파일은 직접 수정하지 않는다.
+- API route를 바꾸면 `apps/web/src/app/api/saju/traditional/test/route.test.ts`를 함께 갱신한다.
+- generated 타입은 참고만 하고 `apps/web/src/generated/api` 아래 파일은 직접 수정하지 않는다.
 - generated의 `traits`, `pillars`, `fiveElements`, `bigLuck`, `twelveGrowthInfo`는 넓은 타입이므로 UI에 넘기기 전에 view model에서 타입을 좁힌다.

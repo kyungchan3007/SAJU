@@ -21,8 +21,8 @@ description: 최신 사주 프론트엔드 디자인 실행 규칙, 레이아웃
 
 ## 스타일 소스 우선순위
 
-- 색상, 반경, 그림자는 `tailwind.config.ts`와 `src/app/globals.css` 토큰을 먼저 확인한다.
-- 공용 UI는 `src/shared/ui`를 먼저 확인한다.
+- 색상, 반경, 그림자는 `apps/web/tailwind.config.ts`와 `apps/web/src/app/globals.css` 토큰을 먼저 확인한다.
+- 공용 UI는 `apps/web/src/shared/ui`를 먼저 확인하고, 도메인 없는 신규 primitive는 `@saju/ui` 승격 가능성을 함께 본다.
 - 공용 버튼은 `@/shared/ui`의 `Button` 사용을 우선 검토한다.
 - 확인 모달은 `@/shared/ui`의 `ConfirmModal` 사용을 우선 검토한다.
 - 같은 의미의 색상, shadow, radius 값을 여러 컴포넌트에 새로 복붙하지 않는다.

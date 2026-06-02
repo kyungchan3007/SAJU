@@ -11,10 +11,10 @@ description: 카카오/이메일 로그인 흐름, /login 관련 경로, 로그�
 
 ## 관련 경로
 
-- `src/app/(auth)/login`
-- `src/features/auth`
-- `src/entities/auth`
-- `src/app/api/auth`
+- `apps/web/src/app/(auth)/login`
+- `apps/web/src/features/auth`
+- `apps/web/src/entities/auth`
+- `apps/web/src/app/api/auth`
 
 ## 로그인 흐름
 

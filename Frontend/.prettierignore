@@ -1,6 +1,12 @@
 node_modules
 .next
+apps/*/.next
 coverage
+apps/*/coverage
 out
+apps/*/out
+playwright-report
+apps/*/playwright-report
+test-results
+apps/*/test-results
 package-lock.json
-

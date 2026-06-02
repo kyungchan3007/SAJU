@@ -16,12 +16,15 @@ description: 기술 스택, 레이어 구조(app/widgets/features/entities/share
 
 ## 레이어 구조
 
-- `src/app`: 라우트 엔트리, API BFF, SEO 메타 정의
-- `src/widgets`: 페이지 단위 조합 블록
-- `src/features`: 사용자 인터랙션 단위 기능
-- `src/domain`: 도메인 UI와 룩업 데이터
-- `src/entities`: 도메인 타입과 서버 유틸
-- `src/shared`: 공용 API 응답 포맷, 설정, UI, 유틸, 인프라 프로바이더
+- `apps/web`: Next.js 앱 workspace
+- `apps/web/src/app`: 라우트 엔트리, API BFF, SEO 메타 정의
+- `apps/web/src/widgets`: 페이지 단위 조합 블록
+- `apps/web/src/features`: 사용자 인터랙션 단위 기능
+- `apps/web/src/domain`: 도메인 UI와 룩업 데이터
+- `apps/web/src/entities`: 도메인 타입과 서버 유틸
+- `apps/web/src/shared`: 공용 API 응답 포맷, 설정, UI, 유틸, 인프라 프로바이더
+- `packages/design-tokens`: 도메인 없는 디자인 토큰
+- `packages/ui`: 도메인 없는 무상태 UI primitive
 
 ## 주요 라우트
 
@@ -40,5 +43,6 @@ description: 기술 스택, 레이어 구조(app/widgets/features/entities/share
 - 이후 실제 수정 대상 도메인의 reference를 1개만 추가로 읽는다.
 - feature 내부의 상태 관리, 파생 계산, 제출/조회 행위는 우선 `hooks/`로 분리한다.
 - `form/client`, `ui` 컴포넌트는 props 기반 렌더링에 집중한다.
-- 여러 도메인에서 재사용되는 포맷팅, 파싱, 변환, 가드 함수는 `src/shared/utils` 배치를 검토한다.
+- 여러 도메인에서 재사용되는 포맷팅, 파싱, 변환, 가드 함수는 `apps/web/src/shared/utils` 배치를 검토한다.
 - 전역 재사용 가능성이 애매하면 `shared`로 올리기 전에 사용자에게 확인한다.
+- 패키지로 올릴 대상은 앱 경계(`features`, `entities`, `widgets`, `app`)를 import하지 않아야 한다.

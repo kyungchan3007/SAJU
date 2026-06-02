@@ -11,24 +11,24 @@ description: /mypage/saju-manage 내 사주·파트너 사주 CRUD 화면과 BFF
 
 ## 관련 경로
 
-- `src/app/(main)/mypage/saju-manage`
-- `src/app/api/saju/me`
-- `src/app/api/partners`
-- `src/app/api/partners/[partnerId]`
-- `src/widgets/mypage/ui/saju-manage-section.tsx`
-- `src/features/mypage/hooks/useSajuManage.ts`
-- `src/features/mypage/hooks/usePartners.ts`
-- `src/features/mypage/model/sajuManage.ts`
-- `src/features/mypage/model/partner.ts`
-- `src/features/mypage/ui/manage/*`
-- `src/entities/saju/client/fetchSajuProfileOnClient.ts`
-- `src/entities/saju/client/updateSajuProfileOnClient.ts`
-- `src/entities/saju/server/getSajuProfileOnServer.ts`
-- `src/entities/saju/server/updateSajuOnServer.ts`
-- `src/entities/partner/client/*`
-- `src/entities/partner/server/*`
-- `src/shared/model/saju-calendar/*`
-- `src/shared/utils/BirthDate.ts`
+- `apps/web/src/app/(main)/mypage/saju-manage`
+- `apps/web/src/app/api/saju/me`
+- `apps/web/src/app/api/partners`
+- `apps/web/src/app/api/partners/[partnerId]`
+- `apps/web/src/widgets/mypage/ui/saju-manage-section.tsx`
+- `apps/web/src/features/mypage/hooks/useSajuManage.ts`
+- `apps/web/src/features/mypage/hooks/usePartners.ts`
+- `apps/web/src/features/mypage/model/sajuManage.ts`
+- `apps/web/src/features/mypage/model/partner.ts`
+- `apps/web/src/features/mypage/ui/manage/*`
+- `apps/web/src/entities/saju/client/fetchSajuProfileOnClient.ts`
+- `apps/web/src/entities/saju/client/updateSajuProfileOnClient.ts`
+- `apps/web/src/entities/saju/server/getSajuProfileOnServer.ts`
+- `apps/web/src/entities/saju/server/updateSajuOnServer.ts`
+- `apps/web/src/entities/partner/client/*`
+- `apps/web/src/entities/partner/server/*`
+- `apps/web/src/shared/model/saju-calendar/*`
+- `apps/web/src/shared/utils/BirthDate.ts`
 
 ## 작업 규칙
 
@@ -43,7 +43,7 @@ description: /mypage/saju-manage 내 사주·파트너 사주 CRUD 화면과 BFF
 - 파트너 수정은 선택된 파트너의 기존 값을 `toPartnerFormValues`로 폼 초기값에 반영한다.
 - 파트너 삭제 후 삭제 대상이 선택 중이면 선택을 내 사주로 되돌린다.
 - 파트너 수 제한 정책은 `MAX_PARTNERS`를 우선 사용한다.
-- 달력 타입 정책은 `src/shared/model/saju-calendar`를 사용한다. UI의 `LUNAR-LEAP`는 백엔드 전송 시 `LUNAR`로 변환한다.
+- 달력 타입 정책은 `apps/web/src/shared/model/saju-calendar`를 사용한다. UI의 `LUNAR-LEAP`는 백엔드 전송 시 `LUNAR`로 변환한다.
 - 백엔드 날짜 문자열을 select 값으로 나눌 때는 `parseBackendBirthDateParts`를 사용한다.
 - 저장 문구는 기존 사주 분석이 새 사주 정보 기준으로 재계산된다는 점을 명확히 알려야 한다.
 - 저장 성공 시 사주 기본 정보와 정통사주 요약 캐시를 함께 갱신한다.

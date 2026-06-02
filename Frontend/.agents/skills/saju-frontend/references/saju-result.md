@@ -11,11 +11,11 @@ description: /saju/result 관련 경로, 결과 조회/캐시 정책, 작업 규
 
 ## 관련 경로
 
-- `src/app/(main)/saju/result`
-- `src/features/saju-result`
-- `src/widgets/saju-result`
-- `src/entities/saju`
-- `src/shared/lib/react-query`
+- `apps/web/src/app/(main)/saju/result`
+- `apps/web/src/features/saju-result`
+- `apps/web/src/widgets/saju-result`
+- `apps/web/src/entities/saju`
+- `apps/web/src/shared/lib/react-query`
 
 ## 작업 규칙
 

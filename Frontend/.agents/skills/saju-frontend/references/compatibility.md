@@ -11,17 +11,17 @@ description: /compatibility 파트너 궁합 생성형 풀이 조회 화면과 P
 
 ## 관련 경로
 
-- `src/app/(main)/compatibility`
-- `src/app/api/saju/me/compatibility/[partnerId]`
-- `src/widgets/compatibility/ui/compatibility-section.tsx`
-- `src/features/compatibility/hooks/useCompatibility.ts`
-- `src/features/compatibility/model/compatibility.ts`
-- `src/features/compatibility/ui/*`
-- `src/entities/compatibility/client/fetchCompatibilityOnClient.ts`
-- `src/entities/compatibility/server/getCompatibilityOnServer.ts`
-- `src/entities/partner/client/fetchPartnersOnClient.ts`
-- `src/entities/saju/client/fetchSajuProfileOnClient.ts`
-- `src/shared/api/backend/parseGeneratedInterpretationResponse.ts`
+- `apps/web/src/app/(main)/compatibility`
+- `apps/web/src/app/api/saju/me/compatibility/[partnerId]`
+- `apps/web/src/widgets/compatibility/ui/compatibility-section.tsx`
+- `apps/web/src/features/compatibility/hooks/useCompatibility.ts`
+- `apps/web/src/features/compatibility/model/compatibility.ts`
+- `apps/web/src/features/compatibility/ui/*`
+- `apps/web/src/entities/compatibility/client/fetchCompatibilityOnClient.ts`
+- `apps/web/src/entities/compatibility/server/getCompatibilityOnServer.ts`
+- `apps/web/src/entities/partner/client/fetchPartnersOnClient.ts`
+- `apps/web/src/entities/saju/client/fetchSajuProfileOnClient.ts`
+- `apps/web/src/shared/api/backend/parseGeneratedInterpretationResponse.ts`
 
 ## 작업 규칙
 
