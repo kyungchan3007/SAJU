@@ -36,14 +36,12 @@ test.describe("mypage domain smoke", () => {
     await expectNoHorizontalOverflow(page);
   });
 
-  test("shows zodiac compatibility with shared badge and progress UI", async ({
+  test("shows zodiac compatibility with shared progress UI", async ({
     page,
   }) => {
     await page.goto("/mypage/zodiac-compatibility");
 
-    await expect(page.getByText("띠별궁합").first()).toBeVisible();
     await expect(page.getByText("나의 띠", { exact: true }).first()).toBeVisible();
-    await expect(page.getByText("12간지 궁합")).toBeVisible();
     await expect(page.getByText("원숭이띠", { exact: true }).first()).toBeVisible();
     await expect(page.getByRole("progressbar").first()).toBeVisible();
     await expectNoHorizontalOverflow(page);

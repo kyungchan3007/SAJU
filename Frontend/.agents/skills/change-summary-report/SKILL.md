@@ -3,7 +3,7 @@ name: change-summary-report
 description: >-
   사용자가 git status 기준 변경 내용을 정리해 달라고 요청할 때 사용하는 보고 스킬.
   기본은 "어떤기능인가요 / 작업상세내용 / 요약본 / 커밋메시지(한글)" 4개 항목을 사용하고,
-  refactor 타입 요청 시에는 refactor 전용 템플릿을 사용한다.
+  refactor 또는 chore 타입 요청 시에는 해당 전용 템플릿을 사용한다.
 ---
 
 # 변경 요약 보고 스킬
@@ -22,10 +22,13 @@ description: >-
 
 ## 타입별 템플릿 규칙
 
-- `feat` / `fix` / `chore`:
+- `feat` / `fix`:
   - 기본 4개 항목 템플릿 사용
 - `refactor`:
   - 아래 refactor 전용 템플릿만 사용
+  - 기본 4개 항목 템플릿 출력 금지
+- `chore`:
+  - 아래 chore 전용 템플릿만 사용
   - 기본 4개 항목 템플릿 출력 금지
 
 ## 기본 4개 항목 템플릿
@@ -82,8 +85,31 @@ description: >-
 
 <br>
 
+## chore 전용 템플릿
+
+## 🔧 어떤 설정/작업인가요?
+
+> 변경하려는 설정이나 작업에 대해 간결하게 설명해주세요.
+
+<br>
+
+## 📝 작업 상세 내용
+
+- [ ] TODO
+- [ ] TODO
+- [ ] TODO
+
+<br>
+
+## ⚠️ 영향 범위
+
+> 이 변경이 영향을 미치는 범위를 작성해주세요. (예: 배포 환경, DB, CI/CD 등)
+
+<br>
+
 ## 사용자 프롬프트 예시
 
 - `git 변경분 feat 기준으로 change-summary-report 형식 정리`
 - `git 변경분 refactor 기준으로 change-summary-report 정리`
 - `git 변경분 fix 기준, 파일 경로 제외`
+- `git 변경분 chore 템플릿으로 정리`

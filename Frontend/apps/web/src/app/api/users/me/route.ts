@@ -4,6 +4,7 @@ import { deleteMyAccountOnServer } from "@/entities/user/server/deleteMyAccountO
 import { getMyProfileOnServer } from "@/entities/user/server/getMyProfileOnServer";
 import { createErrorResponse, createSuccessResponse } from "@/shared/api";
 import { clearAuthCookies } from "@/shared/api/auth/clearAuthCookies";
+import { rejectCrossOriginRequest } from "@/shared/api/auth/rejectCrossOriginRequest";
 import {
   AUTH_COOKIE_OPTIONS,
   USER_EMAIL_COOKIE_MAX_AGE,
@@ -31,7 +32,10 @@ export async function GET() {
   return response;
 }
 
-export async function DELETE() {
+export async function DELETE(request?: Request) {
+  const csrfResponse = rejectCrossOriginRequest(request);
+  if (csrfResponse) return csrfResponse;
+
   const result = await deleteMyAccountOnServer();
 
   if (!result.success) {

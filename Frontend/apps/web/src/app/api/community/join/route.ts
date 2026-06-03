@@ -3,8 +3,12 @@ import { NextResponse } from "next/server";
 import { joinCommunityOnServer } from "@/entities/community/server/joinCommunityOnServer";
 import type { CommunityJoinRequest } from "@/generated/api";
 import { createErrorResponse, createSuccessResponse } from "@/shared/api";
+import { rejectCrossOriginRequest } from "@/shared/api/auth/rejectCrossOriginRequest";
 
 export async function POST(request: Request) {
+  const csrfResponse = rejectCrossOriginRequest(request);
+  if (csrfResponse) return csrfResponse;
+
   let payload: CommunityJoinRequest;
 
   try {

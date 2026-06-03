@@ -1,11 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { exchangeOAuthCodeOnServer } from "@/entities/auth/server/exchangeOAuthCodeOnServer";
+import { isOAuthStateValid } from "@/shared/api/auth/oauthState";
 import { normalizePostLoginRedirect } from "@/shared/api/auth/postLoginRedirect";
 import { getServerEnv } from "@/shared/config";
 import {
   ACCESS_TOKEN_COOKIE_MAX_AGE,
   ACCESS_TOKEN_COOKIE_KEY,
   AUTH_COOKIE_OPTIONS,
+  OAUTH_STATE_COOKIE_KEY,
   POST_LOGIN_REDIRECT_COOKIE_KEY,
   REFRESH_TOKEN_COOKIE_MAX_AGE,
   REFRESH_TOKEN_COOKIE_KEY,
@@ -16,9 +18,15 @@ import { SAJU_USERS_ME_PATH } from "@/shared/config/endPoint";
 
 export async function GET(req: NextRequest) {
   const code = req.nextUrl.searchParams.get("code");
+  const receivedState = req.nextUrl.searchParams.get("state");
+  const storedState = req.cookies.get(OAUTH_STATE_COOKIE_KEY)?.value;
   const requestedNextPath = normalizePostLoginRedirect(
     req.cookies.get(POST_LOGIN_REDIRECT_COOKIE_KEY)?.value,
   );
+
+  if (!isOAuthStateValid(receivedState, storedState)) {
+    return redirectToLogin(req, "invalid_state", requestedNextPath);
+  }
 
   if (!code) {
     return redirectToLogin(req, "missing_code", requestedNextPath);
@@ -40,6 +48,7 @@ export async function GET(req: NextRequest) {
           : "/home";
 
     const res = NextResponse.redirect(new URL(postLoginPath, req.url));
+    clearOAuthStateCookie(res);
     clearPostLoginRedirectCookie(res);
 
     res.cookies.set(ACCESS_TOKEN_COOKIE_KEY, result.data.accessToken, {
@@ -112,7 +121,16 @@ function redirectToLogin(
     loginUrl.searchParams.set("next", requestedNextPath);
   }
 
-  return NextResponse.redirect(loginUrl);
+  const response = NextResponse.redirect(loginUrl);
+  clearOAuthStateCookie(response);
+  return response;
+}
+
+function clearOAuthStateCookie(response: NextResponse) {
+  response.cookies.set(OAUTH_STATE_COOKIE_KEY, "", {
+    ...AUTH_COOKIE_OPTIONS,
+    maxAge: 0,
+  });
 }
 
 function clearPostLoginRedirectCookie(response: NextResponse) {

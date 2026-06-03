@@ -5,6 +5,7 @@ import { getPartnerOnServer } from "@/entities/partner/server/getPartnerOnServer
 import { updatePartnerOnServer } from "@/entities/partner/server/updatePartnerOnServer";
 import type { PartnerRequest } from "@/generated/api";
 import { createErrorResponse, createSuccessResponse } from "@/shared/api";
+import { rejectCrossOriginRequest } from "@/shared/api/auth/rejectCrossOriginRequest";
 
 function parsePartnerId(rawPartnerId: string) {
   const partnerId = Number(rawPartnerId);
@@ -44,6 +45,9 @@ export async function GET(_: Request, context: RouteContext) {
 }
 
 export async function PATCH(request: Request, context: RouteContext) {
+  const csrfResponse = rejectCrossOriginRequest(request);
+  if (csrfResponse) return csrfResponse;
+
   const { partnerId: rawPartnerId } = await context.params;
   const partnerId = parsePartnerId(rawPartnerId);
 
@@ -77,7 +81,10 @@ export async function PATCH(request: Request, context: RouteContext) {
   return NextResponse.json(createSuccessResponse(result.data));
 }
 
-export async function DELETE(_: Request, context: RouteContext) {
+export async function DELETE(request: Request, context: RouteContext) {
+  const csrfResponse = rejectCrossOriginRequest(request);
+  if (csrfResponse) return csrfResponse;
+
   const { partnerId: rawPartnerId } = await context.params;
   const partnerId = parsePartnerId(rawPartnerId);
 

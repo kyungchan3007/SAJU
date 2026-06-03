@@ -1,10 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { createErrorResponse } from "@/shared/api";
+import { createOAuthState } from "@/shared/api/auth/oauthState";
 import { normalizePostLoginRedirect } from "@/shared/api/auth/postLoginRedirect";
 import { getServerEnv } from "@/shared/config";
 import {
   AUTH_COOKIE_OPTIONS,
+  OAUTH_STATE_COOKIE_KEY,
+  OAUTH_STATE_COOKIE_MAX_AGE,
   POST_LOGIN_REDIRECT_COOKIE_KEY,
   POST_LOGIN_REDIRECT_COOKIE_MAX_AGE,
 } from "@/shared/config/authToken";
@@ -59,7 +62,14 @@ export async function GET(request: NextRequest) {
     }
 
     const redirectUrl = new URL(locationHeader, BACKEND_API_BASE_URL);
+    const oauthState = createOAuthState();
+    redirectUrl.searchParams.set("state", oauthState);
     const response = NextResponse.redirect(redirectUrl);
+
+    response.cookies.set(OAUTH_STATE_COOKIE_KEY, oauthState, {
+      ...AUTH_COOKIE_OPTIONS,
+      maxAge: OAUTH_STATE_COOKIE_MAX_AGE,
+    });
 
     if (nextPath) {
       response.cookies.set(POST_LOGIN_REDIRECT_COOKIE_KEY, nextPath, {

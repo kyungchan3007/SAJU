@@ -11,6 +11,8 @@
     "dev": "npm run dev -w @saju/web --",
     "build": "npm run build -w @saju/web --",
     "start": "npm run start -w @saju/web --",
+    "storybook": "npm run storybook -w @saju/web --",
+    "build-storybook": "npm run build-storybook -w @saju/web --",
     "test:e2e": "npm run test:e2e -w @saju/web --",
     "test:e2e:headed": "npm run test:e2e:headed -w @saju/web --",
     "test:e2e:ui": "npm run test:e2e:ui -w @saju/web --",

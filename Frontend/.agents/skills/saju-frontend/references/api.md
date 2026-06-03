@@ -19,6 +19,7 @@ description: BFF 경계 규칙, 서버 호출 구조, 현재 API 엔드포인트
 - 생성형 풀이 응답처럼 `PENDING/COMPLETE` 상태 보존이 필요하면 `parseGeneratedInterpretationResponse`를 사용해 `meta.backendStatus`를 유지한다.
 - `route.ts`는 HTTP 입출력과 쿠키 처리에 집중하고, 비즈니스 로직은 `entities/*/server` 등 서버 함수로 위임한다.
 - 로그인/토큰 교환 경로(`auth/kakao`, `auth/kakao/callback`, refresh)는 예외적으로 인증 래퍼 없이 동작할 수 있다.
+- 쿠키 인증을 사용하는 상태 변경 BFF 요청은 `rejectCrossOriginRequest`로 브라우저 Origin을 검증한다.
 
 ## 현재 API 엔드포인트
 
@@ -37,7 +38,6 @@ description: BFF 경계 규칙, 서버 호출 구조, 현재 API 엔드포인트
 - `GET /api/auth/kakao`
 - `GET /api/auth/kakao/callback`
 - `POST /api/auth/logout`
-- `GET/POST /api/auth/[...nextauth]`
 
 ## OpenAPI 규칙
 

@@ -30,6 +30,11 @@ export type RefreshAuthSessionResult =
   | RefreshAuthSessionSuccess
   | RefreshAuthSessionFailure;
 
+const refreshRequests = new Map<
+  string,
+  ReturnType<typeof refreshTokenOnServer>
+>();
+
 export async function refreshAuthSessionOnServer(
   cookieStore: CookieStore,
 ): Promise<RefreshAuthSessionResult> {
@@ -43,7 +48,22 @@ export async function refreshAuthSessionOnServer(
     };
   }
 
-  const refreshed = await refreshTokenOnServer(refreshToken);
+  let refreshRequest = refreshRequests.get(refreshToken);
+
+  if (!refreshRequest) {
+    refreshRequest = refreshTokenOnServer(refreshToken);
+    refreshRequests.set(refreshToken, refreshRequest);
+  }
+
+  let refreshed: Awaited<ReturnType<typeof refreshTokenOnServer>>;
+
+  try {
+    refreshed = await refreshRequest;
+  } finally {
+    if (refreshRequests.get(refreshToken) === refreshRequest) {
+      refreshRequests.delete(refreshToken);
+    }
+  }
 
   if (!refreshed.success) {
     cookieStore.delete(ACCESS_TOKEN_COOKIE_KEY);

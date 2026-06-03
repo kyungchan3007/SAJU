@@ -1,9 +1,13 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { createErrorResponse, createSuccessResponse } from "@/shared/api";
+import { rejectCrossOriginRequest } from "@/shared/api/auth/rejectCrossOriginRequest";
 import { refreshAuthSessionOnServer } from "@/shared/api/auth/refreshAuthSessionOnServer";
 
-export async function POST() {
+export async function POST(request?: Request) {
+  const csrfResponse = rejectCrossOriginRequest(request);
+  if (csrfResponse) return csrfResponse;
+
   const cookieStore = await cookies();
   const refreshed = await refreshAuthSessionOnServer(cookieStore);
 

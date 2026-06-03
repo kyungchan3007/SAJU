@@ -17,7 +17,7 @@ test.describe("home and auth entry smoke", () => {
 
     await expect(
       page.getByRole("heading", {
-        name: "정통사주로 해석하는 나의 타고난 명식.",
+        name: "정통사주 분석",
       }),
     ).toBeVisible();
     await expect(

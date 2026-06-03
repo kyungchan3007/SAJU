@@ -1,7 +1,6 @@
 "use client";
 
 import { QueryClientProvider } from "@tanstack/react-query";
-import { SessionProvider } from "next-auth/react";
 import type { PropsWithChildren } from "react";
 import { useState } from "react";
 
@@ -16,12 +15,8 @@ export function Providers({ children, authScope }: ProvidersProps) {
   const [queryClient] = useState(() => getQueryClient());
 
   return (
-    <SessionProvider refetchOnWindowFocus={false}>
-      <AuthScopeProvider value={authScope}>
-        <QueryClientProvider client={queryClient}>
-          {children}
-        </QueryClientProvider>
-      </AuthScopeProvider>
-    </SessionProvider>
+    <AuthScopeProvider value={authScope}>
+      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    </AuthScopeProvider>
   );
 }

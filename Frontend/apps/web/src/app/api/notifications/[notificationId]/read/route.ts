@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 
 import { markNotificationAsReadOnServer } from "@/entities/notification/server/markNotificationAsReadOnServer";
 import { createErrorResponse, createSuccessResponse } from "@/shared/api";
+import { rejectCrossOriginRequest } from "@/shared/api/auth/rejectCrossOriginRequest";
 
 type RouteContext = {
   params: Promise<{ notificationId: string }>;
@@ -17,7 +18,10 @@ function parseNotificationId(rawNotificationId: string) {
   return notificationId;
 }
 
-export async function POST(_: Request, context: RouteContext) {
+export async function POST(request: Request, context: RouteContext) {
+  const csrfResponse = rejectCrossOriginRequest(request);
+  if (csrfResponse) return csrfResponse;
+
   const { notificationId: rawNotificationId } = await context.params;
   const notificationId = parseNotificationId(rawNotificationId);
 

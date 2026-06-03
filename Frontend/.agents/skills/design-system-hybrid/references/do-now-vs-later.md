@@ -14,13 +14,14 @@
   - `[DS] domain:<...> component:<...> ui:<...>`
 - 인벤토리 기록 포맷 고정  
   - `ui-inventory-template.md` 기준으로 일관 기록
+- `packages/ui` 공용 컴포넌트 기본 Storybook 스토리 운영
 
 ## 지금 미룰 것 (Later)
 
 - 실제 색상값/타입스케일 최종값 확정
 - 컴포넌트 비주얼 디테일 최종화 (spacing/radius/shadow 픽셀값)
 - 페이지 전면 교체 리팩터링
-- Storybook 전체 시나리오/문서 확정
+- Storybook 전체 시나리오와 최종 문서 정책 확정
 - 배포/버전 정책과 패키지 분리 최종 고정
 
 ## 운영 원칙

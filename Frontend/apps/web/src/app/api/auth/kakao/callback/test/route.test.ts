@@ -12,15 +12,26 @@ vi.mock("@/shared/config", () => ({
   getServerEnv: mockedGetServerEnv,
 }));
 
-function createRequest(url: string, redirectCookie?: string) {
+function createRequest(
+  url: string,
+  redirectCookie?: string,
+  stateCookie = "state-1",
+) {
   return {
     url,
     nextUrl: new URL(url),
     cookies: {
-      get: (name: string) =>
-        name === "saju_post_login_redirect" && redirectCookie
-          ? { value: redirectCookie }
-          : undefined,
+      get: (name: string) => {
+        if (name === "saju_post_login_redirect" && redirectCookie) {
+          return { value: redirectCookie };
+        }
+
+        if (name === "saju_oauth_state" && stateCookie) {
+          return { value: stateCookie };
+        }
+
+        return undefined;
+      },
     },
   } as never;
 }
@@ -37,7 +48,7 @@ describe("/api/auth/kakao/callback GET", () => {
 
   it("redirects to missing_code when code query is absent", async () => {
     const response = await GET(
-      createRequest("http://localhost/api/auth/kakao/callback"),
+      createRequest("http://localhost/api/auth/kakao/callback?state=state-1"),
     );
 
     expect(response.status).toBe(307);
@@ -47,11 +58,42 @@ describe("/api/auth/kakao/callback GET", () => {
     expect(mockedExchangeOAuthCodeOnServer).not.toHaveBeenCalled();
   });
 
+  it("rejects callback when oauth state is missing", async () => {
+    const response = await GET(
+      createRequest("http://localhost/api/auth/kakao/callback?code=abc"),
+    );
+    const setCookie = response.headers.get("set-cookie") ?? "";
+
+    expect(response.status).toBe(307);
+    expect(response.headers.get("location")).toBe(
+      "http://localhost/login?error=invalid_state",
+    );
+    expect(setCookie).toContain("saju_oauth_state=");
+    expect(setCookie).toContain("Max-Age=0");
+    expect(mockedExchangeOAuthCodeOnServer).not.toHaveBeenCalled();
+  });
+
+  it("rejects callback when oauth state does not match cookie", async () => {
+    const response = await GET(
+      createRequest(
+        "http://localhost/api/auth/kakao/callback?code=abc&state=other-state",
+      ),
+    );
+
+    expect(response.status).toBe(307);
+    expect(response.headers.get("location")).toBe(
+      "http://localhost/login?error=invalid_state",
+    );
+    expect(mockedExchangeOAuthCodeOnServer).not.toHaveBeenCalled();
+  });
+
   it("redirects to oauth_failed when exchange returns failure", async () => {
     mockedExchangeOAuthCodeOnServer.mockResolvedValue({ success: false });
 
     const response = await GET(
-      createRequest("http://localhost/api/auth/kakao/callback?code=abc"),
+      createRequest(
+        "http://localhost/api/auth/kakao/callback?code=abc&state=state-1",
+      ),
     );
 
     expect(response.status).toBe(307);
@@ -72,7 +114,9 @@ describe("/api/auth/kakao/callback GET", () => {
     });
 
     const response = await GET(
-      createRequest("http://localhost/api/auth/kakao/callback?code=abc"),
+      createRequest(
+        "http://localhost/api/auth/kakao/callback?code=abc&state=state-1",
+      ),
     );
     const setCookie = response.headers.get("set-cookie") ?? "";
 
@@ -80,6 +124,8 @@ describe("/api/auth/kakao/callback GET", () => {
     expect(response.headers.get("location")).toBe("http://localhost/saju");
     expect(setCookie).toContain("saju_access_token=access-new");
     expect(setCookie).toContain("saju_refresh_token=refresh-new");
+    expect(setCookie).toContain("saju_oauth_state=");
+    expect(setCookie).toContain("Max-Age=0");
   });
 
   it("redirects to /home for existing user", async () => {
@@ -93,7 +139,9 @@ describe("/api/auth/kakao/callback GET", () => {
     });
 
     const response = await GET(
-      createRequest("http://localhost/api/auth/kakao/callback?code=abc"),
+      createRequest(
+        "http://localhost/api/auth/kakao/callback?code=abc&state=state-1",
+      ),
     );
 
     expect(response.status).toBe(307);
@@ -112,7 +160,7 @@ describe("/api/auth/kakao/callback GET", () => {
 
     const response = await GET(
       createRequest(
-        "http://localhost/api/auth/kakao/callback?code=abc",
+        "http://localhost/api/auth/kakao/callback?code=abc&state=state-1",
         "/community",
       ),
     );
@@ -136,7 +184,9 @@ describe("/api/auth/kakao/callback GET", () => {
     });
 
     const response = await GET(
-      createRequest("http://localhost/api/auth/kakao/callback?code=abc"),
+      createRequest(
+        "http://localhost/api/auth/kakao/callback?code=abc&state=state-1",
+      ),
     );
 
     expect(response.status).toBe(307);
@@ -149,7 +199,9 @@ describe("/api/auth/kakao/callback GET", () => {
     mockedExchangeOAuthCodeOnServer.mockRejectedValue(new Error("boom"));
 
     const response = await GET(
-      createRequest("http://localhost/api/auth/kakao/callback?code=abc"),
+      createRequest(
+        "http://localhost/api/auth/kakao/callback?code=abc&state=state-1",
+      ),
     );
 
     expect(response.status).toBe(307);

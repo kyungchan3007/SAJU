@@ -10,7 +10,7 @@ description: 기술 스택, 레이어 구조(app/widgets/features/entities/share
 - Framework: Next.js App Router (`next@16`)
 - Language: TypeScript strict
 - UI: Tailwind CSS + shadcn-style 공용 Button
-- Auth: NextAuth + Kakao OAuth + BFF 쿠키 브리지
+- Auth: Backend Kakao OAuth + BFF HttpOnly 쿠키 브리지
 - State: React local state + 일부 Zustand
 - Data Fetch: `fetch` 중심, React Query 클라이언트 준비
 

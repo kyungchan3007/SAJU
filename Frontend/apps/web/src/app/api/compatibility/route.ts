@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { createSuccessResponse } from "@/shared/api";
+import { rejectCrossOriginRequest } from "@/shared/api/auth/rejectCrossOriginRequest";
 
 export const revalidate = 60;
 
@@ -15,7 +16,10 @@ export async function GET() {
   );
 }
 
-export async function POST() {
+export async function POST(request?: Request) {
+  const csrfResponse = rejectCrossOriginRequest(request);
+  if (csrfResponse) return csrfResponse;
+
   return NextResponse.json(
     createSuccessResponse({
       feature: "compatibility",

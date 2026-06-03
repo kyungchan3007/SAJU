@@ -28,10 +28,6 @@ const publicEnvSchema = z.object({
 });
 
 const serverEnvSchema = z.object({
-  NEXTAUTH_URL: optionalUrl,
-  NEXTAUTH_SECRET: z.string().trim().default("development-secret"),
-  KAKAO_CLIENT_ID: z.string().trim().default(""),
-  KAKAO_CLIENT_SECRET: z.string().trim().default(""),
   KAKAO_REST_API_KEY: z.string().trim().default(""),
   BACKEND_API_BASE_URL: optionalUrl,
   PORTONE_API_SECRET: z.string().trim().default(""),
@@ -52,10 +48,6 @@ export const env = publicEnvSchema.parse({
 
 export function getServerEnv() {
   return serverEnvSchema.parse({
-    NEXTAUTH_URL: process.env.NEXTAUTH_URL,
-    NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
-    KAKAO_CLIENT_ID: process.env.KAKAO_CLIENT_ID,
-    KAKAO_CLIENT_SECRET: process.env.KAKAO_CLIENT_SECRET,
     KAKAO_REST_API_KEY: process.env.KAKAO_REST_API_KEY,
     BACKEND_API_BASE_URL: process.env.BACKEND_API_BASE_URL,
     PORTONE_API_SECRET: process.env.PORTONE_API_SECRET,

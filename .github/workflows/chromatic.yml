@@ -1,0 +1,60 @@
+name: Publish Storybook
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - Frontend/apps/web/.storybook/**
+      - Frontend/apps/web/src/app/globals.css
+      - Frontend/apps/web/tailwind.config.ts
+      - Frontend/packages/design-tokens/**
+      - Frontend/packages/ui/**
+      - Frontend/apps/web/package.json
+      - Frontend/package.json
+      - Frontend/package-lock.json
+      - .github/workflows/chromatic.yml
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - Frontend/apps/web/.storybook/**
+      - Frontend/apps/web/src/app/globals.css
+      - Frontend/apps/web/tailwind.config.ts
+      - Frontend/packages/design-tokens/**
+      - Frontend/packages/ui/**
+      - Frontend/apps/web/package.json
+      - Frontend/package.json
+      - Frontend/package-lock.json
+      - .github/workflows/chromatic.yml
+
+jobs:
+  chromatic:
+    name: Publish Storybook to Chromatic
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: Frontend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: Frontend
+        run: npm ci
+
+      - name: Publish Storybook
+        uses: chromaui/action@latest
+        with:
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          workingDir: Frontend/apps/web
+          onlyChanged: true
+          externals: |
+            ../../packages/design-tokens/**
+            src/app/globals.css
+            tailwind.config.ts

@@ -4,6 +4,7 @@ import { getPartnersOnServer } from "@/entities/partner/server/getPartnersOnServ
 import { registerPartnerOnServer } from "@/entities/partner/server/registerPartnerOnServer";
 import type { PartnerRequest } from "@/generated/api";
 import { createErrorResponse, createSuccessResponse } from "@/shared/api";
+import { rejectCrossOriginRequest } from "@/shared/api/auth/rejectCrossOriginRequest";
 
 export async function GET() {
   const result = await getPartnersOnServer();
@@ -19,6 +20,9 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  const csrfResponse = rejectCrossOriginRequest(request);
+  if (csrfResponse) return csrfResponse;
+
   let payload: PartnerRequest;
 
   try {

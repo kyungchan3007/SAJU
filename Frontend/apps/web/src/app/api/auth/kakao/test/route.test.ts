@@ -74,11 +74,16 @@ describe("/api/auth/kakao GET", () => {
     );
 
     const response = await GET(createRequest("http://localhost/api/auth/kakao"));
+    const location = new URL(response.headers.get("location") ?? "");
+    const oauthState = location.searchParams.get("state");
+    const setCookie = response.headers.get("set-cookie") ?? "";
 
     expect(response.status).toBe(307);
-    expect(response.headers.get("location")).toBe(
-      "https://backend.test/oauth2/authorization/kakao",
-    );
+    expect(location.origin).toBe("https://backend.test");
+    expect(location.pathname).toBe("/oauth2/authorization/kakao");
+    expect(oauthState).toBeTruthy();
+    expect(setCookie).toContain(`saju_oauth_state=${oauthState}`);
+    expect(setCookie).toContain("HttpOnly");
   });
 
   it("stores requested next path before redirecting to kakao auth", async () => {

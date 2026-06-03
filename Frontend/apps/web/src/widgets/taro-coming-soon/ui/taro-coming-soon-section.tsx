@@ -1,5 +1,3 @@
-import { NotifyForm } from "@/features/taro-coming-soon/ui/notify-form";
-
 const FEATURES = [
   { icon: "✨", text: "사주 기반\n타로 리딩" },
   { icon: "🔮", text: "오늘의\n타로 카드" },

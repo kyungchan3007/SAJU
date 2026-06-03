@@ -25,6 +25,7 @@ describe("/api/auth/logout POST", () => {
 
     const response = await POST();
     const body = await response.json();
+    const setCookie = response.headers.get("set-cookie") ?? "";
 
     expect(response.status).toBe(401);
     expect(body).toEqual({
@@ -35,6 +36,8 @@ describe("/api/auth/logout POST", () => {
         message: "TOKEN_REFRESH_FAILED",
       },
     });
+    expect(setCookie).toContain("saju_access_token");
+    expect(setCookie).toContain("saju_refresh_token");
   });
 
   it("returns success and clears auth cookies when logout succeeds", async () => {

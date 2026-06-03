@@ -5,6 +5,7 @@ import { getSajuProfileOnServer } from "@/entities/saju/server/getSajuProfileOnS
 import { updateSajuOnServer } from "@/entities/saju/server/updateSajuOnServer";
 import type { SajuRequest } from "@/generated/api";
 import { createErrorResponse, createSuccessResponse } from "@/shared/api";
+import { rejectCrossOriginRequest } from "@/shared/api/auth/rejectCrossOriginRequest";
 import { ACCESS_TOKEN_COOKIE_KEY } from "@/shared/config/authToken";
 
 export const revalidate = 0;
@@ -32,6 +33,9 @@ export async function GET() {
 }
 
 export async function PUT(req: NextRequest) {
+  const csrfResponse = rejectCrossOriginRequest(req);
+  if (csrfResponse) return csrfResponse;
+
   const token = (await cookies()).get(ACCESS_TOKEN_COOKIE_KEY)?.value;
 
   if (!token) {

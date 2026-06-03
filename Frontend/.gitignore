@@ -3,6 +3,7 @@ node_modules
 apps/*/.next
 out
 apps/*/out
+apps/*/storybook-static
 coverage
 apps/*/coverage
 playwright-report
