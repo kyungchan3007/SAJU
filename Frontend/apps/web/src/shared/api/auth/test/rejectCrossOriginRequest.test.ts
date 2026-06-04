@@ -11,12 +11,22 @@ describe("rejectCrossOriginRequest", () => {
     expect(rejectCrossOriginRequest(request)).toBeNull();
   });
 
-  it("allows server requests without an origin header", () => {
+  it("rejects requests without an origin header", async () => {
     const request = new Request("https://saju.example/api/auth/logout", {
       method: "POST",
     });
 
-    expect(rejectCrossOriginRequest(request)).toBeNull();
+    const response = rejectCrossOriginRequest(request);
+
+    expect(response?.status).toBe(403);
+    await expect(response?.json()).resolves.toEqual({
+      success: false,
+      data: null,
+      error: {
+        code: "CSRF_ORIGIN_REQUIRED",
+        message: "Origin header is required for state-changing requests.",
+      },
+    });
   });
 
   it("rejects cross-origin browser requests", async () => {

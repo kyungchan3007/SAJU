@@ -12,7 +12,10 @@ export function rejectCrossOriginRequest(
   const origin = request.headers.get("origin");
 
   if (!origin) {
-    return null;
+    return forbiddenResponse(
+      "CSRF_ORIGIN_REQUIRED",
+      "Origin header is required for state-changing requests.",
+    );
   }
 
   let requestOrigin: string;
@@ -20,15 +23,23 @@ export function rejectCrossOriginRequest(
   try {
     requestOrigin = new URL(request.url).origin;
   } catch {
-    return forbiddenResponse();
+    return forbiddenResponse(
+      "CSRF_ORIGIN_MISMATCH",
+      "Cross-origin request denied.",
+    );
   }
 
-  return origin === requestOrigin ? null : forbiddenResponse();
+  return origin === requestOrigin
+    ? null
+    : forbiddenResponse(
+        "CSRF_ORIGIN_MISMATCH",
+        "Cross-origin request denied.",
+      );
 }
 
-function forbiddenResponse() {
+function forbiddenResponse(code: string, message: string) {
   return NextResponse.json(
-    createErrorResponse("CSRF_ORIGIN_MISMATCH", "Cross-origin request denied."),
+    createErrorResponse(code, message),
     { status: 403 },
   );
 }

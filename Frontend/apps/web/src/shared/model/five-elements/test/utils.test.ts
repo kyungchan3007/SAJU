@@ -1,7 +1,9 @@
 import {
+  formatYongshinDisplayLabel,
   getFiveElementConfig,
   getFiveElementValue,
   getOrderedFiveElementKeys,
+  getYongshinDisplayInfo,
   normalizeFiveElementKey,
 } from "@/shared/model/five-elements/utils";
 import { describe, expect, it } from "vitest";
@@ -29,6 +31,15 @@ describe("five elements utils", () => {
       label: "화(火)",
       emoji: "🔥",
       description: "표현, 열정, 드러남과 추진의 기운",
+    });
+  });
+
+  it("formats yongshin labels and resolves display info", () => {
+    expect(formatYongshinDisplayLabel("metal")).toBe("금(金)");
+    expect(formatYongshinDisplayLabel("water", { spaced: true })).toBe("수 (水)");
+    expect(getYongshinDisplayInfo("wood")).toMatchObject({
+      ko: "목",
+      hanja: "木",
     });
   });
 });

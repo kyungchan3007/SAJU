@@ -3,9 +3,9 @@
 import { usePathname } from "next/navigation";
 
 import {
-  GLOBAL_NAV_HIDDEN_PATHS,
   MOBILE_TAB_ITEMS,
   NAV_ITEMS,
+  isGlobalNavHiddenPath,
   resolveNavItemHref,
   type ResolvedNavItem,
 } from "@/domain/navigation/model/nav-items";
@@ -17,15 +17,9 @@ function isActive(href: string, pathname: string): boolean {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
-function shouldHideNav(pathname: string): boolean {
-  return GLOBAL_NAV_HIDDEN_PATHS.some(
-    (path) => pathname === path || pathname.startsWith(`${path}/`),
-  );
-}
-
 export function useGlobalNavItems(isLoggedIn: boolean) {
   const pathname = usePathname();
-  const hidden = shouldHideNav(pathname);
+  const hidden = isGlobalNavHiddenPath(pathname);
 
   /** 데스크탑 링크: 마이를 제외한 전체 메뉴 (마이는 우측 아바타로 표시) */
   const desktopItems: ResolvedNavItem[] = NAV_ITEMS.slice(0, -1).map(

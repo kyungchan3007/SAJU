@@ -7,6 +7,15 @@ vi.mock("@/entities/auth/server/logoutOnServer", () => ({
   logoutOnServer: mockedLogoutOnServer,
 }));
 
+function createSameOriginRequest() {
+  return new Request("https://www.saju-me.com/api/auth/logout", {
+    method: "POST",
+    headers: {
+      Origin: "https://www.saju-me.com",
+    },
+  });
+}
+
 describe("/api/auth/logout POST", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -23,7 +32,7 @@ describe("/api/auth/logout POST", () => {
       message: "TOKEN_REFRESH_FAILED",
     });
 
-    const response = await POST();
+    const response = await POST(createSameOriginRequest());
     const body = await response.json();
     const setCookie = response.headers.get("set-cookie") ?? "";
 
@@ -45,7 +54,7 @@ describe("/api/auth/logout POST", () => {
       success: true,
     });
 
-    const response = await POST();
+    const response = await POST(createSameOriginRequest());
     const body = await response.json();
     const setCookie = response.headers.get("set-cookie") ?? "";
 
@@ -57,5 +66,24 @@ describe("/api/auth/logout POST", () => {
     });
     expect(setCookie).toContain("saju_access_token");
     expect(setCookie).toContain("saju_refresh_token");
+  });
+
+  it("rejects requests without an origin header", async () => {
+    const response = await POST(
+      new Request("https://www.saju-me.com/api/auth/logout", {
+        method: "POST",
+      }),
+    );
+    const body = await response.json();
+
+    expect(response.status).toBe(403);
+    expect(body).toEqual({
+      success: false,
+      data: null,
+      error: {
+        code: "CSRF_ORIGIN_REQUIRED",
+        message: "Origin header is required for state-changing requests.",
+      },
+    });
   });
 });

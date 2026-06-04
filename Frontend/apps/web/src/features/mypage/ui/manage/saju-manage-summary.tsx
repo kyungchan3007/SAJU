@@ -1,10 +1,4 @@
-const HANJA: Record<string, string> = {
-  수: "水",
-  목: "木",
-  화: "火",
-  토: "土",
-  금: "金",
-};
+import { formatYongshinDisplayLabel } from "@/shared/model/five-elements/utils";
 
 type Props = {
   summaryZodiac?: string | null;
@@ -30,15 +24,11 @@ export function SajuManageSummary({
     { label: "격국", value: geokguk },
     {
       label: "용신",
-      value: yongshinPrimary
-        ? `${yongshinPrimary} (${HANJA[yongshinPrimary] ?? ""})`
-        : null,
+      value: formatYongshinDisplayLabel(yongshinPrimary, { spaced: true }),
     },
     {
       label: "보조 용신",
-      value: yongshinSecondary
-        ? `${yongshinSecondary} (${HANJA[yongshinSecondary] ?? ""})`
-        : null,
+      value: formatYongshinDisplayLabel(yongshinSecondary, { spaced: true }),
     },
   ].filter((row): row is { label: string; value: string } => !!row.value);
 
@@ -49,7 +39,7 @@ export function SajuManageSummary({
           className="flex h-8 w-8 items-center justify-center rounded-full"
           style={{ background: "#F0EEFF" }}
         >
-          <span className="text-[15px]">✨</span>
+          <span className="text-[15px]">✦</span>
         </div>
         <span className="text-base font-black">나의 명식 요약</span>
       </div>
@@ -69,7 +59,7 @@ export function SajuManageSummary({
       </div>
 
       <p className="mt-3 text-[11px] text-slate-400">
-        ※ 정보를 수정하면 사주 요약이 새로 계산됩니다.
+        사주 정보를 수정하면 사주 요약도 새로 계산됩니다.
       </p>
     </div>
   );

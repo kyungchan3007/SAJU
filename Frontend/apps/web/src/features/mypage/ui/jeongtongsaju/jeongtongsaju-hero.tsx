@@ -1,5 +1,6 @@
-import { Award, Droplets, Flame, Gem, Leaf, Mountain, TrendingDown, TrendingUp } from "lucide-react";
+import { Award } from "lucide-react";
 import { type FiveElementsBalance } from "@/shared/model/five-elements/model";
+import { formatYongshinDisplayLabel } from "@/shared/model/five-elements/utils";
 import {
   getJeongtongsajuHeroImageSrc,
   getOrderedHeroElements,
@@ -8,25 +9,11 @@ import {
 import { findZodiacByLabel } from "@/shared/model/zodiac/utils";
 import { SajuHeroCardShell } from "@/shared/ui/saju-hero-card-shell";
 import { TraitMiniCard } from "@/shared/ui/trait-mini-card";
+import {
+  FiveElementBadgeIcon,
+  StrengthTrendIcon,
+} from "./jeongtongsaju-hero-icons";
 
-function StrengthIcon({ value }: { value: string }) {
-  const isStrong = value.includes("신강");
-  return isStrong
-    ? <TrendingUp size={13} color="#D97706" strokeWidth={2.5} />
-    : <TrendingDown size={13} color="#D97706" strokeWidth={2.5} />;
-}
-
-function FiveElementIcon({ ko, color }: { ko: string; color: string }) {
-  const props = { size: 14, color, strokeWidth: 2 };
-  switch (ko) {
-    case "금": return <Gem {...props} />;
-    case "목": return <Leaf {...props} />;
-    case "토": return <Mountain {...props} />;
-    case "화": return <Flame {...props} />;
-    case "수": return <Droplets {...props} />;
-    default:   return <Gem {...props} />;
-  }
-}
 
 type Traits = {
   summaryZodiac?: string;
@@ -85,7 +72,7 @@ export function JeongtongsajuHero({
                 label="신강/신약"
                 value={traits.summaryStrength}
                 bg="#FEF3C7"
-                icon={<StrengthIcon value={traits.summaryStrength} />}
+                icon={<StrengthTrendIcon value={traits.summaryStrength} />}
                 className="border border-white/40 bg-white/25 backdrop-blur-md"
                 variant="dark"
               />
@@ -140,12 +127,12 @@ export function JeongtongsajuHero({
                     className="flex h-7 w-7 shrink-0 items-center justify-center rounded"
                     style={{ background: primaryInfo.bg }}
                   >
-                    <FiveElementIcon ko={primaryInfo.ko} color={primaryInfo.color} />
+                    <FiveElementBadgeIcon ko={primaryInfo.ko} color={primaryInfo.color} />
                   </div>
                   <div>
                     <div className="text-[10px] text-white/60">용신</div>
                     <div className="text-[14px] font-black text-white">
-                      {primaryInfo.ko}({primaryInfo.hanja})
+                      {formatYongshinDisplayLabel(yongshinPrimary)}
                     </div>
                   </div>
                 </div>
@@ -156,7 +143,7 @@ export function JeongtongsajuHero({
                     className="flex h-7 w-7 shrink-0 items-center justify-center rounded"
                     style={{ background: secondaryInfo.bg }}
                   >
-                    <FiveElementIcon ko={secondaryInfo.ko} color={secondaryInfo.color} />
+                    <FiveElementBadgeIcon ko={secondaryInfo.ko} color={secondaryInfo.color} />
                   </div>
                   <div>
                     <div className="text-[10px] text-white/60">보조 용신</div>
@@ -164,7 +151,7 @@ export function JeongtongsajuHero({
                       className="text-[14px] font-black"
                       style={{ color: secondaryInfo.color }}
                     >
-                      {secondaryInfo.ko}({secondaryInfo.hanja})
+                      {formatYongshinDisplayLabel(yongshinSecondary)}
                     </div>
                   </div>
                 </div>

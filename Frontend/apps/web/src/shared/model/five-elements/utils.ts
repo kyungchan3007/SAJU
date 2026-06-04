@@ -1,6 +1,7 @@
 import {
   FIVE_ELEMENT_CONFIG,
   FIVE_ELEMENT_ORDER,
+  YONGSHIN_DISPLAY_BY_IMAGE_KEY,
   type FiveElementKey,
   type YongshinImageKey,
 } from "@/shared/model/five-elements/model";
@@ -84,4 +85,25 @@ export function getFiveElementConfig(key: string) {
   const normalizedKey = normalizeFiveElementKey(key);
 
   return FIVE_ELEMENT_CONFIG[normalizedKey as FiveElementKey];
+}
+
+export function getYongshinDisplayInfo(key?: string | null) {
+  const normalizedKey = normalizeYongshinImageKey(key ?? undefined);
+  if (!normalizedKey) return null;
+
+  return YONGSHIN_DISPLAY_BY_IMAGE_KEY[normalizedKey];
+}
+
+export function formatYongshinDisplayLabel(
+  key?: string | null,
+  options?: { spaced?: boolean },
+) {
+  if (!key) return null;
+  if (key.includes("(")) return key;
+
+  const info = getYongshinDisplayInfo(key);
+  if (!info) return key;
+
+  const separator = options?.spaced ? " " : "";
+  return `${info.ko}${separator}(${info.hanja})`;
 }

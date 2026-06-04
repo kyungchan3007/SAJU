@@ -20,7 +20,6 @@ export type ResolvedNavItem = NavItem & {
 };
 
 const PROTECTED_NAV_PATHS = new Set([
-  "/saju",
   "/mypage/traditional-fortune",
   "/compatibility",
   "/community",
@@ -51,6 +50,12 @@ export const MOBILE_TAB_ITEMS: NavItem[] = [
 ];
 
 export const GLOBAL_NAV_HIDDEN_PATHS = ["/login", "/auth/restore"];
+
+export function isGlobalNavHiddenPath(pathname: string): boolean {
+  return GLOBAL_NAV_HIDDEN_PATHS.some(
+    (path) => pathname === path || pathname.startsWith(`${path}/`),
+  );
+}
 
 export function resolveNavItemHref(href: string, isLoggedIn: boolean): string {
   if (isLoggedIn || !PROTECTED_NAV_PATHS.has(href)) {

@@ -4,7 +4,7 @@ import { createErrorResponse, createSuccessResponse } from "@/shared/api";
 import { rejectCrossOriginRequest } from "@/shared/api/auth/rejectCrossOriginRequest";
 import { refreshAuthSessionOnServer } from "@/shared/api/auth/refreshAuthSessionOnServer";
 
-export async function POST(request?: Request) {
+export async function POST(request: Request) {
   const csrfResponse = rejectCrossOriginRequest(request);
   if (csrfResponse) return csrfResponse;
 

@@ -5,7 +5,7 @@ import { SajuInputHintAccordion } from "@/features/saju-input/form/client/saju-i
 
 export function SajuInputForm() {
   return (
-    <div className="mx-auto flex max-w-[860px] flex-col gap-8 pb-4 pt-0 sm:px-6 sm:py-8">
+    <div className="mx-auto flex max-w-[860px] flex-col gap-8 pb-4 pt-0">
       {/* ── 히어로 ── */}
       <section className="relative h-[220px] overflow-hidden rounded-3xl shadow-lg sm:h-[368px]">
         <Image
@@ -33,7 +33,7 @@ export function SajuInputForm() {
             정통사주
           </span>
           <h1
-            className="mb-2 font-black leading-snug text-white text-saju-hero sm:mb-3"
+            className="text-saju-hero mb-2 font-black leading-snug text-white sm:mb-3"
             style={{
               textShadow: "0 2px 12px rgba(0,0,0,0.45)",
               letterSpacing: "-0.5px",

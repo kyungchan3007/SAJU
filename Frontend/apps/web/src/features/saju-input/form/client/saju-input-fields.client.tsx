@@ -262,9 +262,14 @@ export function SajuInputFields({
               className="text-sm font-black text-gray-900 xs:text-xs"
               style={{ wordBreak: "keep-all" }}
             >
-              {highlightedZodiac
-                ? `${formValues.birthYear}년생 · ${highlightedZodiac.name}띠`
-                : "출생 연도를 선택하면 띠가 자동으로 표시됩니다"}
+              {highlightedZodiac ? (
+                `${formValues.birthYear}년생 · ${highlightedZodiac.name}띠`
+              ) : (
+                <span>
+                  출생 연도를 선택하면 <br className="sm:hidden" />
+                  띠가 자동으로 표시됩니다
+                </span>
+              )}
             </p>
             <p
               className="mt-1 text-[11px] text-gray-400"

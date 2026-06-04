@@ -1,8 +1,12 @@
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import { defineConfig } from "@hey-api/openapi-ts";
 
+const configDir = dirname(fileURLToPath(import.meta.url));
+
 export default defineConfig({
-  input: "./openapi/openapi.yaml",
-  output: "src/generated/api",
+  input: resolve(configDir, "./openapi/openapi.yaml"),
+  output: resolve(configDir, "./src/generated/api"),
   plugins: [
     {
       name: "@hey-api/typescript",

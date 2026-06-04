@@ -4,7 +4,7 @@ import { BigLuckTimeline } from "@/features/home/ui/home-marketing/big-luck-time
 
 export function BigLuckMarketingSection() {
   return (
-    <section className="border-t border-[#E8E4F8] bg-[#FAFAFA] py-20">
+    <section className="bg-[#FAFAFA] py-20">
       <div className="mx-auto max-w-6xl px-6">
         <div className="grid grid-cols-1 items-center gap-12 md:grid-cols-[1fr_2fr]">
           <div className="flex flex-col gap-4">

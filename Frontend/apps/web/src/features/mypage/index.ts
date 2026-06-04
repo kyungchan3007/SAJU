@@ -9,9 +9,5 @@ export { AccountLoginInfo } from "./ui/account/account-login-info";
 export { AccountLogoutRow } from "./ui/account/account-logout-row";
 export { AccountWithdrawRow } from "./ui/account/account-withdraw-row";
 export { AccountConfirmModal } from "./ui/account/account-confirm-modal";
-export {
-  MYPAGE_SAJU_SUMMARY_ITEMS,
-  MYPAGE_INFO_ITEMS,
-  MYPAGE_MANAGEMENT_ITEMS,
-} from "./model/model";
+export { MYPAGE_INFO_ITEMS, MYPAGE_MANAGEMENT_ITEMS } from "./model/model";
 export type * from "./type/types";

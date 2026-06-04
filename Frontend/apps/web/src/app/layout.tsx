@@ -10,7 +10,7 @@ import {
   REFRESH_TOKEN_COOKIE_KEY,
   USER_EMAIL_COOKIE_KEY,
 } from "@/shared/config/authToken";
-import { Footer } from "@/shared/ui";
+import { AppChromeOffset, Footer } from "@/shared/ui";
 import { GlobalNav } from "@/widgets/global-nav";
 import "./globals.css";
 
@@ -84,7 +84,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="ko" suppressHydrationWarning>
       <body
-        className={`${notoSansKr.variable} ${jua.variable} flex min-h-dvh flex-col font-sans text-foreground antialiased pt-14 pb-16 md:pb-0`}
+        className={`${notoSansKr.variable} ${jua.variable} font-sans text-foreground antialiased`}
       >
         {env.NEXT_PUBLIC_ADSENSE_CLIENT_ID ? (
           <Script
@@ -95,11 +95,13 @@ export default async function RootLayout({ children }: RootLayoutProps) {
           />
         ) : null}
         <Providers authScope={authScope}>
-          <GlobalNav isLoggedIn={isLoggedIn} />
-          <main className="flex flex-1 flex-col bg-white">
-            {children}
-          </main>
-          <Footer />
+          <AppChromeOffset>
+            <GlobalNav isLoggedIn={isLoggedIn} />
+            <main className="flex flex-1 flex-col bg-white">
+              {children}
+            </main>
+            <Footer />
+          </AppChromeOffset>
         </Providers>
       </body>
     </html>

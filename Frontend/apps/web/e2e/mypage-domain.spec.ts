@@ -18,6 +18,11 @@ test.describe("mypage domain smoke", () => {
     await expect(page.getByText("사주정보 관리")).toBeVisible();
     await expect(page.getByText("띠별궁합")).toBeVisible();
     await expect(page.getByText("계정 관리")).toBeVisible();
+    await expect(page.getByText("임인")).toBeVisible();
+    await expect(page.getByText("신약(身弱)")).toBeVisible();
+    await expect(page.getByText("정관격")).toBeVisible();
+    await expect(page.getByText("금 (金)")).toBeVisible();
+    await expect(page.getByText("수 (水)")).toBeVisible();
     await expectNoHorizontalOverflow(page);
   });
 

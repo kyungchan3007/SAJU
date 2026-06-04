@@ -49,6 +49,13 @@ export const mySajuProfile = {
   gender: "MALE",
   calendarType: "SOLAR",
   city: "서울특별시",
+  sajuAnalysis: {
+    ilju: "\uC784\uC778",
+    strength: "\uC2E0\uC57D(\u8EAB\u5F31)",
+    geokguk: "\uC815\uAD00\uACA9",
+    yongshin: "metal",
+    assistYongshin: "water",
+  },
 };
 
 export const defaultPartners: Partner[] = [

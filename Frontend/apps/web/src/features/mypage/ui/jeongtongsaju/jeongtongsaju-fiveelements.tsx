@@ -1,5 +1,6 @@
 import type { FiveElementsBalance } from "@/shared/model/five-elements/model";
 import {
+  formatYongshinDisplayLabel,
   getFiveElementConfig,
   getFiveElementValue,
   getOrderedFiveElementKeys,
@@ -53,24 +54,14 @@ export function JeongtongsajuFiveElements({ fiveElements }: Props) {
             오행 해석
           </h4>
           <p className="mb-3 text-[13px] text-gray-700">
-            균형을 위해 보완이 필요한 기운이에요.
+            균형을 위해 보완이 필요한 기운이에요
           </p>
           <div className="flex gap-2">
             {yongshinPrimary && (
               <div className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-[#C4BAFF] bg-white px-3 py-2">
                 <span className="text-[12px] text-gray-400">용신</span>
                 <span className="text-[14px] font-bold text-gray-900">
-                  {yongshinPrimary}(
-                  {yongshinPrimary === "금"
-                    ? "金"
-                    : yongshinPrimary === "목"
-                      ? "木"
-                      : yongshinPrimary === "토"
-                        ? "土"
-                        : yongshinPrimary === "화"
-                          ? "火"
-                          : "水"}
-                  )
+                  {formatYongshinDisplayLabel(yongshinPrimary)}
                 </span>
               </div>
             )}
@@ -78,17 +69,7 @@ export function JeongtongsajuFiveElements({ fiveElements }: Props) {
               <div className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-[#C4BAFF] bg-white px-3 py-2">
                 <span className="text-[12px] text-gray-400">보조 용신</span>
                 <span className="text-[14px] font-bold text-gray-900">
-                  {yongshinSecondary}(
-                  {yongshinSecondary === "금"
-                    ? "金"
-                    : yongshinSecondary === "목"
-                      ? "木"
-                      : yongshinSecondary === "토"
-                        ? "土"
-                        : yongshinSecondary === "화"
-                          ? "火"
-                          : "水"}
-                  )
+                  {formatYongshinDisplayLabel(yongshinSecondary)}
                 </span>
               </div>
             )}

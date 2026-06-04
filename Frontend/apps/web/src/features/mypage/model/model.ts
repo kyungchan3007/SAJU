@@ -1,12 +1,4 @@
-import type { SajuSummaryItem, ManagementItem, InfoItem } from "@/features/mypage";
-
-export const MYPAGE_SAJU_SUMMARY_ITEMS: SajuSummaryItem[] = [
-  { label: "일주", value: "임인일주" },
-  { label: "신강/신약", value: "신약" },
-  { label: "격국", value: "정관격" },
-  { label: "용신", value: "금 (金)" },
-  { label: "보조 용신", value: "수 (水)" },
-];
+import type { ManagementItem, InfoItem } from "@/features/mypage";
 
 export const MYPAGE_MANAGEMENT_ITEMS: ManagementItem[] = [
   { label: "계정 관리", desc: "계정 정보 및 보안 관리", href: "/mypage/account" },

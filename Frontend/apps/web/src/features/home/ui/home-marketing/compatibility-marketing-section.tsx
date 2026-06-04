@@ -5,7 +5,7 @@ import { FeatureCardGrid } from "@/features/home/ui/home-marketing/feature-card-
 
 export function CompatibilityMarketingSection() {
   return (
-    <section className="overflow-hidden border-t border-[#E8E4F8] bg-white py-20">
+    <section className="overflow-hidden bg-white py-20">
       <div className="mx-auto max-w-6xl px-6">
         <div className="grid grid-cols-1 items-center gap-16 md:grid-cols-[1fr_420px]">
           <div className="flex flex-col gap-8">

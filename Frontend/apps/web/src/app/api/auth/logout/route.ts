@@ -5,7 +5,7 @@ import { clearAuthCookies } from "@/shared/api/auth/clearAuthCookies";
 import { rejectCrossOriginRequest } from "@/shared/api/auth/rejectCrossOriginRequest";
 import { createErrorResponse, createSuccessResponse } from "@/shared/api";
 
-export async function POST(request?: Request) {
+export async function POST(request: Request) {
   const csrfResponse = rejectCrossOriginRequest(request);
   if (csrfResponse) return csrfResponse;
 

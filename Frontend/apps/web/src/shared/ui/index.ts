@@ -29,6 +29,7 @@ export type {
   StateCardProps,
 } from "@saju/ui";
 export { Footer } from "@/shared/ui/footer/footer";
+export { AppChromeOffset } from "@/shared/ui/app-chrome-offset.client";
 export { KakaoIcon } from "@/shared/ui/kakao-icon/kakao-icon";
 export { PageContainer } from "@/shared/ui/page-container";
 export { PageContentLayout } from "@/shared/ui/page-content-layout";
