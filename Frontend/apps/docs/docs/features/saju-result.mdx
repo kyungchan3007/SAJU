@@ -1,0 +1,52 @@
+---
+sidebar_position: 3
+---
+
+# 사주 결과 (/saju/result)
+
+사주 입력 후 결과를 보여주는 화면입니다.
+
+## 관련 경로
+
+```
+app/(main)/saju/result/page.tsx
+widgets/saju-result/
+features/saju-result/
+  ├── hooks/   ← 결과 조회, 캐시, 재시도 정책
+  ├── model/   ← API 응답 매핑
+  └── ui/
+entities/saju/
+shared/lib/react-query/
+app/api/saju/result/route.ts
+```
+
+## 결과 조회 흐름
+
+```
+/saju/result 진입
+   │
+   ├── 로그인 + 서버 저장된 사주 → POST /api/saju/result → 결과 렌더링
+   │
+   └── 미로그인 draft → localStorage에서 draft 읽기 → 결과 렌더링
+```
+
+## 캐시 정책
+
+결과 조회는 React Query로 관리합니다. cache key와 stale/cache 정책은 `features/saju-result/hooks`에서 통일합니다.
+
+## 상태 처리
+
+결과 화면에는 3가지 상태가 필요합니다.
+
+| 상태 | 처리 |
+|------|------|
+| 로딩 | 스켈레톤 or 로딩 인디케이터 |
+| 에러 | 에러 메시지 + 재시도 버튼 |
+| 빈 결과 | 안내 UI |
+
+## 체크리스트
+
+- 서버 결과인지 로컬 draft 결과인지 구분했는가
+- React Query cache key가 기존 정책과 일치하는가
+- 오류·로딩·빈 상태 UI가 있는가
+- draft 흐름 변경 시 `/saju`·`/mypage` 영향도 함께 확인했는가

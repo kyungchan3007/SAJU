@@ -12,6 +12,7 @@ import {
 } from "@/shared/config/authToken";
 import { AppChromeOffset, Footer } from "@/shared/ui";
 import { GlobalNav } from "@/widgets/global-nav";
+import "@saju/design-tokens/css";
 import "./globals.css";
 
 /**

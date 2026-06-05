@@ -1,0 +1,78 @@
+---
+sidebar_position: 4
+---
+
+# 🛡️ 코드 리뷰 워크플로우
+
+Claude 구현 → Codex 검증으로 이어지는 리뷰 절차를 표준화한 워크플로우입니다.
+
+## 기본 절차
+
+```
+① Claude가 구현 완료
+      ↓
+② Codex에 검증 요청
+      ↓
+③ gate-matrix로 작업 유형 분류
+      ↓
+④ code-review-guard 스킬로 리뷰
+      ↓
+   ┌──┴──┐
+  PASS  HOLD
+   ↓      ↓
+  병합   Claude 수정 → 재검증
+```
+
+## 🗂️ 게이트 매트릭스
+
+작업 유형에 따라 어떤 스킬을 추가로 적용할지 결정합니다.
+
+| 작업 유형 | 기본 | 추가 |
+|-----------|------|------|
+| 일반 기능 구현 | `code-review-guard` | — |
+| 성능 / 렌더링 / 번들 | `code-review-guard` | `vercel-react-best-practices` |
+| UI / 접근성 | `code-review-guard` | `web-design-guidelines` |
+
+## 📋 필수 점검 항목
+
+리뷰어가 반드시 확인하는 항목들이에요.
+
+- **도메인 플로우** — `/saju → /saju/result`, `/home`, `/mypage`, `/compatibility`, `/location`, `/login` 각 경로의 정상 동작
+- **인증 분기** — 로그인/미로그인 접근 제어 누락 여부
+- **React Query** — cache key, invalidation, stale 데이터 노출 위험
+- **타입 안전성** — nullable/optional 필드 처리, 실패 응답 처리 누락
+- **보안** — localStorage/console에 민감정보 노출 여부
+- **Dead code** — 하드코딩 flag, 임시 우회 분기
+
+## 📄 리뷰 출력 형식
+
+Codex의 리뷰 결과는 항상 아래 형식을 따릅니다.
+
+```
+### Verdict
+MERGE: PASS  또는  MERGE: HOLD
+(HOLD인 경우 이유 1문장)
+
+### Findings
+[Critical / High / Medium / Low] 제목
+- 영향
+- 근거: path:line
+- 재현 조건
+- 수정 제안
+
+### Open Questions
+- 요구사항 확인이 필요한 항목
+
+### Summary
+- 심각도별 이슈 수
+- 병합 가능/보류 판단 근거
+- 권장 테스트
+```
+
+:::tip 원칙
+모든 이슈에는 **파일/라인 근거**가 포함돼야 합니다. 추측성 지적은 금지예요.
+:::
+
+## 🔄 재검증 모드
+
+수정 후 재요청이 오면 **delta-only** — 새로 바뀐 부분부터 우선 검증합니다. 단, 이전 Critical/High가 미해결이면 반드시 다시 보고합니다.

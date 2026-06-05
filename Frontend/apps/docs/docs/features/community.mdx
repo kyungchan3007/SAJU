@@ -1,0 +1,37 @@
+---
+sidebar_position: 6
+---
+
+# 커뮤니티 (/community)
+
+사주 기반 커뮤니티 참가 관심 신청 및 기수 현황 조회 화면입니다.
+
+## 관련 경로
+
+```
+app/(main)/community/page.tsx
+widgets/community/
+features/community/
+  ├── hooks/
+  ├── model/
+  └── ui/
+entities/community/
+app/api/community/
+  ├── cohorts/route.ts    ← 기수 목록
+  ├── interests/route.ts  ← 관심 신청 목록
+  └── join/route.ts       ← 참가 신청
+```
+
+## 주요 흐름
+
+```
+/community 진입
+   → GET /api/community/cohorts  : 현재 기수 현황 조회
+   → GET /api/community/interests: 내 관심 신청 목록
+
+관심 신청 버튼 클릭
+   → POST /api/community/interests
+
+참가 신청
+   → POST /api/community/join
+```

@@ -1,6 +1,8 @@
 node_modules
 .next
 apps/*/.next
+.open-next
+apps/*/.open-next
 out
 apps/*/out
 apps/*/storybook-static

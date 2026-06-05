@@ -1,0 +1,56 @@
+---
+sidebar_position: 2
+---
+
+# 라우트 맵
+
+Next.js App Router 기반이며 `apps/web/src/app` 디렉토리 구조가 곧 URL 구조입니다.
+
+## 라우트 그룹
+
+| 그룹 | 경로 | 설명 |
+|------|------|------|
+| `(main)` | `/home`, `/saju`, `/mypage`, ... | 메인 레이아웃 (네비게이션 포함) |
+| `(auth)` | `/login` | 인증 레이아웃 (네비게이션 없음) |
+
+## 페이지 목록
+
+| URL | 파일 | 설명 |
+|-----|------|------|
+| `/` | `app/page.tsx` | 루트 → `/home` 리다이렉트 |
+| `/home` | `app/(main)/home/page.tsx` | 메인 홈 |
+| `/login` | `app/(auth)/login/page.tsx` | 카카오 로그인 |
+| `/saju` | `app/(main)/saju/page.tsx` | 사주 입력 |
+| `/saju/result` | `app/(main)/saju/result/page.tsx` | 사주 결과 조회 |
+| `/compatibility` | `app/(main)/compatibility/page.tsx` | 궁합 결과 · 결제 |
+| `/location` | `app/(main)/location/page.tsx` | 위치 추천 · 지도 |
+| `/community` | `app/(main)/community/page.tsx` | 커뮤니티 관심신청 |
+| `/food` | `app/(main)/food/page.tsx` | 음식 추천 |
+| `/taro` | `app/(main)/taro/page.tsx` | 타로 (준비 중) |
+| `/mypage` | `app/(main)/mypage/(with-sidebar)/page.tsx` | 마이페이지 메인 |
+| `/mypage/account` | `app/(main)/mypage/(with-sidebar)/account/page.tsx` | 계정 설정 |
+| `/mypage/saju-manage` | `app/(main)/mypage/(with-sidebar)/saju-manage/page.tsx` | 내 사주 관리 |
+| `/mypage/jeongtongsaju` | `app/(main)/mypage/(with-sidebar)/jeongtongsaju/page.tsx` | 정통사주 |
+| `/mypage/zodiac-compatibility` | `app/(main)/mypage/(with-sidebar)/zodiac-compatibility/page.tsx` | 띠별 궁합 |
+| `/mypage/traditional-fortune` | `app/(main)/mypage/(fullscreen)/traditional-fortune/page.tsx` | 정통사주 전체화면 |
+| `/mypage/year-fortune` | `app/(main)/mypage/(fullscreen)/year-fortune/page.tsx` | 신년운세 전체화면 |
+| `/auth/restore` | `app/auth/restore/page.tsx` | 탈퇴 복구 안내 |
+
+## 마이페이지 중첩 레이아웃
+
+마이페이지는 2개의 중첩 레이아웃 그룹으로 분리합니다.
+
+```
+mypage/
+├── layout.tsx                   ← 인증 체크
+├── (with-sidebar)/
+│   ├── layout.tsx               ← 사이드바 포함
+│   ├── page.tsx                 ← /mypage
+│   ├── account/
+│   ├── saju-manage/
+│   ├── jeongtongsaju/
+│   └── zodiac-compatibility/
+└── (fullscreen)/
+    ├── traditional-fortune/     ← 전체화면 풀이
+    └── year-fortune/            ← 전체화면 풀이
+```

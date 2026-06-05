@@ -1,0 +1,40 @@
+---
+sidebar_position: 7
+---
+
+# 위치 추천 (/location)
+
+현재 위치 또는 검색 위치 기반으로 사주에 맞는 장소를 추천하는 화면입니다.
+
+## 관련 경로
+
+```
+app/(main)/location/
+  ├── page.tsx
+  └── location-page.client.tsx
+widgets/location-map/
+features/location-search/
+  ├── hooks/
+  ├── model/
+  └── ui/
+entities/location/
+app/api/location/route.ts
+app/api/location/search/route.ts
+```
+
+## 주요 흐름
+
+```
+/location 진입
+   → 위치 권한 요청 or 검색 입력
+   → POST /api/location         : 위치 기반 추천
+   → GET  /api/location/search  : 검색어 기반 위치 조회
+   → 지도 + 추천 목록 표시
+```
+
+## 클라이언트 컴포넌트 분리
+
+지도 렌더링은 브라우저 API에 의존하므로 `location-page.client.tsx`로 분리합니다.
+
+- `page.tsx` — 서버 컴포넌트, 메타 · 초기 데이터
+- `location-page.client.tsx` — 지도 · 위치 상태 클라이언트 컴포넌트

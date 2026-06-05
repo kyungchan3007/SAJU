@@ -1,0 +1,39 @@
+saju-me:
+  label: saju-me
+  permalink: /saju-me
+  description: saju-me 서비스 관련
+
+개발:
+  label: 개발
+  permalink: /dev
+  description: 개발 기록
+
+릴리스:
+  label: 릴리스
+  permalink: /release
+  description: 릴리스 노트
+
+ai-agent:
+  label: AI Agent
+  permalink: /ai-agent
+  description: AI 에이전트 활용 기록
+
+워크플로우:
+  label: 워크플로우
+  permalink: /workflow
+  description: 개발 워크플로우
+
+코드리뷰:
+  label: 코드리뷰
+  permalink: /code-review
+  description: 코드 리뷰 관련
+
+디자인시스템:
+  label: 디자인시스템
+  permalink: /design-system
+  description: 디자인 시스템 관련
+
+스킬:
+  label: 스킬
+  permalink: /skill
+  description: AI 스킬 시스템

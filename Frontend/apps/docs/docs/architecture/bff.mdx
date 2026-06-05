@@ -1,0 +1,66 @@
+---
+sidebar_position: 3
+---
+
+# BFF API 경계
+
+클라이언트 컴포넌트에서 백엔드를 직접 호출하지 않습니다. 모든 백엔드 통신은 `apps/web/src/app/api/**/route.ts` BFF 경계를 통합니다.
+
+## 이유
+
+- 백엔드 서버 주소·secret이 브라우저에 노출되지 않도록
+- `HttpOnly` 쿠키로 access/refresh token을 안전하게 관리
+- 토큰 갱신, CORS, Origin 검증을 한 곳에서 처리
+
+## 인증 요청 구조
+
+```
+클라이언트 → BFF route.ts → authenticatedBackendFetch → 백엔드
+                                      ↑
+                              쿠키에서 access token 읽기
+                              401 시 refresh 자동 처리
+```
+
+`authenticatedBackendFetch`를 사용하면 토큰 갱신과 로그인 리다이렉트가 자동으로 처리됩니다.
+
+## 주요 BFF 엔드포인트
+
+| 메서드 | 경로 | 설명 |
+|--------|------|------|
+| `GET/POST` | `/api/saju` | 사주 조회·생성 |
+| `POST` | `/api/saju/draft` | 미로그인 임시저장 |
+| `POST` | `/api/saju/result` | 결과 조회 |
+| `GET` | `/api/saju/traditional` | 정통사주 |
+| `GET` | `/api/saju/traditional-fortune` | 정통사주 풀이 |
+| `GET` | `/api/saju/me/year` | 신년운세 |
+| `GET` | `/api/saju/me/compatibility/[partnerId]` | 파트너 궁합 풀이 |
+| `GET/POST` | `/api/partners` | 파트너 목록·생성 |
+| `GET/PUT/DELETE` | `/api/partners/[partnerId]` | 파트너 상세·수정·삭제 |
+| `GET/POST` | `/api/compatibility` | 궁합 결과 |
+| `GET/POST` | `/api/location` | 위치 추천 |
+| `GET` | `/api/location/search` | 위치 검색 |
+| `POST` | `/api/payment/verify` | 결제 검증 |
+| `GET/DELETE` | `/api/users/me` | 내 정보 조회·탈퇴 |
+| `GET` | `/api/auth/kakao` | 카카오 로그인 시작 |
+| `GET` | `/api/auth/kakao/callback` | 카카오 OAuth 콜백 |
+| `POST` | `/api/auth/logout` | 로그아웃 |
+| `GET` | `/api/auth/refresh` | 토큰 갱신 |
+| `GET/POST` | `/api/auth/restore` | 탈퇴 복구 |
+| `GET` | `/api/notifications` | 알림 목록 |
+| `GET` | `/api/notifications/unread-count` | 미읽음 수 |
+| `POST` | `/api/notifications/[id]/read` | 알림 읽음 처리 |
+
+## 규칙
+
+```ts
+// ✅ route.ts 내에서
+const res = await authenticatedBackendFetch('/saju/me', { method: 'GET' }, request);
+
+// ❌ 클라이언트 컴포넌트에서 백엔드 직접 호출 금지
+const res = await fetch(process.env.BACKEND_URL + '/saju/me');
+```
+
+- `route.ts`는 HTTP 입출력·쿠키 처리에 집중, 비즈니스 로직은 `entities/*/server`로 위임
+- 쿠키 인증을 사용하는 상태 변경 요청은 `rejectCrossOriginRequest`로 Origin 검증
+- 토큰 쿠키 키는 `shared/config/authToken.ts` 상수 사용 (문자열 하드코딩 금지)
+- 백엔드 응답 파싱은 `parseBackendApiResponse`로 통일

@@ -1,0 +1,96 @@
+---
+sidebar_position: 1
+---
+
+# 레이어 구조
+
+`apps/web/src` 아래 5개 레이어로 구성됩니다. 레이어 간 의존 방향은 아래에서 위로 단방향입니다.
+
+```
+app  →  widgets  →  features  →  entities  →  shared
+```
+
+## 레이어별 역할
+
+### `app/`
+라우트 엔트리, BFF API Route, SEO 메타를 담습니다.
+
+- 페이지 파일은 위젯 조립과 레이아웃 역할에 집중합니다.
+- 비즈니스 로직을 직접 작성하지 않습니다.
+- `app/api/**/route.ts`는 백엔드와의 BFF 경계입니다.
+
+### `widgets/`
+페이지 단위 조합 블록입니다. 여러 feature를 묶어 하나의 화면 섹션을 구성합니다.
+
+```
+widgets/
+├── saju-input/
+├── saju-result/
+├── global-nav/
+├── home-hero/
+├── mypage/
+└── ...
+```
+
+### `features/`
+사용자 인터랙션 단위 기능입니다. 각 feature는 다음 구조를 따릅니다.
+
+```
+features/saju-input/
+├── hooks/     ← useQuery, useMutation, 상태·제출 로직
+├── model/     ← 파생 계산, 응답 가공, 순수 유틸
+├── type/      ← 이 feature 전용 타입
+├── form/      ← 폼 UI (client 컴포넌트)
+└── step/      ← 스텝별 UI
+```
+
+:::tip 규칙
+`useQuery`와 `useMutation`은 widget/domain 컴포넌트에 직접 두지 않고 **feature hooks**로 감쌉니다.
+:::
+
+### `entities/`
+도메인 타입과 서버 유틸을 담습니다. `server/`와 `client/`로 분리합니다.
+
+```
+entities/
+├── auth/server/
+├── saju/server/
+├── user/server/
+├── compatibility/server/ · client/
+└── ...
+```
+
+### `shared/`
+레이어 경계 없이 어디서든 사용하는 공용 코드입니다.
+
+```
+shared/
+├── api/          ← BFF 공용 fetch 래퍼
+├── app-infra/    ← QueryProvider, SessionProvider 등
+├── config/       ← 상수 (authToken 키 등)
+├── design-tokens/
+├── hooks/
+├── lib/
+├── model/        ← 오행, 간지, 만세력 등 사주 도메인 공용 모델
+├── ui/           ← button, input, card 등 공용 컴포넌트
+└── utils/
+```
+
+## domain/
+
+`widgets`와 `features` 사이의 도메인 전용 UI와 룩업 데이터를 담는 중간 레이어입니다.
+
+```
+domain/
+├── navigation/   ← 네비게이션 메뉴 모델 + UI
+└── saju/         ← 사주 가이드 카드, 12간지 UI
+```
+
+## packages/
+
+앱 경계를 import하지 않는 순수 패키지입니다.
+
+| 패키지 | 역할 |
+|--------|------|
+| `@saju/design-tokens` | CSS 변수 · 테마 토큰 |
+| `@saju/ui` | 무상태 UI primitive |

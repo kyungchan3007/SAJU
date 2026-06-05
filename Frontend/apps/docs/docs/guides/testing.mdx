@@ -1,0 +1,78 @@
+---
+sidebar_position: 2
+---
+
+# 테스트 가이드
+
+## 테스트 도구
+
+- **Vitest** — 단위 테스트
+- **Playwright** — E2E 테스트
+
+## 테스트 파일 위치
+
+단위 테스트는 대상 파일 옆 `test/` 폴더에 둡니다.
+
+```
+features/community/model/
+├── transformCommunity.ts
+└── test/
+    └── transformCommunity.test.ts
+
+app/api/partners/
+├── route.ts
+└── test/
+    └── route.test.ts
+```
+
+## 테스트 대상
+
+| 대상 | 테스트 여부 |
+|------|-------------|
+| `model/` 순수 함수 | ✅ 필수 |
+| `shared/utils/` 유틸 | ✅ 필수 |
+| `shared/model/` (오행·간지·만세력) | ✅ 필수 |
+| BFF `route.ts` | ✅ 권장 |
+| UI 컴포넌트 | 선택 (중요 인터랙션만) |
+
+## 단위 테스트 예시
+
+```ts
+// features/home/model/test/getGreeting.test.ts
+import { describe, it, expect } from 'vitest';
+import { getGreeting } from '../getGreeting';
+
+describe('getGreeting', () => {
+  it('오전이면 아침 인사를 반환한다', () => {
+    expect(getGreeting(8)).toBe('좋은 아침이에요');
+  });
+});
+```
+
+## BFF Route 테스트
+
+```ts
+// app/api/partners/test/route.test.ts
+import { describe, it, expect, vi } from 'vitest';
+
+describe('POST /api/partners', () => {
+  it('Cross-Origin 요청을 거부한다', async () => {
+    const req = new Request('http://evil.com/api/partners', {
+      method: 'POST',
+      headers: { origin: 'http://evil.com' },
+    });
+    const res = await POST(req);
+    expect(res.status).toBe(403);
+  });
+});
+```
+
+## 실행
+
+```bash
+# 단위 테스트
+npm run test -w @saju/web
+
+# E2E
+npm run e2e -w @saju/web
+```

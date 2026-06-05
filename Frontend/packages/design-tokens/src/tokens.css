@@ -1,0 +1,96 @@
+:root {
+  --background: 0 0% 98%;
+  --foreground: 221 39% 11%;
+  --card: 0 0% 100%;
+  --card-foreground: 221 39% 11%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 221 39% 11%;
+  --primary: 241 77% 63%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 247 100% 97%;
+  --secondary-foreground: 241 77% 63%;
+  --muted: 220 13% 91%;
+  --muted-foreground: 220 9% 46%;
+  --accent: 247 100% 97%;
+  --accent-foreground: 241 77% 63%;
+  --destructive: 0 72% 51%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 220 13% 91%;
+  --input: 220 13% 91%;
+  --ring: 241 77% 63%;
+  --radius: 0.875rem;
+
+  --saju-primary: 89 86 233;
+  --saju-purple: 124 58 237;
+  --saju-accent: 165 163 247;
+  --saju-border: 224 218 255;
+  --saju-tint: 237 233 255;
+  --saju-soft: 245 243 255;
+  --saju-light: 240 238 255;
+  --saju-bg: 250 250 250;
+
+  --saju-surface-card: 255 255 255;
+  --saju-text-primary: 17 24 39;
+  --saju-text-secondary: 55 65 81;
+  --saju-text-muted: 107 114 128;
+  --saju-text-subtle: 156 163 175;
+  --saju-border-neutral: 229 231 235;
+
+  --saju-danger: 239 68 68;
+  --saju-success: 22 163 74;
+  --saju-warning: 245 158 11;
+  --saju-info: 6 182 212;
+
+  --saju-layout-content: 1152px;
+  --saju-layout-reading: 720px;
+  --saju-z-nav: 50;
+  --saju-z-overlay: 190;
+  --saju-z-modal: 200;
+  --saju-z-toast: 300;
+
+  --fs-hero: 1.25rem;
+  --fs-title: 1.125rem;
+  --fs-section: 0.875rem;
+  --fs-body: 0.8125rem;
+  --fs-label: 0.75rem;
+  --fs-badge: 0.6875rem;
+}
+
+@media (min-width: 640px) {
+  :root {
+    --fs-hero: 1.75rem;
+    --fs-title: 1.375rem;
+    --fs-section: 0.9375rem;
+  }
+}
+
+body {
+  background-color: rgb(var(--saju-bg));
+  color: hsl(var(--foreground));
+  word-break: keep-all;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  min-height: 36px;
+  background: #c7c4f8;
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(var(--saju-primary));
+}
+
+html::-webkit-scrollbar-corner,
+body::-webkit-scrollbar-corner,
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}

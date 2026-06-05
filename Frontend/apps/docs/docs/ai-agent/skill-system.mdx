@@ -1,0 +1,73 @@
+---
+sidebar_position: 2
+---
+
+# 📂 스킬 시스템
+
+스킬은 AI가 작업 전에 읽는 **도메인별 지침 파일**입니다.
+
+## 왜 스킬인가
+
+AI에게 모든 프로젝트 규칙을 매번 대화에서 설명하면 토큰 낭비가 심해요. 스킬 시스템은 "지금 이 작업에 필요한 문서만 골라 읽는다"는 원칙으로 설계됐습니다.
+
+## 파일 구조
+
+```
+.agents/skills/{skill-name}/
+├── SKILL.md          ← 진입점. 읽기 규칙 + 공통 원칙
+└── references/       ← 도메인별 세부 지침
+    ├── architecture.md
+    ├── api.md
+    ├── auth.md
+    └── ...
+```
+
+## 읽기 규칙 — "필요한 것만"
+
+`SKILL.md`에는 도메인별 분기 규칙이 있어요.
+
+```
+- /saju 입력 흐름 작업이면 → references/saju.md 읽기
+- API 연동 작업이면       → references/api.md 읽기
+- UI 스타일 작업이면      → references/ui-style.md 읽기
+```
+
+한 도메인 작업에서 읽는 파일은 `SKILL.md + reference 1개`가 원칙이에요.
+여러 도메인에 걸칠 때만 추가로 읽습니다.
+
+## 구현 전 필수 출력
+
+스킬을 읽은 뒤 AI는 코드 작성 전에 반드시 아래 형식을 출력합니다.
+
+```
+읽은 문서: SKILL.md, references/XXX.md
+요약 (5줄 이내): ...
+파일 레이어 계획:
+  - model/: 상수, 순수 유틸, 화면 모델 변환
+  - hooks/: useQuery, useMutation, 상태·플로우 로직
+  - ui/: props 받아 렌더링만
+  - entities/: API 타입, 서버/클라이언트 통신 경계
+  - app/api/: BFF route
+```
+
+이 출력을 강제함으로써 레이어 배치를 구현 전에 한 번 더 검토하게 됩니다.
+
+## 현재 운영 중인 스킬 목록
+
+| 스킬 | 용도 |
+|------|------|
+| `saju-frontend` | 서비스 앱 전체 도메인 구현 |
+| `code-review-guard` | 병합 전 리뷰 |
+| `codex-review-workflow` | Claude → Codex 검증 절차 |
+| `design-system-hybrid` | 디자인 시스템 운영 |
+| `notion-weekly-worklog` | 주간 작업 기록 |
+| `prompt-trigger-eval` | 스킬 트리거 평가 |
+| `change-summary-report` | 변경 요약 리포트 |
+| `vercel-react-best-practices` | React 성능/렌더링 점검 |
+| `web-design-guidelines` | 웹 UI 가이드 점검 |
+
+## 스킬 갱신 규칙
+
+> 새 라우트, 새 도메인, 반복되는 실수, 중요한 규칙이 생기면 스킬 파일을 함께 갱신합니다.
+
+스킬 파일은 코드와 동기화된 살아있는 문서예요. 프로젝트가 바뀌면 스킬도 바뀝니다.

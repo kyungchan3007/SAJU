@@ -1,0 +1,55 @@
+---
+sidebar_position: 1
+---
+
+# 소개
+
+**saju-me** 프론트엔드 개발 문서입니다.
+
+사주·운세 서비스 `saju.me`의 프론트엔드 구조, API 연동 규칙, 공용 UI 정책을 이 사이트에서 관리합니다.
+
+## 저장소 구조
+
+```
+Frontend/
+├── apps/
+│   ├── web/          # Next.js 서비스 앱
+│   └── docs/         # 이 문서 사이트
+└── packages/
+    ├── design-tokens/ # CSS 변수 · 테마 토큰
+    └── ui/            # 무상태 UI primitive
+```
+
+`apps/web`이 실제 서비스이고, 이 사이트(`apps/docs`)는 그 개발 문서입니다.
+
+## 기술 스택
+
+| 항목 | 선택 |
+|------|------|
+| 프레임워크 | Next.js 16 (App Router) |
+| 언어 | TypeScript strict |
+| 스타일 | Tailwind CSS + design-tokens |
+| 인증 | 카카오 OAuth + BFF HttpOnly 쿠키 |
+| 상태 | React local state + Zustand (일부) |
+| 데이터 페칭 | React Query + BFF fetch |
+| 모노레포 | npm workspaces |
+
+## 빠른 시작
+
+```bash
+# 저장소 클론 후
+cd Frontend
+npm install
+
+# 서비스 앱 개발 서버
+npm run dev -w @saju/web
+
+# 문서 사이트 개발 서버
+npm run start -w @saju/docs
+```
+
+## 문서 구성
+
+- **[아키텍처](/docs/architecture/overview)** — 레이어 구조, 라우트 맵, BFF 경계
+- **[기능별 가이드](/docs/features/auth)** — 각 페이지·피처의 흐름과 규칙
+- **[가이드](/docs/guides/api-integration)** — OpenAPI, 테스트 작성법

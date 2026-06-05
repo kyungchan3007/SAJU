@@ -22,7 +22,9 @@
     "typecheck": "npm run typecheck --workspaces --if-present",
     "format": "npm run format -w @saju/web --",
     "format:check": "npm run format:check -w @saju/web --",
-    "openapi-ts": "npm run openapi-ts -w @saju/web --"
+    "openapi-ts": "npm run openapi-ts -w @saju/web --",
+    "docs:dev": "npm run start -w @saju/docs --",
+    "docs:build": "npm run build -w @saju/docs --"
   },
   "keywords": [
     "nextjs",
@@ -36,5 +38,9 @@
   "engines": {
     "node": ">=20.11.0"
   },
-  "packageManager": "npm@11.6.2"
+  "packageManager": "npm@11.6.2",
+  "devDependencies": {
+    "@opennextjs/cloudflare": "^1.19.11",
+    "wrangler": "^4.97.0"
+  }
 }

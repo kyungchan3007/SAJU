@@ -1,0 +1,80 @@
+---
+sidebar_position: 1
+---
+
+# API 연동 가이드
+
+## OpenAPI 생성 클라이언트
+
+백엔드 OpenAPI 스펙 기반으로 타입과 SDK를 자동 생성합니다.
+
+```
+apps/web/openapi/openapi.yaml      ← 백엔드 스펙 보관 위치
+apps/web/src/generated/api/        ← 자동 생성 결과 (직접 수정 금지)
+  ├── sdk.gen.ts
+  ├── zod.gen.ts
+  └── types.gen.ts
+```
+
+생성 명령:
+
+```bash
+npm run openapi-ts -w @saju/web
+```
+
+:::warning
+`src/generated/api` 아래 파일은 직접 수정하지 않습니다. 스펙이 바뀌면 재생성합니다.
+:::
+
+## 새 API 연동 순서
+
+1. `src/generated/api`에서 타입/SDK 확인
+2. `app/api/**/route.ts` BFF가 이미 있으면 재사용
+3. 없으면 새 `route.ts` 작성 — HTTP 입출력만, 비즈니스 로직은 `entities/*/server`로
+4. 클라이언트에서는 BFF 경로만 호출
+
+## 인증이 필요한 API
+
+```ts
+// entities/saju/server/getSaju.ts
+import { authenticatedBackendFetch } from '@/shared/api/backend';
+
+export async function getSajuMe(request: Request) {
+  return authenticatedBackendFetch('/saju/me', { method: 'GET' }, request);
+}
+```
+
+- `authenticatedBackendFetch` — 쿠키에서 토큰 읽기 + 401 시 자동 갱신
+- 로그인/토큰 교환 경로는 예외적으로 인증 래퍼 없이 동작
+
+## React Query 훅 작성 위치
+
+```
+features/{domain}/hooks/use{Domain}Query.ts
+```
+
+```ts
+// ✅ 올바른 위치
+// features/saju-result/hooks/useSajuResult.ts
+export function useSajuResult() {
+  return useQuery({
+    queryKey: SAJU_RESULT_QUERY_KEY,
+    queryFn: () => fetch('/api/saju/result').then(r => r.json()),
+  });
+}
+
+// ❌ 위젯·도메인 컴포넌트에 직접 useQuery 작성 금지
+```
+
+## CSRF / Origin 검증
+
+쿠키 인증을 사용하는 상태 변경(POST·PUT·DELETE) BFF에는 `rejectCrossOriginRequest`를 적용합니다.
+
+```ts
+// app/api/partners/route.ts
+export async function POST(request: Request) {
+  const crossOriginError = rejectCrossOriginRequest(request);
+  if (crossOriginError) return crossOriginError;
+  // ...
+}
+```

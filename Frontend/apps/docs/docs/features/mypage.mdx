@@ -1,0 +1,56 @@
+---
+sidebar_position: 4
+---
+
+# 마이페이지 (/mypage)
+
+사용자 정보 확인과 관리 행동을 담당하는 섹션입니다.
+
+## 관련 경로
+
+```
+app/(main)/mypage/
+  ├── layout.tsx                    ← 인증 체크
+  ├── (with-sidebar)/
+  │   ├── layout.tsx                ← 사이드바 레이아웃
+  │   ├── page.tsx                  ← /mypage 메인
+  │   ├── account/                  ← 계정 설정
+  │   ├── saju-manage/              ← 내 사주 정보 관리
+  │   ├── jeongtongsaju/            ← 정통사주
+  │   └── zodiac-compatibility/     ← 띠별 궁합
+  └── (fullscreen)/
+      ├── traditional-fortune/      ← 정통사주 생성형 풀이
+      └── year-fortune/             ← 신년운세 생성형 풀이
+
+widgets/mypage/
+features/mypage/
+entities/user/
+entities/saju/
+```
+
+## 서브 페이지
+
+| 경로 | 설명 |
+|------|------|
+| `/mypage` | 사용자 정보·메뉴 메인 |
+| `/mypage/account` | 닉네임, 프로필, 회원탈퇴 |
+| `/mypage/saju-manage` | 내 사주 기본 정보 조회·수정 |
+| `/mypage/jeongtongsaju` | 정통사주 결과 조회 |
+| `/mypage/zodiac-compatibility` | 띠별 궁합 점수 조회 |
+| `/mypage/year-fortune` | 신년운세 생성형 풀이 (전체화면) |
+| `/mypage/traditional-fortune` | 정통사주 풀이 (전체화면) |
+
+## 규칙
+
+- 메뉴·배너·관리 섹션의 역할을 명확히 분리합니다.
+- 사용자 프로필 변경과 사주 정보 변경의 API/상태 경계를 섞지 않습니다.
+- 반복 카드·메뉴는 데이터 배열 기반 렌더링을 사용합니다.
+- 인증이 필요한 모든 화면 — 미로그인 시 리다이렉트 처리를 확인합니다.
+
+## 생성형 풀이 (fullscreen)
+
+`year-fortune`, `traditional-fortune`은 생성형 AI 응답을 스트리밍 방식으로 보여줍니다.
+
+- 응답 상태: `PENDING` → `COMPLETE`
+- `parseGeneratedInterpretationResponse`로 `meta.backendStatus` 보존
+- 전체화면 레이아웃(`(fullscreen)`)을 사용해 네비게이션 없이 표시
