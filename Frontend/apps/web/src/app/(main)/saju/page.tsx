@@ -1,9 +1,8 @@
 import { SajuInput } from "@/widgets/saju-input";
 import { Metadata } from "next";
 import type { Route } from "next";
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { REFRESH_TOKEN_COOKIE_KEY } from "@/shared/config/authToken";
+import { getSajuEntryRouteOnServer } from "@/entities/saju/server/getSajuEntryRouteOnServer";
 
 export const metadata: Metadata = {
   title: "무료 사주풀이 | 생년월일로 오늘의 운세 확인",
@@ -22,11 +21,9 @@ export const metadata: Metadata = {
 };
 
 export default async function SajuPage() {
-  const cookieStore = await cookies();
-  const accessToken = cookieStore.get("saju_access_token")?.value;
-  const refreshToken = cookieStore.get(REFRESH_TOKEN_COOKIE_KEY)?.value;
+  const entryRoute = await getSajuEntryRouteOnServer();
 
-  if (accessToken || refreshToken) {
+  if (entryRoute === "result") {
     redirect("/saju/result" as Route);
   }
 

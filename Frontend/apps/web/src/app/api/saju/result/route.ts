@@ -7,10 +7,10 @@ import type { SajuFormValues } from "@/features/saju-input/type/type";
 import { createErrorResponse, createSuccessResponse } from "@/shared/api";
 import { rejectCrossOriginRequest } from "@/shared/api/auth/rejectCrossOriginRequest";
 import { ACCESS_TOKEN_COOKIE_KEY } from "@/shared/config/authToken";
+import { SAJU_PENDING_FORM_COOKIE_KEY } from "@/shared/config/sajuCookie";
 
 export const revalidate = 60;
 
-const SAJU_PENDING_FORM_COOKIE_KEY = "saju_pending_form";
 const SAJU_DAILY_CACHE_COOKIE_KEY = "saju_daily_cache";
 const SAJU_DAILY_CACHE_TTL_SEC = 60 * 60;
 

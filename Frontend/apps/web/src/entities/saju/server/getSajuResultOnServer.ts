@@ -6,8 +6,7 @@ import type { DailyEnergyResponse } from "@/generated/api";
 import { onSajuDailyGetOnServer } from "@/entities/saju/server/onSajuDailyGetOnServer";
 import { onSajuPostOnServer } from "@/entities/saju/server/onSajuPostOnServer";
 import { ACCESS_TOKEN_COOKIE_KEY } from "@/shared/config/authToken";
-
-const SAJU_PENDING_FORM_COOKIE_KEY = "saju_pending_form";
+import { SAJU_PENDING_FORM_COOKIE_KEY } from "@/shared/config/sajuCookie";
 
 type PendingSajuForm = {
   formValues?: SajuFormValues;
@@ -23,6 +22,7 @@ type SajuResultGetFailure = {
   success: false;
   status: number;
   message: string;
+  reason: "LOGIN_REQUIRED" | "PENDING_FORM_REQUIRED" | "REQUEST_FAILED";
 };
 
 export type SajuResultGetResult = SajuResultGetSuccess | SajuResultGetFailure;
@@ -62,6 +62,7 @@ export async function getSajuResultOnServer(): Promise<SajuResultGetResult> {
       success: false,
       status: 401,
       message: "로그인이 필요합니다.",
+      reason: "LOGIN_REQUIRED",
     };
   }
 
@@ -73,7 +74,10 @@ export async function getSajuResultOnServer(): Promise<SajuResultGetResult> {
   }
 
   if (dailyResult.status !== 404) {
-    return dailyResult;
+    return {
+      ...dailyResult,
+      reason: "REQUEST_FAILED",
+    };
   }
 
   const formValues = readPendingFormValue(
@@ -85,8 +89,18 @@ export async function getSajuResultOnServer(): Promise<SajuResultGetResult> {
       success: false,
       status: 400,
       message: "First-time post requires pending saju form.",
+      reason: "PENDING_FORM_REQUIRED",
     };
   }
 
-  return onSajuPostOnServer(formValues, authOptions);
+  const postResult = await onSajuPostOnServer(formValues, authOptions);
+
+  if (postResult.success) {
+    return postResult;
+  }
+
+  return {
+    ...postResult,
+    reason: "REQUEST_FAILED",
+  };
 }

@@ -15,7 +15,7 @@ const config: Config = {
   },
 
   // Set the production url of your site here
-  url: "https://docs.saju.me",
+  url: "https://docs.saju-me.com",
   baseUrl: "/",
   organizationName: "proejct-saju",
   projectName: "saju",
@@ -36,8 +36,7 @@ const config: Config = {
       {
         docs: {
           sidebarPath: "./sidebars.ts",
-          editUrl:
-            "https://github.com/proejct-saju/saju/tree/main/apps/docs/",
+          editUrl: "https://github.com/proejct-saju/saju/tree/main/apps/docs/",
         },
         blog: {
           showReadingTime: true,
@@ -45,8 +44,7 @@ const config: Config = {
             type: ["rss", "atom"],
             xslt: true,
           },
-          editUrl:
-            "https://github.com/proejct-saju/saju/tree/main/apps/docs/",
+          editUrl: "https://github.com/proejct-saju/saju/tree/main/apps/docs/",
           // Useful options to enforce blogging best practices
           onInlineTags: "warn",
           onInlineAuthors: "warn",
@@ -63,7 +61,6 @@ const config: Config = {
   ],
 
   themeConfig: {
-
     colorMode: {
       respectPrefersColorScheme: true,
     },

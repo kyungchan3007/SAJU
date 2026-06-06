@@ -2,8 +2,8 @@
 name: change-summary-report
 description: >-
   사용자가 git status 기준 변경 내용을 정리해 달라고 요청할 때 사용하는 보고 스킬.
-  기본은 "어떤기능인가요 / 작업상세내용 / 요약본 / 커밋메시지(한글)" 4개 항목을 사용하고,
-  refactor 또는 chore 타입 요청 시에는 해당 전용 템플릿을 사용한다.
+  feat는 "어떤기능인가요 / 작업상세내용 / 요약본 / 커밋메시지(한글)" 4개 항목,
+  fix/refactor/chore는 각 타입 전용 템플릿을 사용한다.
 ---
 
 # 변경 요약 보고 스킬
@@ -22,8 +22,11 @@ description: >-
 
 ## 타입별 템플릿 규칙
 
-- `feat` / `fix`:
+- `feat`:
   - 기본 4개 항목 템플릿 사용
+- `fix`:
+  - 아래 fix 전용 템플릿만 사용
+  - 기본 4개 항목 템플릿 출력 금지
 - `refactor`:
   - 아래 refactor 전용 템플릿만 사용
   - 기본 4개 항목 템플릿 출력 금지
@@ -50,6 +53,42 @@ description: >-
 ### 커밋메시지(한글)
 
 > 타입 접두어 포함 한글 커밋 제목
+
+## fix 전용 템플릿
+
+## 🐛 어떤 버그인가요?
+
+> 발생한 버그 핵심 1~2줄 요약
+
+<br>
+
+## 🔍 재현 방법
+
+1.
+2.
+3.
+
+<br>
+
+## ✅ 기대 동작
+
+> 정상 동작 기준
+
+<br>
+
+## ❌ 실제 동작
+
+> 현재 잘못 동작하는 방식
+
+<br>
+
+## 📝 수정 내용
+
+- [ ] TODO
+- [ ] TODO
+- [ ] TODO
+
+<br>
 
 ## refactor 전용 템플릿
 
@@ -110,6 +149,7 @@ description: >-
 ## 사용자 프롬프트 예시
 
 - `git 변경분 feat 기준으로 change-summary-report 형식 정리`
+- `git 변경분 fix 기준으로 change-summary-report 형식 정리`
 - `git 변경분 refactor 기준으로 change-summary-report 정리`
 - `git 변경분 fix 기준, 파일 경로 제외`
 - `git 변경분 chore 템플릿으로 정리`

@@ -1,0 +1,94 @@
+---
+sidebar_position: 4
+---
+
+# 프론트 인프라 구조
+
+saju-me 프론트엔드의 배포 런타임과 도메인 구성을 설명합니다.
+
+## 배포 런타임
+
+Next.js App Router 앱을 **Cloudflare Workers** 위에서 SSR로 실행합니다.
+
+```
+Next.js (apps/web)
+    ↓ opennextjs-cloudflare build
+Cloudflare Worker (.open-next/worker.js)
+    ↓ wrangler deploy
+saju-me.com
+```
+
+빌드 도구는 `@opennextjs/cloudflare`이며, 설정 진입점은 `apps/web/open-next.config.ts`입니다. 빌드 산출물(`.open-next/`)은 직접 수정하지 않습니다.
+
+## 도메인 역할 분리
+
+| 도메인 | 역할 |
+|--------|------|
+| `saju-me.com` | Cloudflare Worker — Next.js SSR |
+| `api.saju-me.com` | Nginx HTTPS termination → 백엔드 HTTP |
+
+`api.saju-me.com`은 Cloudflare 뒤에서 Nginx가 HTTPS를 종단하고, 그 뒤에서 백엔드 앱이 HTTP로 동작합니다.
+
+## 요청 흐름
+
+```
+브라우저
+  ↓ HTTPS
+Cloudflare Worker (saju-me.com)
+  ↓ SSR / BFF route.ts
+api.saju-me.com (Nginx → 백엔드 HTTP)
+```
+
+브라우저는 항상 `saju-me.com` Worker와 통신합니다. Worker 내부의 BFF(`app/api/**/route.ts`)가 `api.saju-me.com`으로 백엔드를 호출합니다. 클라이언트 컴포넌트에서 백엔드를 직접 호출하지 않습니다.
+
+## wrangler.jsonc — source of truth
+
+`apps/web/wrangler.jsonc`가 Worker 배포 설정의 기준입니다.
+
+```jsonc
+{
+  "name": "saju-me",
+  "account_id": "a83a4cf51f88f7b33e2e8a258f081900",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-06-05",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": { "directory": ".open-next/assets", "binding": "ASSETS" },
+  "routes": [{ "pattern": "saju-me.com", "custom_domain": true }],
+  "preview_urls": false,
+  "observability": { "enabled": true, "logs": { "enabled": true } },
+  "vars": {
+    "NEXT_PUBLIC_APP_URL": "https://saju-me.com",
+    "NEXT_PUBLIC_APP_NAME": "SAJU:ME",
+    "NEXT_PUBLIC_APP_DES": "..."
+  }
+}
+```
+
+:::warning
+Cloudflare 대시보드에서 custom domain, vars, observability를 수정하면 다음 `wrangler deploy` 때 `wrangler.jsonc` 값으로 덮어써집니다. 설정 변경은 반드시 `wrangler.jsonc`에 먼저 반영하세요.
+:::
+
+## 환경변수 책임 분리
+
+| 구분 | 위치 | 예시 |
+|------|------|------|
+| **Public runtime vars** | `wrangler.jsonc > vars` | `NEXT_PUBLIC_APP_URL`, `NEXT_PUBLIC_APP_NAME` |
+| **Server secrets** | Cloudflare Dashboard > Variables and Secrets | `BACKEND_API_BASE_URL`, 결제 키 |
+| **배포 토큰** | 로컬 셸 / GitHub Actions secret | `CLOUDFLARE_API_TOKEN` |
+
+`CLOUDFLARE_API_TOKEN`은 앱 환경변수가 아니라 배포 도구(wrangler)용 인증 수단입니다. `.env`에 넣어도 되지만 절대 커밋하지 않습니다.
+
+## preview URL / workers.dev / custom domain
+
+| URL 유형 | 설명 |
+|----------|------|
+| `saju-me.com` | 운영 custom domain |
+| `saju-me.{account}.workers.dev` | workers.dev 기본 URL (현재 비활성) |
+| preview URL | `preview_urls: false` — 비활성 |
+
+운영은 custom domain만 사용합니다.
+
+## SSL/TLS
+
+- `saju-me.com` — Cloudflare가 인증서를 자동 관리합니다.
+- `api.saju-me.com` — Cloudflare ↔ Nginx 구간 HTTPS가 필요합니다. 현재 `Full` 모드 기준이며, 추후 `Full (strict)` 전환을 검토할 수 있습니다.

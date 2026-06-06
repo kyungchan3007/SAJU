@@ -4,11 +4,12 @@ description: >-
   이 저장소의 사주 프론트엔드 구현 또는 변경 요청에 사용한다. Next.js App Router
   페이지와 흐름(/saju, /saju/result, /home, /mypage, /mypage/jeongtongsaju,
   /mypage/year-fortune, /compatibility, /community, /location, /login),
-  인증 인식 UX, 사주 입력 임시저장 동작, React Query 사용/캐싱,
+  인증 인식 UX, 사주 입력 임시저장 동작, React Query 사용/캐싱, Cloudflare
+  Workers/OpenNext 기반 프론트 배포 설정, wrangler/runtime 변수 관리,
   OpenAPI 생성 프론트엔드 클라이언트 연동, UI 상태 및 컴포넌트 레이어 결정 작업이
   해당된다. 사용자가 라우트나 기술명을 명시하지 않아도 해당 영역이면 사용한다.
-  백엔드 전용 변경, 인프라 전용 작업, 프론트엔드 동작 변경 없는 생성 클라이언트
-  재생성에는 사용하지 않는다.
+  백엔드 전용 변경, 백엔드 인프라 전용 작업, 프론트엔드 동작 변경 없는 생성
+  클라이언트 재생성에는 사용하지 않는다.
 ---
 
 # 사주 프론트엔드 스킬
@@ -19,6 +20,7 @@ description: >-
 
 - 기본으로 이 파일만 읽는다.
 - 전체 구조, 라우트 설계, 레이어 경계 작업이면 `references/architecture.md`를 읽는다.
+- Cloudflare Workers, OpenNext, `wrangler.jsonc`, runtime env/secret, custom domain, 프론트 배포 흐름 작업이면 `references/infrastructure.md`를 읽는다.
 - API 연동, OpenAPI, 생성 클라이언트, 백엔드 호출 위치, 쿠키 브리지, 인증 refresh/redirect 작업이면 반드시 `references/api.md`를 읽고 그 BFF 경계를 우선한다.
 - 전역 UX/UI, 테마, 반응형 작업이면 `references/ui-style.md`를 읽는다.
 - AdSense, 광고 슬롯, Rewarded Ads, 결과 공개 광고 게이트 작업이면 `references/ads.md`를 읽는다.

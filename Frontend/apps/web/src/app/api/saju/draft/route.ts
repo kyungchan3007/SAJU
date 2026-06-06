@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import type { SajuFormValues } from "@/features/saju-input/type/type";
 import { createErrorResponse, createSuccessResponse } from "@/shared/api";
 import { rejectCrossOriginRequest } from "@/shared/api/auth/rejectCrossOriginRequest";
+import { SAJU_PENDING_FORM_COOKIE_KEY } from "@/shared/config/sajuCookie";
 
-const SAJU_PENDING_FORM_COOKIE_KEY = "saju_pending_form";
 const PENDING_TTL_SEC = 60 * 10;
 
 export async function POST(req: NextRequest) {

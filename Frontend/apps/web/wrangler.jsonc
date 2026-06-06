@@ -1,11 +1,30 @@
 {
   "$schema": "../../node_modules/wrangler/config-schema.json",
   "name": "saju-me",
+  "account_id": "a83a4cf51f88f7b33e2e8a258f081900",
   "main": ".open-next/worker.js",
-  "compatibility_date": "2026-06-04",
+  "compatibility_date": "2026-06-05",
   "compatibility_flags": ["nodejs_compat"],
   "assets": {
     "directory": ".open-next/assets",
     "binding": "ASSETS"
+  },
+  "routes": [
+    {
+      "pattern": "saju-me.com",
+      "custom_domain": true
+    }
+  ],
+  "preview_urls": false,
+  "observability": {
+    "enabled": true,
+    "logs": {
+      "enabled": true
+    }
+  },
+  "vars": {
+    "NEXT_PUBLIC_APP_URL": "https://saju-me.com",
+    "NEXT_PUBLIC_APP_NAME": "SAJU:ME",
+    "NEXT_PUBLIC_APP_DES": "무료 사주 풀이, 궁합, 정통사주, 오늘의 운세와 위치 추천까지 한 번에 확인하는 사주 서비스"
   }
 }

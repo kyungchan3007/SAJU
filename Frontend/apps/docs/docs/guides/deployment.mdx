@@ -1,0 +1,113 @@
+---
+sidebar_position: 3
+---
+
+# 배포 가이드
+
+`saju-me.com` 프론트엔드 배포 runbook입니다.
+
+## 배포 준비물
+
+| 항목 | 확인 |
+|------|------|
+| Cloudflare 계정 접근 권한 | `Developfff@gmail.com's Account` |
+| `CLOUDFLARE_API_TOKEN` | User API Token (아래 권한 참고) |
+| `apps/web/.env` or 셸 export | 로컬 수동 배포 시 필요 |
+
+### API 토큰 필요 권한
+
+Cloudflare Dashboard → My Profile → API Tokens → **"Edit Cloudflare Workers" 템플릿** 사용을 권장합니다.
+
+필요한 권한:
+
+| 타입 | 항목 | 수준 |
+|------|------|------|
+| Account | Workers Scripts | Edit |
+| Account | Workers KV Storage | Edit |
+| Zone | Workers Routes | Edit |
+| User | Memberships | Read |
+| User | User Details | Read |
+
+:::warning Account API Token 주의
+`cfat_` 접두사 토큰(Account API Token)은 `/memberships` 등 User-level API를 호출하지 못해 배포가 실패합니다. 반드시 **User API Token** (접두사 없는 일반 토큰) 또는 **"Edit Cloudflare Workers" 템플릿**으로 생성하세요.
+:::
+
+## Cloudflare Dashboard 확인 사항
+
+배포 전 **Workers & Pages → saju-me** 에서 확인합니다.
+
+- **Custom Domain**: `saju-me.com` 연결 상태
+- **Variables and Secrets**: 서버 secrets 반영 여부
+- **Observability**: 로그 활성화 여부
+
+### Dashboard에서 관리하는 Secrets
+
+아래 값은 `wrangler.jsonc`에 넣지 않고 Dashboard에서 Secret으로 관리합니다.
+
+| Secret | 설명 |
+|--------|------|
+| `BACKEND_API_BASE_URL` | 백엔드 API 주소 |
+| `KAKAO_REST_API_KEY` | 카카오 REST API 키 |
+| `PORTONE_API_SECRET` | 포트원 결제 secret |
+| `TOSS_SECRET_KEY` | 토스 결제 secret |
+
+## 로컬 수동 배포
+
+```bash
+# 1. 토큰 설정 (apps/web/.env에 추가, 커밋 금지)
+CLOUDFLARE_API_TOKEN=your_token_here
+
+# 2. 빌드
+npm run cf:build -w @saju/web
+
+# 3. 배포
+npm run cf:deploy -w @saju/web
+
+# 또는 한 번에
+npm run deploy -w @saju/web
+```
+
+`wrangler login` (OAuth)으로 인증한 경우 `.env` 토큰 없이도 배포 가능합니다.
+
+## GitHub Actions 자동 배포
+
+`develop` 브랜치에 `Frontend/` 경로 변경이 push되면 자동으로 배포됩니다.
+
+### 필요한 GitHub Secrets
+
+**레포 Settings → Secrets and variables → Actions** 에서 등록:
+
+| Secret 이름 | 설명 |
+|-------------|------|
+| `CLOUDFLARE_API_TOKEN` | User API Token |
+| `CLOUDFLARE_ACCOUNT_ID` | `a83a4cf51f88f7b33e2e8a258f081900` |
+| `BACKEND_API_BASE_URL` | 백엔드 API 주소 |
+
+## 배포 후 확인 체크리스트
+
+- [ ] `https://saju-me.com` 접속 정상
+- [ ] 카카오 로그인 동작 확인
+- [ ] Cloudflare Dashboard → Observability 로그 확인
+- [ ] Workers & Pages → Custom Domain `saju-me.com` 유지 확인
+- [ ] Variables and Secrets 유지 확인
+
+## 알려진 이슈
+
+### Dashboard 설정이 wrangler deploy 시 덮어써지는 문제
+
+Cloudflare Dashboard에서 vars, custom domain, observability를 수정한 뒤 `wrangler deploy`를 실행하면 `wrangler.jsonc` 값으로 원복됩니다.
+
+**해결:** 설정 변경은 항상 `wrangler.jsonc`에 먼저 반영한 뒤 배포합니다.
+
+### Workers Routes 권한 부족 시 배포 실패
+
+```
+Authentication error [code: 10000]
+A request to the Cloudflare API (/zones/{id}/workers/routes) failed.
+```
+
+`cfat_` 접두사 Account API Token을 사용할 때 발생합니다. User API Token으로 교체하거나 `wrangler login`으로 OAuth 인증합니다.
+
+### opennextjs 자식 프로세스에 토큰 미전달
+
+`wrangler deploy`가 내부적으로 `opennextjs-cloudflare deploy`를 실행하고, 이 자식 프로세스가 별도로 wrangler를 띄웁니다. 셸 `export`만으로는 전달이 안 될 수 있으므로 `apps/web/.env`에 `CLOUDFLARE_API_TOKEN`을 설정합니다 (커밋 금지).
