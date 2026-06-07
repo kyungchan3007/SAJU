@@ -4,7 +4,7 @@ sidebar_position: 2
 
 # 사주 입력 (/saju)
 
-사주 정보를 입력하는 흐름입니다. 로그인 여부에 따라 서버 저장과 임시저장(draft) 경로가 나뉩니다.
+사주 정보를 입력하는 단일 온보딩 진입점입니다. 로그인 여부에 따라 서버 저장과 임시저장(draft) 경로가 나뉘며, 보호 서비스에서 들어온 사용자는 입력 완료 후 원래 목적지로 복귀합니다.
 
 ## 관련 경로
 
@@ -33,6 +33,23 @@ app/api/saju/draft/route.ts
                      → 로그인 후 draft 복원 → 서버 저장
 ```
 
+## 보호 서비스 진입 흐름
+
+사주 기본정보가 필요한 서비스는 `/mypage/saju-manage`로 보내지 않고 `/saju` 입력으로 진입을 통일합니다.
+
+```
+/compatibility | /community | /food | /mypage/traditional-fortune 진입
+   │
+   ├── 로그인 + 사주 기본정보 있음 → 원래 서비스 진입
+   ├── 로그인 + 사주 기본정보 없음 → /saju?next=...&forceInput=1
+   └── 비로그인 → /login?next=원래 서비스
+
+/saju 입력 완료
+   │
+   ├── next 없음 → /saju/result
+   └── next 있음 → /saju/result 경유 후 원래 서비스 복귀
+```
+
 ## 폼 구조
 
 사주 입력은 스텝 기반 폼입니다. 스텝 상태, 검증, 제출은 모두 `features/saju-input/hooks`에서 관리합니다.
@@ -44,11 +61,22 @@ app/api/saju/draft/route.ts
 // page.tsx → 위젯 조립
 ```
 
+## 시간 입력 규칙
+
+- 폼 계약은 `birthTime: string`을 유지합니다.
+- 화면에서는 `출생 시간`과 `출생 분`을 분리 선택합니다.
+- 시간 옵션은 `shared`의 `HOUR_OPTIONS`, `MINUTE_OPTIONS`를 재사용합니다.
+- 시간과 분을 모두 선택하면 `HH:MM`으로 조합합니다.
+- `시간 미상`이면 `birthTime`은 빈 문자열로 저장합니다.
+- 시간 또는 분 한쪽만 선택하는 부분 입력은 허용하지 않습니다.
+
 ## 체크리스트
 
 작업 전 확인 사항:
 
 - 서버 제출인지 로컬 draft 저장인지 구분했는가
 - `/saju/result`로 넘어가는 데이터 전달 방식을 확인했는가
+- `next`, `forceInput` 검색 파라미터를 유지해야 하는 흐름인지 확인했는가
 - 인증 쿠키(`saju_access_token`) 요구 여부를 확인했는가
+- 로그인 첫 제출에서 pending cookie가 없어도 제출 body로 복구 가능한지 확인했는가
 - API 응답 가공을 UI 컴포넌트에 직접 넣지 않았는가

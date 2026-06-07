@@ -1,13 +1,20 @@
 import Link from "next/link";
+import type { Route } from "next";
+import { redirect } from "next/navigation";
 
 import { SajuPreviewCard } from "@/domain/saju/guid-card/preview-card/ui/saju-preview-card";
 import { getSajuProfileOnServer } from "@/entities/saju/server/getSajuProfileOnServer";
 import { getSajuResultOnServer } from "@/entities/saju/server/getSajuResultOnServer";
 import { AuthRefreshRetry } from "@/features/saju-result/ui/auth-refresh-retry.client";
 import { RewardedResultGate } from "@/features/saju-result/ui/rewarded-result-gate.client";
+import { buildSajuInputPath } from "@/shared/lib/internalRedirect";
 import { Button, EmptyStateCard, ErrorStateCard } from "@/shared/ui";
 
-export async function SajuResult() {
+type SajuResultProps = {
+  nextPath?: Route | null;
+};
+
+export async function SajuResult({ nextPath }: SajuResultProps) {
   const result = await getSajuResultOnServer();
 
   if (!result.success) {
@@ -22,7 +29,7 @@ export async function SajuResult() {
           description="오늘의 운세를 보려면 먼저 사주 정보를 입력해 주세요."
           action={
             <Button asChild size="sm" className="rounded-full">
-              <Link href="/saju">사주 입력하기</Link>
+              <Link href={buildSajuInputPath(nextPath)}>사주 입력하기</Link>
             </Button>
           }
         />
@@ -35,11 +42,17 @@ export async function SajuResult() {
         description={result.message || "잠시 후 다시 시도해 주세요."}
         action={
           <Button asChild size="sm" className="rounded-full">
-            <Link href="/saju">사주 입력 화면으로 이동</Link>
+            <Link href={buildSajuInputPath(nextPath)}>
+              사주 입력 화면으로 이동
+            </Link>
           </Button>
         }
       />
     );
+  }
+
+  if (nextPath && nextPath !== "/saju/result") {
+    redirect(nextPath);
   }
 
   const profile = await getSajuProfileOnServer({

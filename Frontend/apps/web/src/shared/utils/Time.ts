@@ -10,3 +10,14 @@ export function parseTimeParts(time?: string | null) {
     minute: minute ? String(Number(minute)) : "",
   };
 }
+
+export function buildTimeString(hour: string, minute: string) {
+  if (!hour && !minute) {
+    return "";
+  }
+
+  const formattedHour = hour ? hour.padStart(2, "0") : "";
+  const formattedMinute = minute ? minute.padStart(2, "0") : "";
+
+  return `${formattedHour}:${formattedMinute}`;
+}

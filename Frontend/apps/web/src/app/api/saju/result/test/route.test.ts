@@ -30,6 +30,17 @@ function encodeCookiePayload(payload: unknown): string {
   return Buffer.from(JSON.stringify(payload), "utf8").toString("base64url");
 }
 
+function createJsonRequest(body: unknown) {
+  return new Request("http://localhost/api/saju/result", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Origin: "http://localhost",
+    },
+    body: JSON.stringify(body),
+  });
+}
+
 describe("/api/saju/result POST", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -122,6 +133,52 @@ describe("/api/saju/result POST", () => {
       error: null,
     });
     expect(mockedOnSajuPostOnServer).toHaveBeenCalledTimes(1);
+  });
+
+  it("uses submitted form body when daily result returns 404", async () => {
+    mockedCookies.mockResolvedValue(
+      createCookieStore({
+        saju_access_token: "token",
+      }),
+    );
+    mockedOnSajuDailyGetOnServer.mockResolvedValue({
+      success: false,
+      status: 404,
+      message: "Not found",
+    });
+    mockedOnSajuPostOnServer.mockResolvedValue({
+      success: true,
+      data: { weakElement: "fire" },
+    });
+
+    const request = createJsonRequest({
+      birthYear: "1992",
+      birthDate: "03/14",
+      city: "서울",
+      calendarType: "SOLAR",
+      birthTime: "",
+      gender: "MALE",
+      timeUnknown: "",
+    });
+
+    const response = await POST(request);
+    const body = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(body).toEqual({
+      success: true,
+      data: { weakElement: "fire" },
+      error: null,
+    });
+    expect(mockedOnSajuPostOnServer).toHaveBeenCalledWith({
+      birthYear: "1992",
+      birthDate: "03/14",
+      city: "서울",
+      calendarType: "SOLAR",
+      birthTime: "",
+      gender: "MALE",
+      timeUnknown: "",
+    });
   });
 
   it("returns 400 when daily 404 but pending form is missing", async () => {

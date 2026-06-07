@@ -1,4 +1,8 @@
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
+import { getProtectedPageAuthStateOnServer } from "@/entities/auth/server/getProtectedPageAuthStateOnServer";
+import { ProtectedSajuServiceGate } from "@/features/saju-profile/ui/protected-saju-service-gate";
+import { AuthRefreshRetry } from "@/features/saju-result/ui/auth-refresh-retry.client";
 import { CompatibilitySection } from "@/widgets/compatibility/ui/compatibility-section";
 
 export const metadata: Metadata = {
@@ -7,10 +11,27 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-export default function CompatibilityPage() {
+export default async function CompatibilityPage() {
+  const authState =
+    await getProtectedPageAuthStateOnServer("/compatibility");
+
+  if (authState.kind === "refresh") {
+    return (
+      <main>
+        <AuthRefreshRetry loginPath={authState.loginPath} />
+      </main>
+    );
+  }
+
+  if (authState.kind === "redirect") {
+    redirect(authState.loginPath);
+  }
+
   return (
     <main>
-      <CompatibilitySection />
+      <ProtectedSajuServiceGate servicePath="/compatibility">
+        <CompatibilitySection />
+      </ProtectedSajuServiceGate>
     </main>
   );
 }

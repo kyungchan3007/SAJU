@@ -1,4 +1,8 @@
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
+import { getProtectedPageAuthStateOnServer } from "@/entities/auth/server/getProtectedPageAuthStateOnServer";
+import { ProtectedSajuServiceGate } from "@/features/saju-profile/ui/protected-saju-service-gate";
+import { AuthRefreshRetry } from "@/features/saju-result/ui/auth-refresh-retry.client";
 import { CommunitySection } from "@/widgets/community/ui/community-section";
 
 export const metadata: Metadata = {
@@ -7,12 +11,28 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-export default function CommunityPage() {
+export default async function CommunityPage() {
+  const authState = await getProtectedPageAuthStateOnServer("/community");
+
+  if (authState.kind === "refresh") {
+    return (
+      <main className="bg-white">
+        <AuthRefreshRetry loginPath={authState.loginPath} />
+      </main>
+    );
+  }
+
+  if (authState.kind === "redirect") {
+    redirect(authState.loginPath);
+  }
+
   return (
     <main className="bg-white">
       <div className="mx-auto max-w-[1152px] px-4 py-8 md:px-8">
         <div className="min-w-0">
-          <CommunitySection />
+          <ProtectedSajuServiceGate servicePath="/community">
+            <CommunitySection />
+          </ProtectedSajuServiceGate>
         </div>
       </div>
     </main>

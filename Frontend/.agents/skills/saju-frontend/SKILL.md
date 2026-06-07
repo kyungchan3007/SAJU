@@ -2,8 +2,9 @@
 name: saju-frontend
 description: >-
   이 저장소의 사주 프론트엔드 구현 또는 변경 요청에 사용한다. Next.js App Router
-  페이지와 흐름(/saju, /saju/result, /home, /mypage, /mypage/jeongtongsaju,
-  /mypage/year-fortune, /compatibility, /community, /location, /login),
+  페이지와 흐름(/saju, /saju/result, /home, /mypage,
+  /mypage/traditional-fortune, /mypage/year-fortune, /compatibility,
+  /community, /food, /location, /login),
   인증 인식 UX, 사주 입력 임시저장 동작, React Query 사용/캐싱, Cloudflare
   Workers/OpenNext 기반 프론트 배포 설정, wrangler/runtime 변수 관리,
   OpenAPI 생성 프론트엔드 클라이언트 연동, UI 상태 및 컴포넌트 레이어 결정 작업이
@@ -28,7 +29,7 @@ description: >-
 - `.tsx` 컴포넌트의 비즈니스 로직, 플로우 로직, 역할 분리 작업이면 `references/component-guide.md`를 읽는다.
 - `/saju` 입력 흐름 작업이면 `references/saju.md`를 읽는다.
 - `/saju/result` 결과 조회 작업이면 `references/saju-result.md`를 읽는다.
-- `/mypage/jeongtongsaju` 또는 정통사주 상세 조회 작업이면 `references/jeongtongsaju.md`를 읽는다.
+- `/mypage/traditional-fortune` 또는 정통사주 상세 조회 작업이면 `references/jeongtongsaju.md`를 읽는다.
 - `/mypage/year-fortune` 또는 신년운세 조회·생성형 풀이 작업이면 `references/year-fortune.md`를 읽는다.
 - `/compatibility` 또는 파트너 궁합 풀이 조회·선택 흐름 작업이면 `references/compatibility.md`를 읽는다.
 - `/community` 또는 커뮤니티 관심 신청, 기수 현황 조회, 참가 신청 흐름 작업이면 `references/api.md`를 읽고 BFF 경계를 우선한다.
@@ -50,6 +51,8 @@ description: >-
 - 재사용되거나 복잡한 상태, 검증, 제출, 조회 흐름은 커스텀 훅으로 만들고 `apps/web/src/features/*/hooks`에 둔다.
 - `useQuery`와 `useMutation`은 widget/domain 컴포넌트에 직접 두지 말고 feature 커스텀 훅으로 감싼다.
 - API 응답 가공은 UI 컴포넌트에서 직접 처리하지 않는다.
+- 사주 기본정보가 필요한 보호 서비스는 `/mypage/saju-manage`가 아니라 `/saju` 입력 화면으로 진입을 통일하고, 완료 후 `next`로 원래 목적지에 복귀시키는 흐름을 우선한다.
+- 로그아웃 여부를 UI에서 판정할 때는 "실제 인증 성공"과 "토큰 쿠키 존재"를 구분해서 본다. 헤더 `ME` 표시는 쿠키 기반 분기일 수 있으니 인증 오류 재현 시 쿠키 잔존 여부를 함께 확인한다.
 - 앱 코드는 기존 `app`, `widgets`, `features`, `entities`, `shared` 구조를 먼저 따르고, 도메인 없는 공용 UI/토큰만 `packages/*`로 올린다.
 - 관련 없는 `.md` 파일은 읽지 않는다.
 

@@ -1,5 +1,6 @@
 "use client";
 
+import type { Route } from "next";
 import { useState } from "react";
 
 import { useSajuHooks } from "@/features/saju-input/hooks/useSajuHooks";
@@ -21,14 +22,18 @@ import type {
 
 type UseSajuInputFormParams = {
   steps: InputStepItem[];
+  nextPath?: Route | null;
 };
 
-export function useSajuInputForm({ steps }: UseSajuInputFormParams) {
+export function useSajuInputForm({
+  steps,
+  nextPath,
+}: UseSajuInputFormParams) {
   const [formValues, setFormValues] =
     useState<SajuFormValues>(defaultFormValues);
   const [touchedSteps, setTouchedSteps] =
     useState<TouchedSteps>(defaultTouchedSteps);
-  const { handleSubmitSaju } = useSajuHooks();
+  const { handleSubmitSaju } = useSajuHooks({ nextPath });
 
   const highlightedZodiacIndex = getHighlightedZodiacIndex(
     formValues.birthYear,

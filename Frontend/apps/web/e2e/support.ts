@@ -10,7 +10,27 @@ type Partner = {
   city: string | null;
 };
 
+type SajuProfileMock = {
+  email: string;
+  nickname: string;
+  birthDate: string;
+  birthTime: string | null;
+  gender: "MALE" | "FEMALE";
+  calendarType: "SOLAR" | "LUNAR";
+  city: string | null;
+  sajuAnalysis:
+    | {
+        ilju: string;
+        strength: string;
+        geokguk: string;
+        yongshin: string;
+        assistYongshin: string;
+      }
+    | null;
+};
+
 type ApiMockOptions = {
+  sajuProfile?: SajuProfileMock;
   partners?: Partner[];
   notifications?: NotificationMock[];
   communityInterests?: CommunityInterestMock[];
@@ -41,7 +61,7 @@ export type CommunityInterestMock = {
   }>;
 };
 
-export const mySajuProfile = {
+export const mySajuProfile: SajuProfileMock = {
   email: "e2e@example.com",
   nickname: "이투이",
   birthDate: "1992-03-14",
@@ -124,6 +144,7 @@ export async function mockCurrentProjectApis(
   page: Page,
   options: ApiMockOptions = {},
 ) {
+  const sajuProfile = options.sajuProfile ?? mySajuProfile;
   let partners = options.partners ?? [...defaultPartners];
   let notifications = options.notifications ?? [...defaultNotifications];
   const communityInterests =
@@ -173,7 +194,7 @@ export async function mockCurrentProjectApis(
         contentType: "application/json",
         body: JSON.stringify({
           success: true,
-          data: mySajuProfile,
+          data: sajuProfile,
           error: null,
         }),
       });
@@ -573,14 +594,16 @@ const compatibilityResult = {
       {
         key: "love",
         title: "연인궁합",
-        score: 88,
+        score: 4,
+        scoreLabel: "좋은 흐름의 단계",
         keyword: "설렘",
         content: "감정 표현의 온도가 잘 맞습니다.",
       },
       {
         key: "communication",
         title: "소통궁합",
-        score: 82,
+        score: 5,
+        scoreLabel: "매우 잘 맞는 단계",
         keyword: "대화",
         content: "중요한 이야기를 차분히 풀어가기 좋습니다.",
       },

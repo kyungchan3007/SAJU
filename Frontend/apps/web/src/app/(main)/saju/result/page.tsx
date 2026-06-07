@@ -5,6 +5,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { Metadata } from "next";
 import { Suspense } from "react";
+import { normalizeInternalRedirectPath } from "@/shared/lib/internalRedirect";
 
 export const metadata: Metadata = {
   title: "사주 결과 미리보기",
@@ -18,7 +19,17 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function SajuResultPage() {
+type SajuResultPageProps = {
+  searchParams: Promise<{
+    next?: string;
+  }>;
+};
+
+export default async function SajuResultPage({
+  searchParams,
+}: SajuResultPageProps) {
+  const params = await searchParams;
+  const nextPath = normalizeInternalRedirectPath(params.next);
   const cookieStore = await cookies();
   const accessToken = cookieStore.get("saju_access_token")?.value;
   const refreshToken = cookieStore.get("saju_refresh_token")?.value;
@@ -34,7 +45,7 @@ export default async function SajuResultPage() {
   return (
     <main>
       <Suspense fallback={<AnalysisPendingGate />}>
-        <SajuResult />
+        <SajuResult nextPath={nextPath} />
       </Suspense>
     </main>
   );

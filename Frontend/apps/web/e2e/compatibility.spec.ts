@@ -36,8 +36,15 @@ test.describe("compatibility current flow", () => {
 
     await expect(page.getByText("궁합 대상")).toBeVisible();
     await expect(page.getByText("따뜻한 균형")).toBeVisible();
+    await expect(page.getByText("분야별 궁합")).toBeVisible();
     await expect(page.getByText("연인궁합").first()).toBeVisible();
     await expect(page.getByText("소통궁합").first()).toBeVisible();
+    await expect(page.getByText("어? 우리 은근 잘 맞는 거 아니야?")).toBeVisible();
+    await expect(page.getByText("사주가 인정한 천생연분")).toBeVisible();
+    await expect(page.getByText("좋은 흐름의 단계")).toBeVisible();
+    await expect(page.getByText("매우 잘 맞는 단계")).toBeVisible();
+    await expect(page.getByText("좋아요")).toBeVisible();
+    await expect(page.getByText("최고예요")).toBeVisible();
     await expect(page.getByRole("button", { name: "다른 상대와 궁합 보기" })).toBeVisible();
     await expectNoHorizontalOverflow(page);
   });

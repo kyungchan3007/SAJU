@@ -11,7 +11,7 @@ import type {
   TraditionalFortuneResponse,
 } from "@/generated/api";
 import { toJeongtongsajuViewModel } from "@/features/mypage/model/jeongtongsaju";
-import { SAJU_PROFILE_QUERY_KEY } from "@/features/mypage/hooks/useSajuManage";
+import { SAJU_PROFILE_QUERY_KEY } from "@/features/saju-profile/model/query";
 import type { ApiEnvelope } from "@/shared/api";
 
 import { useJeongtongsaju } from "./useJeongtongsaju";

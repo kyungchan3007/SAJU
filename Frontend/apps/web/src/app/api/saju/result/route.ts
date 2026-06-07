@@ -24,6 +24,25 @@ type CachedDailyResult = {
   exp?: number;
 };
 
+async function readSubmittedFormValue(
+  request: Request | undefined,
+): Promise<SajuFormValues | null> {
+  if (!request) {
+    return null;
+  }
+
+  const contentType = request.headers.get("content-type") ?? "";
+  if (!contentType.includes("application/json")) {
+    return null;
+  }
+
+  try {
+    return (await request.json()) as SajuFormValues;
+  } catch {
+    return null;
+  }
+}
+
 function readPendingFormValue(
   encoded: string | undefined,
 ): SajuFormValues | null {
@@ -94,6 +113,7 @@ export async function POST(request?: Request) {
   const csrfResponse = rejectCrossOriginRequest(request);
   if (csrfResponse) return csrfResponse;
 
+  const submittedFormValues = await readSubmittedFormValue(request);
   const cookieStore = await cookies();
   const token = cookieStore.get(ACCESS_TOKEN_COOKIE_KEY)?.value;
 
@@ -140,9 +160,9 @@ export async function POST(request?: Request) {
 
   // 4) GET에서 "아직 생성 데이터 없음(404)"이면 최초 회원 흐름으로 POST 실행
   if (dailyResult.status === 404) {
-    const formValues = readPendingFormValue(
-      cookieStore.get(SAJU_PENDING_FORM_COOKIE_KEY)?.value,
-    );
+    const formValues =
+      submittedFormValues ??
+      readPendingFormValue(cookieStore.get(SAJU_PENDING_FORM_COOKIE_KEY)?.value);
 
     if (!formValues) {
       return NextResponse.json(

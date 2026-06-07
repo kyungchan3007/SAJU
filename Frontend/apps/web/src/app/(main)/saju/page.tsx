@@ -3,6 +3,10 @@ import { Metadata } from "next";
 import type { Route } from "next";
 import { redirect } from "next/navigation";
 import { getSajuEntryRouteOnServer } from "@/entities/saju/server/getSajuEntryRouteOnServer";
+import {
+  buildSajuResultPath,
+  normalizeInternalRedirectPath,
+} from "@/shared/lib/internalRedirect";
 
 export const metadata: Metadata = {
   title: "무료 사주풀이 | 생년월일로 오늘의 운세 확인",
@@ -20,16 +24,26 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function SajuPage() {
+type SajuPageProps = {
+  searchParams: Promise<{
+    next?: string;
+    forceInput?: string;
+  }>;
+};
+
+export default async function SajuPage({ searchParams }: SajuPageProps) {
+  const params = await searchParams;
+  const nextPath = normalizeInternalRedirectPath(params.next);
+  const forceInput = params.forceInput === "1";
   const entryRoute = await getSajuEntryRouteOnServer();
 
-  if (entryRoute === "result") {
-    redirect("/saju/result" as Route);
+  if (!forceInput && entryRoute === "result") {
+    redirect(buildSajuResultPath(nextPath) as Route);
   }
 
   return (
     <main className="page-shell">
-      <SajuInput />
+      <SajuInput nextPath={nextPath} />
     </main>
   );
 }

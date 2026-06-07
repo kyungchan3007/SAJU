@@ -4,6 +4,7 @@ import type {
   PartnerResponse,
   SajuProfileResponse,
 } from "@/generated/api";
+import { type FunLabel, getFunLabel } from "./funLabel";
 
 export type CompatibilityStatus = "COMPLETE" | "PENDING" | "UNKNOWN";
 
@@ -11,6 +12,8 @@ export type CompatibilitySectionDisplay = {
   icon: string;
   label: string;
   score: number;
+  scoreLabel: string;
+  funLabel: FunLabel;
   color: string;
   keyword: string;
   content: string;
@@ -57,10 +60,14 @@ function parseSectionDisplay(
     SECTION_FALLBACK_META[index] ??
     SECTION_FALLBACK_META[0];
 
+  const score = section.score ?? 3;
+
   return {
     icon: meta.icon,
     label: section.title ?? meta.label,
-    score: section.score ?? 50,
+    score,
+    scoreLabel: section.scoreLabel ?? "",
+    funLabel: getFunLabel(score),
     color: meta.color,
     keyword: section.keyword ?? "",
     content: section.content ?? "",

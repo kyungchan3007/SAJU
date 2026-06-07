@@ -1,4 +1,8 @@
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
+import { getProtectedPageAuthStateOnServer } from "@/entities/auth/server/getProtectedPageAuthStateOnServer";
+import { ProtectedSajuServiceGate } from "@/features/saju-profile/ui/protected-saju-service-gate";
+import { AuthRefreshRetry } from "@/features/saju-result/ui/auth-refresh-retry.client";
 import { JeongtongsajuAndFortuneSection } from "@/widgets/mypage/ui/jeongtongsaju-and-fortune-section";
 
 export const metadata: Metadata = {
@@ -7,6 +11,22 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-export default function TraditionalFortunePage() {
-  return <JeongtongsajuAndFortuneSection />;
+export default async function TraditionalFortunePage() {
+  const authState = await getProtectedPageAuthStateOnServer(
+    "/mypage/traditional-fortune",
+  );
+
+  if (authState.kind === "refresh") {
+    return <AuthRefreshRetry loginPath={authState.loginPath} />;
+  }
+
+  if (authState.kind === "redirect") {
+    redirect(authState.loginPath);
+  }
+
+  return (
+    <ProtectedSajuServiceGate servicePath="/mypage/traditional-fortune">
+      <JeongtongsajuAndFortuneSection />
+    </ProtectedSajuServiceGate>
+  );
 }

@@ -65,6 +65,12 @@ describe("step completion and messaging", () => {
     const noCity = createValidFormValues();
     noCity.city = " ";
     expect(getFirstIncompleteFieldMessage(noCity).title).toBe("출생 도시를 선택해 주세요");
+
+    const partialBirthTime = createValidFormValues();
+    partialBirthTime.birthTime = "09:";
+    expect(getFirstIncompleteFieldMessage(partialBirthTime).title).toBe(
+      "출생 시간을 끝까지 선택해 주세요",
+    );
   });
 });
 

@@ -8,6 +8,7 @@ import {
   isValidBirthMonthDay,
   parseBirthMonthDay,
 } from "@/shared/utils/BirthDate";
+import { parseTimeParts } from "@/shared/utils/Time";
 
 // saju-input-fields.container.tsx 의
 // SajuInputFieldsContainer 안에서 직접 호출된다.
@@ -47,8 +48,12 @@ export function getStepCompletionState(formValues: SajuFormValues) {
     formValues.city !== "" &&
     formValues.calendarType !== "" &&
     isValidBirthMonthDay(formValues.birthDate.trim());
-  // 출생 시간은 선택 입력(옵션)으로 처리한다.
-  const isBirthTimeStepComplete = true;
+  const { hour, minute } = parseTimeParts(formValues.birthTime);
+  const hasAnyBirthTimeSelection = hour !== "" || minute !== "";
+  const isBirthTimeStepComplete =
+    formValues.timeUnknown === "yes" ||
+    !hasAnyBirthTimeSelection ||
+    (hour !== "" && minute !== "");
   const isGenderStepComplete = formValues.gender !== "";
 
   return {
@@ -99,6 +104,17 @@ export function getFirstIncompleteFieldMessage(formValues: SajuFormValues): {
     return {
       title: "양력/음력을 선택해 주세요",
       description: "출생 월/일 기준인 양력 또는 음력을 선택해 주세요.",
+    };
+  }
+
+  const { hour, minute } = parseTimeParts(formValues.birthTime);
+  if (
+    formValues.timeUnknown !== "yes" &&
+    ((hour !== "" && minute === "") || (hour === "" && minute !== ""))
+  ) {
+    return {
+      title: "출생 시간을 끝까지 선택해 주세요",
+      description: "시간을 선택했다면 분까지 함께 선택해 주세요.",
     };
   }
 

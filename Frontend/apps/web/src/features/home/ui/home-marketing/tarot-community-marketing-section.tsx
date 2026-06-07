@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 import { TAROT_COMMUNITY_FEATURE_CARDS } from "@/features/home/model/model";
 import { FeatureCardGrid } from "@/features/home/ui/home-marketing/feature-card-grid";
@@ -25,6 +26,13 @@ export function TarotCommunityMarketingSection() {
                 <br />
                 이야기를 나눠보세요.
               </p>
+              <Link
+                href="/community"
+                className="mt-1 text-sm font-semibold"
+                style={{ color: "#5956E9" }}
+              >
+                자세히 보기 →
+              </Link>
             </div>
 
             {/* 타로·커뮤니티 기능 설명 카드 */}

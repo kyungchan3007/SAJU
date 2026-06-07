@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { addAuthCookies } from "./support";
+import { addAuthCookies, mockCurrentProjectApis, mySajuProfile } from "./support";
 
 async function addSajuPendingDraftCookie(
   context: Parameters<typeof addAuthCookies>[0],
@@ -85,5 +85,36 @@ test.describe("auth protected routing", () => {
     await page.goto("/saju");
 
     await expect(page).toHaveURL(/\/saju\/result$/);
+  });
+
+  test("redirects logged-in users without saved saju profile to saju input from protected services", async ({
+    context,
+    page,
+    baseURL,
+  }) => {
+    await addAuthCookies(context, baseURL);
+    await mockCurrentProjectApis(page, {
+      sajuProfile: {
+        ...mySajuProfile,
+        birthDate: "",
+        sajuAnalysis: null,
+      },
+    });
+
+    await page.goto("/compatibility");
+    await expect(page).toHaveURL(
+      /\/saju\?next=%2Fcompatibility&forceInput=1$/,
+    );
+
+    await page.goto("/community");
+    await expect(page).toHaveURL(/\/saju\?next=%2Fcommunity&forceInput=1$/);
+
+    await page.goto("/food");
+    await expect(page).toHaveURL(/\/saju\?next=%2Ffood&forceInput=1$/);
+
+    await page.goto("/mypage/traditional-fortune");
+    await expect(page).toHaveURL(
+      /\/saju\?next=%2Fmypage%2Ftraditional-fortune&forceInput=1$/,
+    );
   });
 });

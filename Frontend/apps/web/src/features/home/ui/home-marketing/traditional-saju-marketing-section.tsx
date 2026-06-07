@@ -27,7 +27,7 @@ export function TraditionalSajuMarketingSection() {
                 체계적으로 분석합니다.
               </p>
               <Link
-                href="/mypage/jeongtongsaju"
+                href="/mypage/traditional-fortune"
                 className="mt-1 text-sm font-semibold"
                 style={{ color: "#5956E9" }}
               >

@@ -36,6 +36,21 @@ Next.js App Router 기반이며 `apps/web/src/app` 디렉토리 구조가 곧 UR
 | `/mypage/year-fortune` | `app/(main)/mypage/(fullscreen)/year-fortune/page.tsx` | 신년운세 전체화면 |
 | `/auth/restore` | `app/auth/restore/page.tsx` | 탈퇴 복구 안내 |
 
+## 보호 서비스 진입 정책
+
+사주 기본정보가 필요한 서비스는 로그인 여부와 사주 프로필 보유 여부에 따라 진입을 분기합니다.
+
+| 서비스 | 직접 진입 경로 | 사주 기본정보 없음 |
+|------|------|------|
+| 정통사주 풀이 | `/mypage/traditional-fortune` | `/saju?next=/mypage/traditional-fortune&forceInput=1` |
+| 궁합 | `/compatibility` | `/saju?next=/compatibility&forceInput=1` |
+| 오늘의 메뉴 | `/food` | `/saju?next=/food&forceInput=1` |
+| 커뮤니티 | `/community` | `/saju?next=/community&forceInput=1` |
+
+- 비로그인 사용자는 먼저 `/login?next=원래 서비스`로 이동합니다.
+- 로그인 후에도 사주 기본정보가 없으면 `/saju` 입력으로 진입을 통일합니다.
+- `/saju` 완료 후에는 `next` 기준으로 원래 서비스에 복귀합니다.
+
 ## 마이페이지 중첩 레이아웃
 
 마이페이지는 2개의 중첩 레이아웃 그룹으로 분리합니다.

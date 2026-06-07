@@ -1,9 +1,14 @@
 import Image from "next/image";
+import type { Route } from "next";
 import { steps } from "@/domain/saju/guid-card/12zodiac/model/model";
 import { SajuInputFieldsContainer } from "@/features/saju-input/form/client/saju-input-fields.container";
 import { SajuInputHintAccordion } from "@/features/saju-input/form/client/saju-input-hint-accordion";
 
-export function SajuInputForm() {
+type SajuInputFormProps = {
+  nextPath?: Route | null;
+};
+
+export function SajuInputForm({ nextPath }: SajuInputFormProps) {
   return (
     <div className="mx-auto flex max-w-[860px] flex-col gap-8 pb-4 pt-0">
       {/* ── 히어로 ── */}
@@ -69,7 +74,7 @@ export function SajuInputForm() {
         {/* 안내 박스 — 아코디언 */}
         <SajuInputHintAccordion />
 
-        <SajuInputFieldsContainer steps={steps} />
+        <SajuInputFieldsContainer steps={steps} nextPath={nextPath} />
       </section>
     </div>
   );

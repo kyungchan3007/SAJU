@@ -6,7 +6,7 @@ import { useAuthScope } from "@/shared/app-infra/query-provider/auth-scope-conte
 import { fetchCompatibilityOnClient } from "@/entities/compatibility/client/fetchCompatibilityOnClient";
 import { fetchPartnersOnClient } from "@/entities/partner/client/fetchPartnersOnClient";
 import { fetchSajuProfileOnClient } from "@/entities/saju/client/fetchSajuProfileOnClient";
-import { SAJU_PROFILE_QUERY_KEY } from "@/features/mypage/hooks/useSajuManage";
+import { SAJU_PROFILE_QUERY_KEY } from "@/features/saju-profile/model/query";
 import { PARTNERS_QUERY_KEY } from "@/features/mypage/hooks/usePartners";
 import {
   toCompatibilityResultDisplay,

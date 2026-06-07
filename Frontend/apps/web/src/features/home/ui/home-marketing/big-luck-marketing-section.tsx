@@ -22,7 +22,7 @@ export function BigLuckMarketingSection() {
               미리 대비할 수 있습니다.
             </p>
             <Link
-              href="/mypage/jeongtongsaju"
+              href="/mypage/traditional-fortune"
               className="mt-2 text-sm font-semibold"
               style={{ color: "#5956E9" }}
             >

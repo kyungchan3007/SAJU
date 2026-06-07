@@ -4,7 +4,7 @@ sidebar_position: 3
 
 # 사주 결과 (/saju/result)
 
-사주 입력 후 결과를 보여주는 화면입니다.
+사주 입력 후 결과를 보여주는 화면입니다. 보호 서비스에서 `/saju`를 거쳐 들어온 경우에는 결과 조회 후 원래 서비스로 복귀하는 중간 지점 역할도 합니다.
 
 ## 관련 경로
 
@@ -30,6 +30,24 @@ app/api/saju/result/route.ts
    └── 미로그인 draft → localStorage에서 draft 읽기 → 결과 렌더링
 ```
 
+로그인 사용자의 첫 결과 생성은 `/api/saju/result`에서 먼저 오늘 결과 조회를 시도합니다.
+
+```
+POST /api/saju/result
+   │
+   ├── 기존 결과 있음 → 그대로 응답
+   ├── 첫 결과 생성 필요 + 요청 body 있음 → body 기반으로 최초 생성
+   └── 첫 결과 생성 필요 + body 없음 → pending form cookie 복구 시도
+```
+
+`PENDING_FORM_NOT_FOUND` 같은 백엔드 에러 코드는 클라이언트에 raw 영어 문구로 직접 노출하지 않습니다.
+
+## 복귀 흐름
+
+- `/saju/result`는 `next` 검색 파라미터가 있으면 결과 조회 후 원래 목적지로 복귀시킵니다.
+- `next`가 없으면 결과 화면에 머뭅니다.
+- 보호 서비스 재진입 루프를 막기 위해 사주 입력 성공 직후 관련 프로필 캐시를 갱신하거나 제거해야 합니다.
+
 ## 캐시 정책
 
 결과 조회는 React Query로 관리합니다. cache key와 stale/cache 정책은 `features/saju-result/hooks`에서 통일합니다.
@@ -49,4 +67,6 @@ app/api/saju/result/route.ts
 - 서버 결과인지 로컬 draft 결과인지 구분했는가
 - React Query cache key가 기존 정책과 일치하는가
 - 오류·로딩·빈 상태 UI가 있는가
+- 백엔드 에러 코드가 사용자 문구로 매핑되는지 확인했는가
+- `next`가 있을 때 결과 조회 후 목적지 복귀가 끊기지 않는지 확인했는가
 - draft 흐름 변경 시 `/saju`·`/mypage` 영향도 함께 확인했는가

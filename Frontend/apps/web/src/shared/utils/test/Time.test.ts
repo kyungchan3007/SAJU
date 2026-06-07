@@ -1,4 +1,4 @@
-import { parseTimeParts } from "@/shared/utils/Time";
+import { buildTimeString, parseTimeParts } from "@/shared/utils/Time";
 import { describe, expect, it } from "vitest";
 
 describe("parseTimeParts", () => {
@@ -10,5 +10,18 @@ describe("parseTimeParts", () => {
   it("returns empty values for missing input", () => {
     expect(parseTimeParts(null)).toEqual({ hour: "", minute: "" });
     expect(parseTimeParts("")).toEqual({ hour: "", minute: "" });
+  });
+});
+
+describe("buildTimeString", () => {
+  it("builds padded HH:MM strings for hour and minute selects", () => {
+    expect(buildTimeString("9", "5")).toBe("09:05");
+    expect(buildTimeString("0", "0")).toBe("00:00");
+  });
+
+  it("keeps partial selections representable for validation", () => {
+    expect(buildTimeString("9", "")).toBe("09:");
+    expect(buildTimeString("", "30")).toBe(":30");
+    expect(buildTimeString("", "")).toBe("");
   });
 });

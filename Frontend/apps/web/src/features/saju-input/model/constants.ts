@@ -2,7 +2,10 @@ import type {
   SajuFormValues,
   TouchedSteps,
 } from "@/features/saju-input/type/type";
-import { BIRTH_TIME_OPTIONS } from "@/shared/model/date-time-options/model";
+import {
+  HOUR_OPTIONS,
+  MINUTE_OPTIONS,
+} from "@/shared/model/date-time-options/model";
 import { CITY_OPTIONS } from "@/shared/model/city-options/model";
 import { SAJU_CALENDAR_TYPE_OPTIONS } from "@/shared/model/saju-calendar/model";
 
@@ -29,7 +32,15 @@ export const birthYearOptions = Array.from(
 
 export const cityOptions = CITY_OPTIONS;
 
-export const birthTimeOptions = BIRTH_TIME_OPTIONS;
+export const birthHourOptions = [
+  { value: "", label: "시간 선택" },
+  ...HOUR_OPTIONS,
+];
+
+export const birthMinuteOptions = [
+  { value: "", label: "분 선택" },
+  ...MINUTE_OPTIONS,
+];
 
 export const calendarTypeOptions = SAJU_CALENDAR_TYPE_OPTIONS;
 

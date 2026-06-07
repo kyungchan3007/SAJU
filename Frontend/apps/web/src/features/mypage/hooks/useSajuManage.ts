@@ -5,14 +5,13 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuthScope } from "@/shared/app-infra/query-provider/auth-scope-context";
 import { fetchSajuProfileOnClient } from "@/entities/saju/client/fetchSajuProfileOnClient";
 import { updateSajuProfileOnClient } from "@/entities/saju/client/updateSajuProfileOnClient";
+import { SAJU_PROFILE_QUERY_KEY } from "@/features/saju-profile/model/query";
 import { JEONGTONGSAJU_QUERY_KEY, useJeongtongsaju } from "./useJeongtongsaju";
 import {
   toSajuManageFormValues,
   toSajuManageSummaryValues,
 } from "@/features/mypage/model/sajuManage";
 import type { SajuRequest } from "@/generated/api";
-
-export const SAJU_PROFILE_QUERY_KEY = ["saju-profile"] as const;
 
 export function useSajuManage() {
   const authScope = useAuthScope();

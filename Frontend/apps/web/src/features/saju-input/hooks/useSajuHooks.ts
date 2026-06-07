@@ -5,13 +5,24 @@ import type { Route } from "next";
 import { useRouter } from "next/navigation";
 
 import { SAJU_RESULT_QUERY_KEY } from "@/features/saju-result";
+import { SAJU_PROFILE_QUERY_KEY } from "@/features/saju-profile/model/query";
 import type { SajuFormValues } from "@/features/saju-input/type/type";
 import type { ApiEnvelope } from "@/shared/api";
+import {
+  buildLoginPath,
+  buildSajuInputPath,
+} from "@/shared/lib/internalRedirect";
 
-export const useSajuHooks = () => {
+type UseSajuHooksParams = {
+  nextPath?: Route | null;
+};
+
+export const useSajuHooks = ({ nextPath }: UseSajuHooksParams = {}) => {
   const router = useRouter();
   const queryClient = useQueryClient();
   const resultPath = "/saju/result" as Route;
+  const successPath = nextPath ?? resultPath;
+  const loginPath = buildLoginPath(buildSajuInputPath(nextPath));
 
   const handleSubmitSaju = async (formValues: SajuFormValues) => {
     const response = await fetch("/api/saju/result", {
@@ -28,7 +39,7 @@ export const useSajuHooks = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formValues),
       });
-      router.push("/login?intent=saju_submit");
+      router.push(loginPath);
       return;
     }
 
@@ -38,7 +49,8 @@ export const useSajuHooks = () => {
 
     const result = (await response.json()) as ApiEnvelope<unknown>;
     queryClient.setQueryData(SAJU_RESULT_QUERY_KEY, result);
-    router.push(resultPath);
+    queryClient.removeQueries({ queryKey: SAJU_PROFILE_QUERY_KEY });
+    router.push(successPath);
   };
 
   return {

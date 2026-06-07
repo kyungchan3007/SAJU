@@ -6,7 +6,8 @@ import ZodiacList from "@/domain/saju/guid-card/12zodiac/12zodiac";
 import { useSajuValidationToast } from "@/features/saju-input/hooks/useSajuValidationToast";
 import {
   cityOptions,
-  birthTimeOptions,
+  birthHourOptions,
+  birthMinuteOptions,
   birthYearOptions,
   calendarTypeOptions,
   genderOptions,
@@ -18,6 +19,7 @@ import type {
   TouchedSteps,
 } from "@/features/saju-input/type/type";
 import { Button, Input, Select } from "@/shared/ui";
+import { buildTimeString, parseTimeParts } from "@/shared/utils/Time";
 
 type SajuInputFieldsProps = {
   formValues: SajuFormValues;
@@ -50,6 +52,16 @@ export function SajuInputFields({
   } = useSajuValidationToast(formValues);
 
   const isTimeUnknown = formValues.timeUnknown === "yes";
+  const { hour: birthHour, minute: birthMinute } = parseTimeParts(
+    formValues.birthTime,
+  );
+
+  const handleChangeBirthTime = (part: "hour" | "minute", value: string) => {
+    const nextHour = part === "hour" ? value : birthHour;
+    const nextMinute = part === "minute" ? value : birthMinute;
+
+    onChangeField("birthTime", buildTimeString(nextHour, nextMinute));
+  };
 
   return (
     <Toast.Provider swipeDirection="right" duration={2200}>
@@ -156,15 +168,38 @@ export function SajuInputFields({
             <span className="text-xs font-bold text-gray-700">출생 시간</span>
             <div>
               <Select
-                value={formValues.birthTime}
-                onChange={(e) => onChangeField("birthTime", e.target.value)}
+                value={birthHour}
+                onChange={(e) => handleChangeBirthTime("hour", e.target.value)}
                 onBlur={() => onTouchStep("birthTime")}
                 disabled={isTimeUnknown}
-                name="birthTime"
+                name="birthHour"
                 autoComplete="off"
                 className="h-[50px] rounded-[14px] px-4 pr-9"
               >
-                {birthTimeOptions.map((o) => (
+                {birthHourOptions.map((o) => (
+                  <option key={o.value || "empty"} value={o.value}>
+                    {o.label}
+                  </option>
+                ))}
+              </Select>
+            </div>
+          </label>
+
+          <label className="flex flex-col gap-1.5">
+            <span className="text-xs font-bold text-gray-700">출생 분</span>
+            <div>
+              <Select
+                value={birthMinute}
+                onChange={(e) =>
+                  handleChangeBirthTime("minute", e.target.value)
+                }
+                onBlur={() => onTouchStep("birthTime")}
+                disabled={isTimeUnknown}
+                name="birthMinute"
+                autoComplete="off"
+                className="h-[50px] rounded-[14px] px-4 pr-9"
+              >
+                {birthMinuteOptions.map((o) => (
                   <option key={o.value || "empty"} value={o.value}>
                     {o.label}
                   </option>
@@ -206,9 +241,14 @@ export function SajuInputFields({
               role="switch"
               aria-checked={isTimeUnknown}
               aria-label="출생 시간 미상 여부"
-              onClick={() =>
-                onChangeField("timeUnknown", isTimeUnknown ? "no" : "yes")
-              }
+              onClick={() => {
+                const nextTimeUnknown = isTimeUnknown ? "no" : "yes";
+                onChangeField("timeUnknown", nextTimeUnknown);
+
+                if (nextTimeUnknown === "yes") {
+                  onChangeField("birthTime", "");
+                }
+              }}
               className="relative h-[22px] w-10 rounded-full border-none outline-none transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-[#5956E9] focus-visible:ring-offset-2"
               style={{ background: isTimeUnknown ? "#5956E9" : "#E5E7EB" }}
             >

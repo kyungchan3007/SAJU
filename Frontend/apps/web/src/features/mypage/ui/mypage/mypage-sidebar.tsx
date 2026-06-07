@@ -2,8 +2,8 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { fetchSajuProfileOnClient } from "@/entities/saju/client/fetchSajuProfileOnClient";
+import { SAJU_PROFILE_QUERY_KEY } from "@/features/saju-profile/model/query";
 import { useAuthScope } from "@/shared/app-infra/query-provider/auth-scope-context";
-import { SAJU_PROFILE_QUERY_KEY } from "../../hooks/useSajuManage";
 import { toMypageSajuSummaryItems } from "../../model/sajuSummary";
 import type { MypageUser } from "../../type/types";
 import { MypageProfileCard } from "./mypage-profile-card";

@@ -2,6 +2,10 @@ import {
   buildLoginPath,
   normalizePostLoginRedirect,
 } from "@/shared/api/auth/postLoginRedirect";
+import {
+  buildSajuInputPath,
+  buildSajuResultPath,
+} from "@/shared/lib/internalRedirect";
 import { describe, expect, it } from "vitest";
 
 describe("post login redirect", () => {
@@ -11,6 +15,12 @@ describe("post login redirect", () => {
     );
     expect(buildLoginPath("/community?tab=friend")).toBe(
       "/login?next=%2Fcommunity%3Ftab%3Dfriend",
+    );
+    expect(buildSajuInputPath("/community?tab=friend")).toBe(
+      "/saju?next=%2Fcommunity%3Ftab%3Dfriend",
+    );
+    expect(buildSajuResultPath("/community?tab=friend")).toBe(
+      "/saju/result?next=%2Fcommunity%3Ftab%3Dfriend",
     );
   });
 
