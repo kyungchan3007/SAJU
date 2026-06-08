@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { CheckCircle, Circle, Loader2, Sparkles } from "lucide-react";
+import { CheckCircle, Circle, Sparkles } from "lucide-react";
 import {
   useAdProgressGate,
   type AdProgressNoteState,
@@ -53,14 +53,8 @@ export function AdProgressGate({
         }}
       >
         <div className="mb-3 flex items-center justify-center gap-2">
-          {canRevealResult ? (
+          {canRevealResult && (
             <CheckCircle size={20} style={{ color: "rgba(255,255,255,0.9)" }} />
-          ) : (
-            <Loader2
-              size={20}
-              className="animate-spin"
-              style={{ color: "rgba(255,255,255,0.8)" }}
-            />
           )}
           <span
             className="text-xs font-bold uppercase tracking-widest"
@@ -161,9 +155,9 @@ function StatusNote({
         />
       ) : null}
       {state === "active" ? (
-        <Loader2
+        <Circle
           size={16}
-          className="mt-px shrink-0 animate-spin"
+          className="mt-px shrink-0"
           style={{ color: "#5956E9" }}
         />
       ) : null}

@@ -7,7 +7,7 @@ type Props = {
 const CIRCUMFERENCE = 2 * Math.PI * 44;
 
 export function TraditionalFortuneHeroBanner({ data }: Props) {
-  const score = data.score ?? 0;
+  const score = data.totalScore ?? 0;
   const offset = CIRCUMFERENCE * (1 - score / 100);
 
   return (
@@ -61,7 +61,7 @@ export function TraditionalFortuneHeroBanner({ data }: Props) {
               style={{ background: "#F0EEFF" }}
             >
               <span className="text-[11px] font-black text-[#5956E9]">
-                상위 {data.topPercentage}
+                {data.topPercentage}
               </span>
             </div>
           )}

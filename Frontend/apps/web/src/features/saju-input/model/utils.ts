@@ -40,7 +40,7 @@ export function getHighlightedZodiac(highlightedZodiacIndex: number | null) {
     : null;
 }
 
-//utils.ts 의
+// utils.ts 의
 // getStepStates 내부에서만 호출된다.
 export function getStepCompletionState(formValues: SajuFormValues) {
   const isBirthDateStepComplete =
@@ -55,15 +55,18 @@ export function getStepCompletionState(formValues: SajuFormValues) {
     !hasAnyBirthTimeSelection ||
     (hour !== "" && minute !== "");
   const isGenderStepComplete = formValues.gender !== "";
+  const isPrivacyConsentComplete = formValues.agreedToPrivacy;
 
   return {
     isBirthDateStepComplete,
     isBirthTimeStepComplete,
     isGenderStepComplete,
+    isPrivacyConsentComplete,
     isAllComplete:
       isBirthDateStepComplete &&
       isBirthTimeStepComplete &&
-      isGenderStepComplete,
+      isGenderStepComplete &&
+      isPrivacyConsentComplete,
   };
 }
 
@@ -125,9 +128,18 @@ export function getFirstIncompleteFieldMessage(formValues: SajuFormValues): {
     };
   }
 
+  if (!formValues.agreedToPrivacy) {
+    return {
+      title: "개인정보 수집·이용 동의를 확인해주세요.",
+      description:
+        "사주 분석에 필요한 개인정보 수집·이용 안내를 확인하고 동의해야 진행할 수 있습니다.",
+    };
+  }
+
   return {
-    title: "4단계 입력을 완료해 주세요",
-    description: "모든 항목을 채우면 오늘의 기운 보기가 가능합니다.",
+    title: "입력 항목을 모두 확인해주세요.",
+    description:
+      "필수 입력과 개인정보 수집·이용 동의를 완료해야 진행할 수 있습니다.",
   };
 }
 

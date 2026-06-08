@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "@saju/ui";
 import { useAuthScope } from "@/shared/app-infra/query-provider/auth-scope-context";
 import { fetchSajuProfileOnClient } from "@/entities/saju/client/fetchSajuProfileOnClient";
 import { updateSajuProfileOnClient } from "@/entities/saju/client/updateSajuProfileOnClient";
@@ -16,7 +17,6 @@ import type { SajuRequest } from "@/generated/api";
 export function useSajuManage() {
   const authScope = useAuthScope();
   const queryClient = useQueryClient();
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const sajuProfileQueryKey = [...SAJU_PROFILE_QUERY_KEY, authScope] as const;
   const jeongtongsajuQueryKey = [...JEONGTONGSAJU_QUERY_KEY, authScope] as const;
@@ -46,11 +46,10 @@ export function useSajuManage() {
   });
 
   function handleSave(payload: SajuRequest) {
-    setSuccessMessage(null);
     setErrorMessage(null);
 
     mutation.mutate(payload, {
-      onSuccess: () => setSuccessMessage("사주 정보가 수정됐습니다."),
+      onSuccess: () => toast.success("사주 정보가 수정됐습니다."),
       onError: (error) =>
         setErrorMessage(
           error instanceof Error ? error.message : "수정에 실패했습니다.",
@@ -64,7 +63,6 @@ export function useSajuManage() {
     initialValues: profile ? toSajuManageFormValues(profile) : null,
     summary: toSajuManageSummaryValues(traits),
     isPending: mutation.isPending,
-    successMessage,
     errorMessage,
     handleSave,
   };

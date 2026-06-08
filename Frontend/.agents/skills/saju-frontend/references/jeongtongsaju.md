@@ -66,10 +66,9 @@ type SajuResponse = {
 
 ```ts
 type TraditionalFortuneResponse = {
-  targetYear?: number;
-  yearDescription?: string;
+  description?: string;
   fiveElementsSummary?: string;
-  yearScore?: number;
+  totalScore?: number;
   topPercentage?: string;
   overallFortune?: string;
   favorablePeriods?: string;

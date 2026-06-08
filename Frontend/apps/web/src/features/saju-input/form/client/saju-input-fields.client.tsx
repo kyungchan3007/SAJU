@@ -1,6 +1,7 @@
-"use client";
+﻿"use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import * as Toast from "@radix-ui/react-toast";
 import ZodiacList from "@/domain/saju/guid-card/12zodiac/12zodiac";
 import { useSajuValidationToast } from "@/features/saju-input/hooks/useSajuValidationToast";
@@ -20,6 +21,7 @@ import type {
 } from "@/features/saju-input/type/type";
 import { Button, Input, Select } from "@/shared/ui";
 import { buildTimeString, parseTimeParts } from "@/shared/utils/Time";
+import type { Route } from "next";
 
 type SajuInputFieldsProps = {
   formValues: SajuFormValues;
@@ -50,7 +52,7 @@ export function SajuInputFields({
     validationToastMessage,
     showValidationToast,
   } = useSajuValidationToast(formValues);
-
+  const privacyPolicyHref = "/privacy-policy" as Route;
   const isTimeUnknown = formValues.timeUnknown === "yes";
   const { hour: birthHour, minute: birthMinute } = parseTimeParts(
     formValues.birthTime,
@@ -324,6 +326,39 @@ export function SajuInputFields({
 
         {/* ── 12간지 미니 그리드 ── */}
         <ZodiacList highlightedIndex={highlightedZodiacIndex} />
+
+        <div
+          className="mt-5 rounded-2xl px-4 py-4"
+          style={{ background: "#FAFAFA", border: "1px solid #F1F1F5" }}
+        >
+          <label className="flex cursor-pointer items-start gap-3">
+            <input
+              type="checkbox"
+              checked={formValues.agreedToPrivacy}
+              onChange={(e) =>
+                onChangeField("agreedToPrivacy", e.target.checked)
+              }
+              className="mt-0.5 h-4 w-4 rounded border-gray-300 text-[#5956E9] focus:ring-[#5956E9]"
+            />
+            <span className="min-w-0">
+              <span className="block text-sm font-semibold text-gray-900">
+                개인정보 수집·이용에 동의합니다.{" "}
+                <span className="text-[#5956E9]">*</span>
+              </span>
+              <span className="mt-1 block text-[12px] leading-5 text-gray-500">
+                사주 분석 결과 제공을 위해 생년월일, 출생시간, 성별, 출생지
+                정보를 수집하며, 자세한 내용은 개인정보처리방침에서 확인할 수
+                있습니다.
+              </span>
+            </span>
+          </label>
+          <Link
+            href={privacyPolicyHref}
+            className="mt-3 inline-flex text-[12px] font-semibold text-[#5956E9] underline underline-offset-2"
+          >
+            개인정보처리방침 보기
+          </Link>
+        </div>
 
         {/* ── 제출 버튼 ── */}
         <Button

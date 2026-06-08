@@ -1,12 +1,15 @@
+﻿import type { Route } from "next";
 import Link from "next/link";
 
-// [DS] 역할: 데스크톱 하단 브랜드/정책 링크 영역을 제공하는 전역 푸터.
-// [DS] 현재 사용처: app layout에서 전역 페이지 하단에 렌더링.
+// [DS] ??븷: ?곗뒪?ы넲 ?섎떒 釉뚮옖???뺤콉 留곹겕 ?곸뿭???쒓났?섎뒗 ?꾩뿭 ?명꽣.
+// [DS] ?꾩옱 ?ъ슜泥? app layout?먯꽌 ?꾩뿭 ?섏씠吏 ?섎떒???뚮뜑留?
+const privacyPolicyHref = "/privacy-policy" as Route;
+
 export function Footer() {
   return (
     <footer className="hidden bg-white px-8 py-10 md:block">
       <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-5">
-        {/* 브랜드 */}
+        {/* 釉뚮옖??*/}
         <div>
           <div className="mb-1 flex items-center gap-1.5">
             <svg width="14" height="14" viewBox="0 0 18 18" fill="none">
@@ -15,14 +18,14 @@ export function Footer() {
             <span className="text-sm font-black text-gray-900">SAJU:ME</span>
           </div>
           <p className="text-xs text-gray-400">
-            © 2026 SAJU:ME. All rights reserved.
+            짤 2026 SAJU:ME. All rights reserved.
           </p>
         </div>
 
-        {/* 링크 */}
+        {/* 留곹겕 */}
         <div className="flex gap-6">
           <Link
-            href="#"
+            href={privacyPolicyHref}
             className="text-xs text-gray-400 transition-colors hover:text-gray-600"
           >
             Privacy Policy
@@ -44,3 +47,5 @@ export function Footer() {
     </footer>
   );
 }
+
+

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { toast } from "@saju/ui";
 import { usePartners } from "@/features/mypage/hooks/usePartners";
 import {
   EMPTY_PARTNER_FORM_VALUES,
@@ -25,7 +26,6 @@ export function useSajuManagePartnersController() {
   const [deleteTarget, setDeleteTarget] = useState<PartnerDeleteTarget | null>(
     null,
   );
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const selectedPartner =
@@ -48,15 +48,10 @@ export function useSajuManagePartnersController() {
     ? (pendingNewPartner?.name ?? "")
     : (selectedPartner?.name ?? "");
 
-  function clearMessages() {
-    setSuccessMessage(null);
-    setErrorMessage(null);
-  }
-
   function selectTarget(target: SajuManageSelectedTarget) {
     setSelectedTarget(target);
     setPendingNewPartner(null);
-    clearMessages();
+    setErrorMessage(null);
   }
 
   function openAddModal() {
@@ -71,7 +66,7 @@ export function useSajuManagePartnersController() {
     setIsAddModalOpen(false);
     setPendingNewPartner({ name });
     setSelectedTarget(createTemporaryPartnerTarget());
-    clearMessages();
+    setErrorMessage(null);
   }
 
   function openDeleteModal(partnerId: number, partnerName: string) {
@@ -100,7 +95,7 @@ export function useSajuManagePartnersController() {
   }
 
   async function savePartner(payload: SajuRequest) {
-    clearMessages();
+    setErrorMessage(null);
 
     if (isNewPartnerMode && pendingNewPartner) {
       const partnerPayload = toPartnerRequest(pendingNewPartner.name, payload);
@@ -109,7 +104,7 @@ export function useSajuManagePartnersController() {
       if (result.id !== null) {
         setPendingNewPartner(null);
         setSelectedTarget(result.id);
-        setSuccessMessage(`${pendingNewPartner.name} 사주가 추가됐습니다.`);
+        toast.success(`${pendingNewPartner.name} 사주가 추가됐습니다.`);
         return;
       }
 
@@ -129,7 +124,7 @@ export function useSajuManagePartnersController() {
     );
 
     if (result.success) {
-      setSuccessMessage("사주 정보가 수정됐습니다.");
+      toast.success("사주 정보가 수정됐습니다.");
       return;
     }
 
@@ -147,7 +142,6 @@ export function useSajuManagePartnersController() {
     isPendingDelete: partnersHook.isPendingDelete,
     isAddModalOpen,
     deleteTarget,
-    successMessage,
     errorMessage,
     selectTarget,
     openAddModal,

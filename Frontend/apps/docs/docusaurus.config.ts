@@ -30,6 +30,18 @@ const config: Config = {
     locales: ["ko"],
   },
 
+  plugins: [
+    [
+      "@docusaurus/plugin-content-docs",
+      {
+        id: "api",
+        path: "api",
+        routeBasePath: "api",
+        sidebarPath: "./sidebars-api.ts",
+      },
+    ],
+  ],
+
   presets: [
     [
       "classic",
@@ -78,6 +90,13 @@ const config: Config = {
           label: "문서",
         },
         { to: "/blog", label: "블로그", position: "left" },
+        {
+          type: "docSidebar",
+          sidebarId: "apiSidebar",
+          docsPluginId: "api",
+          position: "left",
+          label: "API",
+        },
         {
           href: "https://github.com/proejct-saju/saju",
           label: "GitHub",

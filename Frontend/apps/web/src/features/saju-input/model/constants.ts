@@ -17,6 +17,7 @@ export const defaultFormValues: SajuFormValues = {
   birthTime: "",
   gender: "",
   timeUnknown: "no",
+  agreedToPrivacy: false,
 };
 
 export const defaultTouchedSteps: TouchedSteps = {

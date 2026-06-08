@@ -1,6 +1,5 @@
 {
   "$schema": "../../node_modules/wrangler/config-schema.json",
   "name": "saju-me-docs",
-  "account_id": "a83a4cf51f88f7b33e2e8a258f081900",
   "pages_build_output_dir": "./build"
 }

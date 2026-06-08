@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import type { PartnerResponse } from "@/generated/api";
 import {
   formatBirthDate,
@@ -71,10 +72,23 @@ export function CompatibilityPartnerModal({
         {/* 파트너 목록 */}
         <div className="flex max-h-[360px] flex-col gap-1.5 overflow-y-auto px-5 py-4 [scrollbar-width:thin]">
           {partners.length === 0 ? (
-            <div className="py-10 text-center text-[13px] text-slate-400">
-              등록된 상대가 없어요.
-              <br />
-              사주 관리에서 먼저 추가해주세요.
+            <div className="flex flex-col items-center gap-4 py-10 text-center">
+              <div className="text-[13px] text-slate-400">
+                등록된 상대가 없어요.
+                <br />
+                사주 관리에서 먼저 추가해주세요.
+              </div>
+              <Link
+                href="/mypage/saju-manage"
+                onClick={onCancel}
+                className="inline-flex h-[44px] items-center justify-center rounded-[12px] px-5 text-[13px] font-bold text-white transition hover:opacity-90"
+                style={{
+                  background: "linear-gradient(to right, #5956E9, #7C3AED)",
+                  boxShadow: "0 4px 16px rgba(89,86,233,0.26)",
+                }}
+              >
+                상대방 등록하러 가기
+              </Link>
             </div>
           ) : (
             partners.map((p) => {

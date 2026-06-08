@@ -6,14 +6,14 @@ import {
 } from "./support";
 
 test.describe("compatibility current flow", () => {
-  test.beforeEach(async ({ context, page, baseURL }) => {
+  test.beforeEach(async ({ context, baseURL }) => {
     await addAuthCookies(context, baseURL);
-    await mockCurrentProjectApis(page);
   });
 
   test("selects a partner and reveals compatibility result", async ({
     page,
   }) => {
+    await mockCurrentProjectApis(page);
     await page.goto("/compatibility");
 
     await expect(page.getByText("나의 정보")).toBeVisible();
@@ -47,5 +47,18 @@ test.describe("compatibility current flow", () => {
     await expect(page.getByText("최고예요")).toBeVisible();
     await expect(page.getByRole("button", { name: "다른 상대와 궁합 보기" })).toBeVisible();
     await expectNoHorizontalOverflow(page);
+  });
+
+  test("shows empty partner CTA and routes to saju manage", async ({
+    page,
+  }) => {
+    await mockCurrentProjectApis(page, { partners: [] });
+    await page.goto("/compatibility");
+
+    await page.getByRole("button", { name: /상대를 선택해주세요/ }).first().click();
+
+    await expect(page.getByRole("link", { name: "상대방 등록하러 가기" })).toBeVisible();
+    await page.getByRole("link", { name: "상대방 등록하러 가기" }).click();
+    await expect(page).toHaveURL(/\/mypage\/saju-manage$/);
   });
 });

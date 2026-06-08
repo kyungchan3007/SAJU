@@ -113,7 +113,11 @@ export function PartnerAddModal({
           </div>
         </div>
 
-        <div className="mt-7 flex gap-2">
+        <p className="mt-5 text-[11px] leading-relaxed text-slate-400">
+          타인의 정보를 입력하는 경우, 이용자는 해당 정보 주체로부터 사전 동의를 받을 책임이 있습니다.
+        </p>
+
+        <div className="mt-3 flex gap-2">
           <Button
             type="button"
             variant="outline"
@@ -129,7 +133,7 @@ export function PartnerAddModal({
             disabled={isPending || !name.trim()}
             className="h-auto flex-[2] rounded-xl py-3 text-sm font-bold disabled:opacity-50"
           >
-            {isPending ? "추가 중..." : "다음 — 사주 입력 →"}
+            {isPending ? "추가 중..." : "다음 사주 입력 →"}
           </Button>
         </div>
       </div>

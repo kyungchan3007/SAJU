@@ -2,16 +2,20 @@ import { expect, test, type Page } from "@playwright/test";
 import { addAuthCookies } from "./support";
 
 async function fillRequiredSajuFields(page: Page) {
-  await page.getByLabel("출생 연도").selectOption("1992");
-  await page.getByLabel("출생 월 / 일").fill("03 / 14");
-  await page.getByLabel("양력 / 음력").selectOption("SOLAR");
-  await page.getByLabel("성별").selectOption("MALE");
-  await page.getByLabel("출생 도시").selectOption("서울특별시");
+  await page.locator('select[name="birthYear"]').selectOption("1992");
+  await page.locator('input[name="birthDate"]').fill("03 / 14");
+  await page.locator('select[name="calendarType"]').selectOption("SOLAR");
+  await page.locator('select[name="gender"]').selectOption("MALE");
+  await page.locator('select[name="city"]').selectOption("서울특별시");
 }
 
 async function fillBirthTime(page: Page, hour: string, minute: string) {
-  await page.getByRole("combobox", { name: "출생 시간" }).selectOption(hour);
-  await page.getByRole("combobox", { name: "출생 분" }).selectOption(minute);
+  await page.locator('select[name="birthHour"]').selectOption(hour);
+  await page.locator('select[name="birthMinute"]').selectOption(minute);
+}
+
+async function agreeToPrivacy(page: Page) {
+  await page.getByRole("checkbox").check();
 }
 
 function submitButton(page: Page) {
@@ -36,10 +40,38 @@ test.describe("saju input flow", () => {
     expect(resultRequestCount).toBe(0);
   });
 
+  test("requires privacy consent before completed submit", async ({ page }) => {
+    let resultRequestCount = 0;
+    await page.route("**/api/saju/result", async (route) => {
+      resultRequestCount += 1;
+      await route.fulfill({ status: 500, body: "" });
+    });
+
+    await page.goto("/saju");
+    await fillRequiredSajuFields(page);
+    await expect(page.getByRole("checkbox")).not.toBeChecked();
+    await submitButton(page).click();
+
+    await expect(
+      page.getByText("개인정보 수집·이용 동의를 확인해주세요.", {
+        exact: true,
+      }),
+    ).toBeVisible();
+    expect(resultRequestCount).toBe(0);
+  });
+
+  test("shows privacy policy link in the input form", async ({ page }) => {
+    await page.goto("/saju");
+
+    await expect(
+      page.getByRole("link", { name: "개인정보처리방침 보기" }),
+    ).toHaveAttribute("href", "/privacy-policy");
+  });
+
   test("stores guest draft and moves to login after completed submit", async ({
     page,
   }) => {
-    let draftPayload: unknown = null;
+    let draftPayload: Record<string, unknown> | null = null;
 
     await page.route("**/api/saju/result", async (route) => {
       await route.fulfill({
@@ -54,7 +86,7 @@ test.describe("saju input flow", () => {
     });
 
     await page.route("**/api/saju/draft", async (route) => {
-      draftPayload = route.request().postDataJSON();
+      draftPayload = route.request().postDataJSON() as Record<string, unknown>;
       await route.fulfill({
         status: 200,
         contentType: "application/json",
@@ -64,6 +96,7 @@ test.describe("saju input flow", () => {
 
     await page.goto("/saju");
     await fillRequiredSajuFields(page);
+    await agreeToPrivacy(page);
     await submitButton(page).click();
 
     await expect(page).toHaveURL(/\/login\?next=%2Fsaju$/);
@@ -74,10 +107,11 @@ test.describe("saju input flow", () => {
       calendarType: "SOLAR",
       gender: "MALE",
     });
+    expect(draftPayload).not.toHaveProperty("agreedToPrivacy");
   });
 
   test("combines hour and minute selects into HH:MM", async ({ page }) => {
-    let draftPayload: unknown = null;
+    let draftPayload: Record<string, unknown> | null = null;
 
     await page.route("**/api/saju/result", async (route) => {
       await route.fulfill({
@@ -92,7 +126,7 @@ test.describe("saju input flow", () => {
     });
 
     await page.route("**/api/saju/draft", async (route) => {
-      draftPayload = route.request().postDataJSON();
+      draftPayload = route.request().postDataJSON() as Record<string, unknown>;
       await route.fulfill({
         status: 200,
         contentType: "application/json",
@@ -103,6 +137,7 @@ test.describe("saju input flow", () => {
     await page.goto("/saju");
     await fillRequiredSajuFields(page);
     await fillBirthTime(page, "9", "5");
+    await agreeToPrivacy(page);
     await submitButton(page).click();
 
     await expect(page).toHaveURL(/\/login\?next=%2Fsaju$/);
@@ -114,7 +149,7 @@ test.describe("saju input flow", () => {
   test("supports unknown birth time without blocking submission", async ({
     page,
   }) => {
-    let draftPayload: unknown = null;
+    let draftPayload: Record<string, unknown> | null = null;
 
     await page.route("**/api/saju/result", async (route) => {
       await route.fulfill({
@@ -129,7 +164,7 @@ test.describe("saju input flow", () => {
     });
 
     await page.route("**/api/saju/draft", async (route) => {
-      draftPayload = route.request().postDataJSON();
+      draftPayload = route.request().postDataJSON() as Record<string, unknown>;
       await route.fulfill({
         status: 200,
         contentType: "application/json",
@@ -139,7 +174,8 @@ test.describe("saju input flow", () => {
 
     await page.goto("/saju");
     await fillRequiredSajuFields(page);
-    await page.getByRole("switch", { name: "출생 시간 미상 여부" }).click();
+    await page.getByRole("switch").click();
+    await agreeToPrivacy(page);
     await submitButton(page).click();
 
     await expect(page).toHaveURL(/\/login\?next=%2Fsaju$/);
@@ -160,7 +196,8 @@ test.describe("saju input flow", () => {
 
     await page.goto("/saju");
     await fillRequiredSajuFields(page);
-    await page.getByRole("combobox", { name: "출생 시간" }).selectOption("9");
+    await page.locator('select[name="birthHour"]').selectOption("9");
+    await agreeToPrivacy(page);
     await submitButton(page).click();
 
     await expect(
@@ -194,6 +231,7 @@ test.describe("saju input flow", () => {
 
     await page.goto("/saju?next=%2Fcompatibility");
     await fillRequiredSajuFields(page);
+    await agreeToPrivacy(page);
     await submitButton(page).click();
 
     await expect(page).toHaveURL(
@@ -206,7 +244,10 @@ test.describe("saju input flow", () => {
     page,
     baseURL,
   }) => {
+    let resultPayload: Record<string, unknown> | null = null;
+
     await page.route("**/api/saju/result", async (route) => {
+      resultPayload = route.request().postDataJSON() as Record<string, unknown>;
       await route.fulfill({
         status: 200,
         contentType: "application/json",
@@ -224,8 +265,10 @@ test.describe("saju input flow", () => {
     await addAuthCookies(context, baseURL);
     await page.goto("/saju?next=%2Fcompatibility&forceInput=1");
     await fillRequiredSajuFields(page);
+    await agreeToPrivacy(page);
     await submitButton(page).click();
 
     await expect(page).toHaveURL(/\/compatibility$/);
+    expect(resultPayload).not.toHaveProperty("agreedToPrivacy");
   });
 });

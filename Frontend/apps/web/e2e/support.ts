@@ -227,6 +227,14 @@ export async function mockCurrentProjectApis(
     });
   });
 
+  await page.route("**/api/saju/traditional-fortune", async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify(traditionalFortune),
+    });
+  });
+
   await page.route("**/api/saju/zodiac-compatibility", async (route) => {
     await route.fulfill({
       status: 200,
@@ -550,6 +558,53 @@ const traditionalSaju = {
         isCurrentDaeun: true,
       },
     ],
+  },
+  error: null,
+};
+
+const traditionalFortune = {
+  success: true,
+  data: {
+    description: "2026년은 흐름을 다듬고 기반을 정리하는 해입니다.",
+    fiveElementsSummary: "금과 수의 기운을 보완하면 전체 흐름이 더 안정됩니다.",
+    totalScore: 87,
+    topPercentage: "15%",
+    overallFortune:
+      "상반기에는 기반을 정리하고 하반기에는 그 결과가 드러나는 흐름입니다.",
+    favorablePeriods: "3월, 8월, 11월",
+    cautiousPeriods: "5월, 9월",
+    wealth: {
+      flow: "수입보다 지출 관리가 더 중요한 해입니다.",
+      firstHalf: "고정비를 정리하면 재정 흐름이 안정됩니다.",
+      secondHalf: "작은 기회가 누적되어 실속 있는 결과로 이어집니다.",
+      advice: "무리한 확장보다 현금 흐름 점검이 우선입니다.",
+      score: 81,
+    },
+    love: {
+      flow: "감정 표현을 분명히 할수록 관계가 안정됩니다.",
+      inRelationship: "대화의 빈도를 유지하면 오해를 줄일 수 있습니다.",
+      single: "가까운 인연에서 자연스럽게 기회가 생깁니다.",
+      caution: "감정이 쌓이기 전에 먼저 말로 정리하는 편이 좋습니다.",
+      keyPoint: "타이밍보다 태도가 중요합니다.",
+      score: 84,
+    },
+    career: {
+      flow: "변화보다 정교한 실행이 성과를 만드는 시기입니다.",
+      firstHalf: "기존 업무를 정리하면서 신뢰를 쌓게 됩니다.",
+      secondHalf: "성과가 수치로 드러나며 역할이 넓어질 수 있습니다.",
+      advice: "급한 선택보다 기준을 명확히 두고 움직이는 편이 유리합니다.",
+      keyPoint: "정리된 실행력이 경쟁력입니다.",
+      score: 89,
+    },
+    health: {
+      flow: "컨디션 기복은 크지 않지만 누적 피로 관리가 중요합니다.",
+      seasonal: "환절기에는 수면 리듬과 체온 관리에 신경 써야 합니다.",
+      stressManagement: "짧더라도 규칙적인 회복 시간이 필요합니다.",
+      stressHabits: "과로 신호를 무시하지 않는 습관이 중요합니다.",
+      keyPoint: "무리하지 않는 루틴이 핵심입니다.",
+      score: 78,
+    },
+    yearCautions: "성과를 서두르기보다 일정과 체력을 함께 관리해야 합니다.",
   },
   error: null,
 };

@@ -1,6 +1,26 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
-import { AlertCircle, Inbox, Loader2 } from "lucide-react";
+import { AlertCircle, Inbox } from "lucide-react";
 import { cn } from "../utils";
+
+const ZODIAC = ["🐭","🐮","🐯","🐰","🐲","🐍","🐴","🐑","🐵","🐔","🐶","🐷"];
+
+function ZodiacSpinner() {
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    const id = setInterval(() => setIndex((i) => (i + 1) % ZODIAC.length), 500);
+    return () => clearInterval(id);
+  }, []);
+
+  return (
+    <span className="text-4xl" aria-hidden="true">
+      {ZODIAC[index]}
+    </span>
+  );
+}
 
 // [DS] 역할: loading/empty/error 상태를 카드 형태로 보여주는 공용 상태 표시 컴포넌트.
 // [DS] 현재 사용처: 마이페이지 사주 관리, 띠별 궁합, 정통사주/운세 섹션의 상태 화면.
@@ -45,12 +65,8 @@ export function StateCard({
 
 export function LoadingStateCard({ message }: { message: string }) {
   return (
-    <div className="flex flex-col items-center gap-3 rounded-saju-panel border border-surface-border bg-surface-card px-6 py-10 text-center shadow-saju-sm">
-      <Loader2
-        size={28}
-        className="animate-spin text-saju-primary"
-        aria-hidden="true"
-      />
+    <div className="flex min-h-[60vh] flex-col items-center justify-center gap-3 text-center">
+      <ZodiacSpinner />
       <p className="text-saju-section text-content-muted">{message}</p>
     </div>
   );

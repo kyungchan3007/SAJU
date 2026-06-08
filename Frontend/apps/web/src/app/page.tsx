@@ -14,7 +14,7 @@ const homeUrl = new URL("/", appUrl).toString();
 const ogImageUrl = new URL("/image/background.png", appUrl).toString();
 const homeTitle = "무료 사주 풀이와 궁합 확인";
 const homeDescription =
-  "사주팔자, 궁합, 오늘의 흐름을 한 곳에서 확인하세요. 무료 사주 풀이와 AI 기반 해석으로 운명과 인연의 방향을 살펴볼 수 있습니다.";
+  "사주팔자, 궁합, 오늘의 흐름을 한 곳에서 확인하세요. 무료 사주 풀이로 운명과 인연의 방향을 살펴볼 수 있습니다.";
 
 export const metadata: Metadata = {
   title: homeTitle,

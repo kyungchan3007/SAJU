@@ -14,7 +14,6 @@ import {
   ConfirmModal,
   EmptyStateCard,
   LoadingStateCard,
-  StatusMessage,
 } from "@/shared/ui";
 
 export function SajuManageSection() {
@@ -59,15 +58,6 @@ export function SajuManageSection() {
             onAdd={partners.openAddModal}
             onDelete={partners.openDeleteModal}
             disabled={partners.isPending}
-          />
-
-          {/* 성공/에러 메시지 */}
-          <StatusMessage
-            message={
-              partners.selectedTarget === "me"
-                ? sajuManage.successMessage
-                : partners.successMessage
-            }
           />
 
           {/* 나의 사주 요약 + 수정 폼 (나 선택 시) */}

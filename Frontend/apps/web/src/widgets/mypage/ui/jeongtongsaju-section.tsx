@@ -9,12 +9,12 @@ import { JeongtongsajuFiveElements } from "@/features/mypage/ui/jeongtongsaju/je
 import { JeongtongsajuTwelveGrowth } from "@/features/mypage/ui/jeongtongsaju/jeongtongsaju-twelve-growth";
 import { JeongtongsajuDaewoon } from "@/features/mypage/ui/jeongtongsaju/jeongtongsaju-daewoon";
 import { toJeongtongsajuViewModel } from "@/features/mypage/model/jeongtongsaju";
-import { Button } from "@/shared/ui";
 import {
+  Button,
   EmptyStateCard,
   ErrorStateCard,
   LoadingStateCard,
-} from "@/shared/ui/state-card/state-card";
+} from "@/shared/ui";
 
 export function JeongtongsajuSection() {
   const { data, isLoading, isError } = useJeongtongsaju();

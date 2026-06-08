@@ -4,13 +4,13 @@ import type { TraditionalFortuneResponse } from "@/generated/api";
 import type { JeongtongsajuViewModel } from "@/features/mypage/model/jeongtongsaju";
 import { TraditionalFortuneSection } from "@/features/traditional-fortune/ui/traditional-fortune-section";
 import type { ApiEnvelope } from "@/shared/api";
-import { Button } from "@/shared/ui";
-import { PageContentLayout } from "@/shared/ui/page-content-layout";
 import {
+  Button,
   EmptyStateCard,
   ErrorStateCard,
   LoadingStateCard,
-} from "@/shared/ui/state-card/state-card";
+} from "@/shared/ui";
+import { PageContentLayout } from "@/shared/ui/page-content-layout";
 
 import { JeongtongsajuDaewoon } from "./jeongtongsaju-daewoon";
 import { JeongtongsajuFiveElements } from "./jeongtongsaju-fiveelements";

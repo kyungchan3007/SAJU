@@ -12,6 +12,7 @@ export type SajuFormValues = {
   birthTime: string;
   gender: string;
   timeUnknown: string;
+  agreedToPrivacy: boolean;
 };
 
 export type TouchedSteps = {

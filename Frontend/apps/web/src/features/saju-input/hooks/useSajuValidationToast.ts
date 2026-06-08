@@ -6,8 +6,9 @@ import { getFirstIncompleteFieldMessage } from "@/features/saju-input/model/util
 import type { SajuFormValues } from "@/features/saju-input/type/type";
 
 const defaultValidationToastMessage = {
-  title: "4단계 입력을 완료해 주세요",
-  description: "모든 항목을 채우면 오늘의 기운 보기가 가능합니다.",
+  title: "입력 항목을 모두 확인해주세요.",
+  description:
+    "필수 입력과 개인정보 수집·이용 동의를 완료해야 진행할 수 있습니다.",
 };
 
 export function useSajuValidationToast(formValues: SajuFormValues) {

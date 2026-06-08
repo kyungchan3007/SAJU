@@ -11,6 +11,7 @@ import {
   USER_EMAIL_COOKIE_KEY,
 } from "@/shared/config/authToken";
 import { AppChromeOffset, Footer } from "@/shared/ui";
+import { Toaster } from "@saju/ui";
 import { GlobalNav } from "@/widgets/global-nav";
 import "@saju/design-tokens/css";
 import "./globals.css";
@@ -103,6 +104,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
             </main>
             <Footer />
           </AppChromeOffset>
+          <Toaster />
         </Providers>
       </body>
     </html>
