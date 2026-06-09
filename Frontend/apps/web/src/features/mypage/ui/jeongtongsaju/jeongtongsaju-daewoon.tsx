@@ -2,6 +2,13 @@ import {
   describeBigLuckGanji,
   formatBigLuckGanjiSummary,
 } from "@/shared/model/saju-ganji/utils";
+import {
+  CARD_BG_ACTIVE,
+  CARD_SHADOW,
+  CARD_SHADOW_ACTIVE,
+  SEGMENT_ACTIVE,
+  SEGMENT_INACTIVE,
+} from "../../model/sajuSummary";
 
 export type DaewoonItem = {
   pillar: string;
@@ -15,12 +22,6 @@ type Props = {
   bigLuck: DaewoonItem[];
   description?: string;
 };
-
-const SEGMENT_ACTIVE = "linear-gradient(90deg, #6C63FF 0%, #5B5CF0 100%)";
-const SEGMENT_INACTIVE = "#ECECF3";
-const CARD_BG_ACTIVE = "linear-gradient(135deg, #6C63FF 0%, #5B5CF0 100%)";
-const CARD_SHADOW_ACTIVE = "0 10px 30px rgba(91,92,240,0.25)";
-const CARD_SHADOW = "0 10px 30px rgba(0,0,0,0.06)";
 
 export function JeongtongsajuDaewoon({ bigLuck, description }: Props) {
   const currentItem = bigLuck.find((d) => d.isCurrentDaeun);
@@ -65,7 +66,7 @@ export function JeongtongsajuDaewoon({ bigLuck, description }: Props) {
                   boxShadow: isCurrent ? CARD_SHADOW_ACTIVE : CARD_SHADOW,
                 }}
               >
-                <div className="flex flex-col items-center gap-0.5 min-w-[48px]">
+                <div className="flex min-w-[48px] flex-col items-center gap-0.5">
                   <span
                     className="text-[22px] font-bold"
                     style={{ color: isCurrent ? "#fff" : "#9CA3AF" }}
@@ -75,7 +76,9 @@ export function JeongtongsajuDaewoon({ bigLuck, description }: Props) {
                   {summary && (
                     <span
                       className="text-[11px]"
-                      style={{ color: isCurrent ? "rgba(255,255,255,0.75)" : "#9CA3AF" }}
+                      style={{
+                        color: isCurrent ? "rgba(255,255,255,0.75)" : "#9CA3AF",
+                      }}
                     >
                       {summary}
                     </span>
@@ -84,13 +87,17 @@ export function JeongtongsajuDaewoon({ bigLuck, description }: Props) {
                 <div className="flex flex-col gap-0.5">
                   <span
                     className="text-[12px] font-medium"
-                    style={{ color: isCurrent ? "rgba(255,255,255,0.9)" : "#6B7280" }}
+                    style={{
+                      color: isCurrent ? "rgba(255,255,255,0.9)" : "#6B7280",
+                    }}
                   >
                     {item.age_range}
                   </span>
                   <span
                     className="text-[11px]"
-                    style={{ color: isCurrent ? "rgba(255,255,255,0.5)" : "#D1D5DB" }}
+                    style={{
+                      color: isCurrent ? "rgba(255,255,255,0.5)" : "#D1D5DB",
+                    }}
                   >
                     {item.year_range}
                   </span>
@@ -133,7 +140,9 @@ export function JeongtongsajuDaewoon({ bigLuck, description }: Props) {
                 >
                   <span
                     className="mb-1.5 text-[11px] font-medium"
-                    style={{ color: isCurrent ? "rgba(255,255,255,0.75)" : "#9CA3AF" }}
+                    style={{
+                      color: isCurrent ? "rgba(255,255,255,0.75)" : "#9CA3AF",
+                    }}
                   >
                     {item.age_range}
                   </span>
@@ -146,14 +155,18 @@ export function JeongtongsajuDaewoon({ bigLuck, description }: Props) {
                   {summary && (
                     <div
                       className="mb-1 text-[12px]"
-                      style={{ color: isCurrent ? "rgba(255,255,255,0.8)" : "#9CA3AF" }}
+                      style={{
+                        color: isCurrent ? "rgba(255,255,255,0.8)" : "#9CA3AF",
+                      }}
                     >
                       {summary}
                     </div>
                   )}
                   <div
                     className="text-[10px]"
-                    style={{ color: isCurrent ? "rgba(255,255,255,0.5)" : "#D1D5DB" }}
+                    style={{
+                      color: isCurrent ? "rgba(255,255,255,0.5)" : "#D1D5DB",
+                    }}
                   >
                     {item.year_range}
                   </div>

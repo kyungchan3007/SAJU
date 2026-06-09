@@ -30,15 +30,18 @@ sidebar_position: 3
 | `GET/POST` | `/api/saju` | 사주 조회·생성 |
 | `POST` | `/api/saju/draft` | 미로그인 임시저장 |
 | `POST` | `/api/saju/result` | 결과 조회 |
+| `GET/PUT` | `/api/saju/me` | 내 사주 프로필 조회·수정 |
 | `GET` | `/api/saju/traditional` | 정통사주 |
 | `GET` | `/api/saju/traditional-fortune` | 정통사주 풀이 |
 | `GET` | `/api/saju/me/year` | 신년운세 |
 | `GET` | `/api/saju/me/compatibility/[partnerId]` | 파트너 궁합 풀이 |
+| `GET` | `/api/saju/zodiac-compatibility` | 띠별 궁합 점수 |
 | `GET/POST` | `/api/partners` | 파트너 목록·생성 |
 | `GET/PUT/DELETE` | `/api/partners/[partnerId]` | 파트너 상세·수정·삭제 |
 | `GET/POST` | `/api/compatibility` | 궁합 결과 |
 | `GET/POST` | `/api/location` | 위치 추천 |
 | `GET` | `/api/location/search` | 위치 검색 |
+| `GET/POST` | `/api/food/recommend` | 음식 추천 |
 | `POST` | `/api/payment/verify` | 결제 검증 |
 | `GET/DELETE` | `/api/users/me` | 내 정보 조회·탈퇴 |
 | `GET` | `/api/auth/kakao` | 카카오 로그인 시작 |
@@ -48,7 +51,7 @@ sidebar_position: 3
 | `GET/POST` | `/api/auth/restore` | 탈퇴 복구 |
 | `GET` | `/api/notifications` | 알림 목록 |
 | `GET` | `/api/notifications/unread-count` | 미읽음 수 |
-| `POST` | `/api/notifications/[id]/read` | 알림 읽음 처리 |
+| `POST` | `/api/notifications/[notificationId]/read` | 알림 읽음 처리 |
 
 ## 규칙
 

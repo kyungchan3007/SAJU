@@ -2,7 +2,11 @@
 
 import { useState } from "react";
 import type { PartnerResponse } from "@/generated/api";
-import { MAX_PARTNERS, getPartnerAvatar } from "@/features/mypage/model/partner";
+import {
+  canAddPartner,
+  getPartnerAvatar,
+  getTotalSajuProfileCount,
+} from "@/features/mypage/model/partner";
 import type { SajuManageSelectedTarget } from "@/features/mypage/model/sajuManageTarget";
 
 type MyProfile = {
@@ -32,8 +36,8 @@ export function SajuCardList({
   disabled,
 }: Props) {
   const [isEditMode, setIsEditMode] = useState(false);
-  const total = partners.length + 1; // +1 for "me"
-  const canAdd = total < MAX_PARTNERS;
+  const total = getTotalSajuProfileCount(partners.length);
+  const canAdd = canAddPartner(partners.length);
   const isMySelected = selectedTarget === "me";
 
   const genderLabel =

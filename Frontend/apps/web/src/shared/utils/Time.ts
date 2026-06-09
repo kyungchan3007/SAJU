@@ -21,3 +21,16 @@ export function buildTimeString(hour: string, minute: string) {
 
   return `${formattedHour}:${formattedMinute}`;
 }
+
+export function updateTimeStringPart(
+  time: string | null | undefined,
+  part: "hour" | "minute",
+  value: string,
+) {
+  const { hour, minute } = parseTimeParts(time);
+
+  return buildTimeString(
+    part === "hour" ? value : hour,
+    part === "minute" ? value : minute,
+  );
+}

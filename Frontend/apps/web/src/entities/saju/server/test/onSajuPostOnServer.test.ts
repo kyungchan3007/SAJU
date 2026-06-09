@@ -1,4 +1,4 @@
-import { onSajuPostOnServer } from "@/entities/saju/server/onSajuPostOnServer";
+﻿import { onSajuPostOnServer } from "@/entities/saju/server/onSajuPostOnServer";
 import { SAJU_ENDPOINT_PATH } from "@/shared/config/endPoint";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -28,6 +28,8 @@ describe("onSajuPostOnServer", () => {
         birthTime: "",
         gender: "MALE",
         timeUnknown: "",
+        agreedToTerms: true,
+        agreedToPrivacy: true,
       }),
     ).resolves.toEqual({
       success: false,
@@ -48,6 +50,8 @@ describe("onSajuPostOnServer", () => {
         birthTime: "",
         gender: "male",
         timeUnknown: "",
+        agreedToTerms: true,
+        agreedToPrivacy: true,
       }),
     ).resolves.toEqual({
       success: false,
@@ -78,6 +82,8 @@ describe("onSajuPostOnServer", () => {
         birthTime: "",
         gender: "MALE",
         timeUnknown: "",
+        agreedToTerms: true,
+        agreedToPrivacy: true,
       }),
     ).resolves.toEqual({
       success: true,
@@ -99,6 +105,8 @@ describe("onSajuPostOnServer", () => {
       gender: "MALE",
       calendarType: "SOLAR",
       city: "서울",
+      termsConsent: true,
+      privacyConsent: true,
     });
   });
 });

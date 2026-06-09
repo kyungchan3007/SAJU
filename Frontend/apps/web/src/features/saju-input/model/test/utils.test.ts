@@ -6,7 +6,10 @@ import {
   getStepStates,
 } from "@/features/saju-input/model/utils";
 import type { InputStepItem } from "@/features/saju-input/step/step";
-import type { SajuFormValues, TouchedSteps } from "@/features/saju-input/type/type";
+import type {
+  SajuFormValues,
+  TouchedSteps,
+} from "@/features/saju-input/type/type";
 import { describe, expect, it } from "vitest";
 
 function createValidFormValues(): SajuFormValues {
@@ -14,10 +17,12 @@ function createValidFormValues(): SajuFormValues {
     birthYear: "1992",
     birthDate: "03/14",
     city: "서울",
-    calendarType: "solar",
+    calendarType: "SOLAR",
     birthTime: "",
-    gender: "male",
-    timeUnknown: "true",
+    gender: "MALE",
+    timeUnknown: "yes",
+    agreedToTerms: true,
+    agreedToPrivacy: true,
   };
 }
 
@@ -53,6 +58,8 @@ describe("step completion and messaging", () => {
       isBirthDateStepComplete: true,
       isBirthTimeStepComplete: true,
       isGenderStepComplete: true,
+      isTermsConsentComplete: true,
+      isPrivacyConsentComplete: true,
       isAllComplete: true,
     });
   });
@@ -67,9 +74,22 @@ describe("step completion and messaging", () => {
     expect(getFirstIncompleteFieldMessage(noCity).title).toBe("출생 도시를 선택해 주세요");
 
     const partialBirthTime = createValidFormValues();
+    partialBirthTime.timeUnknown = "no";
     partialBirthTime.birthTime = "09:";
     expect(getFirstIncompleteFieldMessage(partialBirthTime).title).toBe(
       "출생 시간을 끝까지 선택해 주세요",
+    );
+
+    const noTerms = createValidFormValues();
+    noTerms.agreedToTerms = false;
+    expect(getFirstIncompleteFieldMessage(noTerms).title).toBe(
+      "서비스 이용 동의를 확인해주세요.",
+    );
+
+    const noPrivacy = createValidFormValues();
+    noPrivacy.agreedToPrivacy = false;
+    expect(getFirstIncompleteFieldMessage(noPrivacy).title).toBe(
+      "개인정보 수집·이용 동의를 확인해주세요.",
     );
   });
 });

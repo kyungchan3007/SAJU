@@ -1,15 +1,14 @@
 ﻿import type { Route } from "next";
 import Link from "next/link";
 
-// [DS] ??븷: ?곗뒪?ы넲 ?섎떒 釉뚮옖???뺤콉 留곹겕 ?곸뿭???쒓났?섎뒗 ?꾩뿭 ?명꽣.
-// [DS] ?꾩옱 ?ъ슜泥? app layout?먯꽌 ?꾩뿭 ?섏씠吏 ?섎떒???뚮뜑留?
 const privacyPolicyHref = "/privacy-policy" as Route;
+const termsOfServiceHref = "/terms-of-service" as Route;
+const contactHref = "/contact" as Route;
 
 export function Footer() {
   return (
     <footer className="hidden bg-white px-8 py-10 md:block">
       <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-5">
-        {/* 釉뚮옖??*/}
         <div>
           <div className="mb-1 flex items-center gap-1.5">
             <svg width="14" height="14" viewBox="0 0 18 18" fill="none">
@@ -17,35 +16,30 @@ export function Footer() {
             </svg>
             <span className="text-sm font-black text-gray-900">SAJU:ME</span>
           </div>
-          <p className="text-xs text-gray-400">
-            짤 2026 SAJU:ME. All rights reserved.
-          </p>
+          <p className="text-xs text-gray-400">© 2026 SAJU:ME. All rights reserved.</p>
         </div>
 
-        {/* 留곹겕 */}
         <div className="flex gap-6">
           <Link
             href={privacyPolicyHref}
             className="text-xs text-gray-400 transition-colors hover:text-gray-600"
           >
-            Privacy Policy
+            개인정보처리방침
           </Link>
           <Link
-            href="#"
+            href={termsOfServiceHref}
             className="text-xs text-gray-400 transition-colors hover:text-gray-600"
           >
-            Terms of Service
+            서비스 이용약관
           </Link>
           <Link
-            href="#"
+            href={contactHref}
             className="text-xs text-gray-400 transition-colors hover:text-gray-600"
           >
-            Contact Us
+            문의하기
           </Link>
         </div>
       </div>
     </footer>
   );
 }
-
-

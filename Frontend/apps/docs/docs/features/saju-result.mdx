@@ -15,6 +15,10 @@ features/saju-result/
   ├── hooks/   ← 결과 조회, 캐시, 재시도 정책
   ├── model/   ← API 응답 매핑
   └── ui/
+      ├── analysis-pending-gate.client.tsx  ← 분석 대기 중 게이트
+      ├── rewarded-result-gate.client.tsx   ← 광고 시청 후 결과 공개 게이트
+      ├── auth-refresh-retry.client.tsx     ← 인증 토큰 갱신 후 자동 재시도
+      └── saju-element-animation.tsx        ← 오행 애니메이션 컴포넌트
 entities/saju/
 shared/lib/react-query/
 app/api/saju/result/route.ts

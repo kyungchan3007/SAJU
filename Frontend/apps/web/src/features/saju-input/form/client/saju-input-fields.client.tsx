@@ -1,31 +1,29 @@
-﻿"use client";
+"use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import * as Toast from "@radix-ui/react-toast";
+
 import ZodiacList from "@/domain/saju/guid-card/12zodiac/12zodiac";
+import { SajuInputConsentSection } from "@/features/saju-input/form/client/saju-input-consent-section";
 import { useSajuValidationToast } from "@/features/saju-input/hooks/useSajuValidationToast";
 import {
-  cityOptions,
   birthHourOptions,
   birthMinuteOptions,
   birthYearOptions,
   calendarTypeOptions,
+  cityOptions,
   genderOptions,
 } from "@/features/saju-input/model/constants";
-import type { InputStepItem } from "@/features/saju-input/step/step";
 import type {
   HighlightedZodiac,
   SajuFormValues,
   TouchedSteps,
 } from "@/features/saju-input/type/type";
-import { Button, Input, Select } from "@/shared/ui";
-import { buildTimeString, parseTimeParts } from "@/shared/utils/Time";
-import type { Route } from "next";
+import { BirthTimeFields, Button, Input, Select } from "@/shared/ui";
+import { parseTimeParts, updateTimeStringPart } from "@/shared/utils/Time";
 
 type SajuInputFieldsProps = {
   formValues: SajuFormValues;
-  stepStates: InputStepItem[];
   highlightedZodiac: HighlightedZodiac | null;
   highlightedZodiacIndex: number | null;
   onChangeField: <K extends keyof SajuFormValues>(
@@ -33,6 +31,7 @@ type SajuInputFieldsProps = {
     value: SajuFormValues[K],
   ) => void;
   onTouchStep: (step: keyof TouchedSteps) => void;
+  showConsentSection: boolean;
   isFormComplete: boolean;
   onSubmitSaju: () => void;
 };
@@ -43,6 +42,7 @@ export function SajuInputFields({
   highlightedZodiacIndex,
   onChangeField,
   onTouchStep,
+  showConsentSection,
   isFormComplete,
   onSubmitSaju,
 }: SajuInputFieldsProps) {
@@ -52,22 +52,29 @@ export function SajuInputFields({
     validationToastMessage,
     showValidationToast,
   } = useSajuValidationToast(formValues);
-  const privacyPolicyHref = "/privacy-policy" as Route;
   const isTimeUnknown = formValues.timeUnknown === "yes";
   const { hour: birthHour, minute: birthMinute } = parseTimeParts(
     formValues.birthTime,
   );
 
   const handleChangeBirthTime = (part: "hour" | "minute", value: string) => {
-    const nextHour = part === "hour" ? value : birthHour;
-    const nextMinute = part === "minute" ? value : birthMinute;
+    onChangeField(
+      "birthTime",
+      updateTimeStringPart(formValues.birthTime, part, value),
+    );
+  };
 
-    onChangeField("birthTime", buildTimeString(nextHour, nextMinute));
+  const handleToggleTimeUnknown = () => {
+    const nextTimeUnknown = isTimeUnknown ? "no" : "yes";
+    onChangeField("timeUnknown", nextTimeUnknown);
+
+    if (nextTimeUnknown === "yes") {
+      onChangeField("birthTime", "");
+    }
   };
 
   return (
     <Toast.Provider swipeDirection="right" duration={2200}>
-      {/* ── 입력 폼 그리드 ── */}
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -79,7 +86,6 @@ export function SajuInputFields({
         }}
       >
         <div className="grid grid-cols-2 gap-[18px]">
-          {/* 출생 연도 */}
           <label className="flex flex-col gap-1.5">
             <span className="text-xs font-bold text-gray-700">
               출생 연도 <span style={{ color: "#5956E9" }}>*</span>
@@ -102,7 +108,6 @@ export function SajuInputFields({
             </div>
           </label>
 
-          {/* 출생 월/일 */}
           <label className="flex flex-col gap-1.5">
             <span className="text-xs font-bold text-gray-700">
               출생 월 / 일 <span style={{ color: "#5956E9" }}>*</span>
@@ -119,7 +124,6 @@ export function SajuInputFields({
             />
           </label>
 
-          {/* 양력/음력 */}
           <label className="flex flex-col gap-1.5">
             <span className="text-xs font-bold text-gray-700">
               양력 / 음력 <span style={{ color: "#5956E9" }}>*</span>
@@ -142,7 +146,6 @@ export function SajuInputFields({
             </div>
           </label>
 
-          {/* 성별 */}
           <label className="flex flex-col gap-1.5">
             <span className="text-xs font-bold text-gray-700">
               성별 <span style={{ color: "#5956E9" }}>*</span>
@@ -165,52 +168,17 @@ export function SajuInputFields({
             </div>
           </label>
 
-          {/* 출생 시간 */}
-          <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-bold text-gray-700">출생 시간</span>
-            <div>
-              <Select
-                value={birthHour}
-                onChange={(e) => handleChangeBirthTime("hour", e.target.value)}
-                onBlur={() => onTouchStep("birthTime")}
-                disabled={isTimeUnknown}
-                name="birthHour"
-                autoComplete="off"
-                className="h-[50px] rounded-[14px] px-4 pr-9"
-              >
-                {birthHourOptions.map((o) => (
-                  <option key={o.value || "empty"} value={o.value}>
-                    {o.label}
-                  </option>
-                ))}
-              </Select>
-            </div>
-          </label>
+          <BirthTimeFields
+            birthHour={birthHour}
+            birthMinute={birthMinute}
+            isTimeUnknown={isTimeUnknown}
+            hourOptions={birthHourOptions}
+            minuteOptions={birthMinuteOptions}
+            onChangeBirthTime={handleChangeBirthTime}
+            onTouchBirthTime={() => onTouchStep("birthTime")}
+            onToggleTimeUnknown={handleToggleTimeUnknown}
+          />
 
-          <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-bold text-gray-700">출생 분</span>
-            <div>
-              <Select
-                value={birthMinute}
-                onChange={(e) =>
-                  handleChangeBirthTime("minute", e.target.value)
-                }
-                onBlur={() => onTouchStep("birthTime")}
-                disabled={isTimeUnknown}
-                name="birthMinute"
-                autoComplete="off"
-                className="h-[50px] rounded-[14px] px-4 pr-9"
-              >
-                {birthMinuteOptions.map((o) => (
-                  <option key={o.value || "empty"} value={o.value}>
-                    {o.label}
-                  </option>
-                ))}
-              </Select>
-            </div>
-          </label>
-
-          {/* 출생 도시 */}
           <label className="flex flex-col gap-1.5">
             <span className="text-xs font-bold text-gray-700">출생 도시</span>
             <div>
@@ -232,43 +200,6 @@ export function SajuInputFields({
           </label>
         </div>
 
-        {/* ── 시간 미상 토글 ── */}
-        <div className="mt-4 flex items-center justify-between">
-          <span className="text-xs font-semibold text-gray-500">
-            출생 시간을 모르시나요?
-          </span>
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              role="switch"
-              aria-checked={isTimeUnknown}
-              aria-label="출생 시간 미상 여부"
-              onClick={() => {
-                const nextTimeUnknown = isTimeUnknown ? "no" : "yes";
-                onChangeField("timeUnknown", nextTimeUnknown);
-
-                if (nextTimeUnknown === "yes") {
-                  onChangeField("birthTime", "");
-                }
-              }}
-              className="relative h-[22px] w-10 rounded-full border-none outline-none transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-[#5956E9] focus-visible:ring-offset-2"
-              style={{ background: isTimeUnknown ? "#5956E9" : "#E5E7EB" }}
-            >
-              <span
-                className="absolute top-[3px] h-4 w-4 rounded-full bg-white shadow transition-all duration-200"
-                style={{ left: isTimeUnknown ? "21px" : "3px" }}
-              />
-            </button>
-            <span
-              className="text-[11px] font-semibold"
-              style={{ color: isTimeUnknown ? "#5956E9" : "#9CA3AF" }}
-            >
-              {isTimeUnknown ? "시간 미상 선택됨" : "시간 미상"}
-            </span>
-          </div>
-        </div>
-
-        {/* ── 띠 미리보기 ── */}
         <div
           className="mt-5 flex items-center gap-3.5 rounded-2xl px-4 py-4"
           style={{ background: "#FAFAFA" }}
@@ -324,43 +255,21 @@ export function SajuInputFields({
           </div>
         </div>
 
-        {/* ── 12간지 미니 그리드 ── */}
         <ZodiacList highlightedIndex={highlightedZodiacIndex} />
 
-        <div
-          className="mt-5 rounded-2xl px-4 py-4"
-          style={{ background: "#FAFAFA", border: "1px solid #F1F1F5" }}
-        >
-          <label className="flex cursor-pointer items-start gap-3">
-            <input
-              type="checkbox"
-              checked={formValues.agreedToPrivacy}
-              onChange={(e) =>
-                onChangeField("agreedToPrivacy", e.target.checked)
-              }
-              className="mt-0.5 h-4 w-4 rounded border-gray-300 text-[#5956E9] focus:ring-[#5956E9]"
-            />
-            <span className="min-w-0">
-              <span className="block text-sm font-semibold text-gray-900">
-                개인정보 수집·이용에 동의합니다.{" "}
-                <span className="text-[#5956E9]">*</span>
-              </span>
-              <span className="mt-1 block text-[12px] leading-5 text-gray-500">
-                사주 분석 결과 제공을 위해 생년월일, 출생시간, 성별, 출생지
-                정보를 수집하며, 자세한 내용은 개인정보처리방침에서 확인할 수
-                있습니다.
-              </span>
-            </span>
-          </label>
-          <Link
-            href={privacyPolicyHref}
-            className="mt-3 inline-flex text-[12px] font-semibold text-[#5956E9] underline underline-offset-2"
-          >
-            개인정보처리방침 보기
-          </Link>
-        </div>
+        {showConsentSection ? (
+          <SajuInputConsentSection
+            agreedToTerms={formValues.agreedToTerms}
+            agreedToPrivacy={formValues.agreedToPrivacy}
+            onChangeAgreedToTerms={(checked) =>
+              onChangeField("agreedToTerms", checked)
+            }
+            onChangeAgreedToPrivacy={(checked) =>
+              onChangeField("agreedToPrivacy", checked)
+            }
+          />
+        ) : null}
 
-        {/* ── 제출 버튼 ── */}
         <Button
           type="submit"
           className="mt-5 h-[54px] w-full rounded-2xl text-base font-black"
@@ -372,7 +281,6 @@ export function SajuInputFields({
         </p>
       </form>
 
-      {/* ── Toast ── */}
       <Toast.Root
         open={isValidationToastOpen}
         onOpenChange={setValidationToastOpen}

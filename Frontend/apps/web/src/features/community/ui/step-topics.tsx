@@ -1,4 +1,4 @@
-import type {
+﻿import type {
   CommunityTopicOption,
   MeetingType,
 } from "@/features/community/model/community";
@@ -69,6 +69,7 @@ export function StepTopics({
 }: Props) {
   const isFriendLocked = selectedType === "meeting";
   const isMeetingLocked = selectedType === "friend";
+  const selectedCount = selectedTopics.length;
 
   return (
     <div>
@@ -82,8 +83,33 @@ export function StepTopics({
         </span>
       </div>
       <p className="mb-5 ml-10 text-[13px] text-gray-400">
-        관심 있는 주제를 선택해주세요. (복수 선택 가능)
+        관심 있는 주제를 선택해 주세요. 복수 선택은 최대 2개까지 가능합니다.
       </p>
+
+      <div className="mb-5 ml-10 rounded-2xl border border-[#E5E7EB] bg-white px-4 py-3">
+        <div className="flex items-center justify-between gap-3">
+          <p className="text-[12px] font-bold text-slate-500">선택한 주제</p>
+          <span className="text-[12px] font-black text-[#5956E9]">
+            {selectedCount}/2 선택
+          </span>
+        </div>
+        <div className="mt-3 flex min-h-8 flex-wrap gap-2">
+          {selectedTopics.length > 0 ? (
+            selectedTopics.map((topic) => (
+              <span
+                key={topic}
+                className="rounded-full bg-[#F0EEFF] px-3 py-1 text-[12px] font-bold text-[#5956E9]"
+              >
+                {topic}
+              </span>
+            ))
+          ) : (
+            <span className="text-[12px] text-slate-400">
+              아직 선택한 주제가 없습니다.
+            </span>
+          )}
+        </div>
+      </div>
 
       {isLoadingTopics ? (
         <p className="rounded-2xl bg-[#F8F9FF] px-4 py-3 text-[12px] font-semibold text-[#5956E9]">
@@ -97,7 +123,7 @@ export function StepTopics({
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div className="relative overflow-hidden rounded-[20px] border-[1.5px] border-[#E0DAFF] bg-[#F9F8FF] p-5">
             <div className="mb-4 border-b border-gray-100 pb-3 text-center text-[13px] font-extrabold text-[#5956E9]">
-              친구만들기 선택 주제
+              친구 만들기 선택 주제
             </div>
             <div className="grid grid-cols-3 gap-2">
               {friendTopics.map(({ id, icon, label, elementColor, wide }) => (
@@ -139,7 +165,7 @@ export function StepTopics({
               ))}
             </div>
             {isMeetingLocked && (
-              <LockedOverlay label="친구만들기 유형을 선택했어요." />
+              <LockedOverlay label="친구 만들기 유형을 선택했어요." />
             )}
           </div>
         </div>

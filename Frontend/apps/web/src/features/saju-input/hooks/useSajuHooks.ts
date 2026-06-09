@@ -25,21 +25,19 @@ export const useSajuHooks = ({ nextPath }: UseSajuHooksParams = {}) => {
   const loginPath = buildLoginPath(buildSajuInputPath(nextPath));
 
   const handleSubmitSaju = async (formValues: SajuFormValues) => {
-    const { agreedToPrivacy: _agreedToPrivacy, ...payload } = formValues;
-
     const response = await fetch("/api/saju/result", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(payload),
+      body: JSON.stringify(formValues),
     });
 
     if (response.status === 401) {
       await fetch("/api/saju/draft", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(formValues),
       });
       router.push(loginPath);
       return;

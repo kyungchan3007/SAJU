@@ -24,9 +24,57 @@ app/(main)/mypage/
 
 widgets/mypage/
 features/mypage/
+  ├── hooks/
+  ├── model/
+  ├── type/
+  └── ui/
+      ├── account/       ← 계정 관련 UI
+      ├── jeongtongsaju/ ← 정통사주 컴포넌트 (hero, pillars, daewoon 등)
+      ├── manage/        ← 사주 관리 (아래 참조)
+      └── mypage/        ← 마이페이지 메인 UI
 entities/user/
 entities/saju/
+entities/partner/        ← 파트너 CRUD 서버·클라이언트 통신
 ```
+
+### `features/mypage/ui/manage/` 구조
+
+```
+manage/
+├── saju-card-list.tsx          ← 나의 사주 + 파트너 카드 목록
+├── partner-add-modal.tsx       ← 1단계: 이름·관계 입력 모달
+├── saju-manage-partner-panel.tsx ← 2단계: 파트너 사주 정보 입력 패널
+├── saju-manage-form.tsx        ← 사주 정보 입력 폼 (공용)
+├── saju-manage-summary.tsx     ← 나의 사주 요약
+└── saju-manage-birth-date-fields.tsx
+```
+
+## 파트너 사주 등록 — 2단계 UX
+
+파트너 추가는 **모달(1단계) → 패널(2단계)** 순서의 명확한 2단계 흐름으로 동작합니다.
+
+### 1단계: `partner-add-modal.tsx`
+- `SajuCardList` 상단의 **'사주 추가'** 버튼 클릭으로 진입
+- 입력: 이름·관계 (`FRIEND | ROMANTIC | FAMILY | OTHER`)
+- 완료 버튼 라벨: `"완료 · 사주 정보 입력하기 →"`
+- 모달 상단에 단계 표시 칩이 있음 (`① 기본 정보 → ② 사주 정보`)
+
+### 2단계: `saju-manage-partner-panel.tsx`
+- 1단계 완료 직후 자동으로 활성화되어 사주 정보 폼이 표시됨
+- 패널 상단 헤더에 `② 사주 정보 입력` 뱃지 표시
+- 아직 진행 전이면 `LockedPartnerPanel`(잠금 안내)이 대신 표시됨
+
+### 모바일 레이아웃 순서
+
+```
+SajuCardList (나 + 파트너 카드)
+  ↓
+LockedPartnerPanel / SajuManagePartnerPanel  ← 파트너 섹션이 먼저
+  ↓
+SajuManageSummary + SajuManageForm           ← 나의 사주 폼
+```
+
+파트너 패널을 나의 사주 폼보다 위에 배치해 모바일에서 2단계 안내가 바로 보이게 합니다.
 
 ## 서브 페이지
 

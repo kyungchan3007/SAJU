@@ -1,15 +1,11 @@
 "use client";
 
-import type { ReactNode } from "react";
-import { CheckCircle, Circle, Sparkles } from "lucide-react";
-import {
-  useAdProgressGate,
-  type AdProgressNoteState,
-} from "@/shared/hooks/use-ad-progress-gate";
+import { CheckCircle, Loader2, Sparkles } from "lucide-react";
+
+import { useAdProgressGate } from "@/shared/hooks/use-ad-progress-gate";
+import { AdProgressNote } from "@/shared/ui/ad-progress-note";
 import { AdSlot } from "@/shared/ui/ad-slot.client";
 
-// [DS] 역할: 결과 공개 전 광고 슬롯과 분석 진행률을 함께 보여주는 게이트 UI.
-// [DS] 현재 사용처: 사주 결과 대기/보상형 공개, 궁합/신년운세/정통사주 결과 공개 흐름.
 type AdProgressGateProps = {
   progress: number;
   isComplete?: boolean;
@@ -53,8 +49,14 @@ export function AdProgressGate({
         }}
       >
         <div className="mb-3 flex items-center justify-center gap-2">
-          {canRevealResult && (
+          {canRevealResult ? (
             <CheckCircle size={20} style={{ color: "rgba(255,255,255,0.9)" }} />
+          ) : (
+            <Loader2
+              size={20}
+              className="animate-spin"
+              style={{ color: "rgba(255,255,255,0.8)" }}
+            />
           )}
           <span
             className="text-xs font-bold uppercase tracking-widest"
@@ -63,7 +65,7 @@ export function AdProgressGate({
             분석 중
           </span>
         </div>
-        <p className="xs sm:texdt-xl mb-1 text-sm font-black text-white">
+        <p className="mb-1 text-sm font-black text-white sm:text-xl">
           사주 운세를 분석하고 있어요
         </p>
         <p
@@ -73,7 +75,6 @@ export function AdProgressGate({
           잠시만 기다려 주세요
         </p>
 
-        {/* 프로그레스 바 */}
         <div className="mt-4">
           <div className="mb-2 flex items-center justify-between">
             <span
@@ -105,10 +106,10 @@ export function AdProgressGate({
       <AdSlot />
 
       <div className="flex flex-col gap-2.5">
-        <StatusNote state="done">사주 정보를 확인했어요</StatusNote>
-        <StatusNote state={n1State}>오행 기운을 분석하고 있어요</StatusNote>
-        <StatusNote state={n2State}>오늘의 운세를 계산하고 있어요</StatusNote>
-        <StatusNote state={n3State}>결과를 정리하고 있어요</StatusNote>
+        <AdProgressNote state="done">사주 정보를 확인했어요</AdProgressNote>
+        <AdProgressNote state={n1State}>오행 기운을 분석하고 있어요</AdProgressNote>
+        <AdProgressNote state={n2State}>오늘의 운세를 계산하고 있어요</AdProgressNote>
+        <AdProgressNote state={n3State}>결과를 정리하고 있어요</AdProgressNote>
       </div>
 
       {canRevealResult && handleRevealResult ? (
@@ -122,53 +123,5 @@ export function AdProgressGate({
         </button>
       ) : null}
     </section>
-  );
-}
-
-function StatusNote({
-  state,
-  children,
-}: {
-  state: AdProgressNoteState;
-  children: ReactNode;
-}) {
-  const styles: Record<
-    AdProgressNoteState,
-    { bg: string; border: string; color: string }
-  > = {
-    pending: { bg: "#fff", border: "#F3F4F6", color: "#374151" },
-    active: { bg: "#F0EEFF", border: "#C7C4F8", color: "#5956E9" },
-    done: { bg: "#F0FDF4", border: "#BBF7D0", color: "#166534" },
-  };
-  const s = styles[state];
-
-  return (
-    <div
-      className="flex items-start gap-2.5 rounded-[14px] border px-4 py-3 text-[13px] font-semibold transition-all duration-300"
-      style={{ background: s.bg, borderColor: s.border, color: s.color }}
-    >
-      {state === "done" ? (
-        <CheckCircle
-          size={16}
-          className="mt-px shrink-0"
-          style={{ color: "#16A34A" }}
-        />
-      ) : null}
-      {state === "active" ? (
-        <Circle
-          size={16}
-          className="mt-px shrink-0"
-          style={{ color: "#5956E9" }}
-        />
-      ) : null}
-      {state === "pending" ? (
-        <Circle
-          size={16}
-          className="mt-px shrink-0"
-          style={{ color: "#D1D5DB" }}
-        />
-      ) : null}
-      <span>{children}</span>
-    </div>
   );
 }

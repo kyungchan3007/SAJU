@@ -1,6 +1,5 @@
 import Image from "next/image";
 import type { Route } from "next";
-import { steps } from "@/domain/saju/guid-card/12zodiac/model/model";
 import { SajuInputFieldsContainer } from "@/features/saju-input/form/client/saju-input-fields.container";
 import { SajuInputHintAccordion } from "@/features/saju-input/form/client/saju-input-hint-accordion";
 
@@ -74,7 +73,7 @@ export function SajuInputForm({ nextPath }: SajuInputFormProps) {
         {/* 안내 박스 — 아코디언 */}
         <SajuInputHintAccordion />
 
-        <SajuInputFieldsContainer steps={steps} nextPath={nextPath} />
+        <SajuInputFieldsContainer nextPath={nextPath} />
       </section>
     </div>
   );

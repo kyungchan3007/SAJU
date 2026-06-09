@@ -1,4 +1,8 @@
-import { buildTimeString, parseTimeParts } from "@/shared/utils/Time";
+import {
+  buildTimeString,
+  parseTimeParts,
+  updateTimeStringPart,
+} from "@/shared/utils/Time";
 import { describe, expect, it } from "vitest";
 
 describe("parseTimeParts", () => {
@@ -23,5 +27,17 @@ describe("buildTimeString", () => {
     expect(buildTimeString("9", "")).toBe("09:");
     expect(buildTimeString("", "30")).toBe(":30");
     expect(buildTimeString("", "")).toBe("");
+  });
+});
+
+describe("updateTimeStringPart", () => {
+  it("updates a single time part while preserving the other", () => {
+    expect(updateTimeStringPart("09:05", "hour", "10")).toBe("10:05");
+    expect(updateTimeStringPart("09:05", "minute", "30")).toBe("09:30");
+  });
+
+  it("supports partial selections from empty state", () => {
+    expect(updateTimeStringPart("", "hour", "9")).toBe("09:");
+    expect(updateTimeStringPart("", "minute", "15")).toBe(":15");
   });
 });

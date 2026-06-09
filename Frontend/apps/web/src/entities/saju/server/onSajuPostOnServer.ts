@@ -1,5 +1,5 @@
 import type { SajuFormValues } from "@/features/saju-input/type/type";
-import type { DailyEnergyResponse, SajuRequest } from "@/generated/api";
+import type { DailyEnergyResponse, SajuCreateRequest } from "@/generated/api";
 import {
   authenticatedBackendFetch,
   type AuthenticatedBackendFetchOptions,
@@ -53,12 +53,14 @@ export async function onSajuPostOnServer(
     };
   }
 
-  const payload: SajuRequest = {
+  const payload: SajuCreateRequest = {
     birthTime: formValues.birthTime || null,
     gender: formValues.gender,
     calendarType: toBackendSajuCalendarType(formValues.calendarType),
     birthDate,
     city: formValues.city || null,
+    termsConsent: formValues.agreedToTerms,
+    privacyConsent: formValues.agreedToPrivacy,
   };
 
   const result = await authenticatedBackendFetch(
@@ -87,6 +89,6 @@ export async function onSajuPostOnServer(
   };
 }
 
-function isSajuGender(value: string): value is SajuRequest["gender"] {
+function isSajuGender(value: string): value is SajuCreateRequest["gender"] {
   return value === "MALE" || value === "FEMALE";
 }

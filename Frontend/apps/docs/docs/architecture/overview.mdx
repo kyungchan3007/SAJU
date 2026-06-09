@@ -72,9 +72,25 @@ shared/
 ├── hooks/
 ├── lib/
 ├── model/        ← 오행, 간지, 만세력 등 사주 도메인 공용 모델
-├── ui/           ← button, input, card 등 공용 컴포넌트
+├── ui/           ← 공용 컴포넌트 (아래 참조)
 └── utils/
 ```
+
+주요 `shared/ui/` 컴포넌트:
+
+| 컴포넌트 | 역할 |
+|----------|------|
+| `page-content-layout.tsx` | `bg-[#F4F2FC]` + `max-w-[1152px]` 페이지 레이아웃 래퍼 |
+| `page-container.tsx` | 일반 페이지 컨테이너 |
+| `fortune-page-layout.tsx` | 생성형 풀이 전용 레이아웃 |
+| `saju-hero-card-shell.tsx` | 사주 히어로 카드 공통 쉘 |
+| `trait-mini-card.tsx` | 특성 요약 미니 카드 (`variant` prop으로 dark/default 분기) |
+| `segmented-button-group.tsx` | 세그먼트 버튼 그룹 |
+| `ad-progress-gate.client.tsx` | 광고 시청 후 컨텐츠 공개 게이트 |
+| `ad-slot.client.tsx` | AdSense 광고 슬롯 |
+| `app-chrome-offset.client.tsx` | iOS SafeArea 오프셋 |
+| `birth-time-fields.tsx` | 출생 시간 입력 필드 |
+| `confetti.client.tsx` / `firework-emoji.client.tsx` | 이벤트 이펙트 |
 
 ## domain/
 

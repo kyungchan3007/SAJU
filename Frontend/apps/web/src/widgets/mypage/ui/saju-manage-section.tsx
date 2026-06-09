@@ -4,6 +4,7 @@ import Link from "next/link";
 
 import { useSajuManage } from "@/features/mypage/hooks/useSajuManage";
 import { useSajuManagePartnersController } from "@/features/mypage/hooks/useSajuManagePartnersController";
+import { canAddPartner } from "@/features/mypage/model/partner";
 import { SajuManageSummary } from "@/features/mypage/ui/manage/saju-manage-summary";
 import { SajuManageForm } from "@/features/mypage/ui/manage/saju-manage-form";
 import { SajuCardList } from "@/features/mypage/ui/manage/saju-card-list";
@@ -19,6 +20,7 @@ import {
 export function SajuManageSection() {
   const sajuManage = useSajuManage();
   const partners = useSajuManagePartnersController();
+  const canAdd = canAddPartner(partners.partners.length);
 
   const myProfile = sajuManage.initialValues
     ? {
@@ -60,6 +62,24 @@ export function SajuManageSection() {
             disabled={partners.isPending}
           />
 
+          {/* 파트너 사주 폼 또는 잠금 안내 */}
+          {partners.selectedTarget !== "me" ? (
+            <SajuManagePartnerPanel
+              formKey={String(partners.selectedTarget)}
+              name={partners.displayName}
+              isNew={partners.isNewPartnerMode}
+              initialValues={partners.formInitialValues}
+              isPending={partners.isPending}
+              errorMessage={partners.errorMessage}
+              onSave={partners.savePartner}
+            />
+          ) : canAdd ? (
+            <LockedPartnerPanel
+              onAdd={partners.openAddModal}
+              disabled={partners.isPending}
+            />
+          ) : null}
+
           {/* 나의 사주 요약 + 수정 폼 (나 선택 시) */}
           {partners.selectedTarget === "me" && sajuManage.initialValues && (
             <>
@@ -72,27 +92,14 @@ export function SajuManageSection() {
               />
             </>
           )}
-
-          {/* 파트너 사주 폼 */}
-          {partners.selectedTarget !== "me" && (
-            <SajuManagePartnerPanel
-              formKey={String(partners.selectedTarget)}
-              name={partners.displayName}
-              isNew={partners.isNewPartnerMode}
-              initialValues={partners.formInitialValues}
-              isPending={partners.isPending}
-              errorMessage={partners.errorMessage}
-              onSave={partners.savePartner}
-            />
-          )}
         </>
       )}
 
       <PartnerAddModal
         isOpen={partners.isAddModalOpen}
         isPending={false}
-        onClose={partners.closeAddModal}
-        onConfirm={partners.confirmAdd}
+        onCloseAction={partners.closeAddModal}
+        onConfirmAction={partners.confirmAdd}
       />
 
       <ConfirmModal
@@ -112,6 +119,47 @@ export function SajuManageSection() {
         onClose={partners.closeDeleteModal}
         onConfirm={partners.confirmDelete}
       />
+    </div>
+  );
+}
+
+// ── 잠금 패널: 1단계(모달) 완료 전 표시되는 2단계 안내 ──
+function LockedPartnerPanel({
+  onAdd,
+  disabled,
+}: {
+  onAdd: () => void;
+  disabled: boolean;
+}) {
+  return (
+    <div className="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm">
+      {/* 헤더 */}
+      <div className="flex items-center gap-2 border-b border-slate-100 bg-slate-50 px-5 py-3">
+        <span className="flex h-5 w-5 items-center justify-center rounded-full bg-slate-200 text-[10px] font-black text-slate-400">
+          2
+        </span>
+        <span className="text-[13px] font-bold text-slate-400">
+          사주 정보 입력
+        </span>
+        <span className="ml-auto rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-semibold text-slate-300">
+          1단계 완료 후 활성화
+        </span>
+      </div>
+      {/* 안내 문구 */}
+      <div className="px-5 py-5">
+        <p className="text-[13px] leading-relaxed text-slate-400">
+          먼저 상단의{" "}
+          <button
+            type="button"
+            onClick={onAdd}
+            disabled={disabled}
+            className="font-semibold text-[#5956E9] underline underline-offset-2 disabled:opacity-50"
+          >
+            '사주 추가'
+          </button>{" "}
+          버튼을 눌러 이름과 관계를 입력해 주세요.
+        </p>
+      </div>
     </div>
   );
 }

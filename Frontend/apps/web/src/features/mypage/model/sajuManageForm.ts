@@ -5,7 +5,7 @@ import {
   isSajuCalendarInputType,
   toBackendSajuCalendarType,
 } from "@/shared/model/saju-calendar/utils";
-import { parseTimeParts } from "@/shared/utils/Time";
+import { buildTimeString, parseTimeParts } from "@/shared/utils/Time";
 
 export type SajuManageFormState = {
   calendarType: SajuCalendarInputType;
@@ -74,5 +74,5 @@ function toSajuManageBirthTime(state: SajuManageFormState) {
     return null;
   }
 
-  return `${state.hour.padStart(2, "0")}:${state.minute.padStart(2, "0")}`;
+  return buildTimeString(state.hour, state.minute);
 }

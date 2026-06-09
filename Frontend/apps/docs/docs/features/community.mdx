@@ -15,14 +15,39 @@ features/community/
   ├── hooks/
   ├── model/
   └── ui/
+      ├── community-hero.tsx       ← 상단 히어로 배너
+      ├── community-bottom-bar.tsx ← 하단 고정 행동 버튼 바
+      ├── saju-recommendation.tsx  ← 사주 기반 추천 섹션
+      ├── step-topics.tsx          ← 단계: 관심 주제 선택
+      ├── step-contact-form.tsx    ← 단계: 연락처 입력 폼
+      ├── step-meeting-type.tsx    ← 단계: 모임 유형 선택
+      └── step-progress.tsx        ← 단계: 진행 상황 표시
 entities/community/
+  ├── server/   ← 기수 조회·관심신청·참가 (서버)
+  └── client/   ← 기수 조회·관심신청·참가 (클라이언트)
 app/api/community/
   ├── cohorts/route.ts    ← 기수 목록
   ├── interests/route.ts  ← 관심 신청 목록
   └── join/route.ts       ← 참가 신청
 ```
 
-## 주요 흐름
+## 단계별 UI 흐름
+
+신청 과정은 `step-*` 컴포넌트로 나뉜 단계 기반 UI로 구성됩니다.
+
+```
+community-hero.tsx          ← 페이지 상단: 기수 현황 + 타이틀
+
+step-topics.tsx             ← 단계 1: 관심 주제 선택 (다중 선택)
+step-meeting-type.tsx       ← 단계 2: 모임 유형 선택 (온라인/오프라인 등)
+step-contact-form.tsx       ← 단계 3: 연락처 입력 (이름, 연락처)
+step-progress.tsx           ← 단계 진행 상태 인디케이터
+
+saju-recommendation.tsx     ← 사주 기반 커뮤니티 추천 섹션
+community-bottom-bar.tsx    ← 하단 고정 CTA 버튼 바 (다음 / 신청 완료)
+```
+
+## 주요 API 흐름
 
 ```
 /community 진입

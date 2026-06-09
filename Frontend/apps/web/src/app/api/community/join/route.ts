@@ -29,5 +29,5 @@ export async function POST(request: Request) {
     );
   }
 
-  return NextResponse.json(createSuccessResponse(result.data));
+  return NextResponse.json(createSuccessResponse(result.data), { status: 201 });
 }

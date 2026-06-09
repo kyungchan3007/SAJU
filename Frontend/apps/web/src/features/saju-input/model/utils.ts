@@ -10,8 +10,6 @@ import {
 } from "@/shared/utils/BirthDate";
 import { parseTimeParts } from "@/shared/utils/Time";
 
-// saju-input-fields.container.tsx 의
-// SajuInputFieldsContainer 안에서 직접 호출된다.
 export function getHighlightedZodiacIndex(
   birthYear: string,
   birthDate: string,
@@ -23,7 +21,6 @@ export function getHighlightedZodiacIndex(
     return null;
   }
 
-  // 입춘(2/4) 이전 출생자는 전년도 띠 기준으로 본다.
   const zodiacYear =
     monthDay.month < 2 || (monthDay.month === 2 && monthDay.day < 4)
       ? year - 1
@@ -32,16 +29,12 @@ export function getHighlightedZodiacIndex(
   return (((zodiacYear - 2008) % 12) + 12) % 12;
 }
 
-// saju-input-fields.container.tsx 의
-// SajuInputFieldsContainer 안에서 getHighlightedZodiacIndex 바로 아래에서 호출된다.
 export function getHighlightedZodiac(highlightedZodiacIndex: number | null) {
   return highlightedZodiacIndex !== null
     ? ZODIAC_LIST[highlightedZodiacIndex]
     : null;
 }
 
-// utils.ts 의
-// getStepStates 내부에서만 호출된다.
 export function getStepCompletionState(formValues: SajuFormValues) {
   const isBirthDateStepComplete =
     formValues.birthYear !== "" &&
@@ -55,17 +48,20 @@ export function getStepCompletionState(formValues: SajuFormValues) {
     !hasAnyBirthTimeSelection ||
     (hour !== "" && minute !== "");
   const isGenderStepComplete = formValues.gender !== "";
+  const isTermsConsentComplete = formValues.agreedToTerms;
   const isPrivacyConsentComplete = formValues.agreedToPrivacy;
 
   return {
     isBirthDateStepComplete,
     isBirthTimeStepComplete,
     isGenderStepComplete,
+    isTermsConsentComplete,
     isPrivacyConsentComplete,
     isAllComplete:
       isBirthDateStepComplete &&
       isBirthTimeStepComplete &&
       isGenderStepComplete &&
+      isTermsConsentComplete &&
       isPrivacyConsentComplete,
   };
 }
@@ -128,6 +124,14 @@ export function getFirstIncompleteFieldMessage(formValues: SajuFormValues): {
     };
   }
 
+  if (!formValues.agreedToTerms) {
+    return {
+      title: "서비스 이용 동의를 확인해주세요.",
+      description:
+        "사주 분석 서비스 이용을 위해 필수 안내를 확인하고 동의해야 진행할 수 있습니다.",
+    };
+  }
+
   if (!formValues.agreedToPrivacy) {
     return {
       title: "개인정보 수집·이용 동의를 확인해주세요.",
@@ -139,14 +143,10 @@ export function getFirstIncompleteFieldMessage(formValues: SajuFormValues): {
   return {
     title: "입력 항목을 모두 확인해주세요.",
     description:
-      "필수 입력과 개인정보 수집·이용 동의를 완료해야 진행할 수 있습니다.",
+      "필수 입력과 서비스 이용 및 개인정보 수집·이용 동의를 완료해야 진행할 수 있습니다.",
   };
 }
 
-// saju-input-fields.container.tsx 의
-// SajuInputFieldsContainer 안에서 직접 호출되고,
-// saju-input-fields.client.tsx 의
-// <InputStep steps={stepStates} /> 로 내려간다.
 export function getStepStates(
   steps: InputStepItem[],
   touchedSteps: TouchedSteps,
@@ -159,7 +159,6 @@ export function getStepStates(
     isAllComplete,
   } = getStepCompletionState(formValues);
 
-  // step 활성화 규칙은 렌더링과 분리해서 여기서만 관리한다.
   return steps.map((step, index) => {
     if (index === 0) {
       return {

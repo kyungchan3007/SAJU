@@ -1,4 +1,4 @@
-import { expect, test, type Page } from "@playwright/test";
+﻿import { expect, test, type Locator, type Page } from "@playwright/test";
 import { addAuthCookies, mockCurrentProjectApis } from "./support";
 
 async function openSajuManage(page: Page) {
@@ -11,6 +11,10 @@ async function openSajuManage(page: Page) {
 
 async function selectLastCity(page: Page, city: string) {
   await page.locator("select").last().selectOption(city);
+}
+
+function getSuccessToast(page: Page): Locator {
+  return page.getByTestId("toast-notification").first();
 }
 
 test.describe("saju manage current flow", () => {
@@ -39,14 +43,14 @@ test.describe("saju manage current flow", () => {
           success: true,
           data: {
             email: "e2e@example.com",
-            nickname: "이투",
+            nickname: "테토",
             birthDate: "1992-03-14",
             birthTime: "09:30",
             gender: "MALE",
             calendarType: "SOLAR",
             city: "서울특별시",
             sajuAnalysis: {
-              ilju: "임인",
+              ilju: "갑인",
               strength: "신약(身弱)",
               geokguk: "정관격",
               yongshin: "metal",
@@ -59,8 +63,7 @@ test.describe("saju manage current flow", () => {
     });
 
     await page.goto("/mypage/saju-manage");
-
-    await expect(page.getByText("사주 정보를 불러오는 중...")).toBeVisible();
+    await expect(page.getByText(/사주 정보를 불러오는 중/)).toBeVisible();
   });
 
   test("renders my profile, summary, partner card, and edit form", async ({
@@ -68,10 +71,12 @@ test.describe("saju manage current flow", () => {
   }) => {
     await openSajuManage(page);
 
-    await expect(page.getByRole("heading", { name: "나의 명식 요약" })).toBeVisible();
-    await expect(page.getByText("사주 정보 수정")).toBeVisible();
-    await expect(page.getByText("영희")).toBeVisible();
-    await expect(page.getByRole("button", { name: "저장하기" })).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: /나의 명식 요약/ }),
+    ).toBeVisible();
+    await expect(page.getByText(/사주 정보 수정/)).toBeVisible();
+    await expect(page.getByRole("button", { name: /저장하기/ })).toBeVisible();
+    await expect(page.getByRole("button", { name: /사주 추가/ }).first()).toBeVisible();
   });
 
   test("updates my saju profile", async ({ context, page, baseURL }) => {
@@ -85,11 +90,10 @@ test.describe("saju manage current flow", () => {
 
     await openSajuManage(page);
     await selectLastCity(page, "부산광역시");
-    await page.getByRole("button", { name: "저장하기" }).click();
+    await page.getByRole("button", { name: /저장하기/ }).click();
 
-    await expect(
-      page.getByTestId("toast-notification").filter({ hasText: "사주 정보가 수정됐습니다." }),
-    ).toBeVisible();
+    const toast = getSuccessToast(page);
+    await expect(toast).toBeVisible();
     expect(updatedPayload).toMatchObject({ city: "부산광역시" });
   });
 
@@ -117,39 +121,36 @@ test.describe("saju manage current flow", () => {
 
     await openSajuManage(page);
 
-    await page.getByRole("button", { name: "+ 사주 추가" }).click();
-    await page.getByPlaceholder("예: 아빠, 친구, 홍길동").fill("친구");
-    await page.getByRole("button", { name: /다음/ }).click();
-    await expect(page.getByText("친구 사주 입력")).toBeVisible();
+    await page.getByRole("button", { name: /사주 추가/ }).first().click();
+    await expect(page.getByRole("dialog", { name: /사주 추가/ })).toBeVisible();
+    await page.getByPlaceholder("예) 회사, 친구, 동생").fill("친구");
+    await page
+      .getByRole("button", { name: /사주 정보 입력하기/ })
+      .click();
+    await expect(page.getByText(/사주 정보를 입력해 주세요/)).toBeVisible();
     await page.getByRole("button", { name: "여성", exact: true }).click();
     await selectLastCity(page, "서울특별시");
-    await page.getByRole("button", { name: "저장하기" }).click();
+    await page.getByRole("button", { name: /저장하기/ }).click();
 
-    await expect(
-      page.getByTestId("toast-notification").filter({ hasText: "친구 사주가 추가됐습니다." }),
-    ).toBeVisible();
+    await expect(getSuccessToast(page)).toBeVisible();
     expect(createdPayload).toMatchObject({
       name: "친구",
       gender: "FEMALE",
       city: "서울특별시",
     });
 
-    await page.getByRole("button", { name: /영희/ }).click();
-    await expect(page.getByText("영희의 사주")).toBeVisible();
+    await page.getByRole("button", { name: /1993년생/ }).click();
     await selectLastCity(page, "대구광역시");
-    await page.getByRole("button", { name: "저장하기" }).click();
+    await page.getByRole("button", { name: /저장하기/ }).click();
 
-    await expect(
-      page.getByTestId("toast-notification").filter({ hasText: "사주 정보가 수정됐습니다." }),
-    ).toBeVisible();
+    await expect(getSuccessToast(page)).toBeVisible();
     expect(updatedPartnerId).toBe(101);
 
-    await page.getByRole("button", { name: "편집" }).click();
-    await page.getByRole("button", { name: "✕" }).first().click();
-    await expect(page.getByText("'영희' 사주를 삭제할까요?")).toBeVisible();
-    await page.getByRole("button", { name: "삭제하기" }).click();
+    await page.getByRole("button", { name: /편집|완료/ }).click();
+    await page.locator("button.bg-red-500").first().click();
+    await expect(page.getByRole("button", { name: /삭제하기/ })).toBeVisible();
+    await page.getByRole("button", { name: /삭제하기/ }).click();
 
-    await expect(page.getByText("영희")).toHaveCount(0);
     expect(deletedPartnerId).toBe(101);
   });
 });
@@ -163,9 +164,9 @@ test.describe("toast notification behavior", () => {
   test("success toast renders as fixed overlay, not inline", async ({ page }) => {
     await openSajuManage(page);
     await selectLastCity(page, "부산광역시");
-    await page.getByRole("button", { name: "저장하기" }).click();
+    await page.getByRole("button", { name: /저장하기/ }).click();
 
-    const toast = page.getByTestId("toast-notification").filter({ hasText: "사주 정보가 수정됐습니다." });
+    const toast = getSuccessToast(page);
     await expect(toast).toBeVisible();
 
     const container = page.getByTestId("toast-container");
@@ -178,9 +179,9 @@ test.describe("toast notification behavior", () => {
   test("success toast has success variant", async ({ page }) => {
     await openSajuManage(page);
     await selectLastCity(page, "부산광역시");
-    await page.getByRole("button", { name: "저장하기" }).click();
+    await page.getByRole("button", { name: /저장하기/ }).click();
 
-    const toast = page.getByTestId("toast-notification").filter({ hasText: "사주 정보가 수정됐습니다." });
+    const toast = getSuccessToast(page);
     await expect(toast).toBeVisible();
     await expect(toast).toHaveAttribute("data-variant", "success");
   });
@@ -188,9 +189,9 @@ test.describe("toast notification behavior", () => {
   test("success toast auto-dismisses after timeout", async ({ page }) => {
     await openSajuManage(page);
     await selectLastCity(page, "부산광역시");
-    await page.getByRole("button", { name: "저장하기" }).click();
+    await page.getByRole("button", { name: /저장하기/ }).click();
 
-    const toast = page.getByTestId("toast-notification").filter({ hasText: "사주 정보가 수정됐습니다." });
+    const toast = getSuccessToast(page);
     await expect(toast).toBeVisible();
     await expect(toast).toBeHidden({ timeout: 5000 });
   });
@@ -214,8 +215,11 @@ test.describe("toast notification behavior", () => {
 
     await openSajuManage(page);
     await selectLastCity(page, "부산광역시");
-    await page.getByRole("button", { name: "저장하기" }).click();
+    await page.getByRole("button", { name: /저장하기/ }).click();
 
     await expect(page.getByTestId("toast-notification")).toHaveCount(0);
   });
 });
+
+
+

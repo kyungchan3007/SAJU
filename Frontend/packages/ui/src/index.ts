@@ -5,6 +5,7 @@ export type { ButtonProps, ButtonSize, ButtonVariant } from "./button/button";
 export { Card } from "./card/card";
 export type { CardProps, CardVariant } from "./card/card";
 export { ConfirmModal } from "./confirm-modal/confirm-modal";
+export { DialogShell, DialogShellDescription, DialogShellTitle } from "./dialog-shell/dialog-shell";
 export { FormMessage } from "./form-message/form-message";
 export { IconBadge } from "./icon-badge/icon-badge";
 export { Input } from "./input/input";
