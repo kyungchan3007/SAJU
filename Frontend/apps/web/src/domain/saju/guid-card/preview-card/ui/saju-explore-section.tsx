@@ -29,7 +29,7 @@ const EXPLORE_CARDS: {
     ),
   },
   {
-    pathname: "/year-fortune",
+    pathname: "/mypage/year-fortune",
     iconBg: "bg-amber-50",
     title: "올해 운세",
     desc: "한 해의 흐름을 미리 확인하세요.",

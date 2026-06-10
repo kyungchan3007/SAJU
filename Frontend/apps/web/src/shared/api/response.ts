@@ -1,28 +1,30 @@
 export type ApiMeta = Record<string, unknown>;
 
-export type ApiSuccess<T> = {
+export type ApiSuccess<T, TMeta extends ApiMeta = ApiMeta> = {
   success: true;
   data: T;
   error: null;
-  meta?: ApiMeta;
+  meta?: TMeta;
 };
 
-export type ApiFailure = {
+export type ApiFailure<TMeta extends ApiMeta = ApiMeta> = {
   success: false;
   data: null;
   error: {
     code: string;
     message: string;
   };
-  meta?: ApiMeta;
+  meta?: TMeta;
 };
 
-export type ApiEnvelope<T> = ApiSuccess<T> | ApiFailure;
+export type ApiEnvelope<T, TMeta extends ApiMeta = ApiMeta> =
+  | ApiSuccess<T, TMeta>
+  | ApiFailure<TMeta>;
 
-export function createSuccessResponse<T>(
+export function createSuccessResponse<T, TMeta extends ApiMeta = ApiMeta>(
   data: T,
-  meta?: ApiMeta,
-): ApiSuccess<T> {
+  meta?: TMeta,
+): ApiSuccess<T, TMeta> {
   return {
     success: true,
     data,

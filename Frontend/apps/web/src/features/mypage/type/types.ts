@@ -1,3 +1,7 @@
+import type { Route } from "next";
+
+export type ManagementIconKey = "account" | "saju";
+
 export type MypageUser = {
   email: string;
   summaryZodiac: string;
@@ -9,16 +13,31 @@ export type SajuSummaryItem = {
 };
 
 export type ManagementItem = {
+  icon: ManagementIconKey;
   label: string;
   desc?: string;
-  href: string;
+  href: Route;
 };
 
-export type InfoItem = {
+export type InfoIconKey = "notice" | "help" | "recommend" | "partner";
+
+type InfoItemBase = {
+  icon: InfoIconKey;
   label: string;
   desc?: string;
-  href: string;
 };
+
+type InfoLinkItem = InfoItemBase & {
+  href: Route;
+  onClick?: never;
+};
+
+type InfoActionItem = InfoItemBase & {
+  href?: never;
+  onClick: () => void;
+};
+
+export type InfoItem = InfoLinkItem | InfoActionItem;
 
 export type AllMenuItem = {
   icon: React.ReactNode;

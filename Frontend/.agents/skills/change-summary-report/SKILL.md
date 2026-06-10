@@ -3,7 +3,7 @@ name: change-summary-report
 description: >-
   사용자가 git status 기준 변경 내용을 정리해 달라고 요청할 때 사용하는 보고 스킬.
   feat는 "어떤기능인가요 / 작업상세내용 / 요약본 / 커밋메시지(한글)" 4개 항목,
-  fix/refactor/chore는 각 타입 전용 템플릿을 사용한다.
+  fix/refactor/chore/docs는 각 타입 전용 템플릿을 사용한다.
 ---
 
 # 변경 요약 보고 스킬
@@ -11,7 +11,7 @@ description: >-
 ## 사용 조건
 
 - 사용자가 현재 git 변경분 정리를 요청한다.
-- 사용자가 타입(`feat`, `refactor`, `fix`, `chore`)을 지정하면 해당 타입 기준으로 정리한다.
+- 사용자가 타입(`feat`, `refactor`, `fix`, `chore`, `docs`)을 지정하면 해당 타입 기준으로 정리한다.
 - 사용자가 파일 경로 제외를 요청하면 파일 경로를 쓰지 않는다.
 
 ## 출력 규칙
@@ -32,6 +32,9 @@ description: >-
   - 기본 4개 항목 템플릿 출력 금지
 - `chore`:
   - 아래 chore 전용 템플릿만 사용
+  - 기본 4개 항목 템플릿 출력 금지
+- `docs`:
+  - 아래 docs 전용 템플릿만 사용
   - 기본 4개 항목 템플릿 출력 금지
 
 ## 기본 4개 항목 템플릿
@@ -146,6 +149,34 @@ description: >-
 
 <br>
 
+## docs 전용 템플릿
+
+## 📚 어떤 문서 작업인가요?
+
+> 작성하거나 수정할 문서에 대해 간결하게 설명해주세요.
+
+<br>
+
+## 📝 작업 상세 내용
+
+- [ ] TODO
+- [ ] TODO
+- [ ] TODO
+
+<br>
+
+## 📄 대상 문서
+
+> 작업 대상 파일이나 문서를 명시해주세요. (예: README.md, docs/architecture.md 등)
+
+<br>
+
+## 🔗 참고 자료 (선택)
+
+> 관련 문서, 링크 등을 첨부해주세요.
+
+<br>
+
 ## 사용자 프롬프트 예시
 
 - `git 변경분 feat 기준으로 change-summary-report 형식 정리`
@@ -153,3 +184,4 @@ description: >-
 - `git 변경분 refactor 기준으로 change-summary-report 정리`
 - `git 변경분 fix 기준, 파일 경로 제외`
 - `git 변경분 chore 템플릿으로 정리`
+- `git 변경분 docs 템플릿으로 정리`

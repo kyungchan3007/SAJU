@@ -1,5 +1,5 @@
 ﻿import type { Metadata } from "next";
-import { PrivacyPolicyPage } from "@/widgets/privacy-policy";
+import Content from "./content.mdx";
 
 export const metadata: Metadata = {
   title: "개인정보처리방침",
@@ -10,6 +10,4 @@ export const metadata: Metadata = {
   },
 };
 
-export default function PrivacyPolicyRoute() {
-  return <PrivacyPolicyPage />;
-}
+export default Content;

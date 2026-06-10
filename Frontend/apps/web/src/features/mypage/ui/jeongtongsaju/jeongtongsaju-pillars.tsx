@@ -87,9 +87,9 @@ export function JeongtongsajuPillars({ pillars }: Props) {
             : `${SAJU_PILLAR_LABEL_MAP[type]}는 천간과 지지가 결합된 사주 기둥입니다.`;
 
           return (
-            <div key={type} className="gap-3 px-4 py-3.5 sm:flex">
+            <div key={type} className="flex flex-col gap-2 px-4 py-3.5">
               <span
-                className={`mt-0.5 shrink-0 rounded-md p-2 text-[11px] font-bold sm:p-3 ${
+                className={`inline-flex w-fit items-center justify-center rounded-full px-3 py-1 text-[11px] font-bold ${
                   isDay
                     ? "bg-[#EAE7FF] text-[#5956E9]"
                     : "bg-gray-200 text-gray-600"
@@ -97,7 +97,7 @@ export function JeongtongsajuPillars({ pillars }: Props) {
               >
                 {SAJU_PILLAR_LABEL_MAP[type]}
               </span>
-              <p className="mt-4 text-[13px] leading-relaxed text-gray-600">
+              <p className="text-[13px] leading-relaxed text-gray-600">
                 {description}
               </p>
             </div>

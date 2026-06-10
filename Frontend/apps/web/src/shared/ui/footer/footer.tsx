@@ -4,6 +4,7 @@ import Link from "next/link";
 const privacyPolicyHref = "/privacy-policy" as Route;
 const termsOfServiceHref = "/terms-of-service" as Route;
 const contactHref = "/contact" as Route;
+const blogHref = "/blog" as Route;
 
 export function Footer() {
   return (
@@ -37,6 +38,12 @@ export function Footer() {
             className="text-xs text-gray-400 transition-colors hover:text-gray-600"
           >
             문의하기
+          </Link>
+          <Link
+            href={blogHref}
+            className="text-xs text-gray-400 transition-colors hover:text-gray-600"
+          >
+            사주 이야기
           </Link>
         </div>
       </div>

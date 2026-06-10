@@ -1,5 +1,5 @@
 ﻿import type { Metadata } from "next";
-import { ContactPage } from "@/widgets/contact";
+import Content from "./content.mdx";
 
 export const metadata: Metadata = {
   title: "문의하기",
@@ -10,6 +10,4 @@ export const metadata: Metadata = {
   },
 };
 
-export default function ContactRoute() {
-  return <ContactPage />;
-}
+export default Content;

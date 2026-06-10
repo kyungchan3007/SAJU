@@ -27,12 +27,14 @@ export function MypageProfileCard({ user }: Props) {
     : user.summaryZodiac;
   const zodiac = findZodiacByLabel(summaryZodiac);
   const isCommunityJoined = Boolean(data?.success && data.data?.communityJoined);
+  const nickname = data?.success ? (data.data?.nickname ?? "회원") : "회원";
 
   return (
     <MypageProfileCardView
       email={user.email}
       zodiacEmoji={zodiac?.emoji}
       isCommunityJoined={isCommunityJoined}
+      nickname={nickname}
     />
   );
 }

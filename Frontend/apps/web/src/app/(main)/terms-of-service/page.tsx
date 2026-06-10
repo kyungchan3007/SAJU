@@ -1,5 +1,5 @@
 ﻿import type { Metadata } from "next";
-import { TermsOfServicePage } from "@/widgets/terms-of-service";
+import Content from "./content.mdx";
 
 export const metadata: Metadata = {
   title: "서비스 이용약관",
@@ -10,6 +10,4 @@ export const metadata: Metadata = {
   },
 };
 
-export default function TermsOfServiceRoute() {
-  return <TermsOfServicePage />;
-}
+export default Content;

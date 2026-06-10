@@ -1,6 +1,8 @@
 import {
+  BRANCH_HANJA_TO_KOR,
   EARTHLY_BRANCH_INFO,
   HEAVENLY_STEM_INFO,
+  STEM_HANJA_TO_KOR,
   type BigLuckGanji,
   type GanjiPillar,
 } from "@/shared/model/saju-ganji/model";
@@ -43,9 +45,14 @@ function getGanjiParts(ganji: string | null | undefined) {
 
   const stem = trimmed.slice(0, 1);
   const branch = trimmed.slice(1, 2);
-  const stemInfo = HEAVENLY_STEM_INFO[stem as keyof typeof HEAVENLY_STEM_INFO];
+
+  // 한자 입력(丙寅)도 처리: 한글 키로 변환 후 룩업
+  const stemKey = STEM_HANJA_TO_KOR[stem] ?? stem;
+  const branchKey = BRANCH_HANJA_TO_KOR[branch] ?? branch;
+
+  const stemInfo = HEAVENLY_STEM_INFO[stemKey as keyof typeof HEAVENLY_STEM_INFO];
   const branchInfo =
-    EARTHLY_BRANCH_INFO[branch as keyof typeof EARTHLY_BRANCH_INFO];
+    EARTHLY_BRANCH_INFO[branchKey as keyof typeof EARTHLY_BRANCH_INFO];
 
   return { ganji: trimmed, stem, branch, stemInfo, branchInfo };
 }

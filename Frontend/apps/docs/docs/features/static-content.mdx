@@ -1,0 +1,134 @@
+---
+sidebar_position: 8
+---
+
+# 정적 콘텐츠 페이지 (MDX)
+
+법적 문서, 안내 페이지, FAQ 등 **주기적으로 내용이 바뀌지만 코드 변경은 최소화하고 싶은 페이지**는 MDX로 관리합니다.
+
+## 관련 경로
+
+```
+apps/web/
+├── mdx-components.tsx              ← MDX 전역 HTML 요소 스타일 매핑
+├── next.config.ts                  ← @next/mdx 설정 (pageExtensions 포함)
+└── src/app/(main)/
+    ├── privacy-policy/
+    │   ├── layout.tsx              ← PageContainer 래퍼
+    │   ├── content.mdx             ← ✏️ 실제 콘텐츠 (여기만 수정)
+    │   └── page.tsx                ← metadata + content.mdx import
+    ├── terms-of-service/
+    │   ├── layout.tsx
+    │   ├── content.mdx             ← ✏️ 실제 콘텐츠
+    │   └── page.tsx
+    ├── contact/
+    │   ├── layout.tsx
+    │   ├── content.mdx             ← ✏️ 실제 콘텐츠
+    │   └── page.tsx
+    └── faq/
+        └── page.mdx                ← ✏️ metadata + 콘텐츠 통합
+```
+
+## 페이지 목록
+
+| URL | 설명 | 콘텐츠 파일 |
+|-----|------|-------------|
+| `/privacy-policy` | 개인정보처리방침 | `privacy-policy/content.mdx` |
+| `/terms-of-service` | 서비스 이용약관 | `terms-of-service/content.mdx` |
+| `/contact` | 문의하기 | `contact/content.mdx` |
+| `/faq` | 자주 묻는 질문 | `faq/page.mdx` |
+
+## 파일 구조 패턴
+
+### content.mdx 패턴 (privacy-policy · terms-of-service · contact)
+
+`page.tsx`와 `content.mdx`를 분리하는 방식입니다. `page.tsx`는 SEO metadata만 담고, 실제 내용은 `content.mdx`에 있습니다.
+
+```
+page.tsx     ← metadata 선언 + content.mdx를 default export로 re-export
+layout.tsx   ← 공통 래퍼 (StaticPageLayout or PageContainer)
+content.mdx  ← 실제 콘텐츠 (마크다운 + JSX 혼용 가능)
+```
+
+`page.tsx` 예시:
+
+```tsx
+import type { Metadata } from "next";
+import Content from "./content.mdx";
+
+export const metadata: Metadata = {
+  title: "개인정보처리방침",
+  description: "...",
+  alternates: { canonical: "/privacy-policy" },
+};
+
+export default Content;
+```
+
+:::info page.mdx를 사용하지 않는 이유
+Next.js는 같은 디렉토리에 `page.tsx`와 `page.mdx`가 공존하면 충돌 에러가 발생합니다. metadata export를 유지하기 위해 `content.mdx`로 분리합니다.
+:::
+
+### page.mdx 패턴 (faq)
+
+metadata와 콘텐츠를 한 파일에 통합하는 방식입니다. `page.tsx`가 없습니다.
+
+```mdx
+export const metadata = {
+  title: "자주 묻는 질문",
+};
+
+# FAQ
+
+...
+```
+
+## MDX 컴포넌트 스타일 매핑
+
+`apps/web/mdx-components.tsx`에서 HTML 요소를 Tailwind 스타일 컴포넌트로 매핑합니다.
+
+| 요소 | 적용 스타일 |
+|------|------------|
+| `h1` | `text-3xl font-black tracking-tight text-gray-900` |
+| `h2` | `text-lg font-black text-gray-900` |
+| `h3` | `text-sm font-bold text-[#5956E9]` |
+| `p` | `text-sm leading-7 text-gray-600` |
+| `ul` / `li` | `text-sm leading-7 text-gray-600` + disc |
+| `strong` | `font-bold text-gray-900` |
+| `hr` | `border-gray-100` |
+
+MDX 파일 내에서 JSX를 직접 사용할 수 있으므로 카드, 배지 등 복잡한 UI도 인라인으로 작성 가능합니다.
+
+## 정적 빌드 동작
+
+이 페이지들은 런타임 데이터 의존성(쿠키, DB 쿼리 등)이 없기 때문에 빌드 시 정적 HTML로 생성됩니다.
+
+```
+빌드 시 → 정적 HTML 생성 → Cloudflare Assets로 서빙
+(Cloudflare Workers를 거치지 않음 → 빠르고 저렴)
+```
+
+Next.js 빌드 로그에서 `○` 표시로 확인 가능합니다:
+
+```
+○ /privacy-policy     (Static)
+○ /terms-of-service   (Static)
+○ /contact            (Static)
+○ /faq                (Static)
+```
+
+## 콘텐츠 수정 방법
+
+법적 문서나 안내 문구가 바뀔 때는 해당 `content.mdx` 파일만 수정하면 됩니다. TypeScript나 컴포넌트 코드를 건드릴 필요가 없습니다.
+
+```bash
+# 예시: 개인정보처리방침 수정
+apps/web/src/app/(main)/privacy-policy/content.mdx
+```
+
+## 규칙
+
+- 콘텐츠 수정은 `content.mdx`만 변경합니다. `page.tsx`와 `layout.tsx`는 건드리지 않습니다.
+- 새 정적 콘텐츠 페이지를 추가할 때는 `layout.tsx` + `content.mdx` + `page.tsx` 3파일 패턴을 따릅니다.
+- 인터랙티브한 기능(`use client`, API 호출)이 필요하면 MDX 대신 일반 TSX 페이지를 사용합니다.
+- 법적 문서(개인정보처리방침, 이용약관)는 변경 이력을 커밋 메시지에 명시합니다.
