@@ -104,7 +104,7 @@ export function SajuManageSection() {
 
       <ConfirmModal
         isOpen={Boolean(partners.deleteTarget)}
-        title={`'${partners.deleteTarget?.name ?? ""}' 사주를 삭제할까요?`}
+        title={`${partners.deleteTarget?.name ?? ""} 사주를 삭제할까요?`}
         description={
           <>
             해당 사주 정보가 영구 삭제됩니다.
@@ -155,9 +155,9 @@ function LockedPartnerPanel({
             disabled={disabled}
             className="font-semibold text-[#5956E9] underline underline-offset-2 disabled:opacity-50"
           >
-            '사주 추가'
-          </button>{" "}
-          버튼을 눌러 이름과 관계를 입력해 주세요.
+            사주 추가
+          </button>
+          {" "}버튼을 눌러 이름과 관계를 입력해 주세요.
         </p>
       </div>
     </div>

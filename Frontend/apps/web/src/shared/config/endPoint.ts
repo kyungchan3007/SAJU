@@ -4,6 +4,7 @@ export const SAJU_AUTH_LOGOUT_PATH = "/api/auth/logout";
 export const SAJU_ENDPOINT_PATH = "/api/saju";
 export const SAJU_DAILY_ENDPOINT_PATH = "/api/saju/me/daily";
 export const SAJU_YEAR_FORTUNE_ENDPOINT_PATH = "/api/saju/me/year";
+export const SAJU_PERSONALITY_ENDPOINT_PATH = "/api/saju/me/personality";
 export const SAJU_TRADITIONAL_ENDPOINT_PATH = "/api/saju/me/traditional";
 export const SAJU_TRADITIONAL_FORTUNE_ENDPOINT_PATH =
   "/api/saju/me/traditional-fortune";

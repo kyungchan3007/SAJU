@@ -36,6 +36,11 @@ type ApiMockOptions = {
   communityInterests?: CommunityInterestMock[];
   communityInterestsStatus?: number;
   communityInterestsErrorMessage?: string;
+  personalityProfileResponse?: {
+    status?: number;
+    body: unknown;
+    headers?: Record<string, string>;
+  };
   onMySajuUpdate?: (payload: unknown) => void;
   onPartnerCreate?: (payload: unknown) => void;
   onPartnerUpdate?: (partnerId: number, payload: unknown) => void;
@@ -149,6 +154,13 @@ export async function mockCurrentProjectApis(
   let notifications = options.notifications ?? [...defaultNotifications];
   const communityInterests =
     options.communityInterests ?? defaultCommunityInterests;
+  const personalityResponse = options.personalityProfileResponse ?? {
+    status: 200,
+    headers: {
+      "Cache-Control": "private, max-age=300, stale-while-revalidate=600",
+    },
+    body: personalityProfile,
+  };
 
   await page.route("**/api/users/me", async (route) => {
     await route.fulfill({
@@ -232,6 +244,15 @@ export async function mockCurrentProjectApis(
       status: 200,
       contentType: "application/json",
       body: JSON.stringify(traditionalFortune),
+    });
+  });
+
+  await page.route("**/api/saju/me/personality", async (route) => {
+    await route.fulfill({
+      status: personalityResponse.status ?? 200,
+      headers: personalityResponse.headers,
+      contentType: "application/json",
+      body: JSON.stringify(personalityResponse.body),
     });
   });
 
@@ -607,6 +628,37 @@ const traditionalFortune = {
     yearCautions: "성과를 서두르기보다 일정과 체력을 함께 관리해야 합니다.",
   },
   error: null,
+};
+
+const personalityProfile = {
+  success: true,
+  data: {
+    personalityType: "임수(壬水) 감성형",
+    personalityDescription:
+      "임수의 기질은 깊이 있는 감정을 지니고 있으며, 유연하고 적응력이 뛰어납니다.",
+    romanticStyle:
+      "감정을 솔직하게 표현하지만 때때로 내향적인 면이 있습니다.",
+    romanticCompatibility:
+      "목(木)이나 수(水)의 기운을 가진 사람과 잘 어울립니다.",
+    careerTypes: ["컨설턴트", "작가", "심리상담사", "교육자"],
+    careerStyle:
+      "창의적이고 직관적인 스타일로 업무를 수행하며 소통을 중시합니다.",
+    strengths: [
+      "감정적 지능이 뛰어나다",
+      "유연한 사고방식",
+      "혼자서도 잘 소화하며 발전할 수 있다",
+    ],
+    weaknesses: [
+      "자기주장이 약할 수 있음",
+      "감정적 기복이 심할 수 있음",
+      "냉정함을 잃는 경향",
+    ],
+  },
+  error: null,
+  meta: {
+    backendStatus: 200,
+    backendMessage: "success",
+  },
 };
 
 const zodiacCompatibility = {

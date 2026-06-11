@@ -66,10 +66,11 @@ export default function FortuneVsSajuPage() {
 
           <section className="rounded-3xl border border-[#EDE9FF] bg-[#FAFAFF] px-5 py-5 text-sm leading-7 text-gray-600 md:px-7">
             <p>
-              "사주랑 운세랑 같은 건가요?" 많은 분이 혼동하는 질문입니다.
-              사주팔자는 개인의 생년월일시를 기반으로 한 정밀한 분석 체계이고,
-              일반 운세는 띠나 별자리 등 집단 단위로 제공되는 참고 정보입니다.
-              각각의 특성을 이해하면 상황에 맞게 더 잘 활용할 수 있습니다.
+              <q>사주랑 운세랑 같은 건가요?</q> 많은 분이 혼동하는
+              질문입니다. 사주팔자는 개인의 생년월일시를 기반으로 한 정밀한
+              분석 체계이고, 일반 운세는 띠나 별자리 등 집단 단위로 제공되는
+              참고 정보입니다. 각각의 특성을 이해하면 상황에 맞게 더 잘 활용할
+              수 있습니다.
             </p>
           </section>
 

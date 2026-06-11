@@ -1,5 +1,3 @@
-import { Sparkles } from "lucide-react";
-
 type Props = {
   yearDescription?: string;
 };

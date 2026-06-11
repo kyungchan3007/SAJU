@@ -1,7 +1,7 @@
 "use client";
 
 import type { Route } from "next";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { useSajuHooks } from "@/features/saju-input/hooks/useSajuHooks";
 import {
@@ -33,34 +33,22 @@ export function useSajuInputForm({
       agreedToTerms: isConsentAlreadyGiven,
       agreedToPrivacy: isConsentAlreadyGiven,
     }));
-  const [touchedSteps, setTouchedSteps] =
-    useState<TouchedSteps>(defaultTouchedSteps);
+  const [, setTouchedSteps] = useState<TouchedSteps>(defaultTouchedSteps);
   const { handleSubmitSaju } = useSajuHooks({ nextPath });
-
-  useEffect(() => {
-    if (!isConsentAlreadyGiven) {
-      return;
-    }
-
-    setFormValues((prev) => {
-      if (prev.agreedToTerms && prev.agreedToPrivacy) {
-        return prev;
-      }
-
-      return {
-        ...prev,
+  const effectiveFormValues = isConsentAlreadyGiven
+    ? {
+        ...formValues,
         agreedToTerms: true,
         agreedToPrivacy: true,
-      };
-    });
-  }, [isConsentAlreadyGiven]);
+      }
+    : formValues;
 
   const highlightedZodiacIndex = getHighlightedZodiacIndex(
-    formValues.birthYear,
-    formValues.birthDate,
+    effectiveFormValues.birthYear,
+    effectiveFormValues.birthDate,
   );
   const highlightedZodiac = getHighlightedZodiac(highlightedZodiacIndex);
-  const { isAllComplete } = getStepCompletionState(formValues);
+  const { isAllComplete } = getStepCompletionState(effectiveFormValues);
   const updateField = <K extends keyof SajuFormValues>(
     field: K,
     value: SajuFormValues[K],
@@ -73,12 +61,12 @@ export function useSajuInputForm({
   };
 
   return {
-    formValues,
+    formValues: effectiveFormValues,
     highlightedZodiac,
     highlightedZodiacIndex,
     isFormComplete: isAllComplete,
     updateField,
     touchStep,
-    submitSaju: () => handleSubmitSaju(formValues),
+    submitSaju: () => handleSubmitSaju(effectiveFormValues),
   };
 }

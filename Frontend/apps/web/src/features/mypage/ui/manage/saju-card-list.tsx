@@ -5,7 +5,6 @@ import type { PartnerResponse } from "@/generated/api";
 import {
   canAddPartner,
   getPartnerAvatar,
-  getTotalSajuProfileCount,
 } from "@/features/mypage/model/partner";
 import type { SajuManageSelectedTarget } from "@/features/mypage/model/sajuManageTarget";
 
@@ -36,7 +35,6 @@ export function SajuCardList({
   disabled,
 }: Props) {
   const [isEditMode, setIsEditMode] = useState(false);
-  const total = getTotalSajuProfileCount(partners.length);
   const canAdd = canAddPartner(partners.length);
   const isMySelected = selectedTarget === "me";
 
