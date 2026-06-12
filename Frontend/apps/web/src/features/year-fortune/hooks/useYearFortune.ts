@@ -7,6 +7,7 @@ import { useAuthScope } from "@/shared/app-infra/query-provider/auth-scope-conte
 import { fetchYearFortuneOnClient } from "@/entities/saju/client/fetchYearFortuneOnClient";
 import {
   YEAR_FORTUNE_QUERY_KEY,
+  resolveYearFortuneStatus,
   toYearFortuneDisplay,
   type YearFortuneDisplay,
 } from "@/features/year-fortune/model/yearFortune";
@@ -22,8 +23,13 @@ export function useYearFortune() {
   const { refetch } = query;
 
   const raw = query.data?.success ? query.data : null;
-  const backendStatus = raw?.meta?.backendStatus;
-  const isPending = backendStatus === "PENDING";
+  const yearFortuneStatus = resolveYearFortuneStatus(
+    raw?.meta?.backendStatus,
+    raw?.data && typeof raw.data === "object" && "status" in raw.data
+      ? (raw.data.status as string | undefined)
+      : undefined,
+  );
+  const isPending = yearFortuneStatus === "PENDING";
 
   useEffect(() => {
     if (!isPending) return;
@@ -36,11 +42,12 @@ export function useYearFortune() {
   }, [isPending, refetch]);
 
   const display: YearFortuneDisplay | null = raw
-    ? toYearFortuneDisplay(raw.data ?? undefined, backendStatus)
+    ? toYearFortuneDisplay(raw.data ?? undefined, raw?.meta?.backendStatus)
     : null;
 
   return {
     isLoading: query.isLoading,
+    isFetching: query.isFetching,
     isError: query.isError,
     errorMessage: query.isError
       ? query.error instanceof Error

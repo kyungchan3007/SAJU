@@ -9,9 +9,13 @@ import { AdProgressGate } from "@/shared/ui/ad-progress-gate.client";
 import { FortuneGateLayout, FortunePageLayout } from "@/shared/ui/fortune-page-layout";
 
 export function YearFortuneSection() {
-  const { isLoading, isError, errorMessage, isPending, display } =
+  const { isLoading, isFetching, isError, errorMessage, isPending, display } =
     useYearFortune();
-  const isContentReady = !isLoading && !isPending && Boolean(display);
+  const isContentReady =
+    !isLoading &&
+    !isFetching &&
+    !isPending &&
+    display?.status === "COMPLETE";
   const adGate = useAdGate({ enabled: true, isContentReady });
 
   if (isError) {

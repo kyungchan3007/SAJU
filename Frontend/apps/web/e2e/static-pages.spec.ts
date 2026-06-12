@@ -33,8 +33,8 @@ test.describe("static content pages smoke", () => {
       page.getByRole("heading", { level: 2, name: "문의 이메일" }),
     ).toBeVisible();
     await expect(
-      page.getByRole("link", { name: "saju.official@gmail.com" }),
-    ).toHaveAttribute("href", "mailto:saju.official@gmail.com");
+      page.getByRole("link", { name: "sajume.team@gmail.com" }),
+    ).toHaveAttribute("href", "mailto:sajume.team@gmail.com");
     await expectNoHorizontalOverflow(page);
   });
 
@@ -51,7 +51,7 @@ test.describe("static content pages smoke", () => {
         name: "1. 수집하는 개인정보 항목",
       }),
     ).toBeVisible();
-    await expect(page.getByText("saju.official@gmail.com")).toBeVisible();
+    await expect(page.getByText("sajume.team@gmail.com")).toBeVisible();
     await expectNoHorizontalOverflow(page);
   });
 
@@ -65,7 +65,9 @@ test.describe("static content pages smoke", () => {
     await expect(
       page.getByRole("heading", { level: 2, name: "1. 목적" }),
     ).toBeVisible();
-    await expect(page.getByText("대한민국 법령에 따라 해석되고 적용됩니다.")).toBeVisible();
+    await expect(
+      page.getByText("대한민국 법령에 따라 해석되고 적용됩니다."),
+    ).toBeVisible();
     await expectNoHorizontalOverflow(page);
   });
 });

@@ -76,8 +76,9 @@ function parseSectionDisplay(
 
 export function toCompatibilityResultDisplay(
   data: CompatibilityResponse,
+  backendStatus?: unknown,
 ): CompatibilityResultDisplay {
-  const status = normalizeStatus(data.status);
+  const status = normalizeStatus(backendStatus, data.status);
   const sections = (data.sections ?? []).map(parseSectionDisplay);
   const tags = sections.map((s) => s.keyword).filter(Boolean);
 
@@ -91,9 +92,19 @@ export function toCompatibilityResultDisplay(
   };
 }
 
-function normalizeStatus(raw?: string): CompatibilityStatus {
-  if (raw === "COMPLETE") return "COMPLETE";
-  if (raw === "PENDING") return "PENDING";
+export function resolveCompatibilityStatus(
+  backendStatus?: unknown,
+  dataStatus?: string,
+): CompatibilityStatus {
+  return normalizeStatus(backendStatus, dataStatus);
+}
+
+function normalizeStatus(...rawStatuses: Array<unknown>): CompatibilityStatus {
+  for (const raw of rawStatuses) {
+    if (raw === "COMPLETE") return "COMPLETE";
+    if (raw === "PENDING") return "PENDING";
+  }
+
   return "UNKNOWN";
 }
 

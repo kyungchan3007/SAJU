@@ -47,6 +47,10 @@ export type YearFortuneDisplay = {
   months: MonthDisplay[];
 };
 
+type YearFortuneResponseWithStatus = YearFortuneResponse & {
+  status?: string;
+};
+
 const DOMAIN_META: Record<
   DomainKey,
   { icon: string; label: string; color: string; bg: string }
@@ -129,10 +133,10 @@ function toMonthDisplay(m: YearMonthlyFortune): MonthDisplay {
 }
 
 export function toYearFortuneDisplay(
-  data: YearFortuneResponse | undefined,
-  backendStatus: unknown,
+  data: YearFortuneResponseWithStatus | undefined,
+  backendStatus?: unknown,
 ): YearFortuneDisplay {
-  const status = normalizeStatus(backendStatus);
+  const status = normalizeStatus(backendStatus, data?.status);
   const year = data?.targetYear ?? new Date().getFullYear();
   const yearLabel = data?.yearLabel ?? `${year}년`;
 
@@ -172,8 +176,18 @@ export function toYearFortuneDisplay(
   };
 }
 
-function normalizeStatus(raw: unknown): YearFortuneStatus {
-  if (raw === "COMPLETE") return "COMPLETE";
-  if (raw === "PENDING") return "PENDING";
+export function resolveYearFortuneStatus(
+  backendStatus?: unknown,
+  dataStatus?: string,
+): YearFortuneStatus {
+  return normalizeStatus(backendStatus, dataStatus);
+}
+
+function normalizeStatus(...rawStatuses: Array<unknown>): YearFortuneStatus {
+  for (const raw of rawStatuses) {
+    if (raw === "COMPLETE") return "COMPLETE";
+    if (raw === "PENDING") return "PENDING";
+  }
+
   return "UNKNOWN";
 }

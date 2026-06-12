@@ -20,7 +20,7 @@ export function PrivacyPolicyPage() {
               </p>
               <div className="flex flex-col gap-1 text-xs font-semibold text-gray-400">
                 <p>운영자: SAJU:ME</p>
-                <p>문의 이메일: saju.official@gmail.com</p>
+                <p>문의 이메일: sajume.team@gmail.com</p>
                 <p>최종 업데이트: 2026년 6월 9일</p>
               </div>
             </div>

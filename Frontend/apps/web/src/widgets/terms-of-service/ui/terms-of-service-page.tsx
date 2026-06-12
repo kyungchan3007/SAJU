@@ -15,12 +15,12 @@ export function TermsOfServicePage() {
                 서비스 이용약관
               </h1>
               <p className="text-sm leading-relaxed text-gray-500">
-                SAJU:ME 서비스 이용과 관련하여 서비스 제공 범위, 이용자의 권리 및 의무,
-                책임 제한, 약관 변경 및 분쟁 처리 기준을 안내합니다.
+                SAJU:ME 서비스 이용과 관련하여 서비스 제공 범위, 이용자의 권리
+                및 의무, 책임 제한, 약관 변경 및 분쟁 처리 기준을 안내합니다.
               </p>
               <div className="flex flex-col gap-1 text-xs font-semibold text-gray-400">
                 <p>운영자: SAJU:ME</p>
-                <p>문의 이메일: saju.official@gmail.com</p>
+                <p>문의 이메일: sajume.team@gmail.com</p>
                 <p>최종 업데이트: 2026년 6월 9일</p>
               </div>
             </div>

@@ -4,8 +4,8 @@ const contactItems = [
   {
     title: "문의 이메일",
     body: "서비스 이용, 계정, 개인정보 처리, 제휴 또는 기타 운영 문의는 아래 이메일로 접수해 주세요.",
-    value: "saju.official@gmail.com",
-    href: "mailto:saju.official@gmail.com",
+    value: "sajume.team@gmail.com",
+    href: "mailto:sajume.team@gmail.com",
   },
   {
     title: "문의 유형",
@@ -75,8 +75,9 @@ export function ContactPage() {
                 문의하기
               </h1>
               <p className="text-sm leading-relaxed text-gray-500">
-                SAJU:ME 서비스 이용 중 발생한 문의, 계정 관련 요청, 개인정보 관련
-                문의, 제휴 또는 기타 운영 문의를 아래 경로로 접수할 수 있습니다.
+                SAJU:ME 서비스 이용 중 발생한 문의, 계정 관련 요청, 개인정보
+                관련 문의, 제휴 또는 기타 운영 문의를 아래 경로로 접수할 수
+                있습니다.
               </p>
             </div>
           </header>
@@ -120,11 +121,18 @@ export function ContactPage() {
           </div>
 
           <section className="rounded-3xl border border-gray-100 bg-white px-5 py-6 shadow-sm md:px-7">
-            <h2 className="mb-3 text-lg font-black text-gray-900">자주 묻는 질문</h2>
+            <h2 className="mb-3 text-lg font-black text-gray-900">
+              자주 묻는 질문
+            </h2>
             <div className="flex flex-col gap-4 text-sm leading-7 text-gray-600">
               {faqItems.map((item) => (
-                <div key={item.question} className="rounded-2xl bg-[#FAFAFA] px-4 py-4">
-                  <p className="font-semibold text-gray-900">Q. {item.question}</p>
+                <div
+                  key={item.question}
+                  className="rounded-2xl bg-[#FAFAFA] px-4 py-4"
+                >
+                  <p className="font-semibold text-gray-900">
+                    Q. {item.question}
+                  </p>
                   <p className="mt-1">A. {item.answer}</p>
                 </div>
               ))}

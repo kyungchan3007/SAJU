@@ -9,6 +9,7 @@ import { fetchSajuProfileOnClient } from "@/entities/saju/client/fetchSajuProfil
 import { SAJU_PROFILE_QUERY_KEY } from "@/features/saju-profile/model/query";
 import { PARTNERS_QUERY_KEY } from "@/features/mypage/hooks/usePartners";
 import {
+  resolveCompatibilityStatus,
   toCompatibilityResultDisplay,
   type CompatibilityResultDisplay,
 } from "@/features/compatibility/model/compatibility";
@@ -62,7 +63,13 @@ export function useCompatibility() {
   const compatibilityData = compatibilityQuery.data?.success
     ? compatibilityQuery.data.data
     : null;
-  const shouldPollCompatibility = compatibilityData?.status === "PENDING";
+  const compatibilityStatus = resolveCompatibilityStatus(
+    compatibilityQuery.data?.success
+      ? compatibilityQuery.data.meta?.backendStatus
+      : undefined,
+    compatibilityData?.status,
+  );
+  const shouldPollCompatibility = compatibilityStatus === "PENDING";
 
   useEffect(() => {
     if (!fetchPartnerId || !shouldPollCompatibility) {
@@ -79,7 +86,12 @@ export function useCompatibility() {
   }, [fetchPartnerId, refetchCompatibility, shouldPollCompatibility]);
 
   const result: CompatibilityResultDisplay | null = compatibilityData
-    ? toCompatibilityResultDisplay(compatibilityData)
+    ? toCompatibilityResultDisplay(
+        compatibilityData,
+        compatibilityQuery.data?.success
+          ? compatibilityQuery.data.meta?.backendStatus
+          : undefined,
+      )
     : null;
 
   const isInResultView = !!fetchPartnerId;
