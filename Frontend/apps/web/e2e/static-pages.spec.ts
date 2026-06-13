@@ -51,7 +51,7 @@ test.describe("static content pages smoke", () => {
         name: "1. 수집하는 개인정보 항목",
       }),
     ).toBeVisible();
-    await expect(page.getByText("sajume.team@gmail.com")).toBeVisible();
+    await expect(page.getByText("saju.official@gmail.com")).toBeVisible();
     await expectNoHorizontalOverflow(page);
   });
 

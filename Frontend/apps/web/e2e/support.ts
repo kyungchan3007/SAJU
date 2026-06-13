@@ -512,21 +512,7 @@ export async function clickVisibleLink(page: Page, href: string) {
 }
 
 export async function expectVisibleLink(page: Page, href: string) {
-  const visibleCount = await page.locator(`a[href="${href}"]`).evaluateAll(
-    (links) =>
-      links.filter((candidate) => {
-        const style = window.getComputedStyle(candidate);
-        const rect = candidate.getBoundingClientRect();
-        return (
-          style.display !== "none" &&
-          style.visibility !== "hidden" &&
-          rect.width > 0 &&
-          rect.height > 0
-        );
-      }).length,
-  );
-
-  expect(visibleCount).toBeGreaterThan(0);
+  await expect(page.locator(`a[href="${href}"]`).first()).toBeVisible();
 }
 
 const traditionalSaju = {

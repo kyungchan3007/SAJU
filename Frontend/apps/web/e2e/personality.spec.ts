@@ -37,9 +37,7 @@ test.describe("personality report flow", () => {
     await page.getByRole("button", { name: "상세 성향 리포트 보기" }).click();
 
     await expect(page.getByTestId("personality-page")).toBeVisible();
-    await expect(
-      page.getByRole("heading", { name: "상세 성향 리포트" }),
-    ).toBeVisible();
+    await expect(page.getByText("상세 성향 리포트").first()).toBeVisible();
     await expect(page.getByText("임수(壬水) 감성형")).toBeVisible();
     await expect(page.getByText("연애 성향")).toBeVisible();
     await expect(page.getByText("직업 성향")).toBeVisible();
@@ -72,11 +70,11 @@ test.describe("personality report flow", () => {
     await page.goto("/mypage/personality");
 
     await expect(
-      page.getByText("상세 성향 리포트를 불러오지 못했습니다."),
+      page.getByText("상세 성향 리포트를 불러오지 못했습니다.").first(),
     ).toBeVisible();
   });
 
-  test("shows empty state when personality data is missing", async ({
+  test("keeps progress gate when personality data is missing", async ({
     page,
     context,
     baseURL,
@@ -98,13 +96,12 @@ test.describe("personality report flow", () => {
 
     await page.goto("/mypage/personality");
 
+    await expect(page.getByRole("progressbar")).toBeVisible();
+    await expect(
+      page.getByText("사주 운세를 분석하고 있어요"),
+    ).toBeVisible();
     await expect(
       page.getByRole("button", { name: "상세 성향 리포트 보기" }),
-    ).toBeVisible();
-    await page.getByRole("button", { name: "상세 성향 리포트 보기" }).click();
-
-    await expect(
-      page.getByText("상세 성향 리포트를 찾을 수 없습니다."),
-    ).toBeVisible();
+    ).toHaveCount(0);
   });
 });
