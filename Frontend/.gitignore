@@ -16,6 +16,7 @@ apps/*/test-results
 .claude
 tsconfig.tsbuildinfo
 apps/*/tsconfig.tsbuildinfo
+.env.e2e
 .env
 .env.local
 .env.development.local

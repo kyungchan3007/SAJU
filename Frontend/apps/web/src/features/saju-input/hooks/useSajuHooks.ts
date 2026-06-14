@@ -8,9 +8,11 @@ import { SAJU_RESULT_QUERY_KEY } from "@/features/saju-result";
 import { SAJU_PROFILE_QUERY_KEY } from "@/features/saju-profile/model/query";
 import type { SajuFormValues } from "@/features/saju-input/type/type";
 import type { ApiEnvelope } from "@/shared/api";
+import { buildTurnstileVerifyPath } from "@/shared/api/auth/turnstileRecovery";
 import {
   buildLoginPath,
   buildSajuInputPath,
+  buildSajuResultPath,
 } from "@/shared/lib/internalRedirect";
 
 type UseSajuHooksParams = {
@@ -40,6 +42,21 @@ export const useSajuHooks = ({ nextPath }: UseSajuHooksParams = {}) => {
         body: JSON.stringify(formValues),
       });
       router.push(loginPath);
+      return;
+    }
+
+    if (response.status === 403) {
+      const result = (await response.json()) as ApiEnvelope<unknown>;
+
+      if (!result.success && result.error.code === "TURNSTILE_REQUIRED") {
+        await fetch("/api/saju/draft", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formValues),
+        });
+        router.push(buildTurnstileVerifyPath(buildSajuResultPath(nextPath)));
+      }
+
       return;
     }
 

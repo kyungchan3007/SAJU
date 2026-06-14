@@ -76,3 +76,37 @@ npm run test -w @saju/web
 # E2E
 npm run e2e -w @saju/web
 ```
+
+## Turnstile E2E
+
+실제 Cloudflare Turnstile 위젯을 E2E에서 사용할 때는 프로덕션 키 대신 Cloudflare 테스트 키를 사용합니다.
+
+예시 `.env.e2e`
+
+```bash
+NEXT_PUBLIC_TURNSTILE_SITE_KEY=1x00000000000000000000BB
+TURNSTILE_SECRET_KEY=1x0000000000000000000000000000000AA
+```
+
+- `apps/web/playwright.config.ts`는 `.env.e2e`를 읽어 E2E 서버에 주입합니다.
+- Turnstile 관련 Playwright 실행은 `localhost` 기준으로 맞추는 편이 안전합니다.
+- `127.0.0.1`와 `localhost`를 섞으면 CSRF Origin 검증과 쿠키 기준이 어긋날 수 있습니다.
+
+## Turnstile 검증 범위
+
+- 로그인 화면에서 invisible 위젯이 토큰을 발급하는지
+- `/api/auth/turnstile-verify` 성공 후 카카오 로그인 시작으로 이어지는지
+- `/verify?returnTo=...` 페이지에서 재검증 후 원래 화면으로 복귀하는지
+- 보호 API가 `TURNSTILE_REQUIRED`를 주면 각 feature가 `/verify`로 보내는지
+
+## 추천 실행 예시
+
+```bash
+# 실제 Turnstile 위젯 검증
+E2E_BASE_URL=http://localhost:3100 E2E_PORT=3100 \
+  npm run test:e2e -- e2e/auth-turnstile.spec.ts --project=chromium
+
+# 보호 API 복구 흐름 검증
+E2E_BASE_URL=http://localhost:3100 E2E_PORT=3100 \
+  npm run test:e2e -- e2e/auth-security.spec.ts e2e/community.spec.ts e2e/year-fortune.spec.ts --project=chromium
+```

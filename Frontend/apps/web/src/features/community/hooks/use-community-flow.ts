@@ -1,7 +1,9 @@
 "use client";
 
+import type { Route } from "next";
 import { useMemo, useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 
 import { useAuthScope } from "@/shared/app-infra/query-provider/auth-scope-context";
 import { fetchCommunityCohortsOnClient } from "@/entities/community/client/fetchCommunityCohortsOnClient";
@@ -20,6 +22,10 @@ import {
   type ContactForm,
   type MeetingType,
 } from "@/features/community/model/community";
+import {
+  buildTurnstileVerifyPath,
+  isTurnstileRequiredError,
+} from "@/shared/api/auth/turnstileRecovery";
 
 export type { ContactForm, MeetingType };
 
@@ -30,6 +36,7 @@ const SAJU_PROFILE_QUERY_KEY = ["saju-profile", "community-joined"] as const;
 
 export function useCommunityFlow() {
   const authScope = useAuthScope();
+  const router = useRouter();
   const [step, setStep] = useState(1);
   const [selectedType, setSelectedType] = useState<MeetingType>(null);
   const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
@@ -85,6 +92,11 @@ export function useCommunityFlow() {
       setErrorMessage(null);
     },
     onError: (error) => {
+      if (isTurnstileRequiredError(error)) {
+        router.replace(buildTurnstileVerifyPath("/community") as Route);
+        return;
+      }
+
       setErrorMessage(
         error instanceof Error ? error.message : "커뮤니티 요청에 실패했어요.",
       );

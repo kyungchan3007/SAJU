@@ -17,6 +17,10 @@ vi.mock("@/entities/saju/server/onSajuPostOnServer", () => ({
   onSajuPostOnServer: mockedOnSajuPostOnServer,
 }));
 
+vi.mock("@/shared/api/auth/rejectUnverifiedTurnstile", () => ({
+  rejectUnverifiedTurnstile: vi.fn().mockResolvedValue(null),
+}));
+
 function createCookieStore(values: Record<string, string>) {
   return {
     get: vi.fn((key: string) => {
@@ -41,6 +45,13 @@ function createJsonRequest(body: unknown) {
   });
 }
 
+function createEmptyRequest() {
+  return new Request("http://localhost/api/saju/result", {
+    method: "POST",
+    headers: { Origin: "http://localhost" },
+  });
+}
+
 describe("/api/saju/result POST", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -53,7 +64,7 @@ describe("/api/saju/result POST", () => {
   it("returns 401 when access token is missing", async () => {
     mockedCookies.mockResolvedValue(createCookieStore({}));
 
-    const response = await POST();
+    const response = await POST(createEmptyRequest());
     const body = await response.json();
 
     expect(response.status).toBe(401);
@@ -79,7 +90,7 @@ describe("/api/saju/result POST", () => {
       }),
     );
 
-    const response = await POST();
+    const response = await POST(createEmptyRequest());
     const body = await response.json();
     const setCookie = response.headers.get("set-cookie") ?? "";
 
@@ -123,7 +134,7 @@ describe("/api/saju/result POST", () => {
       data: { weakElement: "fire" },
     });
 
-    const response = await POST();
+    const response = await POST(createEmptyRequest());
     const body = await response.json();
 
     expect(response.status).toBe(200);
@@ -193,7 +204,7 @@ describe("/api/saju/result POST", () => {
       message: "Not found",
     });
 
-    const response = await POST();
+    const response = await POST(createEmptyRequest());
     const body = await response.json();
 
     expect(response.status).toBe(400);
@@ -237,7 +248,7 @@ describe("/api/saju/result POST", () => {
       message: "Saju request failed.",
     });
 
-    const response = await POST();
+    const response = await POST(createEmptyRequest());
     const body = await response.json();
 
     expect(response.status).toBe(500);
@@ -263,7 +274,7 @@ describe("/api/saju/result POST", () => {
       message: "Daily saju request failed.",
     });
 
-    const response = await POST();
+    const response = await POST(createEmptyRequest());
     const body = await response.json();
 
     expect(response.status).toBe(503);
@@ -290,7 +301,7 @@ describe("/api/saju/result POST", () => {
       message: "Not found",
     });
 
-    const response = await POST();
+    const response = await POST(createEmptyRequest());
     const body = await response.json();
 
     expect(response.status).toBe(400);

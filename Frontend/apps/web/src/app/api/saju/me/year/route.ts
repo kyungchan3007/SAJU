@@ -3,11 +3,12 @@ import { NextResponse } from "next/server";
 
 import { getMyYearFortuneOnServer } from "@/entities/saju/server/getMyYearFortuneOnServer";
 import { createErrorResponse, createSuccessResponse } from "@/shared/api";
+import { withApiGuards } from "@/shared/api/auth/withApiGuards";
 import { ACCESS_TOKEN_COOKIE_KEY } from "@/shared/config/authToken";
 
 export const revalidate = 0;
 
-export async function GET() {
+export const GET = withApiGuards({ requireTurnstile: true }, async () => {
   const token = (await cookies()).get(ACCESS_TOKEN_COOKIE_KEY)?.value;
 
   if (!token) {
@@ -27,4 +28,4 @@ export async function GET() {
   }
 
   return NextResponse.json(createSuccessResponse(result.data, result.meta));
-}
+});

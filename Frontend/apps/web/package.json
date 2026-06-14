@@ -25,6 +25,7 @@
     "chromatic": "chromatic"
   },
   "dependencies": {
+    "@marsidev/react-turnstile": "^1.5.3",
     "@mdx-js/loader": "^3.1.1",
     "@mdx-js/react": "^3.1.1",
     "@next/mdx": "^16.2.9",

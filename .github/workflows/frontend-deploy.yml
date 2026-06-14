@@ -5,6 +5,7 @@ on:
     branches: [develop]
     paths:
       - Frontend/**
+      - .github/workflows/frontend-deploy.yml
 
 jobs:
   deploy:
@@ -27,6 +28,7 @@ jobs:
         working-directory: Frontend
         env:
           BACKEND_API_BASE_URL: ${{ secrets.BACKEND_API_BASE_URL }}
+          NEXT_PUBLIC_TURNSTILE_SITE_KEY: ${{ secrets.NEXT_PUBLIC_TURNSTILE_SITE_KEY }}
         run: npm run cf:build -w @saju/web
 
       - name: Deploy to Cloudflare Workers

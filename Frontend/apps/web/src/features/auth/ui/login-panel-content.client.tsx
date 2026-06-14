@@ -1,5 +1,7 @@
 "use client";
 
+import { useTurnstileGate } from "@/features/auth/hooks/useTurnstileGate";
+import { TurnstileWidget } from "@/shared/ui/TurnstileWidget";
 import { KakaoIcon } from "@/shared/ui";
 
 type LoginPanelContentProps = {
@@ -7,8 +9,24 @@ type LoginPanelContentProps = {
 };
 
 export function LoginPanelContent({ kakaoLoginUrl }: LoginPanelContentProps) {
+  const turnstileGate = useTurnstileGate({
+    onVerified: () => {
+      window.location.href = kakaoLoginUrl;
+    },
+  });
+
+  async function handleLogin() {
+    await turnstileGate.verifyAndContinue();
+  }
+
   return (
     <div className="flex flex-col items-center text-center">
+      <TurnstileWidget
+        key={turnstileGate.widgetKey}
+        onSuccess={turnstileGate.handleSuccess}
+        onError={turnstileGate.handleError}
+      />
+
       {/* 서비스 로고 */}
       <div className="mb-6">
         <p className="font-display text-3xl font-bold tracking-tight text-black">
@@ -28,11 +46,18 @@ export function LoginPanelContent({ kakaoLoginUrl }: LoginPanelContentProps) {
         <br />
         무료로 만나볼 수 있어요.
       </p>
+      {turnstileGate.error ? (
+        <p className="mt-3 text-xs leading-relaxed text-red-600">
+          {turnstileGate.error}
+        </p>
+      ) : null}
 
       {/* 카카오 로그인 버튼 — 카카오 공식 가이드라인 색상 */}
-      <a
-        href={kakaoLoginUrl}
-        className="mt-7 flex h-[48px] w-full items-center justify-center gap-2 border-2 border-black font-bold text-[rgba(0,0,0,0.85)] transition hover:brightness-95"
+      <button
+        type="button"
+        onClick={handleLogin}
+        disabled={turnstileGate.isPending}
+        className="mt-7 flex h-[48px] w-full items-center justify-center gap-2 border-2 border-black font-bold text-[rgba(0,0,0,0.85)] transition hover:brightness-95 disabled:opacity-70"
         style={{
           backgroundColor: "#FEE500",
           boxShadow: "3px 3px 0 #000",
@@ -40,8 +65,8 @@ export function LoginPanelContent({ kakaoLoginUrl }: LoginPanelContentProps) {
         aria-label="카카오 계정으로 사주이야기 로그인"
       >
         <KakaoIcon size={20} />
-        카카오로 시작하기
-      </a>
+        {turnstileGate.isPending ? "보안 확인 중..." : "카카오로 시작하기"}
+      </button>
     </div>
   );
 }

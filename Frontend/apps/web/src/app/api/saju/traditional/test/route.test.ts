@@ -12,6 +12,10 @@ vi.mock("@/entities/saju/server/onSajuTraditionalGetOnServer", () => ({
   onSajuTraditionalGetOnServer: mockedOnSajuTraditionalGetOnServer,
 }));
 
+vi.mock("@/shared/api/auth/rejectUnverifiedTurnstile", () => ({
+  rejectUnverifiedTurnstile: vi.fn().mockResolvedValue(null),
+}));
+
 function createCookieStore(values: Record<string, string>) {
   return {
     get: vi.fn((key: string) => {
@@ -21,6 +25,8 @@ function createCookieStore(values: Record<string, string>) {
   };
 }
 
+const mockRequest = new Request("http://localhost/api/saju/traditional");
+
 describe("/api/saju/traditional GET", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -29,7 +35,7 @@ describe("/api/saju/traditional GET", () => {
   it("returns 401 when access token is missing", async () => {
     mockedCookies.mockResolvedValue(createCookieStore({}));
 
-    const response = await GET();
+    const response = await GET(mockRequest);
     const body = await response.json();
 
     expect(response.status).toBe(401);
@@ -56,7 +62,7 @@ describe("/api/saju/traditional GET", () => {
       },
     });
 
-    const response = await GET();
+    const response = await GET(mockRequest);
     const body = await response.json();
 
     expect(response.status).toBe(200);
@@ -80,7 +86,7 @@ describe("/api/saju/traditional GET", () => {
       message: "Saju not found.",
     });
 
-    const response = await GET();
+    const response = await GET(mockRequest);
     const body = await response.json();
 
     expect(response.status).toBe(404);

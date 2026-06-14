@@ -141,6 +141,7 @@ export async function addAuthCookies(
 
   await context.addCookies([
     { name: "saju_access_token", value: "e2e-access-token", url },
+    { name: "saju_turnstile_verified", value: "1", url },
     { name: "saju_user_email", value: "e2e@example.com", url },
   ]);
 }

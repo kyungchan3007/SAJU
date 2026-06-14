@@ -1,5 +1,6 @@
 import type { CommunityJoinRequest, CommunityJoinResponse } from "@/generated/api";
 import type { ApiEnvelope } from "@/shared/api";
+import { ApiRequestError } from "@/shared/api/requestError";
 
 export async function joinCommunityOnClient(
   payload: CommunityJoinRequest,
@@ -14,8 +15,10 @@ export async function joinCommunityOnClient(
   >;
 
   if (!response.ok) {
-    throw new Error(
+    throw new ApiRequestError(
       result.success ? "Failed to join community." : result.error.message,
+      result.success ? "COMMUNITY_JOIN_FAILED" : result.error.code,
+      response.status,
     );
   }
 

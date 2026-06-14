@@ -10,6 +10,33 @@ test.describe("year fortune flow", () => {
     await addAuthCookies(context, baseURL);
   });
 
+  test("redirects to verify when turnstile validation is required", async ({
+    page,
+    context,
+  }) => {
+    await mockCurrentProjectApis(page);
+    await context.route("**/api/saju/me/year**", async (route) => {
+      await route.fulfill({
+        status: 403,
+        contentType: "application/json",
+        body: JSON.stringify({
+          success: false,
+          data: null,
+          error: {
+            code: "TURNSTILE_REQUIRED",
+            message: "보안 인증이 필요합니다.",
+          },
+        }),
+      });
+    });
+
+    await page.goto("/mypage/year-fortune");
+
+    await expect(page).toHaveURL(
+      /\/verify\?returnTo=%2Fmypage%2Fyear-fortune$/,
+    );
+  });
+
   test("polls while pending and reveals the result after completion", async ({
     page,
     context,

@@ -23,6 +23,29 @@ sidebar_position: 3
 
 `authenticatedBackendFetch`를 사용하면 토큰 갱신과 로그인 리다이렉트가 자동으로 처리됩니다.
 
+## Guard 패턴
+
+상태 변경 보호와 Turnstile 검증은 각 `route.ts` 안에서 직접 반복하지 않고 공용 래퍼로 선언합니다.
+
+```ts
+export const POST = withApiGuards(
+  { requireCsrf: true, requireTurnstile: true },
+  async (request) => {
+    // route 본문
+  },
+);
+```
+
+- `requireCsrf` — `rejectCrossOriginRequest` 실행
+- `requireTurnstile` — `rejectUnverifiedTurnstile` 실행
+- 보호 조건을 통과한 뒤에만 실제 route handler가 실행됩니다.
+
+## Turnstile 응답 규약
+
+- 보호 API는 Turnstile 검증 쿠키가 없으면 `403` 과 `TURNSTILE_REQUIRED` 에러 코드를 반환합니다.
+- 이 응답은 로그인 필요(`401`)와 구분해야 합니다.
+- 클라이언트는 이 코드를 받았을 때 로그인 화면이 아니라 `/verify?returnTo=...` 복구 흐름으로 보내야 합니다.
+
 ## 주요 BFF 엔드포인트
 
 | 메서드 | 경로 | 설명 |
@@ -65,5 +88,6 @@ const res = await fetch(process.env.BACKEND_URL + '/saju/me');
 
 - `route.ts`는 HTTP 입출력·쿠키 처리에 집중, 비즈니스 로직은 `entities/*/server`로 위임
 - 쿠키 인증을 사용하는 상태 변경 요청은 `rejectCrossOriginRequest`로 Origin 검증
+- Turnstile이 필요한 보호 API는 `withApiGuards({ requireTurnstile: true })` 또는 `withApiGuards({ requireCsrf: true, requireTurnstile: true })`를 우선 사용
 - 토큰 쿠키 키는 `shared/config/authToken.ts` 상수 사용 (문자열 하드코딩 금지)
 - 백엔드 응답 파싱은 `parseBackendApiResponse`로 통일

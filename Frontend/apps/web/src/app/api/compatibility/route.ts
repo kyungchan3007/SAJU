@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { createSuccessResponse } from "@/shared/api";
-import { rejectCrossOriginRequest } from "@/shared/api/auth/rejectCrossOriginRequest";
+import { withApiGuards } from "@/shared/api/auth/withApiGuards";
 
 export const revalidate = 60;
 
@@ -16,16 +16,15 @@ export async function GET() {
   );
 }
 
-export async function POST(request?: Request) {
-  const csrfResponse = rejectCrossOriginRequest(request);
-  if (csrfResponse) return csrfResponse;
-
-  return NextResponse.json(
-    createSuccessResponse({
-      feature: "compatibility",
-      detailLocked: true,
-      message:
-        "Detailed compatibility unlock remains behind payment verification.",
-    }),
-  );
-}
+export const POST = withApiGuards(
+  { requireCsrf: true, requireTurnstile: true },
+  async () =>
+    NextResponse.json(
+      createSuccessResponse({
+        feature: "compatibility",
+        detailLocked: true,
+        message:
+          "Detailed compatibility unlock remains behind payment verification.",
+      }),
+    ),
+);

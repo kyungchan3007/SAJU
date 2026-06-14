@@ -1,5 +1,6 @@
 import type { SajuResponse } from "@/generated/api";
 import type { ApiEnvelope } from "@/shared/api";
+import { ApiRequestError } from "@/shared/api/requestError";
 
 export async function fetchSajuTraditionalOnClient(): Promise<
   ApiEnvelope<SajuResponse | undefined>
@@ -10,8 +11,10 @@ export async function fetchSajuTraditionalOnClient(): Promise<
   >;
 
   if (!response.ok) {
-    throw new Error(
+    throw new ApiRequestError(
       result.success ? "Failed to fetch traditional saju." : result.error.message,
+      result.success ? "SAJU_TRADITIONAL_GET_FAILED" : result.error.code,
+      response.status,
     );
   }
 

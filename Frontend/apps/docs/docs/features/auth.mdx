@@ -29,19 +29,35 @@ entities/auth/server/
 ## 로그인 흐름
 
 ```
-1. /login 페이지 → 카카오 로그인 버튼 클릭
-2. GET /api/auth/kakao → 카카오 OAuth URL로 리다이렉트
-3. 카카오 인증 완료 → GET /api/auth/kakao/callback
-4. OAuth state 검증 → code 교환 → 백엔드 토큰 발급
-5. access/refresh token → HttpOnly 쿠키 저장
-6. 이전 화면으로 복귀 (또는 /home)
+1. /login 페이지 진입 → Turnstile invisible 위젯이 토큰 준비
+2. 카카오 로그인 버튼 클릭 → POST /api/auth/turnstile-verify
+3. Turnstile 검증 성공 → GET /api/auth/kakao
+4. 카카오 인증 완료 → GET /api/auth/kakao/callback
+5. OAuth state 검증 → code 교환 → 백엔드 토큰 발급
+6. access/refresh token → HttpOnly 쿠키 저장
+7. 이전 화면으로 복귀 (또는 /home)
 ```
+
+## Turnstile 검증
+
+- 로그인 시작 전에 Cloudflare Turnstile invisible 검증을 한 번 수행합니다.
+- 검증 성공 시 `saju_turnstile_verified` 쿠키를 저장하고, 일정 시간 동안 보호 API 접근에 사용합니다.
+- 검증 실패 시 카카오 로그인으로 이동하지 않고 현재 로그인 화면에 머물며 에러를 노출합니다.
+- 로그인 `next` 파라미터는 Turnstile 추가 이후에도 그대로 유지됩니다.
+
+## `/verify` 복구 흐름
+
+- 로그인은 되어 있지만 Turnstile 검증 쿠키가 없거나 만료된 경우 보호 API는 `TURNSTILE_REQUIRED`를 반환합니다.
+- 클라이언트 feature hook 또는 submit handler는 이 에러를 받으면 `/verify?returnTo=...`로 보냅니다.
+- `/verify` 페이지는 다시 Turnstile 검증을 수행하고, 성공 시 원래 기능 페이지로 복귀합니다.
+- 실패 시에는 `/verify` 페이지에 머물며 재시도를 유도합니다.
 
 ## 토큰 관리
 
 - `access_token`과 `refresh_token`은 모두 `HttpOnly` 쿠키
 - 쿠키 키 이름은 `shared/config/authToken.ts` 상수 사용
 - BFF 내부에서 401 응답 시 `refresh` route가 자동으로 토큰 갱신
+- Turnstile 검증 쿠키는 로그인 토큰과 별개 세션으로 취급합니다.
 
 ## 로그인 UI 규칙
 
@@ -49,6 +65,7 @@ entities/auth/server/
 - view state는 `default` / `email` 명확하게 구분
 - 과한 bounce·scale 애니메이션 지양
 - 에러 메시지 영역과 input focus 상태를 항상 고려
+- Turnstile 실패 메시지는 로그인 카드 안에서 처리하고 별도 카카오 이동을 시도하지 않습니다.
 
 ## 탈퇴 복구
 

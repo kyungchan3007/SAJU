@@ -46,6 +46,13 @@ app/api/saju/me/compatibility/[partnerId]/route.ts
    → 유료 콘텐츠 → 결제 유도
 ```
 
+## Turnstile 복구
+
+- 궁합 화면은 일일 사주 요약과 일부 보호 API를 함께 사용합니다.
+- Turnstile 검증 쿠키가 없거나 만료되면 관련 요청이 `403 TURNSTILE_REQUIRED`를 반환할 수 있습니다.
+- 이 경우 compatibility feature는 `/verify?returnTo=/compatibility` 로 보내고, 재검증 후 같은 화면으로 복귀합니다.
+- 비로그인 사용자는 먼저 `/login?next=/compatibility` 흐름을 탑니다. `/verify`는 로그인 이후 Turnstile 만료 복구 전용입니다.
+
 ## 결제 연동
 
 - `POST /api/payment/verify` — 결제 완료 후 서버 검증

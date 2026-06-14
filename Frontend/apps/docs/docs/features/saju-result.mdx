@@ -51,6 +51,8 @@ POST /api/saju/result
 - `/saju/result`는 `next` 검색 파라미터가 있으면 결과 조회 후 원래 목적지로 복귀시킵니다.
 - `next`가 없으면 결과 화면에 머뭅니다.
 - 보호 서비스 재진입 루프를 막기 위해 사주 입력 성공 직후 관련 프로필 캐시를 갱신하거나 제거해야 합니다.
+- Turnstile 검증 쿠키가 만료된 상태에서 `/api/saju/result` 호출이 `TURNSTILE_REQUIRED`를 반환하면, 사주 입력 feature는 draft를 저장한 뒤 `/verify?returnTo=/saju/result...` 로 복구시킵니다.
+- 재검증이 끝나면 pending form cookie를 사용해 기존 제출 흐름을 이어갑니다.
 
 ## 캐시 정책
 

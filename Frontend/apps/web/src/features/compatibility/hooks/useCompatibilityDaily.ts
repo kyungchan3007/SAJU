@@ -1,19 +1,36 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
+import type { Route } from "next";
+import { useRouter } from "next/navigation";
 
 import { useAuthScope } from "@/shared/app-infra/query-provider/auth-scope-context";
 import { fetchSajuResultOnClient } from "@/entities/saju";
 import { SAJU_RESULT_QUERY_KEY } from "@/features/saju-result/model/query";
+import {
+  buildTurnstileVerifyPath,
+  isTurnstileRequiredError,
+} from "@/shared/api/auth/turnstileRecovery";
 
 export function useCompatibilityDaily() {
   const authScope = useAuthScope();
-  return useQuery({
+  const router = useRouter();
+  const query = useQuery({
     queryKey: [...SAJU_RESULT_QUERY_KEY, authScope],
     queryFn: fetchSajuResultOnClient,
     staleTime: 60 * 60 * 1000,
     gcTime: 60 * 60 * 1000,
     retry: 1,
   });
-}
 
+  useEffect(() => {
+    if (!isTurnstileRequiredError(query.error)) {
+      return;
+    }
+
+    router.replace(buildTurnstileVerifyPath("/compatibility") as Route);
+  }, [query.error, router]);
+
+  return query;
+}

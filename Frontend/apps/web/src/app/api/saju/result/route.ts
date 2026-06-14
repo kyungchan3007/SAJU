@@ -5,7 +5,7 @@ import { onSajuDailyGetOnServer } from "@/entities/saju/server/onSajuDailyGetOnS
 import { onSajuPostOnServer } from "@/entities/saju/server/onSajuPostOnServer";
 import type { SajuFormValues } from "@/features/saju-input/type/type";
 import { createErrorResponse, createSuccessResponse } from "@/shared/api";
-import { rejectCrossOriginRequest } from "@/shared/api/auth/rejectCrossOriginRequest";
+import { withApiGuards } from "@/shared/api/auth/withApiGuards";
 import { ACCESS_TOKEN_COOKIE_KEY } from "@/shared/config/authToken";
 import { SAJU_PENDING_FORM_COOKIE_KEY } from "@/shared/config/sajuCookie";
 
@@ -109,10 +109,9 @@ function clearPendingFormCookie(response: NextResponse) {
   });
 }
 
-export async function POST(request?: Request) {
-  const csrfResponse = rejectCrossOriginRequest(request);
-  if (csrfResponse) return csrfResponse;
-
+export const POST = withApiGuards(
+  { requireCsrf: true, requireTurnstile: true },
+  async (request?: Request) => {
   const submittedFormValues = await readSubmittedFormValue(request);
   const cookieStore = await cookies();
   const token = cookieStore.get(ACCESS_TOKEN_COOKIE_KEY)?.value;
@@ -213,4 +212,5 @@ export async function POST(request?: Request) {
     createErrorResponse("SAJU_DAILY_GET_FAILED", "Daily saju request failed."),
     { status: 500 },
   );
-}
+  },
+);

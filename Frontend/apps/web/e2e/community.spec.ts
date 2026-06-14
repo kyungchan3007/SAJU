@@ -25,6 +25,38 @@ test.describe("community join flow", () => {
     await mockCurrentProjectApis(page);
   });
 
+  test("redirects to verify when turnstile validation is required on submit", async ({
+    context,
+    page,
+    baseURL,
+  }) => {
+    await page.unrouteAll({ behavior: "ignoreErrors" });
+    await addAuthCookies(context, baseURL);
+    await mockCurrentProjectApis(page);
+    await page.route("**/api/community/join", async (route) => {
+      await route.fulfill({
+        status: 403,
+        contentType: "application/json",
+        body: JSON.stringify({
+          success: false,
+          data: null,
+          error: {
+            code: "TURNSTILE_REQUIRED",
+            message: "보안 인증이 필요합니다.",
+          },
+        }),
+      });
+    });
+
+    await goToTopicsStep(page);
+    await page.getByRole("button", { name: /한강산책/ }).click();
+    await page
+      .getByRole("button", { name: /커뮤니티 열리고 알림 받기/ })
+      .click();
+
+    await expect(page).toHaveURL(/\/verify\?returnTo=%2Fcommunity$/);
+  });
+
   test("locks the topic group that does not match selected meeting type", async ({
     page,
   }) => {
@@ -130,7 +162,6 @@ test.describe("community join flow", () => {
     ).toBeVisible();
   });
 });
-
 
 
 
