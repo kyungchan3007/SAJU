@@ -4,10 +4,10 @@ import type { TraditionalFortuneResponse } from "@/generated/api";
 import type { JeongtongsajuViewModel } from "@/features/mypage/model/jeongtongsaju";
 import { TraditionalFortuneSection } from "@/features/traditional-fortune/ui/traditional-fortune-section";
 import type { ApiEnvelope } from "@/shared/api";
+import { RedirectToError } from "@/shared/app-infra/navigation/redirect-to-error.client";
 import {
   Button,
   EmptyStateCard,
-  ErrorStateCard,
   LoadingStateCard,
 } from "@/shared/ui";
 import { PageContentLayout } from "@/shared/ui/page-content-layout";
@@ -56,17 +56,7 @@ export function JeongtongsajuAndFortuneSectionView({
   }
 
   if (isError) {
-    return (
-      <ErrorStateCard
-        title="사주 정보를 불러오지 못했습니다"
-        description="잠시 후 다시 확인해 주세요."
-        action={
-          <Button asChild size="sm" className="rounded-full">
-            <Link href="/mypage">마이페이지로 돌아가기</Link>
-          </Button>
-        }
-      />
-    );
+    return <RedirectToError code="JEONGTONGSAJU_LOAD_FAILED" />;
   }
 
   if (!hasSaju) {
@@ -76,7 +66,7 @@ export function JeongtongsajuAndFortuneSectionView({
         description="사주를 먼저 입력해 주세요."
         action={
           <Button asChild size="sm" className="rounded-full">
-            <Link href="/saju">사주 입력하기 →</Link>
+            <Link href="/saju">사주 입력하기</Link>
           </Button>
         }
       />
@@ -84,17 +74,7 @@ export function JeongtongsajuAndFortuneSectionView({
   }
 
   if (!viewModel) {
-    return (
-      <ErrorStateCard
-        title="사주 정보를 불러오지 못했습니다"
-        description="잠시 후 다시 확인해 주세요."
-        action={
-          <Button asChild size="sm" className="rounded-full">
-            <Link href="/mypage">마이페이지로 돌아가기</Link>
-          </Button>
-        }
-      />
-    );
+    return <RedirectToError code="JEONGTONGSAJU_LOAD_FAILED" />;
   }
 
   return (

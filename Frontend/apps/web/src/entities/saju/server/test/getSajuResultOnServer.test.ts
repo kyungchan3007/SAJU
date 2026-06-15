@@ -66,6 +66,33 @@ describe("getSajuResultOnServer", () => {
     });
   });
 
+  it("returns cached daily result before backend calls", async () => {
+    const cached = encodeCookiePayload({
+      data: {
+        todayScore: 88,
+        weakElement: "water",
+      },
+      exp: Date.now() + 60_000,
+    });
+
+    mockedCookies.mockResolvedValue(
+      createCookieStore({
+        saju_access_token: "token",
+        saju_daily_cache: cached,
+      }),
+    );
+
+    await expect(getSajuResultOnServer()).resolves.toEqual({
+      success: true,
+      data: {
+        todayScore: 88,
+        weakElement: "water",
+      },
+    });
+    expect(mockedOnSajuDailyGetOnServer).not.toHaveBeenCalled();
+    expect(mockedOnSajuPostOnServer).not.toHaveBeenCalled();
+  });
+
   it("maps post failure to request-failed when draft recovery submit fails", async () => {
     const pending = encodeCookiePayload({
       formValues: {

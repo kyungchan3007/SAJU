@@ -2,8 +2,6 @@
 
 import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import type { Route } from "next";
-import { useRouter } from "next/navigation";
 
 import { useAuthScope } from "@/shared/app-infra/query-provider/auth-scope-context";
 import { fetchYearFortuneOnClient } from "@/entities/saju/client/fetchYearFortuneOnClient";
@@ -13,14 +11,13 @@ import {
   toYearFortuneDisplay,
   type YearFortuneDisplay,
 } from "@/features/year-fortune/model/yearFortune";
-import {
-  buildTurnstileVerifyPath,
-  isTurnstileRequiredError,
-} from "@/shared/api/auth/turnstileRecovery";
+import { useTurnstileErrorRedirect } from "@/shared/hooks/useTurnstileErrorRedirect";
 
 export function useYearFortune() {
   const authScope = useAuthScope();
-  const router = useRouter();
+  const redirectIfTurnstileRequired = useTurnstileErrorRedirect(
+    "/mypage/year-fortune",
+  );
   const query = useQuery({
     queryKey: [...YEAR_FORTUNE_QUERY_KEY, authScope],
     queryFn: fetchYearFortuneOnClient,
@@ -49,12 +46,8 @@ export function useYearFortune() {
   }, [isPending, refetch]);
 
   useEffect(() => {
-    if (!isTurnstileRequiredError(query.error)) {
-      return;
-    }
-
-    router.replace(buildTurnstileVerifyPath("/mypage/year-fortune") as Route);
-  }, [query.error, router]);
+    redirectIfTurnstileRequired(query.error);
+  }, [query.error, redirectIfTurnstileRequired]);
 
   const display: YearFortuneDisplay | null = raw
     ? toYearFortuneDisplay(raw.data ?? undefined, raw?.meta?.backendStatus)

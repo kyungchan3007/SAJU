@@ -1,6 +1,4 @@
-const SAJU_RESULT_CLIENT_ERROR_MESSAGES = {
-  PENDING_FORM_NOT_FOUND: "사주 정보를 입력해주세요.",
-} as const;
+import { resolveApiErrorMessage } from "@/shared/api";
 
 export class SajuResultClientError extends Error {
   code: string;
@@ -13,9 +11,5 @@ export class SajuResultClientError extends Error {
 }
 
 function resolveSajuResultClientErrorMessage(code: string, fallback: string) {
-  return (
-    SAJU_RESULT_CLIENT_ERROR_MESSAGES[
-      code as keyof typeof SAJU_RESULT_CLIENT_ERROR_MESSAGES
-    ] ?? fallback
-  );
+  return resolveApiErrorMessage(code, fallback);
 }

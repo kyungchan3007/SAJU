@@ -42,7 +42,7 @@ describe("/api/auth/logout POST", () => {
       data: null,
       error: {
         code: "AUTH_LOGOUT_FAILED",
-        message: "TOKEN_REFRESH_FAILED",
+        message: "로그아웃을 처리하지 못했습니다. 잠시 후 다시 시도해주세요.",
       },
     });
     expect(setCookie).toContain("saju_access_token");
@@ -82,7 +82,7 @@ describe("/api/auth/logout POST", () => {
       data: null,
       error: {
         code: "CSRF_ORIGIN_REQUIRED",
-        message: "Origin header is required for state-changing requests.",
+        message: "요청을 확인할 수 없습니다. 다시 시도해주세요.",
       },
     });
   });

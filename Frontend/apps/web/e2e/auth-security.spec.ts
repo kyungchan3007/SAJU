@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-const APP_URL = "http://localhost:3100";
+const APP_URL = process.env.E2E_BASE_URL ?? "http://localhost:3100";
 
 test.describe("auth security", () => {
   test("rejects an oauth callback without a matching state", async ({ page }) => {

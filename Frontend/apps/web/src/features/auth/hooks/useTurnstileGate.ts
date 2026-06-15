@@ -1,77 +1,96 @@
 import { useState } from "react";
-import type { Route } from "next";
-import { useRouter } from "next/navigation";
 
+import type { TurnstileGateStatus } from "@/features/auth/model/turnstile-dialog-copy";
+import { getTurnstileWidgetErrorMessage } from "@/features/auth/model/turnstile-widget-errors";
 import { verifyTurnstileToken } from "@/features/auth/model/verifyTurnstileToken";
 
 type UseTurnstileGateParams = {
   onVerified?: () => void;
-  returnTo?: string;
 };
 
-export function useTurnstileGate({
-  onVerified,
-  returnTo,
-}: UseTurnstileGateParams = {}) {
-  const router = useRouter();
-  const [token, setToken] = useState<string | null>(null);
+export function useTurnstileGate({ onVerified }: UseTurnstileGateParams = {}) {
   const [error, setError] = useState<string | null>(null);
   const [isPending, setIsPending] = useState(false);
+  const [isVerified, setIsVerified] = useState(false);
   const [widgetKey, setWidgetKey] = useState(0);
+  const [status, setStatus] = useState<TurnstileGateStatus>("idle");
 
-  function handleSuccess(nextToken: string) {
-    setToken(nextToken);
+  function startVerification() {
     setError(null);
+    setIsPending(false);
+    setIsVerified(false);
+    setStatus("challenging");
   }
 
-  function handleError() {
-    setToken(null);
-    setError("보안 인증을 불러오지 못했어요. 다시 시도해주세요.");
+  function handleError(code?: string) {
+    console.warn("[Turnstile] widget error", { code });
+    setIsPending(false);
+    setIsVerified(false);
+    setStatus("challenging");
+    setError(getTurnstileWidgetErrorMessage(code));
+  }
+
+  function handleTimeout() {
+    console.warn("[Turnstile] widget timeout");
+    setIsPending(false);
+    setIsVerified(false);
+    setStatus("challenging");
+  }
+
+  function handleExpire() {
+    console.warn("[Turnstile] widget expired");
+    setIsPending(false);
+    setIsVerified(false);
+    setStatus("challenging");
+  }
+
+  function handleUnsupported() {
+    console.warn("[Turnstile] widget unsupported");
+    setIsPending(false);
+    setIsVerified(false);
+    setStatus("challenging");
+    setError("현재 브라우저에서는 보안 인증을 완료하기 어려워요. 다시 시도해주세요.");
   }
 
   function resetChallenge(message?: string) {
-    setToken(null);
     setWidgetKey((current) => current + 1);
     setIsPending(false);
-    if (message) {
-      setError(message);
-    }
+    setIsVerified(false);
+    setStatus("challenging");
+    setError(message ?? null);
   }
 
-  async function verifyAndContinue(tokenOverride?: string) {
-    const tokenToVerify = tokenOverride ?? token;
-
-    if (!tokenToVerify) {
-      resetChallenge("보안 인증이 아직 완료되지 않았어요. 다시 시도해주세요.");
-      return false;
-    }
-
+  async function handleWidgetSuccess(nextToken: string) {
+    setStatus("verifying");
     setIsPending(true);
     setError(null);
 
-    const result = await verifyTurnstileToken(tokenToVerify);
+    const result = await verifyTurnstileToken(nextToken);
 
     if (!result.success) {
       resetChallenge(result.message);
       return false;
     }
 
-    if (onVerified) {
-      onVerified();
-    } else if (returnTo) {
-      router.replace(returnTo as Route);
-    }
-
+    setIsPending(false);
+    setIsVerified(true);
+    setStatus("idle");
+    onVerified?.();
     return true;
   }
 
   return {
     error,
     isPending,
+    isVerified,
+    status,
     widgetKey,
+    handleExpire,
     handleError,
-    handleSuccess,
+    handleWidgetSuccess,
+    handleTimeout,
+    handleUnsupported,
+    startVerification,
     resetChallenge,
-    verifyAndContinue,
   };
 }

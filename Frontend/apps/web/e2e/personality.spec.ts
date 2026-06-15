@@ -43,11 +43,12 @@ test.describe("personality report flow", () => {
     await expect(page.getByText("직업 성향")).toBeVisible();
     await expect(page.getByText("강점 · 약점")).toBeVisible();
     await expect(page.getByText("추천 직무")).toBeVisible();
-    await expect(page.getByText("컨설턴트")).toBeVisible();
-    await expect(page.getByText("감정적 지능이 뛰어나다")).toBeVisible();
+    await expect(page.getByRole("button", { name: /더보기|접기/ })).toHaveCount(
+      3,
+    );
   });
 
-  test("shows error state when personality BFF fails", async ({
+  test("shows error page when personality BFF fails", async ({
     page,
     context,
     baseURL,
@@ -69,8 +70,16 @@ test.describe("personality report flow", () => {
 
     await page.goto("/mypage/personality");
 
+    await expect(page).toHaveURL(
+      /\/error\?code=PERSONALITY_REPORT_LOAD_FAILED$/,
+    );
     await expect(
-      page.getByText("상세 성향 리포트를 불러오지 못했습니다.").first(),
+      page.getByRole("heading", {
+        name: "상세 성향 리포트를 불러오지 못했습니다",
+      }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("link", { name: "홈으로 이동하기" }),
     ).toBeVisible();
   });
 
@@ -97,9 +106,6 @@ test.describe("personality report flow", () => {
     await page.goto("/mypage/personality");
 
     await expect(page.getByRole("progressbar")).toBeVisible();
-    await expect(
-      page.getByText("사주 운세를 분석하고 있어요"),
-    ).toBeVisible();
     await expect(
       page.getByRole("button", { name: "상세 성향 리포트 보기" }),
     ).toHaveCount(0);

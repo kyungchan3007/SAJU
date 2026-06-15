@@ -18,31 +18,22 @@ export async function POST(request: Request) {
     const body = (await request.json()) as { token?: string };
     token = body.token;
   } catch {
-    return NextResponse.json(
-      createErrorResponse("INVALID_BODY", "요청 본문을 확인해주세요."),
-      { status: 400 },
-    );
+    return NextResponse.json(createErrorResponse("INVALID_BODY"), {
+      status: 400,
+    });
   }
 
   if (!token) {
-    return NextResponse.json(
-      createErrorResponse(
-        "MISSING_TOKEN",
-        "보안 인증 토큰이 없어 다시 인증이 필요합니다.",
-      ),
-      { status: 400 },
-    );
+    return NextResponse.json(createErrorResponse("MISSING_TOKEN"), {
+      status: 400,
+    });
   }
 
   const success = await verifyTurnstile(token);
   if (!success) {
-    return NextResponse.json(
-      createErrorResponse(
-        "VERIFICATION_FAILED",
-        "보안 인증에 실패해 다시 시도해주세요.",
-      ),
-      { status: 403 },
-    );
+    return NextResponse.json(createErrorResponse("VERIFICATION_FAILED"), {
+      status: 403,
+    });
   }
 
   const response = NextResponse.json(createSuccessResponse({ verified: true }));

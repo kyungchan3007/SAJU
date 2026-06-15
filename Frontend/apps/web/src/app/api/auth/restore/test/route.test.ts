@@ -41,7 +41,7 @@ describe("/api/auth/restore POST", () => {
       data: null,
       error: {
         code: "AUTH_RESTORE_FAILED",
-        message: "ACCOUNT_RESTORE_FAILED",
+        message: "계정 복구를 처리하지 못했습니다. 잠시 후 다시 시도해주세요.",
       },
     });
   });
@@ -76,7 +76,7 @@ describe("/api/auth/restore POST", () => {
       data: null,
       error: {
         code: "CSRF_ORIGIN_REQUIRED",
-        message: "Origin header is required for state-changing requests.",
+        message: "요청을 확인할 수 없습니다. 다시 시도해주세요.",
       },
     });
   });

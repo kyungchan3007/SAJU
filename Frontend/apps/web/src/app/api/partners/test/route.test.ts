@@ -54,7 +54,7 @@ describe("/api/partners route handlers", () => {
       data: null,
       error: {
         code: "PARTNERS_GET_FAILED",
-        message: "LOGIN_REQUIRED",
+        message: "관심 상대 목록을 불러오지 못했습니다. 잠시 후 다시 시도해주세요.",
       },
     });
   });
@@ -63,7 +63,10 @@ describe("/api/partners route handlers", () => {
     const request = new Request("http://localhost/api/partners", {
       method: "POST",
       body: "{invalid",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Origin: "http://localhost",
+      },
     });
 
     const response = await POST(request);
@@ -75,7 +78,7 @@ describe("/api/partners route handlers", () => {
       data: null,
       error: {
         code: "INVALID_REQUEST_BODY",
-        message: "Invalid request body.",
+        message: "요청 정보를 다시 확인해주세요.",
       },
     });
   });
@@ -94,7 +97,10 @@ describe("/api/partners route handlers", () => {
         gender: "MALE",
         calendarType: "SOLAR",
       }),
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Origin: "http://localhost",
+      },
     });
 
     const response = await POST(request);

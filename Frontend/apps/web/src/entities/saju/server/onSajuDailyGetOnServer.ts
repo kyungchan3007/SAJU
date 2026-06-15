@@ -1,4 +1,5 @@
-import { DailyEnergyResponse } from "@/generated/api";
+import type { DailyEnergyResponse } from "@/generated/api";
+import { normalizeDailyEnergyResponse } from "@/entities/saju/server/normalizeDailyEnergyResponse";
 import { parseBackendApiResponse } from "@/shared/api/backend/parseBackendApiResponse";
 import { SAJU_DAILY_ENDPOINT_PATH } from "@/shared/config/endPoint";
 import {
@@ -41,6 +42,6 @@ export async function onSajuDailyGetOnServer(
 
   return {
     success: true,
-    data: parsed.data,
+    data: normalizeDailyEnergyResponse(parsed.data),
   };
 }

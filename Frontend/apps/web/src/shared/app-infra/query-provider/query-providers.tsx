@@ -15,8 +15,8 @@ export function Providers({ children, authScope }: ProvidersProps) {
   const [queryClient] = useState(() => getQueryClient());
 
   return (
-    <AuthScopeProvider value={authScope}>
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-    </AuthScopeProvider>
+    <QueryClientProvider client={queryClient}>
+      <AuthScopeProvider value={authScope}>{children}</AuthScopeProvider>
+    </QueryClientProvider>
   );
 }

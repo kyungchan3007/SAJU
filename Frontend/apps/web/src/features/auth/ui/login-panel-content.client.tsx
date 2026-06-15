@@ -1,31 +1,70 @@
 "use client";
 
+import { useEffect } from "react";
 import { useTurnstileGate } from "@/features/auth/hooks/useTurnstileGate";
-import { TurnstileWidget } from "@/shared/ui/TurnstileWidget";
+
+import { getTurnstileDialogCopy } from "@/features/auth/model/turnstile-dialog-copy";
+import { TurnstileVerificationModal } from "@/features/auth/ui/turnstile-verification-modal";
 import { KakaoIcon } from "@/shared/ui";
+import { TurnstileWidget } from "@/shared/ui/TurnstileWidget";
 
 type LoginPanelContentProps = {
   kakaoLoginUrl: string;
 };
 
 export function LoginPanelContent({ kakaoLoginUrl }: LoginPanelContentProps) {
-  const turnstileGate = useTurnstileGate({
-    onVerified: () => {
-      window.location.href = kakaoLoginUrl;
-    },
-  });
+  const turnstileGate = useTurnstileGate();
+  const {
+    error,
+    handleError,
+    handleExpire,
+    handleWidgetSuccess,
+    handleTimeout,
+    handleUnsupported,
+    isPending,
+    isVerified,
+    startVerification,
+    status,
+    resetChallenge,
+    widgetKey,
+  } = turnstileGate;
+  const copy = getTurnstileDialogCopy("login", status);
+  const hasRecoveryActions = Boolean(error) && !isPending;
 
-  async function handleLogin() {
-    await turnstileGate.verifyAndContinue();
-  }
+  // 마운트 시 1회만 실행 — 인증 성공 후 status가 "idle"로 돌아와도 재시작하지 않음
+  useEffect(() => {
+    startVerification();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
-    <div className="flex flex-col items-center text-center">
-      <TurnstileWidget
-        key={turnstileGate.widgetKey}
-        onSuccess={turnstileGate.handleSuccess}
-        onError={turnstileGate.handleError}
-      />
+    <div className="relative flex flex-col items-center text-center">
+      {!isVerified ? (
+        <TurnstileVerificationModal
+          title={copy.title}
+          description={copy.description}
+          showSpinner={isPending}
+          error={error}
+          primaryActionLabel={hasRecoveryActions ? "다시 시도" : undefined}
+          onPrimaryAction={hasRecoveryActions ? resetChallenge : undefined}
+          secondaryActionLabel={hasRecoveryActions ? "홈으로 돌아가기" : undefined}
+          onSecondaryAction={
+            hasRecoveryActions ? () => { window.location.href = "/"; } : undefined
+          }
+        >
+          <TurnstileWidget
+            key={widgetKey}
+            onSuccess={handleWidgetSuccess}
+            onError={handleError}
+            onExpire={handleExpire}
+            onTimeout={handleTimeout}
+            onUnsupported={handleUnsupported}
+            size="flexible"
+            appearance="always"
+            wrapperClassName="mt-6 w-full flex justify-center overflow-visible"
+          />
+        </TurnstileVerificationModal>
+      ) : null}
 
       {/* 서비스 로고 */}
       <div className="mb-6">
@@ -46,17 +85,14 @@ export function LoginPanelContent({ kakaoLoginUrl }: LoginPanelContentProps) {
         <br />
         무료로 만나볼 수 있어요.
       </p>
-      {turnstileGate.error ? (
-        <p className="mt-3 text-xs leading-relaxed text-red-600">
-          {turnstileGate.error}
-        </p>
-      ) : null}
-
-      {/* 카카오 로그인 버튼 — 카카오 공식 가이드라인 색상 */}
+      {/* 카카오 로그인 버튼 */}
       <button
         type="button"
-        onClick={handleLogin}
-        disabled={turnstileGate.isPending}
+        onClick={() => {
+          if (!isVerified || isPending) return;
+          window.location.href = kakaoLoginUrl;
+        }}
+        disabled={!isVerified || isPending}
         className="mt-7 flex h-[48px] w-full items-center justify-center gap-2 border-2 border-black font-bold text-[rgba(0,0,0,0.85)] transition hover:brightness-95 disabled:opacity-70"
         style={{
           backgroundColor: "#FEE500",
@@ -65,7 +101,7 @@ export function LoginPanelContent({ kakaoLoginUrl }: LoginPanelContentProps) {
         aria-label="카카오 계정으로 사주이야기 로그인"
       >
         <KakaoIcon size={20} />
-        {turnstileGate.isPending ? "보안 확인 중..." : "카카오로 시작하기"}
+        카카오로 시작하기
       </button>
     </div>
   );

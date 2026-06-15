@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { AnalysisPendingGate } from "@/features/saju-result/ui/analysis-pending-gate.client";
 
+const AUTH_REFRESH_TIMEOUT_MS = 8000;
+
 type AuthRefreshRetryProps = {
   loginPath?: string;
 };
@@ -18,10 +20,27 @@ export function AuthRefreshRetry({
     let cancelled = false;
 
     const refresh = async () => {
-      const response = await fetch("/api/auth/refresh", {
-        method: "POST",
-        cache: "no-store",
-      });
+      const controller = new AbortController();
+      const timeoutId = window.setTimeout(() => {
+        controller.abort();
+      }, AUTH_REFRESH_TIMEOUT_MS);
+
+      let response: Response;
+
+      try {
+        response = await fetch("/api/auth/refresh", {
+          method: "POST",
+          cache: "no-store",
+          signal: controller.signal,
+        });
+      } catch {
+        if (!cancelled) {
+          router.replace(loginPath as Route);
+        }
+        return;
+      } finally {
+        window.clearTimeout(timeoutId);
+      }
 
       if (cancelled) {
         return;

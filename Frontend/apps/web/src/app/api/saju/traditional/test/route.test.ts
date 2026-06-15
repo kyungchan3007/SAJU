@@ -58,7 +58,7 @@ describe("/api/saju/traditional GET", () => {
       success: true,
       data: {
         sajuId: 1,
-        traits: { summaryZodiac: "닭띠" },
+        traits: { summaryZodiac: "쥐띠" },
       },
     });
 
@@ -70,7 +70,7 @@ describe("/api/saju/traditional GET", () => {
       success: true,
       data: {
         sajuId: 1,
-        traits: { summaryZodiac: "닭띠" },
+        traits: { summaryZodiac: "쥐띠" },
       },
       error: null,
     });
@@ -95,7 +95,7 @@ describe("/api/saju/traditional GET", () => {
       data: null,
       error: {
         code: "SAJU_TRADITIONAL_GET_FAILED",
-        message: "Saju not found.",
+        message: "전통 사주를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.",
       },
     });
   });

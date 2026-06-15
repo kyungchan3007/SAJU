@@ -2,16 +2,11 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
-import type { Route } from "next";
-import { useRouter } from "next/navigation";
 import { useAuthScope } from "@/shared/app-infra/query-provider/auth-scope-context";
 import type { SajuResponse } from "@/generated/api";
 import { fetchSajuTraditionalOnClient } from "@/entities/saju/client/fetchSajuTraditionalOnClient";
 import type { ApiEnvelope } from "@/shared/api";
-import {
-  buildTurnstileVerifyPath,
-  isTurnstileRequiredError,
-} from "@/shared/api/auth/turnstileRecovery";
+import { useTurnstileErrorRedirect } from "@/shared/hooks/useTurnstileErrorRedirect";
 
 export const JEONGTONGSAJU_QUERY_KEY = ["jeongtongsaju"] as const;
 
@@ -21,7 +16,9 @@ type UseJeongtongsajuOptions = {
 
 export function useJeongtongsaju(options?: UseJeongtongsajuOptions) {
   const authScope = useAuthScope();
-  const router = useRouter();
+  const redirectIfTurnstileRequired = useTurnstileErrorRedirect(
+    "/mypage/traditional-fortune",
+  );
   const query = useQuery({
     queryKey: [...JEONGTONGSAJU_QUERY_KEY, authScope],
     queryFn: fetchSajuTraditionalOnClient,
@@ -32,14 +29,8 @@ export function useJeongtongsaju(options?: UseJeongtongsajuOptions) {
   });
 
   useEffect(() => {
-    if (!isTurnstileRequiredError(query.error)) {
-      return;
-    }
-
-    router.replace(
-      buildTurnstileVerifyPath("/mypage/traditional-fortune") as Route,
-    );
-  }, [query.error, router]);
+    redirectIfTurnstileRequired(query.error);
+  }, [query.error, redirectIfTurnstileRequired]);
 
   return query;
 }

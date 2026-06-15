@@ -323,8 +323,12 @@ test.describe("saju input flow", () => {
   });
 
   test("returns users to the requested service after a successful submit", async ({
+    context,
     page,
+    baseURL,
   }) => {
+    await addAuthCookies(context, baseURL);
+
     let resultPayload: Record<string, unknown> | null = null;
 
     await page.route("**/api/saju/result", async (route) => {

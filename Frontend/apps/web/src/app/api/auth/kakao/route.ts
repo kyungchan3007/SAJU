@@ -12,6 +12,7 @@ import {
   POST_LOGIN_REDIRECT_COOKIE_MAX_AGE,
 } from "@/shared/config/authToken";
 import { KAKAO_LOGIN_URL } from "@/shared/config/endPoint";
+
 export async function GET(request: NextRequest) {
   const { BACKEND_API_BASE_URL } = getServerEnv();
   const nextPath = normalizePostLoginRedirect(
@@ -19,13 +20,9 @@ export async function GET(request: NextRequest) {
   );
 
   if (!BACKEND_API_BASE_URL) {
-    return NextResponse.json(
-      createErrorResponse(
-        "CONFIG_ERROR",
-        "BACKEND_API_BASE_URL is not configured.",
-      ),
-      { status: 500 },
-    );
+    return NextResponse.json(createErrorResponse("CONFIG_ERROR"), {
+      status: 500,
+    });
   }
 
   const backendUrl = new URL(KAKAO_LOGIN_URL, BACKEND_API_BASE_URL);
@@ -39,26 +36,18 @@ export async function GET(request: NextRequest) {
       redirect: "manual",
     });
   } catch {
-    return NextResponse.json(
-      createErrorResponse(
-        "BACKEND_UNAVAILABLE",
-        "Unable to reach backend auth endpoint.",
-      ),
-      { status: 502 },
-    );
+    return NextResponse.json(createErrorResponse("BACKEND_UNAVAILABLE"), {
+      status: 502,
+    });
   }
 
   if (backendResponse.status >= 300 && backendResponse.status < 400) {
     const locationHeader = backendResponse.headers.get("location");
 
     if (!locationHeader) {
-      return NextResponse.json(
-        createErrorResponse(
-          "KAKAO_AUTH_FAILED",
-          "Backend auth redirect is missing Location header.",
-        ),
-        { status: 502 },
-      );
+      return NextResponse.json(createErrorResponse("KAKAO_AUTH_FAILED"), {
+        status: 502,
+      });
     }
 
     const redirectUrl = new URL(locationHeader, BACKEND_API_BASE_URL);
@@ -81,11 +70,7 @@ export async function GET(request: NextRequest) {
     return response;
   }
 
-  return NextResponse.json(
-    createErrorResponse(
-      "KAKAO_AUTH_FAILED",
-      `Backend auth request failed with status ${backendResponse.status}.`,
-    ),
-    { status: backendResponse.status },
-  );
+  return NextResponse.json(createErrorResponse("KAKAO_AUTH_FAILED"), {
+    status: backendResponse.status,
+  });
 }

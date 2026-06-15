@@ -5,8 +5,9 @@ import { PersonalityCareerCard } from "@/features/personality/ui/components/pers
 import { PersonalityHero } from "@/features/personality/ui/components/personality-hero";
 import { PersonalityRomanticCard } from "@/features/personality/ui/components/personality-romantic-card";
 import { PersonalityTraitsCard } from "@/features/personality/ui/components/personality-traits-card";
+import { RedirectToError } from "@/shared/app-infra/navigation/redirect-to-error.client";
 import { useAdGate } from "@/shared/hooks/use-ad-gate";
-import { ErrorStateCard } from "@/shared/ui";
+import { LoadingStateCard } from "@/shared/ui";
 import { AdProgressGate } from "@/shared/ui/ad-progress-gate.client";
 import {
   FortuneGateLayout,
@@ -14,29 +15,18 @@ import {
 } from "@/shared/ui/fortune-page-layout";
 
 export function PersonalitySection() {
-  const { isLoading, isError, errorMessage, data, isPending } =
-    usePersonalityProfile();
+  const { isLoading, isError, data, isPending } = usePersonalityProfile();
   const isContentReady = !isLoading && !isPending && Boolean(data);
   const adGate = useAdGate({ enabled: true, isContentReady });
 
   if (isError) {
-    return (
-      <FortunePageLayout>
-        <ErrorStateCard
-          title="상세 성향 리포트를 불러오지 못했습니다."
-          description={errorMessage ?? "잠시 후 다시 시도해 주세요."}
-        />
-      </FortunePageLayout>
-    );
+    return <RedirectToError code="PERSONALITY_REPORT_LOAD_FAILED" />;
   }
 
   if (isPending) {
     return (
       <FortunePageLayout>
-        <ErrorStateCard
-          title="상세 성향 리포트를 생성 중입니다."
-          description="분석이 완료되면 다시 열어 확인해 주세요."
-        />
+        <LoadingStateCard message="상세 성향 리포트를 생성 중입니다." />
       </FortunePageLayout>
     );
   }
@@ -55,14 +45,7 @@ export function PersonalitySection() {
   }
 
   if (!data) {
-    return (
-      <FortunePageLayout>
-        <ErrorStateCard
-          title="상세 성향 리포트를 찾을 수 없습니다."
-          description="사주 분석 정보가 준비된 뒤 다시 확인해 주세요."
-        />
-      </FortunePageLayout>
-    );
+    return <RedirectToError code="PERSONALITY_REPORT_NOT_FOUND" />;
   }
 
   return (

@@ -1,5 +1,5 @@
-import Link from "next/link";
 import type { Route } from "next";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { SajuPreviewCard } from "@/domain/saju/guid-card/preview-card/ui/saju-preview-card";
@@ -7,8 +7,13 @@ import { getSajuProfileOnServer } from "@/entities/saju/server/getSajuProfileOnS
 import { getSajuResultOnServer } from "@/entities/saju/server/getSajuResultOnServer";
 import { AuthRefreshRetry } from "@/features/saju-result/ui/auth-refresh-retry.client";
 import { RewardedResultGate } from "@/features/saju-result/ui/rewarded-result-gate.client";
-import { buildSajuInputPath } from "@/shared/lib/internalRedirect";
-import { Button, EmptyStateCard, ErrorStateCard } from "@/shared/ui";
+import { buildErrorPagePath } from "@/shared/lib/error-page";
+import {
+  buildLoginPath,
+  buildSajuInputPath,
+  buildSajuResultPath,
+} from "@/shared/lib/internalRedirect";
+import { Button, EmptyStateCard } from "@/shared/ui";
 
 type SajuResultProps = {
   nextPath?: Route | null;
@@ -16,10 +21,11 @@ type SajuResultProps = {
 
 export async function SajuResult({ nextPath }: SajuResultProps) {
   const result = await getSajuResultOnServer();
+  const loginPath = buildLoginPath(buildSajuResultPath(nextPath));
 
   if (!result.success) {
-    if (result.reason === "LOGIN_REQUIRED") {
-      return <AuthRefreshRetry />;
+    if (result.reason === "LOGIN_REQUIRED" || result.status === 401) {
+      return <AuthRefreshRetry loginPath={loginPath} />;
     }
 
     if (result.reason === "PENDING_FORM_REQUIRED") {
@@ -36,19 +42,7 @@ export async function SajuResult({ nextPath }: SajuResultProps) {
       );
     }
 
-    return (
-      <ErrorStateCard
-        title="사주 결과를 불러오지 못했습니다"
-        description={result.message || "잠시 후 다시 시도해 주세요."}
-        action={
-          <Button asChild size="sm" className="rounded-full">
-            <Link href={buildSajuInputPath(nextPath)}>
-              사주 입력 화면으로 이동
-            </Link>
-          </Button>
-        }
-      />
-    );
+    redirect(buildErrorPagePath({ code: "SAJU_RESULT_LOAD_FAILED" }) as Route);
   }
 
   if (nextPath && nextPath !== "/saju/result") {

@@ -11,10 +11,9 @@ export async function GET() {
   const token = (await cookies()).get(ACCESS_TOKEN_COOKIE_KEY)?.value;
 
   if (!token) {
-    return NextResponse.json(
-      createErrorResponse("LOGIN_REQUIRED", "로그인이 필요합니다."),
-      { status: 401 },
-    );
+    return NextResponse.json(createErrorResponse("LOGIN_REQUIRED"), {
+      status: 401,
+    });
   }
 
   const result = await getZodiacCompatibilityOnServer();

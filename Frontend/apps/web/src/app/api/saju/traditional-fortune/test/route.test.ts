@@ -87,7 +87,7 @@ describe("/api/saju/traditional-fortune GET", () => {
       data: null,
       error: {
         code: "SAJU_TRADITIONAL_FORTUNE_GET_FAILED",
-        message: "Traditional fortune not found.",
+        message: "정통 운세를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.",
       },
     });
   });

@@ -5,6 +5,8 @@ type TurnstileVerifyResult =
       message: string;
     };
 
+const TURNSTILE_VERIFY_TIMEOUT_MS = 8000;
+
 function getErrorMessage(status: number, code?: string, message?: string) {
   if (message) {
     return message;
@@ -24,11 +26,17 @@ function getErrorMessage(status: number, code?: string, message?: string) {
 export async function verifyTurnstileToken(
   token: string,
 ): Promise<TurnstileVerifyResult> {
+  const controller = new AbortController();
+  const timeoutId = window.setTimeout(() => {
+    controller.abort();
+  }, TURNSTILE_VERIFY_TIMEOUT_MS);
+
   try {
     const response = await fetch("/api/auth/turnstile-verify", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ token }),
+      signal: controller.signal,
     });
 
     if (response.ok) {
@@ -52,10 +60,20 @@ export async function verifyTurnstileToken(
         data?.error?.message,
       ),
     };
-  } catch {
+  } catch (error) {
+    if (error instanceof DOMException && error.name === "AbortError") {
+      return {
+        success: false,
+        message:
+          "보안 인증 응답이 지연되고 있어요. 다시 시도해주세요.",
+      };
+    }
+
     return {
       success: false,
       message: "네트워크 문제로 보안 인증에 실패했어요. 다시 시도해주세요.",
     };
+  } finally {
+    window.clearTimeout(timeoutId);
   }
 }

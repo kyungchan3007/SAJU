@@ -1,8 +1,6 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import type { Route } from "next";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { useAuthScope } from "@/shared/app-infra/query-provider/auth-scope-context";
@@ -14,10 +12,7 @@ import {
   toDisplayFood,
   type DisplayFood,
 } from "@/features/food-recommend/model/food-recommend";
-import {
-  buildTurnstileVerifyPath,
-  isTurnstileRequiredError,
-} from "@/shared/api/auth/turnstileRecovery";
+import { useTurnstileErrorRedirect } from "@/shared/hooks/useTurnstileErrorRedirect";
 
 const AUTH_RECOVERY_ERROR_CODES = new Set([
   "FOOD_RECOMMEND_GET_FAILED",
@@ -42,7 +37,7 @@ export type UseFoodRecommendResult = {
 
 export function useFoodRecommend(): UseFoodRecommendResult {
   const authScope = useAuthScope();
-  const router = useRouter();
+  const redirectIfTurnstileRequired = useTurnstileErrorRedirect("/food");
   const [isRetryingWithRefresh, setIsRetryingWithRefresh] = useState(false);
   const { data, isLoading, isError, error, refetch } = useQuery({
     queryKey: ["food-recommend", authScope],
@@ -54,12 +49,8 @@ export function useFoodRecommend(): UseFoodRecommendResult {
   });
 
   useEffect(() => {
-    if (!isTurnstileRequiredError(error)) {
-      return;
-    }
-
-    router.replace(buildTurnstileVerifyPath("/food") as Route);
-  }, [error, router]);
+    redirectIfTurnstileRequired(error);
+  }, [error, redirectIfTurnstileRequired]);
 
   const rankedFoods = (data?.rankedFoods ?? []).map(toDisplayFood);
   const canRetryWithRefresh =

@@ -80,6 +80,7 @@ describe("/api/partners/[partnerId] route handlers", () => {
           gender: "FEMALE",
           calendarType: "SOLAR",
         }),
+        headers: { Origin: "http://localhost" },
       }),
       createContext("1"),
     );
@@ -101,7 +102,10 @@ describe("/api/partners/[partnerId] route handlers", () => {
     });
 
     const response = await DELETE(
-      new Request("http://localhost/api/partners/1", { method: "DELETE" }),
+      new Request("http://localhost/api/partners/1", {
+        method: "DELETE",
+        headers: { Origin: "http://localhost" },
+      }),
       createContext("1"),
     );
     const body = await response.json();
@@ -112,7 +116,7 @@ describe("/api/partners/[partnerId] route handlers", () => {
       data: null,
       error: {
         code: "PARTNER_DELETE_FAILED",
-        message: "PARTNER_NOT_FOUND",
+        message: "관심 상대를 삭제하지 못했습니다. 잠시 후 다시 시도해주세요.",
       },
     });
   });

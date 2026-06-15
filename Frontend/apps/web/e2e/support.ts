@@ -146,6 +146,17 @@ export async function addAuthCookies(
   ]);
 }
 
+export async function addRefreshOnlyCookie(
+  context: BrowserContext,
+  baseURL?: string,
+) {
+  const url = baseURL ?? "http://127.0.0.1:3100";
+
+  await context.addCookies([
+    { name: "saju_refresh_token", value: "e2e-refresh-token", url },
+  ]);
+}
+
 export async function mockCurrentProjectApis(
   page: Page,
   options: ApiMockOptions = {},

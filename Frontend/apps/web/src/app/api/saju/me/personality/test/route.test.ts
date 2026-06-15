@@ -88,7 +88,7 @@ describe("/api/saju/me/personality GET", () => {
       data: null,
       error: {
         code: "PERSONALITY_PROFILE_GET_FAILED",
-        message: "Saju not found.",
+        message: "성향 분석을 불러오지 못했습니다. 잠시 후 다시 시도해주세요.",
       },
     });
   });

@@ -22,6 +22,9 @@ describe("post login redirect", () => {
     expect(buildSajuResultPath("/community?tab=friend")).toBe(
       "/saju/result?next=%2Fcommunity%3Ftab%3Dfriend",
     );
+    expect(buildLoginPath(buildSajuResultPath("/community?tab=friend"))).toBe(
+      "/login?next=%2Fsaju%2Fresult%3Fnext%3D%252Fcommunity%253Ftab%253Dfriend",
+    );
   });
 
   it("rejects external and protocol-relative redirects", () => {

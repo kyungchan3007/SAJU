@@ -57,7 +57,6 @@ function getQueryValue(searchParams: URLSearchParams, key: string) {
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
 
-  // 1) 사용자가 선택한 추천 키워드와 선택 좌표 옵션을 BFF 쿼리에서 읽는다.
   const parsedQuery = locationSearchQuerySchema.safeParse({
     query: getQueryValue(searchParams, "query"),
     x: getQueryValue(searchParams, "x"),
@@ -70,15 +69,11 @@ export async function GET(request: Request) {
 
   if (!parsedQuery.success) {
     return NextResponse.json(
-      createErrorResponse(
-        "INVALID_LOCATION_SEARCH_QUERY",
-        "Invalid location search query.",
-      ),
+      createErrorResponse("INVALID_LOCATION_SEARCH_QUERY"),
       { status: 400 },
     );
   }
 
-  // 2) 서버 전용 Kakao REST API 키로 Local Keyword Search API를 호출한다.
   const result = await searchLocationPlacesOnServer(parsedQuery.data);
 
   if (!result.success) {
@@ -88,6 +83,5 @@ export async function GET(request: Request) {
     );
   }
 
-  // 3) Kakao 원본 응답 대신 지도/리스트 UI가 바로 쓰는 장소 타입으로 내려준다.
   return NextResponse.json(createSuccessResponse(result.data));
 }

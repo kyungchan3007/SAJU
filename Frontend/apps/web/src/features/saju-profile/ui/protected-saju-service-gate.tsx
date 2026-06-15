@@ -8,9 +8,9 @@ import { useEffect, type ReactNode } from "react";
 import { fetchSajuProfileOnClient } from "@/entities/saju/client/fetchSajuProfileOnClient";
 import { AnalysisPendingGate } from "@/features/saju-result/ui/analysis-pending-gate.client";
 import { SAJU_PROFILE_QUERY_KEY } from "@/features/saju-profile/model/query";
+import { RedirectToError } from "@/shared/app-infra/navigation/redirect-to-error.client";
 import { useAuthScope } from "@/shared/app-infra/query-provider/auth-scope-context";
 import { buildSajuInputPath } from "@/shared/lib/internalRedirect";
-import { ErrorStateCard } from "@/shared/ui";
 
 type ProtectedSajuServiceGateProps = {
   servicePath: Route;
@@ -47,17 +47,7 @@ export function ProtectedSajuServiceGate({
   }
 
   if (query.isError) {
-    const errorDescription =
-      query.error instanceof Error
-        ? `${query.error.message} 잠시 후 다시 시도해 주세요.`
-        : "잠시 후 다시 시도해 주세요.";
-
-    return (
-      <ErrorStateCard
-        title="사주 정보를 불러오지 못했습니다"
-        description={errorDescription}
-      />
-    );
+    return <RedirectToError code="SAJU_PROFILE_LOAD_FAILED" />;
   }
 
   return <>{children}</>;

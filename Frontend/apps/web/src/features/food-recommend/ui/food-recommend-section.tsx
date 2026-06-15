@@ -2,8 +2,9 @@
 
 import { useFoodRecommendSection } from "@/features/food-recommend/hooks/useFoodRecommendSection";
 import { FoodRecommendContent } from "@/features/food-recommend/ui/food-recommend-content";
+import { RedirectToError } from "@/shared/app-infra/navigation/redirect-to-error.client";
 import { AdProgressGate } from "@/shared/ui/ad-progress-gate.client";
-import { Button, EmptyStateCard, ErrorStateCard } from "@/shared/ui";
+import { EmptyStateCard } from "@/shared/ui";
 import {
   FortuneGateLayout,
   FortunePageLayout,
@@ -16,12 +17,9 @@ export function FoodRecommendSection() {
     avoidFoods,
     groceryList,
     isError,
-    errorMessage,
-    isRetryingWithRefresh,
     contextViewModel,
     isContentReady,
     adGate,
-    handleRetry,
   } = useFoodRecommendSection();
 
   if (adGate.shouldShowGate && !isError) {
@@ -38,24 +36,7 @@ export function FoodRecommendSection() {
   }
 
   if (isError) {
-    return (
-      <FortunePageLayout>
-        <ErrorStateCard
-          title="메뉴 추천을 불러오지 못했어요"
-          description={errorMessage ?? "잠시 후 다시 확인해 주세요."}
-          action={
-            <Button
-              size="sm"
-              className="rounded-full"
-              onClick={() => void handleRetry()}
-              disabled={isRetryingWithRefresh}
-            >
-              {isRetryingWithRefresh ? "인증 확인 중..." : "다시 확인하기"}
-            </Button>
-          }
-        />
-      </FortunePageLayout>
-    );
+    return <RedirectToError code="FOOD_RECOMMEND_LOAD_FAILED" />;
   }
 
   if (!topFood) {

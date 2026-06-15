@@ -17,3 +17,11 @@ export function isTurnstileRequiredError(error: unknown): boolean {
 export function buildTurnstileVerifyPath(returnTo: string): Route {
   return `/verify?returnTo=${encodeURIComponent(returnTo)}` as Route;
 }
+
+export function buildTurnstileLoginPath(nextPath?: string | null): Route {
+  if (!nextPath) {
+    return "/verify?intent=login" as Route;
+  }
+
+  return `/verify?intent=login&next=${encodeURIComponent(nextPath)}` as Route;
+}

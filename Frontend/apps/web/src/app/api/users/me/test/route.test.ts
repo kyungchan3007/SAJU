@@ -54,7 +54,7 @@ describe("/api/users/me route handlers", () => {
       data: null,
       error: {
         code: "USER_PROFILE_GET_FAILED",
-        message: "LOGIN_REQUIRED",
+        message: "내 정보를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.",
       },
     });
   });
@@ -75,7 +75,7 @@ describe("/api/users/me route handlers", () => {
       data: null,
       error: {
         code: "USER_DELETE_FAILED",
-        message: "Delete account request failed.",
+        message: "회원 탈퇴를 처리하지 못했습니다. 잠시 후 다시 시도해주세요.",
       },
     });
   });

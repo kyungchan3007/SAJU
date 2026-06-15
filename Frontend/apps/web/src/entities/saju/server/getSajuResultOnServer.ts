@@ -5,8 +5,13 @@ import type { SajuFormValues } from "@/features/saju-input/type/type";
 import type { DailyEnergyResponse } from "@/generated/api";
 import { onSajuDailyGetOnServer } from "@/entities/saju/server/onSajuDailyGetOnServer";
 import { onSajuPostOnServer } from "@/entities/saju/server/onSajuPostOnServer";
+import { normalizeDailyEnergyResponse } from "@/entities/saju/server/normalizeDailyEnergyResponse";
+import { readCachedDailyResult } from "@/entities/saju/server/sajuDailyCacheCookie";
 import { ACCESS_TOKEN_COOKIE_KEY } from "@/shared/config/authToken";
-import { SAJU_PENDING_FORM_COOKIE_KEY } from "@/shared/config/sajuCookie";
+import {
+  SAJU_DAILY_CACHE_COOKIE_KEY,
+  SAJU_PENDING_FORM_COOKIE_KEY,
+} from "@/shared/config/sajuCookie";
 
 type PendingSajuForm = {
   formValues?: SajuFormValues;
@@ -63,6 +68,16 @@ export async function getSajuResultOnServer(): Promise<SajuResultGetResult> {
       status: 401,
       message: "로그인이 필요합니다.",
       reason: "LOGIN_REQUIRED",
+    };
+  }
+
+  const cachedDailyResult = normalizeDailyEnergyResponse(
+    readCachedDailyResult(cookieStore.get(SAJU_DAILY_CACHE_COOKIE_KEY)?.value),
+  );
+  if (cachedDailyResult) {
+    return {
+      success: true,
+      data: cachedDailyResult,
     };
   }
 

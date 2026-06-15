@@ -1,6 +1,7 @@
 import { expect, test } from "@playwright/test";
 import {
   addAuthCookies,
+  addRefreshOnlyCookie,
   clickVisibleLink,
   expectNoHorizontalOverflow,
   expectVisibleLink,
@@ -41,7 +42,7 @@ test.describe("home and auth entry smoke", () => {
 
     await page.goto("/home");
     await clickVisibleLink(page, "/compatibility");
-    await expect(page).toHaveURL(/\/compatibility$/);
+    await expect(page).toHaveURL(/\/login\?next=%2Fcompatibility$/);
 
     await page.goto("/home");
     await clickVisibleLink(page, "/mypage/traditional-fortune");
@@ -65,7 +66,38 @@ test.describe("home and auth entry smoke", () => {
     await page.goto("/home");
 
     await expect(page.getByRole("link", { name: "로그인" })).toHaveCount(0);
-    await expectVisibleLink(page, "/mypage");
+    // 모바일에서는 nav 링크가 숨김 처리되므로 DOM 존재 여부만 확인
+    await expect(page.locator('a[href="/mypage"]').first()).toBeAttached();
+  });
+
+  test("falls back to root when refresh-only recovery fails on home", async ({
+    context,
+    page,
+    baseURL,
+  }) => {
+    await addRefreshOnlyCookie(context, baseURL);
+    await page.route("**/api/auth/refresh", async (route) => {
+      await route.fulfill({
+        status: 401,
+        contentType: "application/json",
+        headers: {
+          "Set-Cookie":
+            "saju_refresh_token=; Max-Age=0; Path=/; HttpOnly; SameSite=Lax",
+        },
+        body: JSON.stringify({
+          success: false,
+          data: null,
+          error: {
+            code: "TOKEN_REFRESH_FAILED",
+            message: "재로그인이 필요합니다.",
+          },
+        }),
+      });
+    });
+
+    await page.goto("/home");
+
+    await expect(page).toHaveURL(/\/$/);
   });
 
   test("shows a saju input prompt instead of backend pending-form english error", async ({

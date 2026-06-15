@@ -14,10 +14,9 @@ export async function GET() {
   const token = (await cookies()).get(ACCESS_TOKEN_COOKIE_KEY)?.value;
 
   if (!token) {
-    return NextResponse.json(
-      createErrorResponse("LOGIN_REQUIRED", "로그인이 필요합니다."),
-      { status: 401 },
-    );
+    return NextResponse.json(createErrorResponse("LOGIN_REQUIRED"), {
+      status: 401,
+    });
   }
 
   const result = await getSajuProfileOnServer();
@@ -39,20 +38,18 @@ export async function PUT(req: NextRequest) {
   const token = (await cookies()).get(ACCESS_TOKEN_COOKIE_KEY)?.value;
 
   if (!token) {
-    return NextResponse.json(
-      createErrorResponse("LOGIN_REQUIRED", "로그인이 필요합니다."),
-      { status: 401 },
-    );
+    return NextResponse.json(createErrorResponse("LOGIN_REQUIRED"), {
+      status: 401,
+    });
   }
 
   let body: SajuRequest;
   try {
     body = (await req.json()) as SajuRequest;
   } catch {
-    return NextResponse.json(
-      createErrorResponse("INVALID_BODY", "Request body is invalid."),
-      { status: 400 },
-    );
+    return NextResponse.json(createErrorResponse("INVALID_BODY"), {
+      status: 400,
+    });
   }
 
   const result = await updateSajuOnServer(body);

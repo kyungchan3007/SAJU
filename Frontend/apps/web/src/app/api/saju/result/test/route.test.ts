@@ -213,7 +213,7 @@ describe("/api/saju/result POST", () => {
       data: null,
       error: {
         code: "PENDING_FORM_NOT_FOUND",
-        message: "First-time post requires pending saju form.",
+        message: "사주 정보를 입력해주세요.",
       },
     });
   });
@@ -257,7 +257,7 @@ describe("/api/saju/result POST", () => {
       data: null,
       error: {
         code: "SAJU_POST_FAILED",
-        message: "Saju request failed.",
+        message: "사주 결과를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.",
       },
     });
   });
@@ -283,7 +283,7 @@ describe("/api/saju/result POST", () => {
       data: null,
       error: {
         code: "SAJU_DAILY_GET_FAILED",
-        message: "Daily saju request failed.",
+        message: "오늘의 사주를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.",
       },
     });
   });
@@ -310,7 +310,7 @@ describe("/api/saju/result POST", () => {
       data: null,
       error: {
         code: "PENDING_FORM_NOT_FOUND",
-        message: "First-time post requires pending saju form.",
+        message: "사주 정보를 입력해주세요.",
       },
     });
   });

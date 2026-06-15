@@ -8,10 +8,10 @@ import { SAJU_RESULT_QUERY_KEY } from "@/features/saju-result";
 import { SAJU_PROFILE_QUERY_KEY } from "@/features/saju-profile/model/query";
 import type { SajuFormValues } from "@/features/saju-input/type/type";
 import type { ApiEnvelope } from "@/shared/api";
+import { useAuthScope } from "@/shared/app-infra/query-provider/auth-scope-context";
 import { buildTurnstileVerifyPath } from "@/shared/api/auth/turnstileRecovery";
 import {
   buildLoginPath,
-  buildSajuInputPath,
   buildSajuResultPath,
 } from "@/shared/lib/internalRedirect";
 
@@ -22,11 +22,21 @@ type UseSajuHooksParams = {
 export const useSajuHooks = ({ nextPath }: UseSajuHooksParams = {}) => {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const resultPath = "/saju/result" as Route;
-  const successPath = nextPath ?? resultPath;
-  const loginPath = buildLoginPath(buildSajuInputPath(nextPath));
+  const authScope = useAuthScope();
+  const successPath = buildSajuResultPath(nextPath);
+  const loginPath = buildLoginPath(buildSajuResultPath(nextPath));
 
   const handleSubmitSaju = async (formValues: SajuFormValues) => {
+    if (authScope === "guest") {
+      await fetch("/api/saju/draft", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formValues),
+      });
+      router.push(loginPath);
+      return;
+    }
+
     const response = await fetch("/api/saju/result", {
       method: "POST",
       headers: {
@@ -65,8 +75,11 @@ export const useSajuHooks = ({ nextPath }: UseSajuHooksParams = {}) => {
     }
 
     const result = (await response.json()) as ApiEnvelope<unknown>;
-    queryClient.setQueryData(SAJU_RESULT_QUERY_KEY, result);
-    queryClient.removeQueries({ queryKey: SAJU_PROFILE_QUERY_KEY });
+    queryClient.setQueryData([...SAJU_RESULT_QUERY_KEY, authScope], result);
+    queryClient.removeQueries({
+      queryKey: SAJU_PROFILE_QUERY_KEY,
+      exact: false,
+    });
     router.push(successPath);
   };
 

@@ -62,11 +62,8 @@ const homeStructuredData = {
 
 export default async function HomePage() {
   const cookieStore = await cookies();
-  const isLoggedIn = Boolean(
-    cookieStore.get(ACCESS_TOKEN_COOKIE_KEY)?.value ||
-      cookieStore.get(REFRESH_TOKEN_COOKIE_KEY)?.value,
-  );
-  if (isLoggedIn) redirect("/home");
+  const accessToken = cookieStore.get(ACCESS_TOKEN_COOKIE_KEY)?.value;
+  if (accessToken) redirect("/home");
 
   return (
     <>

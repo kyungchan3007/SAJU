@@ -56,7 +56,7 @@ describe("/api/saju/me/year GET", () => {
     );
     mockedGetMyYearFortuneOnServer.mockResolvedValue({
       success: true,
-      data: { targetYear: 2026, yearLabel: "2026년 (병오년)" },
+      data: { targetYear: 2026, yearLabel: "2026년(병오년)" },
       meta: { backendStatus: "COMPLETE", backendMessage: "ok" },
     });
 
@@ -66,7 +66,7 @@ describe("/api/saju/me/year GET", () => {
     expect(response.status).toBe(200);
     expect(body).toEqual({
       success: true,
-      data: { targetYear: 2026, yearLabel: "2026년 (병오년)" },
+      data: { targetYear: 2026, yearLabel: "2026년(병오년)" },
       error: null,
       meta: { backendStatus: "COMPLETE", backendMessage: "ok" },
     });
@@ -91,7 +91,7 @@ describe("/api/saju/me/year GET", () => {
       data: null,
       error: {
         code: "YEAR_FORTUNE_GET_FAILED",
-        message: "Saju not found.",
+        message: "올해 운세를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.",
       },
     });
   });

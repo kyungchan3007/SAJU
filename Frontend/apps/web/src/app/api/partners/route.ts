@@ -28,10 +28,9 @@ export async function POST(request: Request) {
   try {
     payload = (await request.json()) as PartnerRequest;
   } catch {
-    return NextResponse.json(
-      createErrorResponse("INVALID_REQUEST_BODY", "Invalid request body."),
-      { status: 400 },
-    );
+    return NextResponse.json(createErrorResponse("INVALID_REQUEST_BODY"), {
+      status: 400,
+    });
   }
 
   const result = await registerPartnerOnServer(payload);

@@ -1,5 +1,6 @@
 import type { SajuFormValues } from "@/features/saju-input/type/type";
 import type { DailyEnergyResponse, SajuCreateRequest } from "@/generated/api";
+import { normalizeDailyEnergyResponse } from "@/entities/saju/server/normalizeDailyEnergyResponse";
 import {
   authenticatedBackendFetch,
   type AuthenticatedBackendFetchOptions,
@@ -85,7 +86,7 @@ export async function onSajuPostOnServer(
 
   return {
     success: true,
-    data: parsed.data,
+    data: normalizeDailyEnergyResponse(parsed.data),
   };
 }
 

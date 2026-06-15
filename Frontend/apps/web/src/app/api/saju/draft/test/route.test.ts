@@ -6,7 +6,10 @@ describe("/api/saju/draft POST", () => {
     const request = new Request("http://localhost/api/saju/draft", {
       method: "POST",
       body: "{invalid-json",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Origin: "http://localhost",
+      },
     });
 
     const response = await POST(request as never);
@@ -18,7 +21,7 @@ describe("/api/saju/draft POST", () => {
       data: null,
       error: {
         code: "INVALID_BODY",
-        message: "Invalid saju form body.",
+        message: "요청 정보를 다시 확인해주세요.",
       },
     });
   });
@@ -36,7 +39,10 @@ describe("/api/saju/draft POST", () => {
     const request = new Request("http://localhost/api/saju/draft", {
       method: "POST",
       body: JSON.stringify(formValues),
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Origin: "http://localhost",
+      },
     });
 
     const response = await POST(request as never);

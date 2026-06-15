@@ -35,7 +35,7 @@ describe("/api/auth/kakao GET", () => {
       data: null,
       error: {
         code: "CONFIG_ERROR",
-        message: "BACKEND_API_BASE_URL is not configured.",
+        message: "서비스 설정을 확인하지 못했습니다. 잠시 후 다시 시도해주세요.",
       },
     });
   });
@@ -55,7 +55,7 @@ describe("/api/auth/kakao GET", () => {
       data: null,
       error: {
         code: "BACKEND_UNAVAILABLE",
-        message: "Unable to reach backend auth endpoint.",
+        message: "서비스에 연결하지 못했습니다. 잠시 후 다시 시도해주세요.",
       },
     });
   });
@@ -126,7 +126,7 @@ describe("/api/auth/kakao GET", () => {
       data: null,
       error: {
         code: "KAKAO_AUTH_FAILED",
-        message: "Backend auth redirect is missing Location header.",
+        message: "카카오 로그인 요청을 처리하지 못했습니다.",
       },
     });
   });
@@ -148,7 +148,7 @@ describe("/api/auth/kakao GET", () => {
       data: null,
       error: {
         code: "KAKAO_AUTH_FAILED",
-        message: "Backend auth request failed with status 401.",
+        message: "카카오 로그인 요청을 처리하지 못했습니다.",
       },
     });
   });

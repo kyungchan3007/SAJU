@@ -26,10 +26,9 @@ export async function GET(_: Request, context: RouteContext) {
   const partnerId = parsePartnerId(rawPartnerId);
 
   if (!partnerId) {
-    return NextResponse.json(
-      createErrorResponse("INVALID_PARTNER_ID", "Partner id must be a number."),
-      { status: 400 },
-    );
+    return NextResponse.json(createErrorResponse("INVALID_PARTNER_ID"), {
+      status: 400,
+    });
   }
 
   const result = await getPartnerOnServer(partnerId);
@@ -52,10 +51,9 @@ export async function PATCH(request: Request, context: RouteContext) {
   const partnerId = parsePartnerId(rawPartnerId);
 
   if (!partnerId) {
-    return NextResponse.json(
-      createErrorResponse("INVALID_PARTNER_ID", "Partner id must be a number."),
-      { status: 400 },
-    );
+    return NextResponse.json(createErrorResponse("INVALID_PARTNER_ID"), {
+      status: 400,
+    });
   }
 
   let payload: PartnerRequest;
@@ -63,10 +61,9 @@ export async function PATCH(request: Request, context: RouteContext) {
   try {
     payload = (await request.json()) as PartnerRequest;
   } catch {
-    return NextResponse.json(
-      createErrorResponse("INVALID_REQUEST_BODY", "Invalid request body."),
-      { status: 400 },
-    );
+    return NextResponse.json(createErrorResponse("INVALID_REQUEST_BODY"), {
+      status: 400,
+    });
   }
 
   const result = await updatePartnerOnServer(partnerId, payload);
@@ -89,10 +86,9 @@ export async function DELETE(request: Request, context: RouteContext) {
   const partnerId = parsePartnerId(rawPartnerId);
 
   if (!partnerId) {
-    return NextResponse.json(
-      createErrorResponse("INVALID_PARTNER_ID", "Partner id must be a number."),
-      { status: 400 },
-    );
+    return NextResponse.json(createErrorResponse("INVALID_PARTNER_ID"), {
+      status: 400,
+    });
   }
 
   const result = await deletePartnerOnServer(partnerId);

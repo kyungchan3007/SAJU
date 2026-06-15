@@ -28,6 +28,24 @@ async function addSajuPendingDraftCookie(
 }
 
 test.describe("auth protected routing", () => {
+  test("keeps refresh-only sessions on the public root page", async ({
+    context,
+    page,
+    baseURL,
+  }) => {
+    await context.addCookies([
+      {
+        name: "saju_refresh_token",
+        value: "e2e-refresh-token",
+        url: baseURL ?? "http://127.0.0.1:3100",
+      },
+    ]);
+
+    await page.goto("/");
+
+    await expect(page).toHaveURL(/\/$/);
+  });
+
   test("redirects guests away from protected mypage routes", async ({
     page,
   }) => {

@@ -26,13 +26,9 @@ export async function POST(request: Request, context: RouteContext) {
   const notificationId = parseNotificationId(rawNotificationId);
 
   if (!notificationId) {
-    return NextResponse.json(
-      createErrorResponse(
-        "INVALID_NOTIFICATION_ID",
-        "Notification id must be a number.",
-      ),
-      { status: 400 },
-    );
+    return NextResponse.json(createErrorResponse("INVALID_NOTIFICATION_ID"), {
+      status: 400,
+    });
   }
 
   const result = await markNotificationAsReadOnServer(notificationId);

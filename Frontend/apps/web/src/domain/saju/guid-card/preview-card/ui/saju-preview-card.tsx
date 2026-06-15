@@ -1,3 +1,5 @@
+"use client";
+
 import type { DailyEnergyResponse } from "@/generated/api";
 import type { SajuProfileResponse } from "@/generated/api";
 import { SajuHeroSection } from "@/domain/saju/guid-card/preview-card/ui/saju-hero-section";

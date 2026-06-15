@@ -16,13 +16,11 @@ export async function POST(request: Request) {
       refreshed.message === "REFRESH_TOKEN_MISSING"
         ? "REFRESH_TOKEN_MISSING"
         : "TOKEN_REFRESH_FAILED";
-    const message =
-      refreshed.message === "REFRESH_TOKEN_MISSING"
-        ? "재로그인이 필요합니다."
-        : "재로그인이 필요합니다.";
-    return NextResponse.json(createErrorResponse(code, message), {
+
+    return NextResponse.json(createErrorResponse(code), {
       status: refreshed.status,
     });
   }
+
   return NextResponse.json(createSuccessResponse({ refreshed: true }));
 }

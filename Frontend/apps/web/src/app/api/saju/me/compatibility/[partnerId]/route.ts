@@ -22,10 +22,9 @@ export async function GET(_: Request, context: RouteContext) {
   const partnerId = parsePartnerId(rawPartnerId);
 
   if (!partnerId) {
-    return NextResponse.json(
-      createErrorResponse("INVALID_PARTNER_ID", "Partner id must be a number."),
-      { status: 400 },
-    );
+    return NextResponse.json(createErrorResponse("INVALID_PARTNER_ID"), {
+      status: 400,
+    });
   }
 
   const result = await getCompatibilityOnServer(partnerId);

@@ -15,10 +15,9 @@ export async function POST(req: NextRequest) {
   try {
     formValues = (await req.json()) as SajuFormValues;
   } catch {
-    return NextResponse.json(
-      createErrorResponse("INVALID_BODY", "Invalid saju form body."),
-      { status: 400 },
-    );
+    return NextResponse.json(createErrorResponse("INVALID_BODY"), {
+      status: 400,
+    });
   }
 
   const encoded = Buffer.from(

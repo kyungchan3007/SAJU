@@ -5,7 +5,12 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { Metadata } from "next";
 import { Suspense } from "react";
-import { normalizeInternalRedirectPath } from "@/shared/lib/internalRedirect";
+import { buildTurnstileVerifyPath } from "@/shared/api/auth/turnstileRecovery";
+import { TURNSTILE_VERIFIED_COOKIE_KEY } from "@/shared/config/turnstile";
+import {
+  buildSajuResultPath,
+  normalizeInternalRedirectPath,
+} from "@/shared/lib/internalRedirect";
 
 export const metadata: Metadata = {
   title: "사주 결과 미리보기",
@@ -33,6 +38,9 @@ export default async function SajuResultPage({
   const cookieStore = await cookies();
   const accessToken = cookieStore.get("saju_access_token")?.value;
   const refreshToken = cookieStore.get("saju_refresh_token")?.value;
+  const isTurnstileVerified = Boolean(
+    cookieStore.get(TURNSTILE_VERIFIED_COOKIE_KEY)?.value,
+  );
 
   if (!accessToken) {
     if (refreshToken) {
@@ -40,6 +48,10 @@ export default async function SajuResultPage({
     }
 
     redirect("/login");
+  }
+
+  if (!isTurnstileVerified) {
+    redirect(buildTurnstileVerifyPath(buildSajuResultPath(nextPath)));
   }
 
   return (

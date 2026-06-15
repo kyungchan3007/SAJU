@@ -1,25 +1,10 @@
 import type { Metadata } from "next";
 import { Jua, Noto_Sans_KR } from "next/font/google";
-import { cookies } from "next/headers";
 import Script from "next/script";
 import type { ReactNode } from "react";
-import { Providers } from "@/shared/app-infra/query-provider/query-providers";
 import { env } from "@/shared/config";
-import {
-  ACCESS_TOKEN_COOKIE_KEY,
-  REFRESH_TOKEN_COOKIE_KEY,
-  USER_EMAIL_COOKIE_KEY,
-} from "@/shared/config/authToken";
-import { AppChromeOffset, Footer } from "@/shared/ui";
-import { Toaster } from "@saju/ui";
-import { GlobalNav } from "@/widgets/global-nav";
 import "@saju/design-tokens/css";
 import "./globals.css";
-
-/**
- * 홈 페이지와 SEO 페이지를 전역 클라이언트 경계 밖으로
- * 앱 전체 기본값을 서버 컴포넌트로 유지
- * */
 
 const appUrl = env.NEXT_PUBLIC_APP_URL || "https://your-domain.com";
 const ogImageUrl = new URL("/image/background.png", appUrl).toString();
@@ -72,17 +57,7 @@ export const metadata: Metadata = {
   },
 };
 
-type RootLayoutProps = {
-  children: ReactNode;
-};
-
-export default async function RootLayout({ children }: RootLayoutProps) {
-  const cookieStore = await cookies();
-  const accessToken = cookieStore.get(ACCESS_TOKEN_COOKIE_KEY)?.value;
-  const refreshToken = cookieStore.get(REFRESH_TOKEN_COOKIE_KEY)?.value;
-  const userEmail = cookieStore.get(USER_EMAIL_COOKIE_KEY)?.value?.trim();
-  const isLoggedIn = Boolean(accessToken || refreshToken);
-  const authScope = isLoggedIn ? userEmail || "authenticated" : "guest";
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="ko" suppressHydrationWarning>
       <body
@@ -96,16 +71,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
             strategy="afterInteractive"
           />
         ) : null}
-        <Providers authScope={authScope}>
-          <AppChromeOffset>
-            <GlobalNav isLoggedIn={isLoggedIn} />
-            <main className="flex flex-1 flex-col bg-white">
-              {children}
-            </main>
-            <Footer />
-          </AppChromeOffset>
-          <Toaster />
-        </Providers>
+        {children}
       </body>
     </html>
   );

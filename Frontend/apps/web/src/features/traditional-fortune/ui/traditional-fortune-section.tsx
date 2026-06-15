@@ -9,8 +9,8 @@ import { TraditionalFortuneHeader } from "@/features/traditional-fortune/ui/comp
 import { TraditionalFortuneHeroBanner } from "@/features/traditional-fortune/ui/components/traditional-fortune-hero-banner";
 import { TraditionalFortuneOverallCard } from "@/features/traditional-fortune/ui/components/traditional-fortune-overall-card";
 import type { ApiEnvelope } from "@/shared/api";
+import { RedirectToError } from "@/shared/app-infra/navigation/redirect-to-error.client";
 import { useAdGate } from "@/shared/hooks/use-ad-gate";
-import { ErrorStateCard } from "@/shared/ui";
 import { AdProgressGate } from "@/shared/ui/ad-progress-gate.client";
 import { FortuneGateLayout, FortunePageLayout } from "@/shared/ui/fortune-page-layout";
 
@@ -21,7 +21,7 @@ type TraditionalFortuneSectionProps = {
 export function TraditionalFortuneSection({
   initialData,
 }: TraditionalFortuneSectionProps) {
-  const { isLoading, isError, errorMessage, data, domains } =
+  const { isLoading, isError, data, domains } =
     useTraditionalFortune({ initialData });
   const { activeDomain, setActiveDomain, activeDomainData } =
     useTraditionalFortuneSectionState({ domains });
@@ -29,14 +29,7 @@ export function TraditionalFortuneSection({
   const adGate = useAdGate({ enabled: true, isContentReady });
 
   if (isError) {
-    return (
-      <FortunePageLayout>
-        <ErrorStateCard
-          title="데이터를 불러오지 못했어요"
-          description={errorMessage ?? "사주 데이터를 불러오지 못했어."}
-        />
-      </FortunePageLayout>
-    );
+    return <RedirectToError code="TRADITIONAL_FORTUNE_LOAD_FAILED" />;
   }
 
   if (adGate.shouldShowGate) {
