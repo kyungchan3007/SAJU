@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Turnstile } from "@marsidev/react-turnstile";
-import { TURNSTILE_WIDGET_MISSING_SITE_KEY } from "@/features/auth/model/turnstile-widget-errors";
+const LOAD_TIMEOUT_MS = 5000;
 
 type TurnstileWidgetProps = {
   onSuccess: (token: string) => void;
@@ -27,22 +27,26 @@ export function TurnstileWidget({
   wrapperClassName = "",
 }: TurnstileWidgetProps) {
   const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "";
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+  const onErrorRef = useRef(onError);
+  const onTimeoutRef = useRef(onTimeout);
 
   useEffect(() => {
-    if (!siteKey) {
-      onError?.(TURNSTILE_WIDGET_MISSING_SITE_KEY);
-    }
-  }, [onError, siteKey]);
+    onErrorRef.current = onError;
+    onTimeoutRef.current = onTimeout;
+  });
 
-  if (!siteKey) {
-    return null;
-  }
+  useEffect(() => {
+    const id = window.setTimeout(() => {
+      setIsVisible(true);
+      onTimeoutRef.current?.();
+    }, LOAD_TIMEOUT_MS);
+
+    return () => window.clearTimeout(id);
+  }, []);
 
   return (
-    // 로드 전: h-0 + overflow-hidden으로 공간 차지 안 함
-    // 로드 후: wrapperClassName 적용해서 레이아웃에 자리 잡음
-    <div className={isLoaded ? wrapperClassName : "h-0 overflow-hidden"}>
+    <div className={isVisible ? wrapperClassName : "h-0 overflow-hidden"}>
       <Turnstile
         siteKey={siteKey}
         onSuccess={onSuccess}
@@ -50,7 +54,7 @@ export function TurnstileWidget({
         onExpire={onExpire}
         onUnsupported={onUnsupported}
         onTimeout={onTimeout}
-        onLoad={() => setIsLoaded(true)}
+        onLoad={() => setIsVisible(true)}
         options={{
           size,
           appearance,

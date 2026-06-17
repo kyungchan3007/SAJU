@@ -1,6 +1,10 @@
 import { expect, test } from "@playwright/test";
 
-import { addAuthCookies, mockCurrentProjectApis } from "./support";
+import {
+  addAuthCookies,
+  addSajuDailyCacheCookie,
+  mockCurrentProjectApis,
+} from "./support";
 
 test.describe("saju result flow", () => {
   test("reveals the daily saju result after the progress gate", async ({
@@ -9,6 +13,7 @@ test.describe("saju result flow", () => {
     baseURL,
   }) => {
     await addAuthCookies(context, baseURL);
+    await addSajuDailyCacheCookie(context, baseURL);
     await mockCurrentProjectApis(page);
 
     await page.goto("/saju/result");

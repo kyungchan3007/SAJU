@@ -49,6 +49,14 @@ type ApiMockOptions = {
   onCommunityJoin?: (payload: unknown) => void;
 };
 
+type DailyResultMock = {
+  todayScore: number;
+  mood: string;
+  goodTime: string;
+  weakElement: string;
+  fiveElements: Record<string, number>;
+};
+
 export type NotificationMock = {
   id: number;
   title: string;
@@ -133,6 +141,38 @@ export const defaultCommunityInterests: CommunityInterestMock[] = [
   },
 ];
 
+export const defaultDailyResult: DailyResultMock = {
+  todayScore: 82,
+  mood: "차분한 집중",
+  goodTime: "오전",
+  weakElement: "water",
+  fiveElements: { 목: 20, 화: 25, 토: 30, 금: 15, 수: 10 },
+};
+
+export function createSajuDailyCacheCookieValue(
+  data: unknown = defaultDailyResult,
+) {
+  return Buffer.from(
+    JSON.stringify({
+      data,
+      exp: Date.now() + 60 * 60 * 1000,
+    }),
+    "utf8",
+  ).toString("base64url");
+}
+
+export function createSajuDailyCacheSetCookieHeader(
+  data: unknown = defaultDailyResult,
+) {
+  return [
+    `saju_daily_cache=${createSajuDailyCacheCookieValue(data)}`,
+    "Path=/",
+    "Max-Age=3600",
+    "SameSite=Lax",
+    "HttpOnly",
+  ].join("; ");
+}
+
 export async function addAuthCookies(
   context: BrowserContext,
   baseURL?: string,
@@ -143,6 +183,24 @@ export async function addAuthCookies(
     { name: "saju_access_token", value: "e2e-access-token", url },
     { name: "saju_turnstile_verified", value: "1", url },
     { name: "saju_user_email", value: "e2e@example.com", url },
+  ]);
+}
+
+export async function addSajuDailyCacheCookie(
+  context: BrowserContext,
+  baseURL?: string,
+  data: unknown = defaultDailyResult,
+) {
+  const url = baseURL ?? "http://127.0.0.1:3100";
+
+  await context.addCookies([
+    {
+      name: "saju_daily_cache",
+      value: createSajuDailyCacheCookieValue(data),
+      url,
+      httpOnly: true,
+      sameSite: "Lax",
+    },
   ]);
 }
 
@@ -195,15 +253,12 @@ export async function mockCurrentProjectApis(
     await route.fulfill({
       status: 200,
       contentType: "application/json",
+      headers: {
+        "Set-Cookie": createSajuDailyCacheSetCookieHeader(),
+      },
       body: JSON.stringify({
         success: true,
-        data: {
-          todayScore: 82,
-          mood: "차분한 집중",
-          goodTime: "오전",
-          weakElement: "water",
-          fiveElements: { 목: 20, 화: 25, 토: 30, 금: 15, 수: 10 },
-        },
+        data: defaultDailyResult,
         error: null,
       }),
     });

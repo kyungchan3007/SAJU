@@ -1,4 +1,5 @@
 import type { Route } from "next";
+import type { SajuProfileResponse } from "@/generated/api";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
@@ -18,6 +19,18 @@ import { Button, EmptyStateCard } from "@/shared/ui";
 type SajuResultProps = {
   nextPath?: Route | null;
 };
+
+async function getOptionalSajuProfile(): Promise<SajuProfileResponse | null> {
+  try {
+    const profile = await getSajuProfileOnServer({
+      refreshOnUnauthorized: false,
+    });
+
+    return profile.success ? (profile.data ?? null) : null;
+  } catch {
+    return null;
+  }
+}
 
 export async function SajuResult({ nextPath }: SajuResultProps) {
   const result = await getSajuResultOnServer();
@@ -49,16 +62,11 @@ export async function SajuResult({ nextPath }: SajuResultProps) {
     redirect(nextPath);
   }
 
-  const profile = await getSajuProfileOnServer({
-    refreshOnUnauthorized: false,
-  });
+  const profile = await getOptionalSajuProfile();
 
   return (
     <RewardedResultGate>
-      <SajuPreviewCard
-        dailyResult={result.data}
-        profile={profile.success ? profile.data : null}
-      />
+      <SajuPreviewCard dailyResult={result.data} profile={profile} />
     </RewardedResultGate>
   );
 }

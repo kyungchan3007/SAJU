@@ -9,8 +9,11 @@
   ],
   "scripts": {
     "dev": "npm run dev -w @saju/web --",
+    "dev:admin": "npm run dev -w @saju/admin --",
     "build": "npm run build -w @saju/web --",
+    "build:admin": "npm run build -w @saju/admin --",
     "start": "npm run start -w @saju/web --",
+    "start:admin": "npm run start -w @saju/admin --",
     "storybook": "npm run storybook -w @saju/web --",
     "build-storybook": "npm run build-storybook -w @saju/web --",
     "test:e2e": "npm run test:e2e -w @saju/web --",

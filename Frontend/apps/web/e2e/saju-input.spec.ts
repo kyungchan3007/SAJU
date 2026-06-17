@@ -1,5 +1,5 @@
 ﻿import { expect, test, type Page } from "@playwright/test";
-import { addAuthCookies } from "./support";
+import { addAuthCookies, createSajuDailyCacheSetCookieHeader } from "./support";
 
 async function fillRequiredSajuFields(page: Page) {
   await page.locator('select[name="birthYear"]').selectOption("1992");
@@ -177,7 +177,7 @@ test.describe("saju input flow", () => {
     await agreeToRequiredConsents(page);
     await submitButton(page).click();
 
-    await expect(page).toHaveURL(/\/login\?next=%2Fsaju$/);
+    await expect(page).toHaveURL(/\/login\?next=%2Fsaju%2Fresult$/);
     expect(draftPayload).toMatchObject({
       birthYear: "1992",
       birthDate: "03 / 14",
@@ -219,7 +219,7 @@ test.describe("saju input flow", () => {
     await agreeToRequiredConsents(page);
     await submitButton(page).click();
 
-    await expect(page).toHaveURL(/\/login\?next=%2Fsaju$/);
+    await expect(page).toHaveURL(/\/login\?next=%2Fsaju%2Fresult$/);
     expect(draftPayload).toMatchObject({
       birthTime: "09:05",
       agreedToTerms: true,
@@ -259,7 +259,7 @@ test.describe("saju input flow", () => {
     await agreeToRequiredConsents(page);
     await submitButton(page).click();
 
-    await expect(page).toHaveURL(/\/login\?next=%2Fsaju$/);
+    await expect(page).toHaveURL(/\/login\?next=%2Fsaju%2Fresult$/);
     expect(draftPayload).toMatchObject({
       timeUnknown: "yes",
       birthTime: "",
@@ -318,7 +318,7 @@ test.describe("saju input flow", () => {
     await submitButton(page).click();
 
     await expect(page).toHaveURL(
-      /\/login\?next=%2Fsaju%3Fnext%3D%252Fcompatibility$/,
+      /\/login\?next=%2Fsaju%2Fresult%3Fnext%3D%252Fcompatibility$/,
     );
   });
 
@@ -336,6 +336,12 @@ test.describe("saju input flow", () => {
       await route.fulfill({
         status: 200,
         contentType: "application/json",
+        headers: {
+          "Set-Cookie": createSajuDailyCacheSetCookieHeader({
+            todayScore: 82,
+            weakElement: "water",
+          }),
+        },
         body: JSON.stringify({
           success: true,
           data: {

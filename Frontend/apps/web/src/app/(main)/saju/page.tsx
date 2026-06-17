@@ -35,10 +35,13 @@ export default async function SajuPage({ searchParams }: SajuPageProps) {
   const params = await searchParams;
   const nextPath = normalizeInternalRedirectPath(params.next);
   const forceInput = params.forceInput === "1";
-  const entryRoute = await getSajuEntryRouteOnServer();
 
-  if (!forceInput && entryRoute === "result") {
-    redirect(buildSajuResultPath(nextPath) as Route);
+  if (!forceInput) {
+    const entryRoute = await getSajuEntryRouteOnServer();
+
+    if (entryRoute === "result") {
+      redirect(buildSajuResultPath(nextPath) as Route);
+    }
   }
 
   return (
