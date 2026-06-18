@@ -3,19 +3,11 @@ import { cookies } from "next/headers";
 
 import { onSajuDailyGetOnServer } from "@/entities/saju/server/onSajuDailyGetOnServer";
 import { onSajuPostOnServer } from "@/entities/saju/server/onSajuPostOnServer";
-import {
-  encodeCachedDailyResult,
-  readCachedDailyResult,
-} from "@/entities/saju/server/sajuDailyCacheCookie";
 import type { SajuFormValues } from "@/features/saju-input/type/type";
 import { createErrorResponse, createSuccessResponse } from "@/shared/api";
 import { withApiGuards } from "@/shared/api/auth/withApiGuards";
 import { ACCESS_TOKEN_COOKIE_KEY } from "@/shared/config/authToken";
-import {
-  SAJU_DAILY_CACHE_COOKIE_KEY,
-  SAJU_DAILY_CACHE_TTL_SEC,
-  SAJU_PENDING_FORM_COOKIE_KEY,
-} from "@/shared/config/sajuCookie";
+import { SAJU_PENDING_FORM_COOKIE_KEY } from "@/shared/config/sajuCookie";
 
 export const revalidate = 60;
 
@@ -92,13 +84,16 @@ export const POST = withApiGuards(
       });
     }
 
-    const cachedDailyResult = readCachedDailyResult(
-      cookieStore.get(SAJU_DAILY_CACHE_COOKIE_KEY)?.value,
-    );
-    if (cachedDailyResult) {
-      const response = NextResponse.json(
-        createSuccessResponse(cachedDailyResult),
-      );
+    if (submittedFormValues) {
+      const postResult = await onSajuPostOnServer(submittedFormValues);
+      if (!postResult.success) {
+        return NextResponse.json(
+          createErrorResponse("SAJU_POST_FAILED", postResult.message),
+          { status: postResult.status },
+        );
+      }
+
+      const response = NextResponse.json(createSuccessResponse(postResult.data));
       clearPendingFormCookie(response);
       return response;
     }
@@ -107,17 +102,6 @@ export const POST = withApiGuards(
     if (dailyResult.success) {
       const response = NextResponse.json(createSuccessResponse(dailyResult.data));
 
-      response.cookies.set(
-        SAJU_DAILY_CACHE_COOKIE_KEY,
-        encodeCachedDailyResult(dailyResult.data, SAJU_DAILY_CACHE_TTL_SEC),
-        {
-          httpOnly: true,
-          secure: process.env.NODE_ENV === "production",
-          sameSite: "lax",
-          path: "/",
-          maxAge: SAJU_DAILY_CACHE_TTL_SEC,
-        },
-      );
       clearPendingFormCookie(response);
 
       return response;
@@ -147,17 +131,6 @@ export const POST = withApiGuards(
 
       const response = NextResponse.json(createSuccessResponse(postResult.data));
 
-      response.cookies.set(
-        SAJU_DAILY_CACHE_COOKIE_KEY,
-        encodeCachedDailyResult(postResult.data, SAJU_DAILY_CACHE_TTL_SEC),
-        {
-          httpOnly: true,
-          secure: process.env.NODE_ENV === "production",
-          sameSite: "lax",
-          path: "/",
-          maxAge: SAJU_DAILY_CACHE_TTL_SEC,
-        },
-      );
       clearPendingFormCookie(response);
 
       return response;

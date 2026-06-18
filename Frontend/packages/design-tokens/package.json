@@ -1,7 +1,6 @@
 {
   "name": "@saju/design-tokens",
-  "version": "0.0.0",
-  "private": true,
+  "version": "0.1.0",
   "type": "module",
   "scripts": {
     "typecheck": "tsc --noEmit -p tsconfig.json"

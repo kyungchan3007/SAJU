@@ -1,5 +1,5 @@
 ---
-sidebar_position: 4
+sidebar_position: 5
 ---
 
 # 🛡️ 코드 리뷰 워크플로우
@@ -25,13 +25,30 @@ Claude 구현 → Codex 검증으로 이어지는 리뷰 절차를 표준화한 
 
 ## 🗂️ 게이트 매트릭스
 
-작업 유형에 따라 어떤 스킬을 추가로 적용할지 결정합니다.
+작업 유형에 따라 **필수 스킬**, **선택 스킬**, **검증 포커스**가 달라집니다. 작업이 여러 유형에 걸칠 때는 가장 위험한 유형을 주 유형으로 잡고 게이트를 합산합니다.
 
-| 작업 유형 | 기본 | 추가 |
-|-----------|------|------|
-| 일반 기능 구현 | `code-review-guard` | — |
-| 성능 / 렌더링 / 번들 | `code-review-guard` | `vercel-react-best-practices` |
-| UI / 접근성 | `code-review-guard` | `web-design-guidelines` |
+### 대표 유형별 게이트
+
+| 작업 유형 | 필수 스킬 | 선택 스킬 | 검증 포커스 |
+|---|---|---|---|
+| 기능 구현/리팩터 | `code-review-guard` | `vercel-react-best-practices` | G1, G2, G4, G5 |
+| 인증/권한/로그인 | `code-review-guard` | — | G2, G3, G4, G5 |
+| `/saju` 입력 흐름 | `saju-frontend`, `code-review-guard` | — | G1, G2, G4, G5 |
+| `/saju/result` 결과 조회 | `saju-frontend`, `code-review-guard` | `vercel-react-best-practices` | G1, G2, G4, G5 |
+| React Query 캐시/무효화 | `saju-frontend`, `code-review-guard` | `vercel-react-best-practices` | G1, G2, G4, G5 |
+| BFF/API route 변경 | `saju-frontend`, `code-review-guard` | — | G1, G2, G3, G4, G5 |
+| 쿠키/세션/민감정보 처리 | `saju-frontend`, `code-review-guard` | — | G2, G3, G4, G5 |
+| UI/디자인 전수 수정 | `code-review-guard` | `web-design-guidelines` | G1, G4, G5 + 접근성 |
+| 디자인 시스템/토큰 | `design-system-hybrid`, `code-review-guard` | `web-design-guidelines` | G1, G2, G4, G5 + 접근성 |
+| 성능 개선 | `code-review-guard` | `vercel-react-best-practices` | G1, G2, G4, G5 + 성능 근거 |
+| CI/CD 워크플로우 | `saju-frontend`, `code-review-guard` | — | G1, G3, G4, G5 |
+| docs 사이트 | `saju-docs`, `code-review-guard` | — | G1, G2, G4, G5 |
+| Notion/작업 기록 | `notion-weekly-worklog` | `change-summary-report` | G5 |
+| 릴리즈 직전 통합 점검 | `code-review-guard` | `vercel-react-best-practices`, `web-design-guidelines` | G1~G5 전체 |
+
+**G1** 비즈니스 로직 무결성 / **G2** API 계약·타입 안전성 / **G3** 인증·보안 / **G4** 상태관리·캐시 일관성 / **G5** 회귀·운영 안정성
+
+세부 유형과 검증 명령은 `.agents/skills/codex-review-workflow/references/gate-matrix.md`에서 관리합니다.
 
 ## 📋 필수 점검 항목
 

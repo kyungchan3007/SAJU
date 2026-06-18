@@ -1,14 +1,6 @@
 name: Frontend E2E
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - Frontend/apps/web/**
-      - Frontend/packages/**
-      - Frontend/package.json
-      - Frontend/package-lock.json
-      - .github/workflows/frontend-e2e.yml
   pull_request:
     branches: [main, develop]
     paths:

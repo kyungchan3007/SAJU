@@ -1,27 +1,11 @@
 name: Publish Storybook
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - Frontend/apps/web/.storybook/**
-      - Frontend/apps/web/src/app/globals.css
-      - Frontend/apps/web/tailwind.config.ts
-      - Frontend/packages/design-tokens/**
-      - Frontend/packages/ui/**
-      - Frontend/apps/web/package.json
-      - Frontend/package.json
-      - Frontend/package-lock.json
-      - .github/workflows/chromatic.yml
   pull_request:
     branches: [main, develop]
     paths:
-      - Frontend/apps/web/.storybook/**
-      - Frontend/apps/web/src/app/globals.css
-      - Frontend/apps/web/tailwind.config.ts
-      - Frontend/packages/design-tokens/**
-      - Frontend/packages/ui/**
-      - Frontend/apps/web/package.json
+      - Frontend/apps/web/**
+      - Frontend/packages/**
       - Frontend/package.json
       - Frontend/package-lock.json
       - .github/workflows/chromatic.yml

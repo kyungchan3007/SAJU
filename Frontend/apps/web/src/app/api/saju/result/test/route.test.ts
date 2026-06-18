@@ -78,33 +78,6 @@ describe("/api/saju/result POST", () => {
     });
   });
 
-  it("returns cached daily result without server calls", async () => {
-    const cached = encodeCookiePayload({
-      data: { weakElement: "water" },
-      exp: Date.now() + 60_000,
-    });
-    mockedCookies.mockResolvedValue(
-      createCookieStore({
-        saju_access_token: "token",
-        saju_daily_cache: cached,
-      }),
-    );
-
-    const response = await POST(createEmptyRequest());
-    const body = await response.json();
-    const setCookie = response.headers.get("set-cookie") ?? "";
-
-    expect(response.status).toBe(200);
-    expect(body).toEqual({
-      success: true,
-      data: { weakElement: "water" },
-      error: null,
-    });
-    expect(mockedOnSajuDailyGetOnServer).not.toHaveBeenCalled();
-    expect(mockedOnSajuPostOnServer).not.toHaveBeenCalled();
-    expect(setCookie).toContain("saju_pending_form=");
-  });
-
   it("falls back to POST when daily result returns 404 and pending form exists", async () => {
     const pending = encodeCookiePayload({
       formValues: {
@@ -146,17 +119,12 @@ describe("/api/saju/result POST", () => {
     expect(mockedOnSajuPostOnServer).toHaveBeenCalledTimes(1);
   });
 
-  it("uses submitted form body when daily result returns 404", async () => {
+  it("uses submitted form body without checking daily result first", async () => {
     mockedCookies.mockResolvedValue(
       createCookieStore({
         saju_access_token: "token",
       }),
     );
-    mockedOnSajuDailyGetOnServer.mockResolvedValue({
-      success: false,
-      status: 404,
-      message: "Not found",
-    });
     mockedOnSajuPostOnServer.mockResolvedValue({
       success: true,
       data: { weakElement: "fire" },
@@ -190,6 +158,7 @@ describe("/api/saju/result POST", () => {
       gender: "MALE",
       timeUnknown: "",
     });
+    expect(mockedOnSajuDailyGetOnServer).not.toHaveBeenCalled();
   });
 
   it("returns 400 when daily 404 but pending form is missing", async () => {
@@ -288,11 +257,11 @@ describe("/api/saju/result POST", () => {
     });
   });
 
-  it("treats broken cache/pending cookie payload as missing and follows failure path", async () => {
+  it("treats broken pending cookie payload as missing and follows failure path", async () => {
     mockedCookies.mockResolvedValue(
       createCookieStore({
         saju_access_token: "token",
-        saju_daily_cache: "not-base64",
+        saju_pending_form: "not-base64",
       }),
     );
     mockedOnSajuDailyGetOnServer.mockResolvedValue({

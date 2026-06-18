@@ -2,7 +2,7 @@ import { type NextRequest, NextResponse } from "next/server";
 import { ACCESS_TOKEN_COOKIE_KEY } from "@/shared/config/authToken";
 import { decodeJwtPayload } from "@/shared/lib/jwt";
 
-const PUBLIC_PATHS = ["/login", "/api/auth"];
+const PUBLIC_PATHS = ["/", "/login", "/api/auth"];
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;

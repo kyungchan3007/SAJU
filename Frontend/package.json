@@ -27,7 +27,9 @@
     "format:check": "npm run format:check -w @saju/web --",
     "openapi-ts": "npm run openapi-ts -w @saju/web --",
     "docs:dev": "npm run start -w @saju/docs --",
-    "docs:build": "npm run build -w @saju/docs --"
+    "docs:build": "npm run build -w @saju/docs --",
+    "changeset": "changeset",
+    "version-packages": "changeset version"
   },
   "keywords": [
     "nextjs",
@@ -43,6 +45,7 @@
   },
   "packageManager": "npm@11.6.2",
   "devDependencies": {
+    "@changesets/cli": "^2.31.0",
     "@opennextjs/cloudflare": "^1.19.11",
     "wrangler": "^4.97.0"
   }

@@ -23,7 +23,6 @@ export function useTurnstileGate({ onVerified }: UseTurnstileGateParams = {}) {
   }
 
   function handleError(code?: string) {
-    console.warn("[Turnstile] widget error", { code });
     setIsPending(false);
     setIsVerified(false);
     setStatus("challenging");
@@ -31,21 +30,18 @@ export function useTurnstileGate({ onVerified }: UseTurnstileGateParams = {}) {
   }
 
   function handleTimeout() {
-    console.warn("[Turnstile] widget timeout");
     setIsPending(false);
     setIsVerified(false);
     setStatus("challenging");
   }
 
   function handleExpire() {
-    console.warn("[Turnstile] widget expired");
     setIsPending(false);
     setIsVerified(false);
     setStatus("challenging");
   }
 
   function handleUnsupported() {
-    console.warn("[Turnstile] widget unsupported");
     setIsPending(false);
     setIsVerified(false);
     setStatus("challenging");

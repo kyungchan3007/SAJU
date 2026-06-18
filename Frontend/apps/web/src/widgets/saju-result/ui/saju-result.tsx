@@ -1,11 +1,19 @@
+"use client";
+
 import type { Route } from "next";
-import type { SajuProfileResponse } from "@/generated/api";
 import Link from "next/link";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 import { SajuPreviewCard } from "@/domain/saju/guid-card/preview-card/ui/saju-preview-card";
-import { getSajuProfileOnServer } from "@/entities/saju/server/getSajuProfileOnServer";
-import { getSajuResultOnServer } from "@/entities/saju/server/getSajuResultOnServer";
+import {
+  fetchSajuProfileOnClient,
+  SajuResultClientError,
+} from "@/entities/saju";
+import { SAJU_PROFILE_QUERY_KEY } from "@/features/saju-profile/model/query";
+import { useSajuResultQuery } from "@/features/saju-result/hooks/useSajuResultQuery";
+import { AnalysisPendingGate } from "@/features/saju-result/ui/analysis-pending-gate.client";
 import { AuthRefreshRetry } from "@/features/saju-result/ui/auth-refresh-retry.client";
 import { RewardedResultGate } from "@/features/saju-result/ui/rewarded-result-gate.client";
 import { buildErrorPagePath } from "@/shared/lib/error-page";
@@ -20,28 +28,68 @@ type SajuResultProps = {
   nextPath?: Route | null;
 };
 
-async function getOptionalSajuProfile(): Promise<SajuProfileResponse | null> {
-  try {
-    const profile = await getSajuProfileOnServer({
-      refreshOnUnauthorized: false,
-    });
-
-    return profile.success ? (profile.data ?? null) : null;
-  } catch {
-    return null;
-  }
+function isLoginRequiredError(error: unknown) {
+  return (
+    error instanceof SajuResultClientError &&
+    (error.code === "LOGIN_REQUIRED" ||
+      error.code === "REFRESH_TOKEN_MISSING")
+  );
 }
 
-export async function SajuResult({ nextPath }: SajuResultProps) {
-  const result = await getSajuResultOnServer();
-  const loginPath = buildLoginPath(buildSajuResultPath(nextPath));
+function isPendingFormRequiredError(error: unknown) {
+  return (
+    error instanceof SajuResultClientError &&
+    error.code === "PENDING_FORM_NOT_FOUND"
+  );
+}
 
-  if (!result.success) {
-    if (result.reason === "LOGIN_REQUIRED" || result.status === 401) {
+export function SajuResult({ nextPath }: SajuResultProps) {
+  const router = useRouter();
+  const resultPath = buildSajuResultPath(nextPath);
+  const loginPath = buildLoginPath(resultPath);
+  const resultQuery = useSajuResultQuery(resultPath);
+  const profileQuery = useQuery({
+    queryKey: SAJU_PROFILE_QUERY_KEY,
+    queryFn: fetchSajuProfileOnClient,
+    enabled: resultQuery.isSuccess,
+    staleTime: 60 * 60 * 1000,
+    gcTime: 60 * 60 * 1000,
+  });
+
+  useEffect(() => {
+    if (!resultQuery.isSuccess) {
+      return;
+    }
+
+    if (nextPath && nextPath !== "/saju/result") {
+      router.replace(nextPath);
+    }
+  }, [nextPath, resultQuery.isSuccess, router]);
+
+  useEffect(() => {
+    if (
+      !resultQuery.error ||
+      isLoginRequiredError(resultQuery.error) ||
+      isPendingFormRequiredError(resultQuery.error)
+    ) {
+      return;
+    }
+
+    router.replace(
+      buildErrorPagePath({ code: "SAJU_RESULT_LOAD_FAILED" }) as Route,
+    );
+  }, [resultQuery.error, router]);
+
+  if (resultQuery.isPending || (resultQuery.isSuccess && nextPath)) {
+    return <AnalysisPendingGate />;
+  }
+
+  if (resultQuery.error) {
+    if (isLoginRequiredError(resultQuery.error)) {
       return <AuthRefreshRetry loginPath={loginPath} />;
     }
 
-    if (result.reason === "PENDING_FORM_REQUIRED") {
+    if (isPendingFormRequiredError(resultQuery.error)) {
       return (
         <EmptyStateCard
           title="사주 정보가 없습니다"
@@ -55,18 +103,17 @@ export async function SajuResult({ nextPath }: SajuResultProps) {
       );
     }
 
-    redirect(buildErrorPagePath({ code: "SAJU_RESULT_LOAD_FAILED" }) as Route);
+    return <AnalysisPendingGate />;
   }
 
-  if (nextPath && nextPath !== "/saju/result") {
-    redirect(nextPath);
-  }
-
-  const profile = await getOptionalSajuProfile();
+  const dailyResult = resultQuery.data?.data;
+  const profile = profileQuery.data?.success
+    ? (profileQuery.data.data ?? null)
+    : null;
 
   return (
     <RewardedResultGate>
-      <SajuPreviewCard dailyResult={result.data} profile={profile} />
+      <SajuPreviewCard dailyResult={dailyResult} profile={profile} />
     </RewardedResultGate>
   );
 }

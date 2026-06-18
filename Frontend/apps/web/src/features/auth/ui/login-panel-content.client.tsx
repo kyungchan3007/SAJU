@@ -10,9 +10,10 @@ import { TurnstileWidget } from "@/shared/ui/TurnstileWidget";
 
 type LoginPanelContentProps = {
   kakaoLoginUrl: string;
+  isPreVerified?: boolean;
 };
 
-export function LoginPanelContent({ kakaoLoginUrl }: LoginPanelContentProps) {
+export function LoginPanelContent({ kakaoLoginUrl, isPreVerified = false }: LoginPanelContentProps) {
   const turnstileGate = useTurnstileGate();
   const {
     error,
@@ -39,7 +40,7 @@ export function LoginPanelContent({ kakaoLoginUrl }: LoginPanelContentProps) {
 
   return (
     <div className="relative flex flex-col items-center text-center">
-      {!isVerified ? (
+      {!isVerified && !isPreVerified ? (
         <TurnstileVerificationModal
           title={copy.title}
           description={copy.description}
@@ -89,10 +90,10 @@ export function LoginPanelContent({ kakaoLoginUrl }: LoginPanelContentProps) {
       <button
         type="button"
         onClick={() => {
-          if (!isVerified || isPending) return;
+          if ((!isVerified && !isPreVerified) || isPending) return;
           window.location.href = kakaoLoginUrl;
         }}
-        disabled={!isVerified || isPending}
+        disabled={(!isVerified && !isPreVerified) || isPending}
         className="mt-7 flex h-[48px] w-full items-center justify-center gap-2 border-2 border-black font-bold text-[rgba(0,0,0,0.85)] transition hover:brightness-95 disabled:opacity-70"
         style={{
           backgroundColor: "#FEE500",

@@ -39,6 +39,8 @@ export const useSajuHooks = ({ nextPath }: UseSajuHooksParams = {}) => {
 
     const response = await fetch("/api/saju/result", {
       method: "POST",
+      cache: "no-store",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },

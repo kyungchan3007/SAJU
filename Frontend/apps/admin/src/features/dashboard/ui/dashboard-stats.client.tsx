@@ -1,5 +1,6 @@
 "use client";
 
+import { Activity, AlertTriangle, Database, Globe, MousePointerClick, Users } from "lucide-react";
 import { ErrorStateCard, LoadingStateCard } from "@saju/ui";
 
 import { useWorkersAnalytics, useZoneAnalytics } from "../hooks/useDashboard";
@@ -34,21 +35,25 @@ export function DashboardStatsContainer() {
     <div className="flex flex-col gap-6">
       <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
         <StatCard
+          icon={Users}
           label="등록된 유저"
           value={MOCK_REGISTERED_USERS.toLocaleString()}
           sub="목데이터"
         />
         <StatCard
+          icon={Globe}
           label="총 요청수 (24h)"
           value={summary.totalRequests.toLocaleString()}
           sub="Cloudflare Zone"
         />
         <StatCard
+          icon={MousePointerClick}
           label="총 방문수 (24h)"
           value={summary.totalVisits.toLocaleString()}
           sub="Cloudflare Zone"
         />
         <StatCard
+          icon={Database}
           label="응답 바이트 (24h)"
           value={formatBytes(summary.totalBytes)}
           sub="Cloudflare Zone"
@@ -57,11 +62,13 @@ export function DashboardStatsContainer() {
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <StatCard
+          icon={Activity}
           label="Workers 호출수 (24h)"
           value={totalInvocations.toLocaleString()}
           sub="Cloudflare Workers"
         />
         <StatCard
+          icon={AlertTriangle}
           label="Workers 에러율 (24h)"
           value={`${errorRate}%`}
           sub={`${totalErrors.toLocaleString()} 건 에러`}

@@ -30,17 +30,17 @@
 
 ## 허용 문서
 
-- `.agents/skills/saju-frontend/SKILL.md`
-- `.agents/skills/saju-frontend/references/architecture.md`
-- `.agents/skills/saju-frontend/references/api.md`
-- `.agents/skills/saju-frontend/references/ui-style.md`
-- `.agents/skills/saju-frontend/references/component-guide.md`
-- `.agents/skills/saju-frontend/references/saju.md`
-- `.agents/skills/saju-frontend/references/saju-result.md`
-- `.agents/skills/saju-frontend/references/home.md`
-- `.agents/skills/saju-frontend/references/auth.md`
-- `.agents/skills/saju-frontend/references/mypage.md`
-- `.agents/skills/saju-frontend/references/location.md`
+허용 문서 목록은 `.agents/skills/saju-frontend/SKILL.md`의 읽기 규칙을 따른다.
+SKILL.md에 명시되지 않은 문서는 사용자 확인 없이 열람하지 않는다.
+
+## UI/UX 작업 규칙
+
+UI 컴포넌트 설계·구현·리뷰·수정 작업 시 반드시 아래 스킬을 참조한다.
+
+- 스킬 위치: `.claude/skills/ui-ux-pro-max/SKILL.md`
+- 트리거 조건: 컴포넌트 신규 작성, 스타일 선택, 색상/폰트 결정, 접근성 검토, 레이아웃 구성, 애니메이션 추가, UI 리뷰 요청
+- 작업 전 `python3 .claude/skills/ui-ux-pro-max/scripts/search.py "<키워드>" --design-system` 으로 디자인 시스템 조회를 먼저 실행한다.
+- 스킬의 Pre-Delivery Checklist를 반드시 확인 후 코드를 제출한다.
 
 ## 응답 기본 형식
 
