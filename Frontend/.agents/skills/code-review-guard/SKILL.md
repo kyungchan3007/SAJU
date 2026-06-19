@@ -53,7 +53,7 @@ description: >-
 ### Findings
 
 - [Severity] 제목
-- 영향
+- 영향[settings.local.json](../../../../../POT/.claude/settings.local.json)
 - 근거: `path:line`
 - 재현/조건
 - 수정 제안

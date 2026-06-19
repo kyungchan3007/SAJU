@@ -11,8 +11,10 @@
 ## 필수 스킬 (순서 고정)
 
 1. `code-review-guard`
-2. `web-design-guidelines`
-3. `vercel-react-best-practices`
+2. `caveman-review`
+3. `next-best-practices`
+4. `vercel-react-best-practices`
+5. `web-design-guidelines`
 
 ## 금지
 
@@ -28,4 +30,4 @@
 - 각 이슈에 영향/근거(파일:라인)/재현조건/수정제안 포함
 
 ## 명령어
-- $codex-review-workflow reviewer.md 순서대로 이번 변경분 배포 전 최종 리뷰해줘. MERGE: PASS/HOLD로.
+- $codex-review-workflow reviewer.md 순서대로 이번 변경분 배포 전 최종 리뷰해줘. caveman-review, next-best-practices까지 트리거해서 MERGE: PASS/HOLD로.

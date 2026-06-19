@@ -5,6 +5,7 @@ import { CheckCircle, Loader2, Sparkles } from "lucide-react";
 import { useAdProgressGate } from "@/shared/hooks/use-ad-progress-gate";
 import { AdProgressNote } from "@/shared/ui/ad-progress-note";
 import { AdSlot } from "@/shared/ui/ad-slot.client";
+import { SajuQuizGame } from "@/shared/ui/saju-quiz-game.client";
 
 type AdProgressGateProps = {
   progress: number;
@@ -103,12 +104,18 @@ export function AdProgressGate({
         </div>
       </div>
 
+      <SajuQuizGame />
+
       <AdSlot />
 
       <div className="flex flex-col gap-2.5">
         <AdProgressNote state="done">사주 정보를 확인했어요</AdProgressNote>
-        <AdProgressNote state={n1State}>오행 기운을 분석하고 있어요</AdProgressNote>
-        <AdProgressNote state={n2State}>오늘의 운세를 계산하고 있어요</AdProgressNote>
+        <AdProgressNote state={n1State}>
+          오행 기운을 분석하고 있어요
+        </AdProgressNote>
+        <AdProgressNote state={n2State}>
+          오늘의 운세를 계산하고 있어요
+        </AdProgressNote>
         <AdProgressNote state={n3State}>결과를 정리하고 있어요</AdProgressNote>
       </div>
 
