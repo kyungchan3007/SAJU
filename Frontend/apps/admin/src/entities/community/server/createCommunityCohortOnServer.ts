@@ -6,7 +6,7 @@ import type {
 } from "@/features/community-cohort/type/types";
 import { authenticatedBackendFetch } from "@/shared/api/auth/authenticatedBackendFetch";
 import { parseBackendApiResponse } from "@/shared/api/backend/parseBackendApiResponse";
-import { ADMIN_COMMUNITY_COHORTS_ENDPOINT_PATH } from "@/shared/config/endPoint";
+import { ADMIN_COMMUNITY_COHORT_ENDPOINT_PATH } from "@/shared/config/endPoint";
 
 type Result =
   | { success: true; data: CommunityCohortCreateResponse | undefined }
@@ -16,7 +16,7 @@ export async function createCommunityCohortOnServer(
   body: CommunityCohortCreateRequest,
 ): Promise<Result> {
   const result = await authenticatedBackendFetch(
-    ADMIN_COMMUNITY_COHORTS_ENDPOINT_PATH,
+    ADMIN_COMMUNITY_COHORT_ENDPOINT_PATH,
     {
       method: "POST",
       body: JSON.stringify(body),

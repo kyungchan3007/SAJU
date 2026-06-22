@@ -1,55 +1,124 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { ADMIN_LOGIN_ENDPOINT_PATH } from "@/shared/config/endPoint";
 
 const ERROR_MESSAGES: Record<string, string> = {
   forbidden: "관리자 계정이 아닙니다.",
-  oauth_failed: "카카오 로그인에 실패했습니다. 다시 시도해주세요.",
-  invalid_state: "인증 요청이 유효하지 않습니다. 다시 시도해주세요.",
-  oauth_exception: "로그인 중 오류가 발생했습니다. 다시 시도해주세요.",
+  invalid_credentials: "관리자 계정 정보를 확인해주세요.",
+  login_failed: "로그인 중 오류가 발생했습니다. 다시 시도해주세요.",
+  INVALID_REQUEST_BODY: "입력값을 확인해주세요.",
 };
 
-type LoginCardContentProps = {
-  kakaoLoginUrl: string;
-};
+const DEFAULT_ERROR_MESSAGE = "로그인 중 오류가 발생했습니다. 다시 시도해주세요.";
 
-export function LoginCardContent({ kakaoLoginUrl }: LoginCardContentProps) {
-  const searchParams = useSearchParams();
-  const errorCode = searchParams.get("error");
-  const errorMessage = errorCode ? (ERROR_MESSAGES[errorCode] ?? "알 수 없는 오류가 발생했습니다.") : null;
+export function LoginCardContent() {
+  const router = useRouter();
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [isPending, setIsPending] = useState(false);
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+
+    if (isPending) return;
+
+    setError(null);
+    setIsPending(true);
+
+    try {
+      const res = await fetch(ADMIN_LOGIN_ENDPOINT_PATH, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
+
+      if (res.ok) {
+        router.replace("/dashboard");
+        return;
+      }
+
+      const json = (await res.json().catch(() => null)) as {
+        message?: string;
+      } | null;
+      const code = json?.message ?? "";
+      setError(ERROR_MESSAGES[code] ?? DEFAULT_ERROR_MESSAGE);
+    } catch {
+      setError(DEFAULT_ERROR_MESSAGE);
+    } finally {
+      setIsPending(false);
+    }
+  }
 
   return (
     <div className="flex flex-col items-center">
       <div className="mb-8 text-center">
-        <p className="text-2xl font-bold tracking-tight text-content-primary">사주 어드민</p>
+        <p className="text-2xl font-bold tracking-tight text-content-primary">
+          사주 어드민
+        </p>
         <p className="mt-1 text-sm text-content-muted">관리자 전용 페이지입니다</p>
       </div>
 
-      {errorMessage ? (
-        <div className="mb-4 w-full rounded-md bg-red-50 px-4 py-3 text-sm text-red-600">
-          {errorMessage}
+      <form onSubmit={handleSubmit} className="w-full space-y-4" noValidate>
+        <div className="flex flex-col gap-1.5">
+          <label
+            htmlFor="username"
+            className="text-sm font-medium text-content-primary"
+          >
+            아이디
+          </label>
+          <input
+            id="username"
+            type="text"
+            autoComplete="username"
+            required
+            disabled={isPending}
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            className="w-full rounded-md border border-surface-border bg-white px-3 py-2 text-sm text-content-primary placeholder:text-content-muted focus:outline-none focus:ring-2 focus:ring-saju-primary disabled:opacity-50"
+            placeholder="아이디를 입력하세요"
+          />
         </div>
-      ) : null}
 
-      <a
-        href={kakaoLoginUrl}
-        className="flex h-12 w-full items-center justify-center gap-2 rounded-md font-semibold text-[rgba(0,0,0,0.85)] transition hover:brightness-95"
-        style={{ backgroundColor: "#FEE500" }}
-      >
-        <KakaoIcon />
-        카카오로 로그인
-      </a>
+        <div className="flex flex-col gap-1.5">
+          <label
+            htmlFor="password"
+            className="text-sm font-medium text-content-primary"
+          >
+            비밀번호
+          </label>
+          <input
+            id="password"
+            type="password"
+            autoComplete="current-password"
+            required
+            disabled={isPending}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full rounded-md border border-surface-border bg-white px-3 py-2 text-sm text-content-primary placeholder:text-content-muted focus:outline-none focus:ring-2 focus:ring-saju-primary disabled:opacity-50"
+            placeholder="비밀번호를 입력하세요"
+          />
+        </div>
+
+        {error ? (
+          <div
+            role="alert"
+            className="rounded-md bg-red-50 px-4 py-3 text-sm text-red-600"
+          >
+            {error}
+          </div>
+        ) : null}
+
+        <button
+          type="submit"
+          disabled={isPending}
+          className="w-full rounded-md bg-saju-primary py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          {isPending ? "로그인 중..." : "로그인"}
+        </button>
+      </form>
     </div>
-  );
-}
-
-function KakaoIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
-      <path
-        d="M9 1.5C4.858 1.5 1.5 4.134 1.5 7.368c0 2.07 1.368 3.888 3.438 4.932L4.05 15.0c-.054.18.144.324.306.216l3.474-2.304c.384.054.774.084 1.17.084 4.142 0 7.5-2.634 7.5-5.868C16.5 4.134 13.142 1.5 9 1.5z"
-        fill="currentColor"
-      />
-    </svg>
   );
 }

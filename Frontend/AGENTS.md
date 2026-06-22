@@ -4,7 +4,9 @@
 
 ## 시작 규칙
 
-- 작업 시작 전 `.agents/skills/saju-frontend/SKILL.md`를 확인한다.
+- 작업 시작 전 대상 앱을 먼저 식별한다.
+- `apps/admin` 작업이면 `.agents/skills/saju-admin/SKILL.md`를 확인한다.
+- `apps/web` 작업이면 `.agents/skills/saju-frontend/SKILL.md`를 확인한다.
 - 작업 대상 라우트 또는 기능 도메인을 먼저 식별한다.
 - `SKILL.md`에 매핑된 `references/` 문서 중 필요한 것만 읽는다.
 - 관련 없는 `.md` 파일은 읽지 않는다.
@@ -13,7 +15,9 @@
 ## 작업 범위
 
 - 이 파일은 `Frontend` 하위 전체에 적용된다.
-- Next.js 앱 코드는 `apps/web` 아래에 있고, 루트 npm scripts는 해당 workspace로 위임된다.
+- 서비스 앱 코드는 `apps/web`, 관리자 앱 코드는 `apps/admin`, 문서 사이트는 `apps/docs` 아래에 있다.
+- `apps/admin` 작업 중 `apps/web`을 수정하지 않는다. `apps/web` 작업 중 `apps/admin`을 수정하지 않는다.
+- 루트 npm scripts는 각 workspace로 위임된다.
 - 소스코드 변경 요청이 아닌 문서 정리 작업에서는 `.md` 파일만 수정한다.
 - `apps/web/src/generated/api` 아래 생성 파일은 직접 수정하지 않는다.
 

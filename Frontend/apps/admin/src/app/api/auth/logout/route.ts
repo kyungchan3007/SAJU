@@ -2,8 +2,7 @@ import { NextResponse } from "next/server";
 import {
   ACCESS_TOKEN_COOKIE_KEY,
   AUTH_COOKIE_OPTIONS,
-  REFRESH_TOKEN_COOKIE_KEY,
-  USER_EMAIL_COOKIE_KEY,
+  TOKEN_TYPE_COOKIE_KEY,
 } from "@/shared/config/authToken";
 
 export async function POST() {
@@ -11,8 +10,7 @@ export async function POST() {
 
   const clearOptions = { ...AUTH_COOKIE_OPTIONS, maxAge: 0 };
   response.cookies.set(ACCESS_TOKEN_COOKIE_KEY, "", clearOptions);
-  response.cookies.set(REFRESH_TOKEN_COOKIE_KEY, "", clearOptions);
-  response.cookies.set(USER_EMAIL_COOKIE_KEY, "", clearOptions);
+  response.cookies.set(TOKEN_TYPE_COOKIE_KEY, "", clearOptions);
 
   return response;
 }

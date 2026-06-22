@@ -1,7 +1,10 @@
 import type { NotificationCreateRequest } from "@/features/notification/type/types";
+import { ADMIN_NOTIFICATIONS_ENDPOINT_PATH } from "@/shared/config/endPoint";
 
-export async function createNotificationOnClient(body: NotificationCreateRequest): Promise<void> {
-  const res = await fetch("/api/admin/notifications", {
+export async function createNotificationOnClient(
+  body: NotificationCreateRequest,
+): Promise<void> {
+  const res = await fetch(ADMIN_NOTIFICATIONS_ENDPOINT_PATH, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),

@@ -2,17 +2,31 @@
 
 import { useQuery } from "@tanstack/react-query";
 
-import type { HourlyRequest, WorkersSummary, ZoneAnalyticsSummary } from "../type/types";
+import type {
+  HourlyRequest,
+  WorkersSummary,
+  ZoneAnalyticsSummary,
+} from "../type/types";
 import { DASHBOARD_QUERY_KEY } from "../model/queryKey";
+import {
+  ADMIN_ANALYTICS_WORKERS_ENDPOINT_PATH,
+  ADMIN_ANALYTICS_ZONE_ENDPOINT_PATH,
+} from "@/shared/config/endPoint";
 
-async function fetchZoneAnalytics(): Promise<{ hourly: HourlyRequest[]; summary: ZoneAnalyticsSummary }> {
-  const res = await fetch("/api/admin/analytics/zone");
+async function fetchZoneAnalytics(): Promise<{
+  hourly: HourlyRequest[];
+  summary: ZoneAnalyticsSummary;
+}> {
+  const res = await fetch(ADMIN_ANALYTICS_ZONE_ENDPOINT_PATH);
   if (!res.ok) throw new Error("Failed to fetch zone analytics");
-  return res.json() as Promise<{ hourly: HourlyRequest[]; summary: ZoneAnalyticsSummary }>;
+  return res.json() as Promise<{
+    hourly: HourlyRequest[];
+    summary: ZoneAnalyticsSummary;
+  }>;
 }
 
 async function fetchWorkersAnalytics(): Promise<WorkersSummary> {
-  const res = await fetch("/api/admin/analytics/workers");
+  const res = await fetch(ADMIN_ANALYTICS_WORKERS_ENDPOINT_PATH);
   if (!res.ok) throw new Error("Failed to fetch workers analytics");
   return res.json() as Promise<WorkersSummary>;
 }
