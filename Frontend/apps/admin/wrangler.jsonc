@@ -21,5 +21,9 @@
     "logs": {
       "enabled": true
     }
+  },
+  "vars": {
+    "NEXT_PUBLIC_APP_URL": "https://admin.saju-me.com",
+    "NEXT_PUBLIC_APP_NAME": "SAJU:ME-Admin"
   }
 }

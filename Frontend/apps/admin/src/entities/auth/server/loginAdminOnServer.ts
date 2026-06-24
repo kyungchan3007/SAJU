@@ -64,15 +64,17 @@ export async function loginAdminOnServer(
     };
   }
 
-  let body: AdminLoginResponseBody | null = null;
+  const rawText = await response.text().catch(() => "");
 
+  let body: AdminLoginResponseBody | null = null;
   try {
-    body = (await response.json()) as AdminLoginResponseBody;
+    body = JSON.parse(rawText) as AdminLoginResponseBody;
   } catch {
     body = null;
   }
 
   if (!response.ok) {
+    console.error("[login] backend status:", response.status, "raw:", rawText);
     return {
       success: false,
       status: response.status,
