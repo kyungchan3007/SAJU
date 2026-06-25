@@ -40,6 +40,15 @@ const config: Config = {
         sidebarPath: "./sidebars-api.ts",
       },
     ],
+    [
+      "@docusaurus/plugin-content-docs",
+      {
+        id: "planning",
+        path: "planning",
+        routeBasePath: "planning",
+        sidebarPath: "./sidebars.ts",
+      },
+    ],
   ],
 
   presets: [
@@ -89,7 +98,13 @@ const config: Config = {
           position: "left",
           label: "문서",
         },
-        { to: "/blog", label: "블로그", position: "left" },
+        {
+          type: "docSidebar",
+          sidebarId: "planningSidebar",
+          docsPluginId: "planning",
+          position: "left",
+          label: "기획",
+        },
         {
           type: "docSidebar",
           sidebarId: "apiSidebar",
@@ -97,6 +112,7 @@ const config: Config = {
           position: "left",
           label: "API",
         },
+        { to: "/blog", label: "블로그", position: "left" },
         {
           href: "https://github.com/proejct-saju/saju",
           label: "GitHub",

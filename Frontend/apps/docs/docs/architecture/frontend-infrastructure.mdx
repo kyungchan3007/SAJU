@@ -48,7 +48,7 @@ api.saju-me.com (Nginx → 백엔드 HTTP)
 ```jsonc
 {
   "name": "saju-me",
-  "account_id": "a83a4cf51f88f7b33e2e8a258f081900",
+  "account_id": "클라우드 어카운트 ID",
   "main": ".open-next/worker.js",
   "compatibility_date": "2026-06-05",
   "compatibility_flags": ["nodejs_compat"],
@@ -90,5 +90,19 @@ Cloudflare 대시보드에서 custom domain, vars, observability를 수정하면
 
 ## SSL/TLS
 
-- `saju-me.com` — Cloudflare가 인증서를 자동 관리합니다.
-- `api.saju-me.com` — Cloudflare ↔ Nginx 구간 HTTPS가 필요합니다. 현재 `Full` 모드 기준이며, 추후 `Full (strict)` 전환을 검토할 수 있습니다.
+- `saju-me.com`: Cloudflare Edge 인증서를 사용하며, 인증서는 Cloudflare가 자동 관리합니다.
+- `api.saju-me.com`: Cloudflare를 통해 프록시되며, 브라우저 ↔ Cloudflare 구간은 Edge 인증서를 사용합니다.
+- Cloudflare ↔ Nginx origin 구간은 현재 `Full (strict)` 모드로 운영합니다.
+- `Full (strict)` 모드에서는 origin 인증서가 유효해야 하므로, Nginx origin 서버에는 Cloudflare가 신뢰할 수 있는 인증서 또는 Cloudflare Origin Certificate를 유지해야 합니다.
+- Cloudflare의 `Always Use HTTPS`가 활성화되어 있어 zone의 모든 HTTP 요청은 HTTPS로 리다이렉트됩니다.
+- HTTP → HTTPS 리다이렉트는 Cloudflare에서 담당하므로, origin/Nginx에서 동일한 강제 리다이렉트를 중복 설정하지 않습니다. 중복 설정 시 `ERR_TOO_MANY_REDIRECTS`가 발생할 수 있습니다.
+
+### 활성화된 Cloudflare SSL/TLS 옵션
+
+| 옵션 | 상태 | 비고 |
+|------|------|------|
+| `Full (strict)` | Enabled | Cloudflare ↔ origin HTTPS 연결 및 origin 인증서 검증 |
+| `Always Use HTTPS` | Enabled | HTTP 요청을 HTTPS로 리다이렉트 |
+| `TLS 1.3` | Enabled | 최신 TLS 프로토콜 사용 |
+| `Automatic HTTPS Rewrites` | Enabled | HTTPS로 제공 가능한 리소스의 `http://` 링크를 `https://`로 자동 변환 |
+| `Opportunistic Encryption` | Enabled | 암호화 가능한 연결을 활용하는 HTTP/2 성능 최적화 |

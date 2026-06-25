@@ -65,6 +65,12 @@ test.describe("auth protected routing", () => {
     await expect(page).toHaveURL(/\/login$/);
   });
 
+  test("redirects guests away from contact inquiry form", async ({ page }) => {
+    await page.goto("/contact/form");
+
+    await expect(page).toHaveURL(/\/login\?next=%2Fcontact%2Fform$/);
+  });
+
   test("keeps guests on saju input", async ({ page }) => {
     await page.goto("/saju");
 

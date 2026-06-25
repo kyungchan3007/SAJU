@@ -24,6 +24,7 @@ export const LOCATION_SEARCH_ENDPOINT_PATH = "/api/location/search";
 export const COMMUNITY_COHORTS_ENDPOINT_PATH = "/api/admin/community/cohorts";
 export const COMMUNITY_JOIN_ENDPOINT_PATH = "/api/community/join";
 export const COMMUNITY_INTERESTS_ENDPOINT_PATH = "/api/community/interests";
+export const INQUIRIES_ENDPOINT_PATH = "/api/inquiries";
 export const NOTIFICATIONS_ENDPOINT_PATH = "/api/notifications";
 export const NOTIFICATIONS_UNREAD_COUNT_ENDPOINT_PATH =
   "/api/notifications/unread-count";

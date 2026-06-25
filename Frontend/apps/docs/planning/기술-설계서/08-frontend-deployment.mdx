@@ -1,0 +1,78 @@
+---
+sidebar_position: 8
+sidebar_label: "ADR-008: 프론트엔드 배포"
+---
+
+# ADR-008: 프론트엔드 배포
+
+## 상황 (Context)
+React 기반 프론트엔드를 빠르게, 자주, 안정적으로 배포해야 한다. 동시에 다양한 디바이스(모바일 웹, 데스크톱)를 지원해야 하며, 초기 로딩 성능과 SEO도 고려해야 한다.
+
+## 의사결정 (Decision)
+**Vercel + GitHub Actions 기반 자동 배포**
+
+- **호스팅**: Vercel (프리 플랜)
+  - Next.js 최적화 (프리페칭, 이미지 최적화)
+  - 자동 CDN 캐싱
+  - 프리뷰 배포 (PR마다 임시 URL)
+  
+- **CI/CD**: GitHub Actions
+  - PR 제출 시: Lint, 타입 체크, 테스트
+  - Main 병합 시: 자동 프로덕션 배포
+  
+- **모니터링**: Vercel Analytics + Sentry (에러 추적)
+
+## 근거 (Rationale)
+1. **개발 속도**: PR마다 미리보기 가능
+2. **자동 배포**: 수동 개입 최소화
+3. **성능**: Vercel의 엣지 캐싱으로 응답 속도 향상
+4. **비용**: 초기 무료, 스케일 시에만 과금
+5. **SEO**: Next.js SSG/ISR로 정적 페이지 생성
+
+## 결과 (Consequences)
+
+### ✅ 긍정
+- 높은 성능 (자동 최적화)
+- 빠른 배포 사이클
+- 롤백 용이 (이전 배포로 즉시 복구)
+
+### ⚠️ 위험
+- Vendor Lock-in (Vercel 의존)
+- 서드파티 서비스 의존도 높음
+- 비용 증가 시 마이그레이션 어려움
+
+## 배포 프로세스
+```
+1. 개발자가 GitHub에 push
+2. GitHub Actions 실행
+   - npm run lint (ESLint)
+   - npm run type-check (TypeScript)
+   - npm run test (Jest)
+3. PR 제출 시:
+   - Vercel Preview 배포 (URL 생성)
+   - 리뷰어가 QA 확인
+4. Main 병합 시:
+   - Vercel 프로덕션 배포 (자동)
+   - CDN 캐시 무효화
+```
+
+## 성능 목표
+| 지표 | 목표 |
+|------|------|
+| First Contentful Paint (FCP) | < 2.5s |
+| Largest Contentful Paint (LCP) | < 4s |
+| Cumulative Layout Shift (CLS) | < 0.1 |
+| Time to Interactive (TTI) | < 5s |
+| Lighthouse Score | 80+ |
+
+## 출시 전 확인사항
+- [ ] Vercel 프로젝트 설정 (W1)
+- [ ] GitHub Actions 워크플로우 작성 및 테스트
+- [ ] 환경 변수 설정 (.env.production)
+- [ ] Sentry 프로젝트 생성 및 설정
+- [ ] 브라우저 호환성 테스트 (Chrome, Safari, Firefox, Edge)
+- [ ] 모바일 반응형 테스트
+
+---
+
+**상태**: ✅ 승인됨 | **최종 수정**: 2026-06-25

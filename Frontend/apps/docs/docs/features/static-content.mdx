@@ -25,6 +25,8 @@ apps/web/
     │   ├── layout.tsx
     │   ├── content.mdx             ← ✏️ 실제 콘텐츠
     │   └── page.tsx
+    │   └── form/
+    │       └── page.tsx            ← 로그인 기반 문의 작성(Form) 페이지
     └── faq/
         └── page.mdx                ← ✏️ metadata + 콘텐츠 통합
 ```
@@ -37,6 +39,11 @@ apps/web/
 | `/terms-of-service` | 서비스 이용약관 | `terms-of-service/content.mdx` |
 | `/contact` | 문의하기 | `contact/content.mdx` |
 | `/faq` | 자주 묻는 질문 | `faq/page.mdx` |
+
+:::info 문의 작성 Form
+`/contact`는 정적 MDX 안내 페이지입니다. 실제 문의 작성은 `/contact/form`에서 처리하며, 해당 페이지는 로그인 필요 페이지입니다.
+Form 제출은 프론트 BFF `POST /api/inquiries`를 통해 백엔드로 전달합니다.
+:::
 
 ## 파일 구조 패턴
 

@@ -27,6 +27,7 @@ Next.js App Router 기반이며 `apps/web/src/app` 디렉토리 구조가 곧 UR
 | `/community` | `app/(main)/community/page.tsx` | 커뮤니티 관심신청 |
 | `/food` | `app/(main)/food/page.tsx` | 음식 추천 |
 | `/taro` | `app/(main)/taro/page.tsx` | 타로 (준비 중) |
+| `/contact/form` | `app/(main)/contact/form/page.tsx` | 로그인 사용자 문의 작성 |
 | `/mypage` | `app/(main)/mypage/(with-sidebar)/page.tsx` | 마이페이지 메인 |
 | `/mypage/account` | `app/(main)/mypage/(with-sidebar)/account/page.tsx` | 계정 설정 |
 | `/mypage/saju-manage` | `app/(main)/mypage/(with-sidebar)/saju-manage/page.tsx` | 내 사주 관리 |
@@ -47,6 +48,8 @@ Next.js App Router 기반이며 `apps/web/src/app` 디렉토리 구조가 곧 UR
 | `/contact` | `contact/content.mdx` | 문의하기 |
 | `/faq` | `faq/page.mdx` | 자주 묻는 질문 |
 
+`/contact`는 정적 안내 페이지이며, CTA를 통해 로그인 기반 문의 작성 페이지인 `/contact/form`으로 이동합니다.
+
 콘텐츠 수정은 각 `content.mdx` 파일만 변경하면 됩니다. 자세한 내용은 [정적 콘텐츠 페이지 가이드](/docs/features/static-content)를 참고하세요.
 
 ## 보호 서비스 진입 정책
@@ -60,6 +63,7 @@ Next.js App Router 기반이며 `apps/web/src/app` 디렉토리 구조가 곧 UR
 | 오늘의 메뉴 | `/food` | `/saju?next=/food&forceInput=1` |
 | 커뮤니티 | `/community` | `/saju?next=/community&forceInput=1` |
 | 위치 추천 | `/location` | `/saju?next=/location&forceInput=1` |
+| 문의 작성 | `/contact/form` | 사주 기본정보 요구 없음 |
 
 - 비로그인 사용자는 먼저 `/login?next=원래 서비스`로 이동합니다.
 - 로그인 후에도 사주 기본정보가 없으면 `/saju` 입력으로 진입을 통일합니다.

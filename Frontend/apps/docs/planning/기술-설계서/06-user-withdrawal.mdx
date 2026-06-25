@@ -1,0 +1,64 @@
+---
+sidebar_position: 6
+sidebar_label: "ADR-006: 회원 탈퇴"
+---
+
+# ADR-006: 회원 탈퇴
+
+## 상황 (Context)
+서비스에서 사용자가 언제든 탈퇴할 수 있어야 하며, GDPR/개인정보보호법에 따라 개인 데이터를 완전히 삭제할 권리를 제공해야 한다. 동시에 거래 기록(결제, 채팅 감시 등)은 법적으로 일정 기간 보관해야 한다.
+
+## 의사결정 (Decision)
+**하이브리드 삭제 정책**
+
+1. **즉시 삭제** (개인 정보)
+   - 프로필 정보 (이름, 프로필 사진, 자기소개)
+   - 사주 정보 (생년월일 포함)
+
+2. **익명화 (개인정보 제거, 거래 기록만 보관)**
+   - 채팅 메시지 (내용 삭제, 통계만 보관)
+   - 결제 기록 (개인정보 마스킹)
+   - 매칭 이력 (익명화)
+
+3. **논리적 삭제 (논쟁 중인 부분)**
+   - 계정 상태: `status = 'withdrawn'` 표시
+   - 복구 불가능하지만 데이터 물리적 삭제 아님
+
+## 근거 (Rationale)
+1. **법적 준수**: GDPR & 개인정보보호법 충족
+2. **운영 안정성**: 결제/거래 기록 보관으로 분쟁 대응
+3. **데이터 활용**: 통계 생성은 가능하지만 개인정보 노출 안 함
+
+## 결과 (Consequences)
+
+### ✅ 긍정
+- 법적 책임 회피
+- 거래 추적 가능
+- 사용자 신뢰도 향상
+
+### ⚠️ 위험
+- 개인정보 재식별 가능성 (익명화 데이터에서)
+- 삭제 프로세스 복잡도
+- 삭제 대기 시간 문제
+
+## 구현 디테일
+```sql
+-- 사용자 탈퇴 시 자동 실행
+BEGIN TRANSACTION;
+  DELETE FROM user_profiles WHERE user_id = ?;
+  DELETE FROM saju_info WHERE user_id = ?;
+  UPDATE chat_messages SET content = '삭제된 메시지', user_id = NULL WHERE user_id = ?;
+  UPDATE payments SET email = HASH(email) WHERE user_id = ?;
+  UPDATE users SET status = 'withdrawn', deleted_at = NOW() WHERE id = ?;
+COMMIT;
+```
+
+## 출시 전 확인사항
+- [ ] 법무팀 검토 (개인정보보호법)
+- [ ] 삭제 프로세스 자동화 테스트
+- [ ] 고객지원팀 가이드 작성
+- [ ] 복구 불가 경고 메시지 작성
+
+---
+
+**상태**: ✅ 승인됨 | **최종 수정**: 2026-06-25

@@ -66,6 +66,7 @@ export const POST = withApiGuards(
 | `GET` | `/api/location/search` | 위치 검색 |
 | `GET/POST` | `/api/food/recommend` | 음식 추천 |
 | `POST` | `/api/payment/verify` | 결제 검증 |
+| `POST` | `/api/inquiries` | 문의 등록 |
 | `GET/DELETE` | `/api/users/me` | 내 정보 조회·탈퇴 |
 | `GET` | `/api/auth/kakao` | 카카오 로그인 시작 |
 | `GET` | `/api/auth/kakao/callback` | 카카오 OAuth 콜백 |
@@ -88,6 +89,7 @@ const res = await fetch(process.env.BACKEND_URL + '/saju/me');
 
 - `route.ts`는 HTTP 입출력·쿠키 처리에 집중, 비즈니스 로직은 `entities/*/server`로 위임
 - 쿠키 인증을 사용하는 상태 변경 요청은 `rejectCrossOriginRequest`로 Origin 검증
+- 문의 등록(`POST /api/inquiries`)은 로그인 필요 BFF이며 CSRF Origin 검증만 적용하고 Turnstile은 적용하지 않음
 - Turnstile이 필요한 보호 API는 `withApiGuards({ requireTurnstile: true })` 또는 `withApiGuards({ requireCsrf: true, requireTurnstile: true })`를 우선 사용
 - 토큰 쿠키 키는 `shared/config/authToken.ts` 상수 사용 (문자열 하드코딩 금지)
 - 백엔드 응답 파싱은 `parseBackendApiResponse`로 통일
