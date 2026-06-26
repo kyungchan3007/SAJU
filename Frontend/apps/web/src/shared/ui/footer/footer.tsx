@@ -1,4 +1,5 @@
-﻿import type { Route } from "next";
+﻿import { cn } from "@/shared/lib/utils";
+import type { Route } from "next";
 import Link from "next/link";
 
 const privacyPolicyHref = "/privacy-policy" as Route;
@@ -6,9 +7,18 @@ const termsOfServiceHref = "/terms-of-service" as Route;
 const contactHref = "/contact" as Route;
 const blogHref = "/blog" as Route;
 
-export function Footer() {
+type FooterProps = {
+  showOnMobile?: boolean;
+};
+
+export function Footer({ showOnMobile = false }: FooterProps) {
   return (
-    <footer className="hidden bg-white px-8 py-10 md:block">
+    <footer
+      className={cn(
+        "bg-white px-8 py-10",
+        showOnMobile ? "block" : "hidden md:block",
+      )}
+    >
       <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-5">
         <div>
           <div className="mb-1 flex items-center gap-1.5">
@@ -17,7 +27,9 @@ export function Footer() {
             </svg>
             <span className="text-sm font-black text-gray-900">SAJU:ME</span>
           </div>
-          <p className="text-xs text-gray-400">© 2026 SAJU:ME. All rights reserved.</p>
+          <p className="text-xs text-gray-400">
+            © 2026 SAJU:ME. All rights reserved.
+          </p>
         </div>
 
         <div className="flex gap-6">

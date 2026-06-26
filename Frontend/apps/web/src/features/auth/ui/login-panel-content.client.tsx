@@ -4,8 +4,8 @@ import { useEffect } from "react";
 import { useTurnstileGate } from "@/features/auth/hooks/useTurnstileGate";
 
 import { getTurnstileDialogCopy } from "@/features/auth/model/turnstile-dialog-copy";
+import { KakaoLoginSubmitButton } from "@/features/auth/ui/kakao-login-submit-button.client";
 import { TurnstileVerificationModal } from "@/features/auth/ui/turnstile-verification-modal";
-import { KakaoIcon } from "@/shared/ui";
 import { TurnstileWidget } from "@/shared/ui/TurnstileWidget";
 
 type LoginPanelContentProps = {
@@ -13,7 +13,10 @@ type LoginPanelContentProps = {
   isPreVerified?: boolean;
 };
 
-export function LoginPanelContent({ kakaoLoginUrl, isPreVerified = false }: LoginPanelContentProps) {
+export function LoginPanelContent({
+  kakaoLoginUrl,
+  isPreVerified = false,
+}: LoginPanelContentProps) {
   const turnstileGate = useTurnstileGate();
   const {
     error,
@@ -31,6 +34,7 @@ export function LoginPanelContent({ kakaoLoginUrl, isPreVerified = false }: Logi
   } = turnstileGate;
   const copy = getTurnstileDialogCopy("login", status);
   const hasRecoveryActions = Boolean(error) && !isPending;
+  const canSubmitLogin = (isVerified || isPreVerified) && !isPending;
 
   // 마운트 시 1회만 실행 — 인증 성공 후 status가 "idle"로 돌아와도 재시작하지 않음
   useEffect(() => {
@@ -48,9 +52,15 @@ export function LoginPanelContent({ kakaoLoginUrl, isPreVerified = false }: Logi
           error={error}
           primaryActionLabel={hasRecoveryActions ? "다시 시도" : undefined}
           onPrimaryAction={hasRecoveryActions ? resetChallenge : undefined}
-          secondaryActionLabel={hasRecoveryActions ? "홈으로 돌아가기" : undefined}
+          secondaryActionLabel={
+            hasRecoveryActions ? "홈으로 돌아가기" : undefined
+          }
           onSecondaryAction={
-            hasRecoveryActions ? () => { window.location.href = "/"; } : undefined
+            hasRecoveryActions
+              ? () => {
+                  window.location.href = "/";
+                }
+              : undefined
           }
         >
           <TurnstileWidget
@@ -87,23 +97,16 @@ export function LoginPanelContent({ kakaoLoginUrl, isPreVerified = false }: Logi
         무료로 만나볼 수 있어요.
       </p>
       {/* 카카오 로그인 버튼 */}
-      <button
-        type="button"
-        onClick={() => {
-          if ((!isVerified && !isPreVerified) || isPending) return;
-          window.location.href = kakaoLoginUrl;
-        }}
-        disabled={(!isVerified && !isPreVerified) || isPending}
+      <KakaoLoginSubmitButton
+        ariaLabel="카카오 계정으로 사주이야기 로그인"
+        canSubmit={canSubmitLogin}
         className="mt-7 flex h-[48px] w-full items-center justify-center gap-2 border-2 border-black font-bold text-[rgba(0,0,0,0.85)] transition hover:brightness-95 disabled:opacity-70"
         style={{
           backgroundColor: "#FEE500",
           boxShadow: "3px 3px 0 #000",
         }}
-        aria-label="카카오 계정으로 사주이야기 로그인"
-      >
-        <KakaoIcon size={20} />
-        카카오로 시작하기
-      </button>
+        kakaoLoginUrl={kakaoLoginUrl}
+      />
     </div>
   );
 }

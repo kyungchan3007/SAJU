@@ -3,63 +3,16 @@ import { cookies } from "next/headers";
 
 import { onSajuDailyGetOnServer } from "@/entities/saju/server/onSajuDailyGetOnServer";
 import { onSajuPostOnServer } from "@/entities/saju/server/onSajuPostOnServer";
-import type { SajuFormValues } from "@/features/saju-input/type/type";
+import {
+  readPendingSajuFormValue,
+  readSubmittedSajuFormValue,
+} from "@/entities/saju/server/sajuFormPayload";
 import { createErrorResponse, createSuccessResponse } from "@/shared/api";
 import { withApiGuards } from "@/shared/api/auth/withApiGuards";
 import { ACCESS_TOKEN_COOKIE_KEY } from "@/shared/config/authToken";
 import { SAJU_PENDING_FORM_COOKIE_KEY } from "@/shared/config/sajuCookie";
 
 export const revalidate = 60;
-
-type PendingSajuForm = {
-  formValues?: SajuFormValues;
-  exp?: number;
-};
-
-async function readSubmittedFormValue(
-  request: Request | undefined,
-): Promise<SajuFormValues | null> {
-  if (!request) {
-    return null;
-  }
-
-  const contentType = request.headers.get("content-type") ?? "";
-  if (!contentType.includes("application/json")) {
-    return null;
-  }
-
-  try {
-    return (await request.json()) as SajuFormValues;
-  } catch {
-    return null;
-  }
-}
-
-function readPendingFormValue(
-  encoded: string | undefined,
-): SajuFormValues | null {
-  if (!encoded) {
-    return null;
-  }
-
-  try {
-    const parsed = JSON.parse(
-      Buffer.from(encoded, "base64url").toString("utf8"),
-    ) as PendingSajuForm;
-
-    if (!parsed.formValues || typeof parsed.exp !== "number") {
-      return null;
-    }
-
-    if (parsed.exp < Date.now()) {
-      return null;
-    }
-
-    return parsed.formValues;
-  } catch {
-    return null;
-  }
-}
 
 function clearPendingFormCookie(response: NextResponse) {
   response.cookies.set(SAJU_PENDING_FORM_COOKIE_KEY, "", {
@@ -74,7 +27,7 @@ function clearPendingFormCookie(response: NextResponse) {
 export const POST = withApiGuards(
   { requireCsrf: true, requireTurnstile: true },
   async (request?: Request) => {
-    const submittedFormValues = await readSubmittedFormValue(request);
+    const submittedFormValues = await readSubmittedSajuFormValue(request);
     const cookieStore = await cookies();
     const token = cookieStore.get(ACCESS_TOKEN_COOKIE_KEY)?.value;
 
@@ -93,14 +46,18 @@ export const POST = withApiGuards(
         );
       }
 
-      const response = NextResponse.json(createSuccessResponse(postResult.data));
+      const response = NextResponse.json(
+        createSuccessResponse(postResult.data),
+      );
       clearPendingFormCookie(response);
       return response;
     }
 
     const dailyResult = await onSajuDailyGetOnServer();
     if (dailyResult.success) {
-      const response = NextResponse.json(createSuccessResponse(dailyResult.data));
+      const response = NextResponse.json(
+        createSuccessResponse(dailyResult.data),
+      );
 
       clearPendingFormCookie(response);
 
@@ -110,7 +67,7 @@ export const POST = withApiGuards(
     if (dailyResult.status === 404) {
       const formValues =
         submittedFormValues ??
-        readPendingFormValue(
+        readPendingSajuFormValue(
           cookieStore.get(SAJU_PENDING_FORM_COOKIE_KEY)?.value,
         );
 
@@ -129,7 +86,9 @@ export const POST = withApiGuards(
         );
       }
 
-      const response = NextResponse.json(createSuccessResponse(postResult.data));
+      const response = NextResponse.json(
+        createSuccessResponse(postResult.data),
+      );
 
       clearPendingFormCookie(response);
 

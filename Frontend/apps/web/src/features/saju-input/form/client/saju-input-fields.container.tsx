@@ -21,6 +21,7 @@ export function SajuInputFieldsContainer({
     isFormComplete,
     updateField,
     touchStep,
+    submitStatus,
     submitSaju,
   } = useSajuInputForm({ nextPath, isConsentAlreadyGiven });
 
@@ -33,6 +34,7 @@ export function SajuInputFieldsContainer({
       onTouchStep={touchStep}
       showConsentSection={!isConsentAlreadyGiven}
       isFormComplete={isFormComplete}
+      submitStatus={submitStatus}
       onSubmitSaju={submitSaju}
     />
   );

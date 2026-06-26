@@ -7,11 +7,12 @@ import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 
 import { SajuPreviewCard } from "@/domain/saju/guid-card/preview-card/ui/saju-preview-card";
-import {
-  fetchSajuProfileOnClient,
-  SajuResultClientError,
-} from "@/entities/saju";
+import { fetchSajuProfileOnClient } from "@/entities/saju";
 import { SAJU_PROFILE_QUERY_KEY } from "@/features/saju-profile/model/query";
+import {
+  isSajuResultLoginRequiredError,
+  isSajuResultPendingFormRequiredError,
+} from "@/features/saju-result/model/errors";
 import { useSajuResultQuery } from "@/features/saju-result/hooks/useSajuResultQuery";
 import { AnalysisPendingGate } from "@/features/saju-result/ui/analysis-pending-gate.client";
 import { AuthRefreshRetry } from "@/features/saju-result/ui/auth-refresh-retry.client";
@@ -27,21 +28,6 @@ import { Button, EmptyStateCard } from "@/shared/ui";
 type SajuResultProps = {
   nextPath?: Route | null;
 };
-
-function isLoginRequiredError(error: unknown) {
-  return (
-    error instanceof SajuResultClientError &&
-    (error.code === "LOGIN_REQUIRED" ||
-      error.code === "REFRESH_TOKEN_MISSING")
-  );
-}
-
-function isPendingFormRequiredError(error: unknown) {
-  return (
-    error instanceof SajuResultClientError &&
-    error.code === "PENDING_FORM_NOT_FOUND"
-  );
-}
 
 export function SajuResult({ nextPath }: SajuResultProps) {
   const router = useRouter();
@@ -69,8 +55,8 @@ export function SajuResult({ nextPath }: SajuResultProps) {
   useEffect(() => {
     if (
       !resultQuery.error ||
-      isLoginRequiredError(resultQuery.error) ||
-      isPendingFormRequiredError(resultQuery.error)
+      isSajuResultLoginRequiredError(resultQuery.error) ||
+      isSajuResultPendingFormRequiredError(resultQuery.error)
     ) {
       return;
     }
@@ -85,11 +71,11 @@ export function SajuResult({ nextPath }: SajuResultProps) {
   }
 
   if (resultQuery.error) {
-    if (isLoginRequiredError(resultQuery.error)) {
+    if (isSajuResultLoginRequiredError(resultQuery.error)) {
       return <AuthRefreshRetry loginPath={loginPath} />;
     }
 
-    if (isPendingFormRequiredError(resultQuery.error)) {
+    if (isSajuResultPendingFormRequiredError(resultQuery.error)) {
       return (
         <EmptyStateCard
           title="사주 정보가 없습니다"

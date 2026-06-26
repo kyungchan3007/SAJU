@@ -2,12 +2,10 @@ import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { env } from "@/shared/config";
-import {
-  ACCESS_TOKEN_COOKIE_KEY,
-  REFRESH_TOKEN_COOKIE_KEY,
-} from "@/shared/config/authToken";
+import { ACCESS_TOKEN_COOKIE_KEY } from "@/shared/config/authToken";
 import { resolveCommunityEntryHref } from "@/features/home/model/community-entry";
 import { WelcomSection } from "@/widgets/welcom-section/ui/welcom-section";
+import { Footer } from "@/shared/ui";
 
 const appUrl = env.NEXT_PUBLIC_APP_URL || "https://your-domain.com";
 const homeUrl = new URL("/", appUrl).toString();
@@ -76,6 +74,7 @@ export default async function HomePage() {
       <main className="flex min-h-dvh">
         <WelcomSection primaryCtaHref={resolveCommunityEntryHref(false)} />
       </main>
+      <Footer showOnMobile />
     </>
   );
 }

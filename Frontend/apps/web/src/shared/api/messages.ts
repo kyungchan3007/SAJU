@@ -1,7 +1,8 @@
 export const API_ERROR_MESSAGES = {
   LOGIN_REQUIRED: "로그인이 필요합니다.",
   REFRESH_TOKEN_MISSING: "로그인이 필요합니다.",
-  TOKEN_REFRESH_FAILED: "로그인 상태를 확인하지 못했습니다. 다시 로그인해주세요.",
+  TOKEN_REFRESH_FAILED:
+    "로그인 상태를 확인하지 못했습니다. 다시 로그인해주세요.",
   TURNSTILE_REQUIRED: "보안 인증이 필요합니다.",
   INVALID_BODY: "요청 정보를 다시 확인해주세요.",
   INVALID_REQUEST_BODY: "요청 정보를 다시 확인해주세요.",
@@ -25,6 +26,8 @@ export const API_ERROR_MESSAGES = {
     "오늘의 사주를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.",
   SAJU_POST_FAILED:
     "사주 결과를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.",
+  SAJU_SAVE_FAILED:
+    "사주 정보를 저장하지 못했습니다. 잠시 후 다시 시도해주세요.",
   SAJU_PROFILE_GET_FAILED:
     "사주 정보를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.",
   SAJU_UPDATE_FAILED:

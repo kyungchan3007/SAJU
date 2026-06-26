@@ -27,14 +27,13 @@ export function useSajuInputForm({
   nextPath,
   isConsentAlreadyGiven = false,
 }: UseSajuInputFormParams) {
-  const [formValues, setFormValues] =
-    useState<SajuFormValues>(() => ({
-      ...defaultFormValues,
-      agreedToTerms: isConsentAlreadyGiven,
-      agreedToPrivacy: isConsentAlreadyGiven,
-    }));
+  const [formValues, setFormValues] = useState<SajuFormValues>(() => ({
+    ...defaultFormValues,
+    agreedToTerms: isConsentAlreadyGiven,
+    agreedToPrivacy: isConsentAlreadyGiven,
+  }));
   const [, setTouchedSteps] = useState<TouchedSteps>(defaultTouchedSteps);
-  const { handleSubmitSaju } = useSajuHooks({ nextPath });
+  const { handleSubmitSaju, submitStatus } = useSajuHooks({ nextPath });
   const effectiveFormValues = isConsentAlreadyGiven
     ? {
         ...formValues,
@@ -67,6 +66,7 @@ export function useSajuInputForm({
     isFormComplete: isAllComplete,
     updateField,
     touchStep,
+    submitStatus,
     submitSaju: () => handleSubmitSaju(effectiveFormValues),
   };
 }

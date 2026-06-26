@@ -5,6 +5,7 @@ import * as Toast from "@radix-ui/react-toast";
 
 import ZodiacList from "@/domain/saju/guid-card/12zodiac/12zodiac";
 import { SajuInputConsentSection } from "@/features/saju-input/form/client/saju-input-consent-section";
+import type { SajuSubmitStatus } from "@/features/saju-input/hooks/useSajuHooks";
 import { useSajuValidationToast } from "@/features/saju-input/hooks/useSajuValidationToast";
 import {
   birthHourOptions,
@@ -33,6 +34,7 @@ type SajuInputFieldsProps = {
   onTouchStep: (step: keyof TouchedSteps) => void;
   showConsentSection: boolean;
   isFormComplete: boolean;
+  submitStatus: SajuSubmitStatus;
   onSubmitSaju: () => void;
 };
 
@@ -44,6 +46,7 @@ export function SajuInputFields({
   onTouchStep,
   showConsentSection,
   isFormComplete,
+  submitStatus,
   onSubmitSaju,
 }: SajuInputFieldsProps) {
   const {
@@ -53,6 +56,8 @@ export function SajuInputFields({
     showValidationToast,
   } = useSajuValidationToast(formValues);
   const isTimeUnknown = formValues.timeUnknown === "yes";
+  const isSubmitting = submitStatus === "submitting";
+  const isSubmitComplete = submitStatus === "complete";
   const { hour: birthHour, minute: birthMinute } = parseTimeParts(
     formValues.birthTime,
   );
@@ -273,8 +278,9 @@ export function SajuInputFields({
         <Button
           type="submit"
           className="mt-5 h-[54px] w-full rounded-2xl text-base font-black"
+          disabled={isSubmitting || isSubmitComplete}
         >
-          ✨ 사주 분석 시작하기
+          <SajuSubmitButtonContent submitStatus={submitStatus} />
         </Button>
         <p className="mt-2.5 text-center text-[11px] text-gray-400">
           🔒 입력된 정보는 사주 분석 목적으로만 사용됩니다.
@@ -300,4 +306,28 @@ export function SajuInputFields({
       <Toast.Viewport className="pointer-events-none fixed inset-0 z-50" />
     </Toast.Provider>
   );
+}
+
+function SajuSubmitButtonContent({
+  submitStatus,
+}: {
+  submitStatus: SajuSubmitStatus;
+}) {
+  if (submitStatus === "submitting") {
+    return (
+      <>
+        <span
+          className="size-4 animate-spin rounded-full border-2 border-white/45 border-t-white"
+          aria-hidden="true"
+        />
+        분석을 준비하고 있어요…
+      </>
+    );
+  }
+
+  if (submitStatus === "complete") {
+    return <>완료되었어요!</>;
+  }
+
+  return <>✨ 사주 분석 시작하기</>;
 }

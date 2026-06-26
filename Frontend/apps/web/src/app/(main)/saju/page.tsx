@@ -1,4 +1,5 @@
 import { SajuInput } from "@/widgets/saju-input";
+import { SajuHub } from "@/widgets/saju-hub";
 import { Metadata } from "next";
 import type { Route } from "next";
 import { redirect } from "next/navigation";
@@ -28,6 +29,7 @@ type SajuPageProps = {
   searchParams: Promise<{
     next?: string;
     forceInput?: string;
+    step?: string;
   }>;
 };
 
@@ -35,6 +37,15 @@ export default async function SajuPage({ searchParams }: SajuPageProps) {
   const params = await searchParams;
   const nextPath = normalizeInternalRedirectPath(params.next);
   const forceInput = params.forceInput === "1";
+  const step = params.step === "hub" ? "hub" : "input";
+
+  if (step === "hub") {
+    return (
+      <main className="page-shell">
+        <SajuHub nextPath={nextPath} />
+      </main>
+    );
+  }
 
   if (!forceInput) {
     const entryRoute = await getSajuEntryRouteOnServer();

@@ -1,5 +1,6 @@
 import type { SajuProfileResponse } from "@/generated/api";
 import type { ApiEnvelope } from "@/shared/api";
+import { SajuProfileClientError } from "@/entities/saju/client/sajuProfileClientError";
 
 export async function fetchSajuProfileOnClient(): Promise<
   ApiEnvelope<SajuProfileResponse | undefined>
@@ -10,9 +11,11 @@ export async function fetchSajuProfileOnClient(): Promise<
   >;
 
   if (!response.ok) {
-    throw new Error(
-      result.success ? "Failed to fetch saju profile." : result.error.message,
-    );
+    if (!result.success) {
+      throw new SajuProfileClientError(result.error.code, result.error.message);
+    }
+
+    throw new Error("Failed to fetch saju profile.");
   }
 
   return result;

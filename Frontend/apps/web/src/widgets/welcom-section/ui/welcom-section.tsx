@@ -1,8 +1,7 @@
 import type { Route } from "next";
-import Link from "next/link";
 import { HomeMarketingSections } from "@/features/home/ui/home-marketing-sections";
 import { HomeHeroSection } from "@/widgets/home-hero/ui/home-hero-section";
-import { KakaoIcon } from "@/shared/ui";
+import { KakaoLoginSubmitButton } from "@/features/auth/ui/kakao-login-submit-button.client";
 
 type WelcomSectionProps = {
   primaryCtaHref: Route;
@@ -48,11 +47,16 @@ function GuestFortuneCard() {
       {/* 오행 바 리스트 — 블러 + 잠금 오버레이 */}
       <div className="relative overflow-hidden rounded-xl">
         {/* 오행 디자인 그대로, 블러 처리 */}
-        <div className="select-none space-y-2 p-3 blur-[3px]" aria-hidden="true">
+        <div
+          className="select-none space-y-2 p-3 blur-[3px]"
+          aria-hidden="true"
+        >
           <div className="text-[10px] text-white/50">오행 균형</div>
           {GUEST_OHAENG.map((item) => (
             <div key={item.label} className="flex items-center gap-2">
-              <span className="w-3 text-[10px] text-white/80">{item.label}</span>
+              <span className="w-3 text-[10px] text-white/80">
+                {item.label}
+              </span>
               <div
                 className="h-1.5 flex-1 overflow-hidden rounded-full"
                 style={{ background: "rgba(255,255,255,0.15)" }}
@@ -67,7 +71,10 @@ function GuestFortuneCard() {
               </span>
             </div>
           ))}
-          <div className="pt-2" style={{ borderTop: "1px solid rgba(255,255,255,0.12)" }}>
+          <div
+            className="pt-2"
+            style={{ borderTop: "1px solid rgba(255,255,255,0.12)" }}
+          >
             <div className="mb-1 text-[10px] text-white/50">나의 주 오행</div>
             <span
               className="rounded-full px-2.5 py-0.5 text-[10px] font-semibold text-white"
@@ -84,29 +91,36 @@ function GuestFortuneCard() {
           style={{ background: "rgba(15,10,40,0.60)" }}
         >
           <div className="flex h-9 w-9 items-center justify-center rounded-full bg-saju-gradient-br">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="white"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
               <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
               <path d="M7 11V7a5 5 0 0 1 10 0v4" />
             </svg>
           </div>
-          <span className="text-[11px] font-semibold text-white/80">로그인하면 볼 수 있어요</span>
+          <span className="text-[11px] font-semibold text-white/80">
+            로그인하면 볼 수 있어요
+          </span>
         </div>
       </div>
 
-      <Link
-        href="/api/auth/kakao"
-        prefetch={false}
+      <KakaoLoginSubmitButton
+        ariaLabel="카카오 계정으로 로그인"
         className="flex min-h-11 items-center justify-center gap-2 rounded-xl py-3 text-sm font-bold transition hover:brightness-95 active:scale-[0.98]"
         style={{
           backgroundColor: "#FEE500",
           color: "rgba(0,0,0,0.85)",
           boxShadow: "0 2px 8px rgba(0,0,0,0.12)",
         }}
-        aria-label="카카오 계정으로 로그인"
-      >
-        <KakaoIcon />
-        카카오로 시작하기
-      </Link>
+        kakaoLoginUrl="/api/auth/kakao"
+      />
 
       {/*<p className="text-center text-[10px] text-gray-400">*/}
       {/*  무료 · 광고 없음 · 1분 완성*/}

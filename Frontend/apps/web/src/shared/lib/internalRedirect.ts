@@ -76,3 +76,15 @@ export function buildSajuResultPath(nextPath?: string | null): Route {
 
   return `/saju/result?next=${encodeURIComponent(nextPath)}` as Route;
 }
+
+export function buildSajuHubPath(nextPath?: string | null): Route {
+  const searchParams = new URLSearchParams({
+    step: "hub",
+  });
+
+  if (nextPath) {
+    searchParams.set("next", nextPath);
+  }
+
+  return `/saju?${searchParams.toString()}` as Route;
+}
