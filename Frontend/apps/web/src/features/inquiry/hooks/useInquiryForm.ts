@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
+import { API_ERROR_MESSAGES } from "@/shared/api/messages";
 import { validateInquiryForm } from "../model/validation";
 import { INQUIRY_FORM_LIMITS, type InquiryFormData, type InquiryFormState, type InquiryErrorCode } from "../types";
 
@@ -118,5 +119,5 @@ function getErrorMessage(status: number, code: string): string {
   if (status === 403 || code === "UNAUTHORIZED") {
     return "페이지를 새로고침한 후 다시 시도해주세요.";
   }
-  return "요청을 처리할 수 없습니다. 잠시 후 다시 시도해주세요.";
+  return API_ERROR_MESSAGES.UNKNOWN_ERROR;
 }

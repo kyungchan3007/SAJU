@@ -8,6 +8,7 @@ import { SajuHubCard } from "@/features/saju-hub/ui/saju-hub-card";
 import { AnalysisPendingGate } from "@/features/saju-result";
 import { AuthRefreshRetry } from "@/features/saju-result/ui/auth-refresh-retry.client";
 import { Button, EmptyStateCard } from "@/shared/ui";
+import { MESSAGES } from "@/shared/constants/messages";
 
 type SajuHubProps = {
   nextPath?: Route | null;
@@ -27,7 +28,7 @@ export function SajuHub({ nextPath }: SajuHubProps) {
   if (hub.isPendingFormRequired) {
     return (
       <EmptyStateCard
-        title="사주 정보가 없습니다"
+        title={MESSAGES.SAJU_NOT_FOUND}
         description="허브를 보려면 먼저 사주 정보를 입력해 주세요."
         action={
           <Button asChild size="sm" className="rounded-full">

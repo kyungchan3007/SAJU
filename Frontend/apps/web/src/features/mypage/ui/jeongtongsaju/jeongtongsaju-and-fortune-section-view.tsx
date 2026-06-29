@@ -10,6 +10,7 @@ import {
   EmptyStateCard,
   LoadingStateCard,
 } from "@/shared/ui";
+import { MESSAGES } from "@/shared/constants/messages";
 import { PageContentLayout } from "@/shared/ui/page-content-layout";
 
 import { JeongtongsajuDaewoon } from "./jeongtongsaju-daewoon";
@@ -62,7 +63,7 @@ export function JeongtongsajuAndFortuneSectionView({
   if (!hasSaju) {
     return (
       <EmptyStateCard
-        title="사주 정보가 없습니다"
+        title={MESSAGES.SAJU_NOT_FOUND}
         description="사주를 먼저 입력해 주세요."
         action={
           <Button asChild size="sm" className="rounded-full">

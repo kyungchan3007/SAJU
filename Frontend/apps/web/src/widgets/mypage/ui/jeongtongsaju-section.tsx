@@ -15,6 +15,7 @@ import {
   ErrorStateCard,
   LoadingStateCard,
 } from "@/shared/ui";
+import { MESSAGES } from "@/shared/constants/messages";
 
 export function JeongtongsajuSection() {
   const { data, isLoading, isError } = useJeongtongsaju();
@@ -39,8 +40,8 @@ export function JeongtongsajuSection() {
           <span className="h-0.5 flex-1 bg-black" />
         </h2>
         <ErrorStateCard
-          title="사주 정보를 불러오지 못했습니다"
-          description="잠시 후 다시 확인해 주세요."
+          title={MESSAGES.SAJU_LOAD_FAILED}
+          description={MESSAGES.RETRY_CONFIRM}
           action={
             <Button asChild size="sm" className="rounded-full">
               <Link href="/mypage">마이페이지로 돌아가기</Link>
@@ -59,7 +60,7 @@ export function JeongtongsajuSection() {
           <span className="h-0.5 flex-1 bg-black" />
         </h2>
         <EmptyStateCard
-          title="사주 정보가 없습니다"
+          title={MESSAGES.SAJU_NOT_FOUND}
           description="사주를 먼저 입력해 주세요."
           action={
             <Button asChild size="sm" className="rounded-full">

@@ -23,21 +23,14 @@ description: BFF 경계 규칙, 서버 호출 구조, 현재 API 엔드포인트
 
 ## 현재 API 엔드포인트
 
-- `GET/POST /api/saju`
-- `POST /api/saju/draft`
-- `POST /api/saju/result`
-- `GET /api/saju/traditional`
-- `GET /api/saju/me/year`
-- `GET /api/saju/me/compatibility/[partnerId]`
-- `GET/POST /api/partners`
-- `GET/PUT/DELETE /api/partners/[partnerId]`
-- `GET/POST /api/compatibility`
-- `GET/POST /api/location`
-- `POST /api/payment/verify`
-- `GET/DELETE /api/users/me`
-- `GET /api/auth/kakao`
-- `GET /api/auth/kakao/callback`
-- `POST /api/auth/logout`
+- 인증: `GET /api/auth/kakao`, `GET /api/auth/kakao/callback`, `POST /api/auth/logout`, `POST /api/auth/refresh`, `POST /api/auth/restore`, `POST /api/auth/restore/decline`, `POST /api/auth/turnstile-verify`
+- 사용자: `GET /api/users/me`, `GET /api/notifications`, `POST /api/notifications/[notificationId]/read`, `GET /api/notifications/unread-count`
+- 사주 기본/결과: `GET/POST /api/saju`, `POST /api/saju/draft`, `POST /api/saju/result`, `GET /api/saju/me`
+- 사주 보호 서비스: `GET /api/saju/traditional`, `GET /api/saju/traditional-fortune`, `GET /api/saju/me/year`, `GET /api/saju/me/personality`, `GET /api/saju/me/compatibility/[partnerId]`, `GET /api/saju/zodiac-compatibility`
+- 파트너/궁합: `GET/POST /api/partners`, `GET/PUT/DELETE /api/partners/[partnerId]`, `GET/POST /api/compatibility`
+- 커뮤니티: `GET /api/community/interests`, `GET /api/community/cohorts`, `POST /api/community/join`
+- 음식/위치: `GET /api/food/recommend`, `GET /api/location`, `POST /api/location`, `GET /api/location/search`
+- 기타: `POST /api/payment/verify`, `POST /api/inquiries`
 
 ## OpenAPI 규칙
 

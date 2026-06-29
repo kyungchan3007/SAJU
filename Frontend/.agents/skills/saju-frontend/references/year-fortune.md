@@ -35,3 +35,25 @@ description: /mypage/year-fortune 신년운세 생성형 풀이 조회 화면과
 - `/mypage` 하위 페이지이므로 `page-shell`은 `mypage/layout.tsx`의 공통 shell을 우선 사용하고 하위 페이지에서 중복 적용하지 않는다.
 - 마이페이지 메뉴의 신년운세 링크는 `/mypage/year-fortune`로 유지한다.
 - BFF나 parser 변경 시 route/server/parser unit test를 함께 갱신한다.
+
+## 관계 규칙
+
+- `YearFortunePage`는 `/mypage` 하위 보호 조회 화면이다.
+- `YearFortuneQuery`는 `/api/saju/me/year` BFF를 통해 `getMyYearFortuneOnServer`로 위임된다.
+- `YearFortuneViewModel`은 `YearFortuneResponse`와 생성형 풀이 meta에서 파생된다.
+- `PendingState`는 `meta.backendStatus`를 우선 근거로 판단한다.
+- 생성형 풀이 parser 변경은 route/server/parser test와 연결된다.
+
+## 불변조건
+
+- 생성형 풀이 응답의 `status/message/errorCode`를 버리지 않는다.
+- `PENDING` 재조회는 최대 횟수·시간 제한 없이 무한 polling하지 않는다.
+- `/mypage` 공통 shell을 하위 페이지에서 중복 적용하지 않는다.
+- 클라이언트에서 신년운세 백엔드를 직접 호출하지 않는다.
+
+## 명령 해석 규칙
+
+- “신년운세”, “올해 운세”, “year fortune” 요청은 `features/year-fortune`과 `/api/saju/me/year`를 우선 확인한다.
+- “생성중/대기중” 요청은 `meta.backendStatus` 보존과 polling 제한을 먼저 확인한다.
+- “신년운세 표시 오류” 요청은 `features/year-fortune/model/yearFortune.ts`의 view model 변환을 우선 확인한다.
+- “마이페이지 메뉴 링크” 요청은 `/mypage/year-fortune` 경로 유지 여부를 확인한다.

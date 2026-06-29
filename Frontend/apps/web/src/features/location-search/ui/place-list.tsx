@@ -7,6 +7,7 @@ import {
 } from "@/features/location-search/model/locationHelpers";
 import { LOCATION_PLACES_PER_PAGE } from "@/features/location-search/model/locationConstants";
 import { cn } from "@/shared/lib/utils";
+import { MESSAGES } from "@/shared/constants/messages";
 
 type PlaceListProps = {
   places: LocationSearchPlace[];
@@ -94,7 +95,7 @@ export function PlaceList({
           <div>
             <p className="text-lg">⚠️</p>
             <p className="mt-1">장소 검색 중 오류가 발생했습니다.</p>
-            <p className="mt-0.5 text-xs">잠시 후 다시 시도해 주세요.</p>
+            <p className="mt-0.5 text-xs">{MESSAGES.RETRY}</p>
           </div>
         </div>
       )}

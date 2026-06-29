@@ -1,4 +1,5 @@
 import { Button } from "@/shared/ui";
+import { MESSAGES } from "@/shared/constants/messages";
 
 type Props = {
   onWithdraw: () => void;
@@ -16,7 +17,7 @@ export function AccountWithdrawRow({ onWithdraw }: Props) {
           <span className="text-xs text-slate-400">
             탈퇴 시 모든 운세 데이터와 코인이 영구 삭제됩니다.
             <br />
-            이 작업은 되돌릴 수 없습니다.
+            {MESSAGES.IRREVERSIBLE_ACTION}
           </span>
         </div>
         <Button

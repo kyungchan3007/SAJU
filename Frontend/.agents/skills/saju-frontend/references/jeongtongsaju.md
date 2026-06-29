@@ -91,3 +91,26 @@ type TraditionalFortuneResponse = {
 - API route를 바꾸면 `apps/web/src/app/api/saju/traditional/test/route.test.ts`를 함께 갱신한다.
 - generated 타입은 참고만 하고 `apps/web/src/generated/api` 아래 파일은 직접 수정하지 않는다.
 - generated의 `traits`, `pillars`, `fiveElements`, `bigLuck`, `twelveGrowthInfo`는 넓은 타입이므로 UI에 넘기기 전에 view model에서 타입을 좁힌다.
+
+## 관계 규칙
+
+- `JeongtongsajuPage`는 정통사주 데이터 확인과 풀이 진입을 연결한다.
+- `TraditionalSajuQuery`는 `/api/saju/traditional` BFF를 통해 `onSajuTraditionalGetOnServer`로 위임된다.
+- `TraditionalFortuneAction`은 `/api/saju/traditional-fortune` BFF와 연결된다.
+- `TraditionalSajuViewModel`은 generated 응답의 넓은 타입을 화면 표시용으로 좁힌 결과다.
+- 사용자 노출 용어는 백엔드/generator 용어보다 서비스 용어 규칙을 우선한다.
+
+## 불변조건
+
+- 사용자 노출 문구에 `만세력`을 쓰지 않고 `정통사주` 기준으로 변환한다.
+- generated 파일은 직접 수정하지 않는다.
+- 클라이언트에서 정통사주 백엔드를 직접 호출하지 않는다.
+- 실제 API에 확정되지 않은 필드는 목업과 실제 응답을 구분한다.
+- 정통사주 데이터 확인 화면에서 풀이 진입 동선을 잃지 않는다.
+
+## 명령 해석 규칙
+
+- “정통사주”, “원국”, “오행”, “대운” 요청은 `features/traditional-fortune`, `features/mypage`, `/api/saju/traditional` 경계를 우선 확인한다.
+- “정통사주 풀이” 요청은 `/api/saju/traditional-fortune`과 풀이 진입 UI를 함께 확인한다.
+- “만세력 문구” 요청은 사용자 노출 용어를 `정통사주`로 바꾸되 generated 타입명은 억지로 바꾸지 않는다.
+- “필드가 없음/타입 오류” 요청은 generated 응답 shape과 view model 타입 좁히기 경계를 먼저 확인한다.

@@ -36,3 +36,26 @@ description: /compatibility 파트너 궁합 생성형 풀이 조회 화면과 P
 - UI 컴포넌트에는 파트너 선택, 결과 카드 렌더링, 재선택 이벤트만 남긴다.
 - 파트너 목록 캐시는 `PARTNERS_QUERY_KEY`, 내 사주 캐시는 `SAJU_PROFILE_QUERY_KEY`를 재사용한다.
 - BFF나 parser 변경 시 route/server/parser unit test를 함께 갱신한다.
+
+## 관계 규칙
+
+- `CompatibilityFlow`는 내 사주 프로필, 파트너 목록, 선택된 `partnerId`, 궁합 결과 조회로 구성된다.
+- `CompatibilityQuery`는 선택된 `partnerId`가 있을 때만 `/api/saju/me/compatibility/[partnerId]` BFF를 통해 활성화된다.
+- `CompatibilityViewModel`은 결과 응답과 생성형 풀이 meta에서 파생된다.
+- `PartnerSelection`은 `PARTNERS_QUERY_KEY` 캐시와 연결된다.
+- `SajuProfileDependency`는 `SAJU_PROFILE_QUERY_KEY` 캐시와 연결된다.
+
+## 불변조건
+
+- 파트너 선택 전에는 궁합 결과 조회를 활성화하지 않는다.
+- `CompatibilityResponse.status`와 `meta.backendStatus` 판단 정책을 UI 곳곳에 흩뿌리지 않는다.
+- `PENDING` 재조회는 최대 횟수·시간 제한 없이 무한 polling하지 않는다.
+- 클라이언트에서 궁합 백엔드를 직접 호출하지 않는다.
+- 파트너 목록과 내 사주 캐시는 기존 query key를 재사용한다.
+
+## 명령 해석 규칙
+
+- “궁합”, “파트너 궁합”, “compatibility” 요청은 `features/compatibility`와 `/api/saju/me/compatibility/[partnerId]`를 우선 확인한다.
+- “파트너 선택/변경” 요청은 `fetchPartnersOnClient`, `PARTNERS_QUERY_KEY`, 선택 상태를 먼저 확인한다.
+- “궁합 결과가 안 나옴” 요청은 내 사주 프로필, 파트너 목록, 선택된 `partnerId`, query enabled 조건 순서로 확인한다.
+- “생성중/대기중” 요청은 `status`와 `meta.backendStatus` 정책이 한 곳에 있는지 확인한다.

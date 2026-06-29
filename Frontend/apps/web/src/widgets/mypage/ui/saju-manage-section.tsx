@@ -16,6 +16,7 @@ import {
   EmptyStateCard,
   LoadingStateCard,
 } from "@/shared/ui";
+import { MESSAGES } from "@/shared/constants/messages";
 
 export function SajuManageSection() {
   const sajuManage = useSajuManage();
@@ -109,7 +110,7 @@ export function SajuManageSection() {
           <>
             해당 사주 정보가 영구 삭제됩니다.
             <br />
-            이 작업은 되돌릴 수 없습니다.
+            {MESSAGES.IRREVERSIBLE_ACTION}
           </>
         }
         variant="destructive"

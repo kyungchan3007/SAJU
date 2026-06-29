@@ -48,3 +48,26 @@ description: /mypage/saju-manage 내 사주·파트너 사주 CRUD 화면과 BFF
 - 저장 문구는 기존 사주 분석이 새 사주 정보 기준으로 재계산된다는 점을 명확히 알려야 한다.
 - 저장 성공 시 사주 기본 정보와 정통사주 요약 캐시를 함께 갱신한다.
 - API route를 바꾸면 `/api/saju/me`, `/api/partners`, `/api/partners/[partnerId]` route 테스트 추가·갱신을 검토한다.
+
+## 관계 규칙
+
+- `SajuManageFlow`는 내 사주 조회·수정과 파트너 CRUD를 함께 다루는 관리 흐름이다.
+- `MySajuProfileQuery`는 `/api/saju/me` BFF를 통해 `getSajuProfileOnServer`로 위임된다.
+- `MySajuProfileMutation`은 `/api/saju/me` BFF를 통해 `updateSajuOnServer`로 위임된다.
+- `PartnerCrudFlow`는 `/api/partners`, `/api/partners/[partnerId]` BFF와 `entities/partner/server` 함수에 연결된다.
+- `SajuCalendarForm`은 UI 달력 타입과 백엔드 전송 타입 사이의 변환 경계다.
+
+## 불변조건
+
+- 사용자 프로필 변경과 사주 정보 변경의 API/상태 경계를 섞지 않는다.
+- 파트너 CRUD 성공 시 `PARTNERS_QUERY_KEY` 캐시를 무효화한다.
+- `LUNAR-LEAP`는 백엔드 전송 시 `LUNAR`로 변환한다.
+- 파트너 수 제한은 `MAX_PARTNERS`를 우선 사용한다.
+- 저장 성공 시 사주 기본 정보와 정통사주 요약 캐시를 함께 갱신한다.
+
+## 명령 해석 규칙
+
+- “내 사주 정보 수정” 요청은 `useSajuManage`, `/api/saju/me`, `features/mypage/model/sajuManage.ts`를 우선 확인한다.
+- “파트너 추가/수정/삭제” 요청은 `usePartners`, `/api/partners`, `features/mypage/model/partner.ts`를 우선 확인한다.
+- “윤달/음력/생년월일” 요청은 `shared/model/saju-calendar`와 `BirthDate` 변환 경계를 먼저 확인한다.
+- “저장 후 결과 갱신” 요청은 사주 기본 정보 캐시와 정통사주 요약 캐시 갱신을 함께 확인한다.

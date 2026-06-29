@@ -57,7 +57,9 @@ description: 기술 스택, 레이어 구조(app/widgets/features/entities/share
 - `/mypage/zodiac-compatibility`: 띠 궁합 조회와 파트너 매핑
 - `/blog`: 블로그 목록
 - `/blog/*`: 사주/띠/운세 SEO 콘텐츠
+- `/faq`: FAQ 정적 콘텐츠
 - `/contact`: 문의
+- `/contact/form`: 문의 접수 폼
 - `/privacy-policy`: 개인정보처리방침
 - `/terms-of-service`: 이용약관
 - `/error`: 공통 오류 화면

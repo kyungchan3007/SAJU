@@ -25,6 +25,27 @@ description: /saju/result 관련 경로, 결과 조회/캐시 정책, 작업 규
 - `/saju` 입력 폼 상태 로직을 복사하지 않는다.
 - 로그인/미로그인 draft 흐름을 바꾸면 `/saju`, `/saju/result`, `/mypage` 영향을 같이 확인한다.
 
+## 관계 규칙
+
+- `SajuResultPage`는 결과 화면 조립만 담당하고 조회·캐시 정책은 feature 경계에 둔다.
+- `SajuResultQuery`는 서버 결과 또는 로컬 draft 결과 중 하나를 해석한다.
+- `SajuResultViewModel`은 API 응답에서 파생되며 UI 컴포넌트가 직접 응답을 가공하지 않는다.
+- `/saju/result`는 `/saju` 입력 완료 흐름과 보호 서비스 `next` 복귀 흐름에 연결된다.
+
+## 불변조건
+
+- 서버 결과와 로컬 draft 결과를 같은 전제로 처리하지 않는다.
+- React Query cache key와 stale/cache 정책은 한 곳에서 일관되게 관리한다.
+- 결과 조회 실패 시 raw 서버 메시지를 사용자에게 직접 노출하지 않는다.
+- `/saju` 입력 폼 상태 로직을 결과 화면으로 복사하지 않는다.
+
+## 명령 해석 규칙
+
+- “사주 결과”, “분석 결과”, “결과 조회” 요청은 `features/saju-result`와 `widgets/saju-result`를 우선 확인한다.
+- “결과가 안 나옴” 요청은 서버 결과인지 로컬 draft 결과인지 먼저 구분한다.
+- “결과 캐시/재조회” 요청은 React Query key, stale/cache 정책, retry 조건을 우선 확인한다.
+- “입력 후 원래 페이지 복귀” 요청은 `/saju`와 `/saju/result`의 `next` 소비 흐름을 함께 확인한다.
+
 ## 체크리스트
 
 - 서버 결과인지 로컬 draft 결과인지 먼저 구분한다.
