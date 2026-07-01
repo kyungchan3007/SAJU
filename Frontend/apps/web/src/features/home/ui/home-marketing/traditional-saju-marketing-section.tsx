@@ -2,6 +2,10 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { TRADITIONAL_SAJU_FEATURE_CARDS } from "@/features/home/model/model";
+import {
+  MarketingExampleCard,
+  MarketingSupportLinks,
+} from "@/features/home/ui/home-marketing/marketing-support";
 import { FeatureCardGrid } from "@/features/home/ui/home-marketing/feature-card-grid";
 
 export function TraditionalSajuMarketingSection() {
@@ -27,15 +31,26 @@ export function TraditionalSajuMarketingSection() {
                 체계적으로 분석합니다.
               </p>
               <Link
-                href="/mypage/traditional-fortune"
+                href="/preview/traditional-saju"
                 className="mt-1 text-sm font-semibold"
                 style={{ color: "#5956E9" }}
               >
-                자세히 보기 →
+                정통사주 미리보기 →
               </Link>
             </div>
 
             <FeatureCardGrid cards={TRADITIONAL_SAJU_FEATURE_CARDS} />
+            <MarketingExampleCard
+              title="공개 예시"
+              description="사주팔자의 오행 분포와 일간을 함께 보면 성향, 강점, 주의할 점을 하나의 흐름으로 읽을 수 있습니다."
+            />
+            <MarketingSupportLinks
+              heading="관련 글"
+              links={[
+                { href: "/blog/saju-meaning", label: "사주팔자란 무엇인가?" },
+                { href: "/blog/cheongan-jiji", label: "천간과 지지란?" },
+              ]}
+            />
           </div>
 
           {/* 우: 이미지 카드 — 궁합 섹션과 동일한 배치 */}

@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 
 import {
+  GUEST_NAV_ITEMS,
   MOBILE_TAB_ITEMS,
   NAV_ITEMS,
   isGlobalNavHiddenPath,
@@ -20,9 +21,11 @@ function isActive(href: string, pathname: string): boolean {
 export function useGlobalNavItems(isLoggedIn: boolean) {
   const pathname = usePathname();
   const hidden = isGlobalNavHiddenPath(pathname);
+  const desktopSourceItems = isLoggedIn ? NAV_ITEMS.slice(0, -1) : GUEST_NAV_ITEMS.slice(0, -1);
+  const mobileSourceItems = isLoggedIn ? MOBILE_TAB_ITEMS : GUEST_NAV_ITEMS;
 
   /** 데스크탑 링크: 마이를 제외한 전체 메뉴 (마이는 우측 아바타로 표시) */
-  const desktopItems: ResolvedNavItem[] = NAV_ITEMS.slice(0, -1).map(
+  const desktopItems: ResolvedNavItem[] = desktopSourceItems.map(
     (item) => ({
       ...item,
       href: resolveNavItemHref(item.href, isLoggedIn),
@@ -30,8 +33,8 @@ export function useGlobalNavItems(isLoggedIn: boolean) {
     }),
   );
 
-  /** 모바일 탭: 5개 고정 */
-  const mobileItems: ResolvedNavItem[] = MOBILE_TAB_ITEMS.map((item) => ({
+  /** 모바일 탭 */
+  const mobileItems: ResolvedNavItem[] = mobileSourceItems.map((item) => ({
     ...item,
     href: resolveNavItemHref(item.href, isLoggedIn),
     active: isActive(item.href, pathname),

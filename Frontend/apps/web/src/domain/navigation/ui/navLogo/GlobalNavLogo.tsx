@@ -1,9 +1,13 @@
 import Link from "next/link";
 
-export function GlobalNavLogo() {
+type GlobalNavLogoProps = {
+  isLoggedIn: boolean;
+};
+
+export function GlobalNavLogo({ isLoggedIn }: GlobalNavLogoProps) {
   return (
     <Link
-      href={{ pathname: "/home" }}
+      href={{ pathname: isLoggedIn ? "/home" : "/" }}
       className="flex items-center gap-2 no-underline"
     >
       <svg width="18" height="18" viewBox="0 0 18 18" fill="none">

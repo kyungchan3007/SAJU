@@ -57,6 +57,14 @@ test.describe("auth protected routing", () => {
 
     await page.goto("/mypage/saju-manage");
     await expect(page).toHaveURL(/\/login\?next=\/mypage$/);
+
+    await page.goto("/mypage/traditional-fortune");
+    await expect(page).toHaveURL(
+      /\/login\?next=%2Fmypage%2Ftraditional-fortune$/,
+    );
+
+    await page.goto("/mypage/year-fortune");
+    await expect(page).toHaveURL(/\/login\?next=%2Fmypage%2Fyear-fortune$/);
   });
 
   test("redirects guests away from protected saju result", async ({ page }) => {

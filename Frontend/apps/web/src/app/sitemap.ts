@@ -3,15 +3,10 @@ import type { MetadataRoute } from "next";
 const BASE_URL = "https://saju-me.com";
 
 export default function sitemap(): MetadataRoute.Sitemap {
+  // AdSense 심사 단계에서는 공개적으로 읽을 가치가 분명한 페이지들만 노출한다.
   const staticPages: MetadataRoute.Sitemap = [
     { url: BASE_URL, lastModified: new Date(), changeFrequency: "daily", priority: 1.0 },
-    { url: `${BASE_URL}/saju`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.9 },
-    { url: `${BASE_URL}/compatibility`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.9 },
-    { url: `${BASE_URL}/taro`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
-    { url: `${BASE_URL}/food`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.7 },
-    { url: `${BASE_URL}/location`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.7 },
     { url: `${BASE_URL}/blog`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
-    { url: `${BASE_URL}/community`, lastModified: new Date(), changeFrequency: "daily", priority: 0.7 },
     { url: `${BASE_URL}/faq`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.5 },
     { url: `${BASE_URL}/contact`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.4 },
     { url: `${BASE_URL}/privacy-policy`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.3 },

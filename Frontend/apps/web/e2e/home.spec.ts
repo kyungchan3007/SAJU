@@ -24,12 +24,14 @@ test.describe("home and auth entry smoke", () => {
     await expect(
       page.getByRole("link", { name: /무료 사주 풀이/ }).first(),
     ).toBeVisible();
-    await expectVisibleLink(page, "/compatibility");
+    await expectVisibleLink(page, "/preview/traditional-saju");
+    await expectVisibleLink(page, "/preview/compatibility");
+    await expectVisibleLink(page, "/preview/year-fortune");
     await expect(page.getByText("나의 오행 분석")).toBeVisible();
     await expectNoHorizontalOverflow(page);
   });
 
-  test("routes public CTA links to saju input and compatibility", async ({
+  test("routes public CTA links to saju input, previews, and protected entry", async ({
     page,
   }) => {
     await page.goto("/home");
@@ -41,12 +43,12 @@ test.describe("home and auth entry smoke", () => {
     await expect(page).toHaveURL(/\/saju$/);
 
     await page.goto("/home");
-    await clickVisibleLink(page, "/compatibility");
-    await expect(page).toHaveURL(/\/login\?next=%2Fcompatibility$/);
+    await clickVisibleLink(page, "/preview/traditional-saju");
+    await expect(page).toHaveURL(/\/preview\/traditional-saju$/);
 
     await page.goto("/home");
-    await clickVisibleLink(page, "/mypage/traditional-fortune");
-    await expect(page).toHaveURL(/\/login\?next=\/mypage$/);
+    await clickVisibleLink(page, "/preview/compatibility");
+    await expect(page).toHaveURL(/\/preview\/compatibility$/);
 
     await page.goto("/home");
     await clickVisibleLink(page, "/community");
@@ -65,9 +67,8 @@ test.describe("home and auth entry smoke", () => {
     await addAuthCookies(context, baseURL);
     await page.goto("/home");
 
-    await expect(page.getByRole("link", { name: "로그인" })).toHaveCount(0);
-    // 모바일에서는 nav 링크가 숨김 처리되므로 DOM 존재 여부만 확인
-    await expect(page.locator('a[href="/mypage"]').first()).toBeAttached();
+    await expect(page.getByRole("link", { name: "마이페이지" })).toBeVisible();
+    await expect(page.locator('header a[href="/mypage"]').first()).toBeVisible();
   });
 
   test("falls back to root when refresh-only recovery fails on home", async ({

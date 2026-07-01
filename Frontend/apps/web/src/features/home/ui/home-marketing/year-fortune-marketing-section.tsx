@@ -2,6 +2,10 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { YEAR_FORTUNE_FEATURE_CARDS } from "@/features/home/model/model";
+import {
+  MarketingExampleCard,
+  MarketingSupportLinks,
+} from "@/features/home/ui/home-marketing/marketing-support";
 import { FeatureCardGrid } from "@/features/home/ui/home-marketing/feature-card-grid";
 
 export function YearFortuneMarketingSection() {
@@ -25,15 +29,26 @@ export function YearFortuneMarketingSection() {
                 <br />더 현명하게 준비하세요.
               </p>
               <Link
-                href="/mypage/year-fortune"
+                href="/preview/year-fortune"
                 className="mt-1 text-sm font-semibold"
                 style={{ color: "#5956E9" }}
               >
-                자세히 보기 →
+                신년운세 미리보기 →
               </Link>
             </div>
 
             <FeatureCardGrid cards={YEAR_FORTUNE_FEATURE_CARDS} />
+            <MarketingExampleCard
+              title="공개 예시"
+              description="병오년처럼 화(火) 기운이 강한 해에는 추진력과 변화가 커지는 대신 과열과 충동을 함께 주의하는 식으로 흐름을 읽습니다."
+            />
+            <MarketingSupportLinks
+              heading="관련 글"
+              links={[
+                { href: "/blog/2026-fortune", label: "2026년 병오년 운세" },
+                { href: "/blog/2026-zodiac-fortune", label: "2026년 띠별 운세" },
+              ]}
+            />
           </div>
 
           {/* 우: 이미지 카드 */}

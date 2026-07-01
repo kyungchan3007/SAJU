@@ -1,6 +1,10 @@
 import Link from "next/link";
 
 import { COMPATIBILITY_FEATURE_CARDS } from "@/features/home/model/model";
+import {
+  MarketingExampleCard,
+  MarketingSupportLinks,
+} from "@/features/home/ui/home-marketing/marketing-support";
 import { FeatureCardGrid } from "@/features/home/ui/home-marketing/feature-card-grid";
 
 export function CompatibilityMarketingSection() {
@@ -24,15 +28,26 @@ export function CompatibilityMarketingSection() {
                 방향을 제시합니다.
               </p>
               <Link
-                href="/compatibility"
+                href="/preview/compatibility"
                 className="mt-1 text-sm font-semibold"
                 style={{ color: "#5956E9" }}
               >
-                자세히 보기 →
+                궁합 미리보기 →
               </Link>
             </div>
 
             <FeatureCardGrid cards={COMPATIBILITY_FEATURE_CARDS} />
+            <MarketingExampleCard
+              title="공개 예시"
+              description="궁합은 단순 점수보다 두 사람의 대화 방식, 감정 리듬, 오행 조화를 함께 보며 관계의 강점과 주의 지점을 읽습니다."
+            />
+            <MarketingSupportLinks
+              heading="같이 읽기"
+              links={[
+                { href: "/blog/fortune-vs-saju", label: "운세와 사주의 차이" },
+                { href: "/blog/yin-yang-ohaeng", label: "오행으로 관계 읽기" },
+              ]}
+            />
           </div>
 
           <div

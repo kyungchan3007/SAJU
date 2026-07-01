@@ -2,6 +2,10 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { TAROT_COMMUNITY_FEATURE_CARDS } from "@/features/home/model/model";
+import {
+  MarketingExampleCard,
+  MarketingSupportLinks,
+} from "@/features/home/ui/home-marketing/marketing-support";
 import { FeatureCardGrid } from "@/features/home/ui/home-marketing/feature-card-grid";
 
 export function TarotCommunityMarketingSection() {
@@ -37,6 +41,17 @@ export function TarotCommunityMarketingSection() {
 
             {/* 타로·커뮤니티 기능 설명 카드 */}
             <FeatureCardGrid cards={TAROT_COMMUNITY_FEATURE_CARDS} />
+            <MarketingExampleCard
+              title="공개 예시"
+              description="사주로 본 나의 기질을 바탕으로 관심사와 고민을 나누고, 타로와 커뮤니티를 통해 현재의 질문을 가볍게 확장해볼 수 있습니다."
+            />
+            <MarketingSupportLinks
+              heading="운영 안내"
+              links={[
+                { href: "/faq", label: "FAQ" },
+                { href: "/contact", label: "문의하기" },
+              ]}
+            />
           </div>
 
           {/* 우: 이미지 카드 */}

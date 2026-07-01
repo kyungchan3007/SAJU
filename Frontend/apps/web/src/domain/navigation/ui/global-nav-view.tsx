@@ -29,7 +29,7 @@ export function GlobalNavView({
         style={{ boxShadow: "0 1px 3px rgba(0,0,0,0.04)" }}
       >
         <div className="mx-auto flex h-full max-w-6xl items-center justify-between px-6">
-          <GlobalNavLogo />
+          <GlobalNavLogo isLoggedIn={isLoggedIn} />
           <DesktopMainMenu items={desktopItems} />
           <DesktopNavActions
             isLoggedIn={isLoggedIn}
@@ -44,7 +44,7 @@ export function GlobalNavView({
         className="fixed inset-x-0 top-0 z-40 flex h-14 items-center justify-between border-b border-gray-100 bg-white/[0.97] px-4 backdrop-blur-md md:hidden"
         style={{ boxShadow: "0 1px 3px rgba(0,0,0,0.04)" }}
       >
-        <GlobalNavLogo />
+        <GlobalNavLogo isLoggedIn={isLoggedIn} />
         <DesktopNavActions
           isLoggedIn={isLoggedIn}
           profileItem={profileItem}

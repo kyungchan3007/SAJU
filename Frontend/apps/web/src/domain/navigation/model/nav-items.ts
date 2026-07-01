@@ -1,11 +1,13 @@
 import {
   BookOpen,
+  CircleHelp,
   Heart,
   Sparkles,
   User,
   Users,
   UtensilsCrossed,
   Wand2,
+  Mail,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -35,6 +37,15 @@ export const NAV_ITEMS: NavItem[] = [
   { href: "/taro", label: "타로", icon: Wand2 },
   { href: "/food", label: "오늘의 메뉴", icon: UtensilsCrossed },
   { href: "/community", label: "커뮤니티", icon: Users },
+  { href: "/mypage", label: "마이", icon: User },
+];
+
+/** 심사 단계 비로그인 사용자용 공개 메뉴 */
+export const GUEST_NAV_ITEMS: NavItem[] = [
+  { href: "/saju", label: "오늘의 운세", icon: Sparkles },
+  { href: "/blog", label: "사주 이야기", icon: BookOpen },
+  { href: "/faq", label: "FAQ", icon: CircleHelp },
+  { href: "/contact", label: "문의", icon: Mail },
   { href: "/mypage", label: "마이", icon: User },
 ];
 

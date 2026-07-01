@@ -1,5 +1,9 @@
 import Link from "next/link";
 
+import {
+  MarketingExampleCard,
+  MarketingSupportLinks,
+} from "@/features/home/ui/home-marketing/marketing-support";
 import { BigLuckTimeline } from "@/features/home/ui/home-marketing/big-luck-timeline";
 
 export function BigLuckMarketingSection() {
@@ -21,13 +25,24 @@ export function BigLuckMarketingSection() {
               <br />
               미리 대비할 수 있습니다.
             </p>
-            <Link
-              href="/mypage/traditional-fortune"
-              className="mt-2 text-sm font-semibold"
-              style={{ color: "#5956E9" }}
-            >
-              자세히 보기 →
-            </Link>
+            {/*<Link*/}
+            {/*  href="/mypage/traditional-fortune"*/}
+            {/*  className="mt-2 text-sm font-semibold"*/}
+            {/*  style={{ color: "#5956E9" }}*/}
+            {/*>*/}
+            {/*  자세히 보기 →*/}
+            {/*</Link>*/}
+            <MarketingExampleCard
+              title="공개 예시"
+              description="대운은 10년 단위의 큰 방향을, 세운은 해마다 달라지는 기회를 읽습니다. 같은 사람도 시기별 포인트가 달라지는 이유가 여기에 있습니다."
+            />
+            <MarketingSupportLinks
+              heading="관련 글"
+              links={[
+                { href: "/blog/how-to-read-saju", label: "사주 보는 법 입문" },
+                { href: "/blog/2026-fortune", label: "2026년 운세 총정리" },
+              ]}
+            />
           </div>
 
           <BigLuckTimeline />
