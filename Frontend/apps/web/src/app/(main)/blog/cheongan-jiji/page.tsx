@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
+import { createPageMetadata } from "@/shared/lib/seo";
 import { PageContainer } from "@/shared/ui/page-container";
 
-export const metadata: Metadata = {
-  title: "천간(天干)과 지지(地支)란? 사주의 기본 구성 완벽 정리",
-  description:
-    "사주팔자를 이루는 천간 10개와 지지 12개의 의미와 특성을 알기 쉽게 정리했습니다. 십이지신과 오행의 관계까지 한눈에 파악하세요.",
-  alternates: { canonical: "/blog/cheongan-jiji" },
-};
+export const metadata: Metadata = createPageMetadata({
+  title: "천간과 지지란? | 사주팔자 8글자 기초 정리",
+  description: "천간과 지지가 무엇인지, 사주팔자 8글자를 이루는 천간 10개와 지지 12개의 의미를 쉽게 정리했습니다.",
+  path: "/blog/cheongan-jiji",
+  type: "article",
+});
 
 const cheongan = [
   { char: "甲", korean: "갑", element: "목(木)", nature: "양", desc: "새싹처럼 뻗어나가는 강한 생명력과 진취성" },

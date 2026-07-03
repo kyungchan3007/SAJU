@@ -26,7 +26,7 @@ export function ZodiacPageTemplate({ data }: ZodiacPageTemplateProps) {
               <h1 className="text-3xl font-black tracking-tight text-gray-900">
                 {data.emoji} {data.name} 성격과 운세
               </h1>
-              <p className="text-sm leading-relaxed text-gray-500">{data.years}</p>
+              <p className="text-sm leading-relaxed text-gray-500">{data.years} · {data.name} 성격, 궁합, 2026년 운세 정리</p>
             </div>
           </header>
 

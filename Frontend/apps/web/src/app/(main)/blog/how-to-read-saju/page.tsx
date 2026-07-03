@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
+import { createPageMetadata } from "@/shared/lib/seo";
 import { PageContainer } from "@/shared/ui/page-container";
 
-export const metadata: Metadata = {
-  title: "사주 보는 법 입문 가이드 | 사주팔자 분석 첫걸음",
-  description:
-    "사주팔자를 처음 보는 분을 위한 입문 가이드입니다. 생년월일시를 어떻게 사주로 변환하고, 무엇을 읽는지 단계별로 알려드립니다.",
-  alternates: { canonical: "/blog/how-to-read-saju" },
-};
+export const metadata: Metadata = createPageMetadata({
+  title: "사주 보는 법 입문 가이드 | 초보자를 위한 사주 해석 순서",
+  description: "사주 보는 법이 궁금한 초보자를 위해 생년월일시를 사주로 바꾸는 방법과 해석 순서를 단계별로 정리했습니다.",
+  path: "/blog/how-to-read-saju",
+  type: "article",
+});
 
 const steps = [
   {
@@ -54,7 +55,7 @@ export default function HowToReadSajuPage() {
               사주 보는 법 입문 가이드
             </h1>
             <p className="text-sm leading-relaxed text-gray-500">
-              처음 접하는 분도 이해할 수 있는 사주팔자 분석 6단계
+              사주 보는 방법이 궁금한 초보자를 위한 6단계 입문 가이드
             </p>
           </header>
 
@@ -88,7 +89,7 @@ export default function HowToReadSajuPage() {
                 직접 사주를 분석해보세요
               </h2>
               <p className="text-sm leading-6 text-gray-600">
-                복잡한 과정 없이 생년월일시만 입력하면 AI가 사주를 세우고 분석해드립니다.
+                복잡한 과정 없이 생년월일시만 입력하면 사주를 세우고 흐름을 확인할 수 있습니다.
               </p>
               <a
                 href="/saju"

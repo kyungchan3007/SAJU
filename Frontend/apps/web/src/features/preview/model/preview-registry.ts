@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import type { Route } from "next";
+import { createPageMetadata } from "@/shared/lib/seo";
 
 export type PreviewSlug = "traditional-saju" | "year-fortune" | "compatibility";
 
@@ -29,24 +30,22 @@ type PreviewEntry = {
 export const PREVIEW_REGISTRY: Record<PreviewSlug, PreviewEntry> = {
   "traditional-saju": {
     slug: "traditional-saju",
-    metadata: {
-      title: "정통사주 미리보기",
+    metadata: createPageMetadata({
+      title: "정통사주 풀이  | 명식·오행·대운 예시 화면",
       description:
-        "정통사주 풀이에서 제공하는 명식 요약, 4기둥, 오행 밸런스, 12운성, 대운 흐름을 예시 데이터로 먼저 확인할 수 있습니다.",
-      alternates: {
-        canonical: "/preview/traditional-saju",
-      },
-    },
+        "정통사주 풀이에서 확인하는 명식 요약, 4기둥, 오행 밸런스, 12운성, 대운 흐름을 공개 예시 화면으로 먼저 살펴보세요.",
+      path: "/preview/traditional-saju",
+    }),
     badge: "정통사주 미리보기",
-    title: "",
+    title: "정통사주 풀이",
     description:
-      "실제 정통사주 화면과 같은 구조로 명식 요약, 4기둥, 오행 밸런스, 12운성, 대운 흐름을 예시 데이터로 먼저 확인할 수 있습니다.",
+      "정통사주 풀이에서 확인하는 명식 요약, 4기둥, 오행 밸런스, 12운성, 대운 흐름을 공개 예시 화면으로 먼저 살펴보세요.",
     cta: {
       title: "정통사주 전체 풀이가 궁금하다면",
       description:
         "예시 화면으로 구조를 먼저 확인했다면, 실제 서비스에서 내 명식과 운의 흐름을 기반으로 더 자세한 풀이를 볼 수 있습니다.",
       href: "/mypage/traditional-fortune",
-      label: "정통사주 보러가기",
+      label: "정통사주 풀이 보러가기",
     },
     relatedLinks: {
       heading: "같이 읽어보면 좋은 글",
@@ -59,18 +58,16 @@ export const PREVIEW_REGISTRY: Record<PreviewSlug, PreviewEntry> = {
   },
   "year-fortune": {
     slug: "year-fortune",
-    metadata: {
-      title: "신년운세 미리보기",
+    metadata: createPageMetadata({
+      title: "2026년 신년운세 | 올해 운세 예시 화면",
       description:
-        "신년운세에서 제공하는 연도 헤더, 영역별 운세, 월별 운세 구성을 예시 데이터로 먼저 확인할 수 있습니다.",
-      alternates: {
-        canonical: "/preview/year-fortune",
-      },
-    },
+        "2026년 신년운세에서 확인하는 연도 헤더, 영역별 운세, 월별 운세 구성을 공개 예시 화면으로 먼저 살펴보세요.",
+      path: "/preview/year-fortune",
+    }),
     badge: "신년운세 미리보기",
-    title: "",
+    title: "2026년 신년운세",
     description:
-      "실제 신년운세 화면과 같은 구조로 연도 헤더, 영역별 운세, 월별 흐름을 예시 데이터로 먼저 확인할 수 있습니다.",
+      "2026년 신년운세에서 확인하는 연도 헤더, 영역별 운세, 월별 운세 구성을 공개 예시 화면으로 먼저 살펴보세요.",
     cta: {
       title: "내 신년운세 전체 풀이가 궁금하다면",
       description:
@@ -89,24 +86,22 @@ export const PREVIEW_REGISTRY: Record<PreviewSlug, PreviewEntry> = {
   },
   compatibility: {
     slug: "compatibility",
-    metadata: {
-      title: "궁합 미리보기",
+    metadata: createPageMetadata({
+      title: "사주 궁합 | 무료 궁합 보기 예시 화면",
       description:
-        "궁합 분석에서 제공하는 두 사람 비교, 종합 점수, 분야별 풀이 구성을 예시 데이터로 먼저 확인할 수 있습니다.",
-      alternates: {
-        canonical: "/preview/compatibility",
-      },
-    },
+        "사주 궁합에서 확인하는 두 사람 비교, 종합 점수, 분야별 풀이, 총평 구성을 공개 예시 화면으로 먼저 살펴보세요.",
+      path: "/preview/compatibility",
+    }),
     badge: "궁합 미리보기",
-    title: "",
+    title: "사주 궁합",
     description:
-      "실제 궁합 결과 화면과 같은 구조로 두 사람 비교, 종합 점수, 분야별 해석, 총평을 공개 예시로 먼저 확인할 수 있습니다.",
+      "사주 궁합에서 확인하는 두 사람 비교, 종합 점수, 분야별 풀이, 총평 구성을 공개 예시 화면으로 먼저 살펴보세요.",
     cta: {
       title: "내 궁합 결과를 직접 확인하고 싶다면",
       description:
         "공개 예시로 구조를 먼저 확인했다면, 실제 서비스에서 내 사주와 상대 정보를 기준으로 더 자세한 궁합 분석을 볼 수 있습니다.",
       href: "/compatibility",
-      label: "궁합 보러가기",
+      label: "무료 궁합 보러가기",
     },
     relatedLinks: {
       heading: "같이 읽어보면 좋은 글",

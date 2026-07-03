@@ -25,7 +25,7 @@ export const CtaButton = () => {
       </nav>
 
       <p className="mt-5 text-xs tracking-widest text-black/40">
-        AI 사주 해석 · 궁합 풀이 · 오늘의 흐름
+        사주 해석 · 궁합 풀이 · 오늘의 흐름
       </p>
     </>
   );

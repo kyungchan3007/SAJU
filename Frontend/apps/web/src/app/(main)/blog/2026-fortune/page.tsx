@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
+import { createPageMetadata } from "@/shared/lib/seo";
 import { PageContainer } from "@/shared/ui/page-container";
 
-export const metadata: Metadata = {
-  title: "2026년 병오년(丙午年) 운세 총정리",
-  description:
-    "2026년 병오년의 전체 운세 흐름과 분야별 운세를 정리했습니다. 올해의 기운과 주의할 점, 좋은 방향을 사주 관점에서 안내합니다.",
-  alternates: { canonical: "/blog/2026-fortune" },
-};
+export const metadata: Metadata = createPageMetadata({
+  title: "2026년 운세 총정리 | 올해 운세와 병오년 흐름",
+  description: "2026년 운세와 올해 운세 흐름이 궁금한 분을 위해 병오년의 재물운, 애정운, 건강운, 직장운을 한눈에 정리했습니다.",
+  path: "/blog/2026-fortune",
+  type: "article",
+});
 
 const areas = [
   {
@@ -54,7 +55,7 @@ export default function Fortune2026Page() {
               2026년 병오년(丙午年) 운세
             </h1>
             <p className="text-sm leading-relaxed text-gray-500">
-              붉은 말의 해, 화(火)의 기운이 가득한 2026년 전망
+              올해 운세가 궁금할 때 먼저 보는 2026년 병오년 전체 흐름
             </p>
           </header>
 

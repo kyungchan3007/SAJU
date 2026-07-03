@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
+import { createPageMetadata } from "@/shared/lib/seo";
 import { PageContainer } from "@/shared/ui/page-container";
 
-export const metadata: Metadata = {
-  title: "운세와 사주의 차이 | 타로·별자리·사주 비교 정리",
-  description:
-    "사주팔자, 운세, 타로, 별자리 점성술의 차이를 알기 쉽게 비교 정리했습니다. 각각 무엇을 알 수 있는지, 어떤 상황에서 활용하면 좋은지 안내합니다.",
-  alternates: { canonical: "/blog/fortune-vs-saju" },
-};
+export const metadata: Metadata = createPageMetadata({
+  title: "운세와 사주의 차이 | 사주팔자·타로·별자리 비교 정리",
+  description: "운세와 사주의 차이가 궁금한 분을 위해 사주팔자, 타로, 별자리 점성술의 기준과 활용 차이를 알기 쉽게 비교했습니다.",
+  path: "/blog/fortune-vs-saju",
+  type: "article",
+});
 
 const comparisons = [
   {

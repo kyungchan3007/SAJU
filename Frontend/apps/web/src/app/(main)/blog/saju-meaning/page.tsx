@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
+import { createPageMetadata } from "@/shared/lib/seo";
 import { PageContainer } from "@/shared/ui/page-container";
 
-export const metadata: Metadata = {
-  title: "사주팔자란 무엇인가? 기초부터 완벽 정리",
-  description:
-    "사주팔자의 개념, 구성 원리, 보는 방법을 쉽게 설명합니다. 생년월일시로 파악하는 운명의 지도, 사주팔자를 처음 접하는 분께 드리는 완벽 입문 가이드입니다.",
-  alternates: { canonical: "/blog/saju-meaning" },
-};
+export const metadata: Metadata = createPageMetadata({
+  title: "사주팔자란 무엇인가? | 사주 뜻과 기초 보는 법 정리",
+  description: "사주팔자란 무엇인지, 사주 뜻은 무엇인지 궁금한 분을 위해 개념, 구성 원리, 보는 법 기초를 쉽게 정리했습니다.",
+  path: "/blog/saju-meaning",
+  type: "article",
+});
 
 const sections = [
   {
@@ -49,7 +50,7 @@ export default function SajuMeaningPage() {
               사주팔자란 무엇인가?
             </h1>
             <p className="text-sm leading-relaxed text-gray-500">
-              생년월일시로 읽는 나의 운명 지도, 사주팔자의 모든 것
+              사주 뜻과 사주팔자 기초를 처음부터 이해하는 입문 정리
             </p>
           </header>
 
@@ -77,7 +78,7 @@ export default function SajuMeaningPage() {
                 내 사주팔자를 직접 확인해보세요
               </h2>
               <p className="text-sm leading-6 text-gray-600">
-                생년월일시를 입력하면 AI가 나의 사주를 분석하고 운의 흐름을 알려드립니다.
+                생년월일시를 입력하면 나의 사주를 분석하고 운의 흐름을 확인할 수 있습니다.
               </p>
               <a
                 href="/saju"

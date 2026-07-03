@@ -1,14 +1,15 @@
 import type { Metadata, Route } from "next";
+import { createPageMetadata } from "@/shared/lib/seo";
 import Link from "next/link";
 import { PageContainer } from "@/shared/ui/page-container";
 import { ZODIAC_DATA } from "./_data/zodiac-data";
 
-export const metadata: Metadata = {
-  title: "사주 이야기 | 띠별 운세 · 사주 기초 · 2026년 운세",
+export const metadata: Metadata = createPageMetadata({
+  title: "사주 이야기 | 사주 기초 · 띠별 운세 · 2026년 운세",
   description:
-    "사주팔자 기초 개념, 띠별 성격과 운세, 2026년 운세를 알기 쉽게 정리합니다. SAJU:ME의 사주 정보 콘텐츠를 확인하세요.",
-  alternates: { canonical: "/blog" },
-};
+    "사주 보는 법, 사주팔자 뜻, 띠별 운세, 2026년 운세까지 무료 사주 콘텐츠를 알기 쉽게 정리합니다.",
+  path: "/blog",
+});
 
 const conceptPosts: Array<{ href: Route; title: string; desc: string }> = [
   { href: "/blog/saju-meaning", title: "사주팔자란 무엇인가?", desc: "사주팔자의 개념과 구성 원리 완벽 입문" },
@@ -36,7 +37,7 @@ export default function BlogIndexPage() {
             </span>
             <h1 className="text-3xl font-black tracking-tight text-gray-900">사주 이야기</h1>
             <p className="text-sm leading-relaxed text-gray-500">
-              사주팔자 기초부터 띠별 운세, 연도별 운세까지 알기 쉽게 정리합니다.
+              사주 보는 법, 사주팔자 기초, 띠별 운세, 2026년 운세를 한 곳에서 정리합니다.
             </p>
           </header>
 

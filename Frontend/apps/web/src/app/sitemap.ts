@@ -1,16 +1,48 @@
 import type { MetadataRoute } from "next";
 
 const BASE_URL = "https://saju-me.com";
+const PUBLIC_LAST_MODIFIED = new Date("2026-07-03T00:00:00.000Z");
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  // AdSense 심사 단계에서는 공개적으로 읽을 가치가 분명한 페이지들만 노출한다.
+  // 콘텐츠별 실제 수정일을 아직 연결하지 못한 상태라, 빌드마다 변하는 현재 시간을 쓰지 않고
+  // 검증 가능한 고정 기준일만 노출한다.
   const staticPages: MetadataRoute.Sitemap = [
-    { url: BASE_URL, lastModified: new Date(), changeFrequency: "daily", priority: 1.0 },
-    { url: `${BASE_URL}/blog`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
-    { url: `${BASE_URL}/faq`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.5 },
-    { url: `${BASE_URL}/contact`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.4 },
-    { url: `${BASE_URL}/privacy-policy`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.3 },
-    { url: `${BASE_URL}/terms-of-service`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.3 },
+    {
+      url: BASE_URL,
+      lastModified: PUBLIC_LAST_MODIFIED,
+      changeFrequency: "daily",
+      priority: 1.0,
+    },
+    {
+      url: `${BASE_URL}/blog`,
+      lastModified: PUBLIC_LAST_MODIFIED,
+      changeFrequency: "weekly",
+      priority: 0.8,
+    },
+    {
+      url: `${BASE_URL}/faq`,
+      lastModified: PUBLIC_LAST_MODIFIED,
+      changeFrequency: "monthly",
+      priority: 0.5,
+    },
+    {
+      url: `${BASE_URL}/contact`,
+      lastModified: PUBLIC_LAST_MODIFIED,
+      changeFrequency: "monthly",
+      priority: 0.4,
+    },
+    {
+      url: `${BASE_URL}/privacy-policy`,
+      lastModified: PUBLIC_LAST_MODIFIED,
+      changeFrequency: "monthly",
+      priority: 0.3,
+    },
+    {
+      url: `${BASE_URL}/terms-of-service`,
+      lastModified: PUBLIC_LAST_MODIFIED,
+      changeFrequency: "monthly",
+      priority: 0.3,
+    },
   ];
 
   const blogPosts: MetadataRoute.Sitemap = [
@@ -35,7 +67,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "pig-zodiac",
   ].map((slug) => ({
     url: `${BASE_URL}/blog/${slug}`,
-    lastModified: new Date(),
+    lastModified: PUBLIC_LAST_MODIFIED,
     changeFrequency: "monthly" as const,
     priority: 0.7,
   }));

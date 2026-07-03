@@ -3,11 +3,13 @@ import { Jua, Noto_Sans_KR } from "next/font/google";
 import Script from "next/script";
 import type { ReactNode } from "react";
 import { env } from "@/shared/config";
+import {
+  DEFAULT_OG_IMAGE_URL,
+  SITE_NAME,
+  SITE_URL,
+} from "@/shared/lib/seo";
 import "@saju/design-tokens/css";
 import "./globals.css";
-
-const appUrl = env.NEXT_PUBLIC_APP_URL || "https://your-domain.com";
-const ogImageUrl = new URL("/image/background.png", appUrl).toString();
 
 const notoSansKr = Noto_Sans_KR({
   subsets: ["latin"],
@@ -23,10 +25,10 @@ const jua = Jua({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(appUrl),
+  metadataBase: new URL(SITE_URL),
   title: {
-    default: env.NEXT_PUBLIC_APP_NAME,
-    template: `%s | ${env.NEXT_PUBLIC_APP_NAME}`,
+    default: SITE_NAME,
+    template: `%s | ${SITE_NAME}`,
   },
   description: env.NEXT_PUBLIC_APP_DES,
   robots: {
@@ -34,16 +36,16 @@ export const metadata: Metadata = {
     follow: true,
   },
   openGraph: {
-    title: env.NEXT_PUBLIC_APP_NAME,
+    title: SITE_NAME,
     description: env.NEXT_PUBLIC_APP_DES,
-    url: appUrl,
-    siteName: env.NEXT_PUBLIC_APP_NAME,
+    url: SITE_URL,
+    siteName: SITE_NAME,
     images: [
       {
-        url: ogImageUrl,
+        url: DEFAULT_OG_IMAGE_URL,
         width: 1200,
         height: 630,
-        alt: `${env.NEXT_PUBLIC_APP_NAME} 대표 이미지`,
+        alt: `${SITE_NAME} 대표 이미지`,
       },
     ],
     locale: "ko_KR",
@@ -51,9 +53,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: env.NEXT_PUBLIC_APP_NAME,
+    title: SITE_NAME,
     description: env.NEXT_PUBLIC_APP_DES,
-    images: [ogImageUrl],
+    images: [DEFAULT_OG_IMAGE_URL],
   },
 };
 

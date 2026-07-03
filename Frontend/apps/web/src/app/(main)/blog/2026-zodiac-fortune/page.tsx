@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
+import { createPageMetadata } from "@/shared/lib/seo";
 import { PageContainer } from "@/shared/ui/page-container";
 import { ZODIAC_DATA } from "../_data/zodiac-data";
 
-export const metadata: Metadata = {
-  title: "2026년 띠별 운세 총정리 | 12띠 운세 한눈에 보기",
-  description:
-    "2026년 병오년 쥐띠·소띠·호랑이띠·토끼띠·용띠·뱀띠·말띠·양띠·원숭이띠·닭띠·개띠·돼지띠 12띠 운세를 한눈에 정리했습니다.",
-  alternates: { canonical: "/blog/2026-zodiac-fortune" },
-};
+export const metadata: Metadata = createPageMetadata({
+  title: "2026년 띠별 운세 총정리 | 12띠 올해 운세 한눈에 보기",
+  description: "2026년 띠별 운세가 궁금한 분을 위해 쥐띠부터 돼지띠까지 12띠 올해 운세를 재물, 애정, 건강, 직장 흐름으로 정리했습니다.",
+  path: "/blog/2026-zodiac-fortune",
+  type: "article",
+});
 
 const zodiacs = Object.values(ZODIAC_DATA);
 
@@ -24,7 +25,7 @@ export default function ZodiacFortune2026Page() {
               2026년 띠별 운세 총정리
             </h1>
             <p className="text-sm leading-relaxed text-gray-500">
-              병오년(丙午年) 12띠 운세를 한눈에 확인하세요
+              올해 띠별 운세가 궁금할 때 바로 보는 2026년 12띠 정리
             </p>
           </header>
 

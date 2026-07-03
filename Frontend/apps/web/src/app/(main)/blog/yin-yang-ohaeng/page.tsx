@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
+import { createPageMetadata } from "@/shared/lib/seo";
 import { PageContainer } from "@/shared/ui/page-container";
 
-export const metadata: Metadata = {
-  title: "음양오행(陰陽五行)이란? 사주의 핵심 원리 쉽게 이해하기",
-  description:
-    "사주팔자의 근간이 되는 음양오행의 개념과 상생·상극 관계를 알기 쉽게 설명합니다. 목·화·토·금·수 오행이 내 사주에서 어떤 의미를 갖는지 알아보세요.",
-  alternates: { canonical: "/blog/yin-yang-ohaeng" },
-};
+export const metadata: Metadata = createPageMetadata({
+  title: "음양오행이란? | 사주 오행 뜻과 상생 상극 정리",
+  description: "음양오행이 무엇인지, 사주 오행 뜻과 목화토금수의 특성, 상생·상극 관계를 쉽게 이해할 수 있도록 정리했습니다.",
+  path: "/blog/yin-yang-ohaeng",
+  type: "article",
+});
 
 const ohaeng = [
   {
