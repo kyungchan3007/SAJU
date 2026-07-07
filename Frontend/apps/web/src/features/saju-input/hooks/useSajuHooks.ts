@@ -11,6 +11,7 @@ import { SAJU_PROFILE_QUERY_KEY } from "@/features/saju-profile/model/query";
 import type { SajuFormValues } from "@/features/saju-input/type/type";
 import { useAuthScope } from "@/shared/app-infra/query-provider/auth-scope-context";
 import { buildTurnstileVerifyPath } from "@/shared/api/auth/turnstileRecovery";
+import { SAJU_DRAFT_ENDPOINT_PATH } from "@/shared/config/endPoint";
 import {
   buildSajuHubPath,
   buildLoginPath,
@@ -32,7 +33,7 @@ export const useSajuHooks = ({ nextPath }: UseSajuHooksParams = {}) => {
   const loginPath = buildLoginPath(hubPath);
 
   const saveDraft = async (formValues: SajuFormValues) => {
-    const response = await fetch("/api/saju/draft", {
+    const response = await fetch(SAJU_DRAFT_ENDPOINT_PATH, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formValues),

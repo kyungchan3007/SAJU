@@ -4,6 +4,7 @@ import type { Route } from "next";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { AnalysisPendingGate } from "@/features/saju-result/ui/analysis-pending-gate.client";
+import { SAJU_AUTH_REFRESH_PATH } from "@/shared/config/endPoint";
 
 const AUTH_REFRESH_TIMEOUT_MS = 8000;
 
@@ -28,7 +29,7 @@ export function AuthRefreshRetry({
       let response: Response;
 
       try {
-        response = await fetch("/api/auth/refresh", {
+        response = await fetch(SAJU_AUTH_REFRESH_PATH, {
           method: "POST",
           cache: "no-store",
           signal: controller.signal,

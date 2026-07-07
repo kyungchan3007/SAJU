@@ -7,6 +7,7 @@ import {
   buildSajuInputPath,
   buildSajuResultPath,
 } from "@/shared/lib/internalRedirect";
+import { SAJU_USERS_ME_PATH } from "@/shared/config/endPoint";
 import { describe, expect, it } from "vitest";
 
 describe("post login redirect", () => {
@@ -42,6 +43,6 @@ describe("post login redirect", () => {
     expect(normalizePostLoginRedirect("/login")).toBeNull();
     expect(normalizePostLoginRedirect("/login/callback")).toBeNull();
     expect(normalizePostLoginRedirect("/api")).toBeNull();
-    expect(normalizePostLoginRedirect("/api/users/me")).toBeNull();
+    expect(normalizePostLoginRedirect(SAJU_USERS_ME_PATH)).toBeNull();
   });
 });

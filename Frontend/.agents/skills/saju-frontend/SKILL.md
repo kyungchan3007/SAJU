@@ -28,6 +28,7 @@ description: >-
 - 기능 추가/수정 이후 unit test(Vitest) 작성/갱신 작업이면 `references/testing.md`를 읽는다.
 - `.tsx` 컴포넌트의 비즈니스 로직, 플로우 로직, 역할 분리 작업이면 `references/component-guide.md`를 읽는다.
 - `/saju` 입력 흐름 작업이면 `references/saju.md`를 읽는다.
+- `/saju?step=hub` 또는 사주 허브 진입/로그인/입력 복귀 흐름 작업이면 `references/saju-hub.md`를 읽는다.
 - `/saju/result` 결과 조회 작업이면 `references/saju-result.md`를 읽는다.
 - `/mypage/traditional-fortune` 또는 정통사주 상세 조회 작업이면 `references/jeongtongsaju.md`를 읽는다.
 - `/mypage/year-fortune` 또는 신년운세 조회·생성형 풀이 작업이면 `references/year-fortune.md`를 읽는다.

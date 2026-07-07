@@ -1,11 +1,12 @@
 import type { PersonalityProfileResponse } from "@/generated/api";
 import type { GeneratedInterpretationMeta } from "@/shared/api/backend/parseGeneratedInterpretationResponse";
 import type { ApiEnvelope } from "@/shared/api";
+import { SAJU_PERSONALITY_ENDPOINT_PATH } from "@/shared/config/endPoint";
 
 export async function fetchPersonalityProfileOnClient(): Promise<
   ApiEnvelope<PersonalityProfileResponse | undefined, GeneratedInterpretationMeta>
 > {
-  const response = await fetch("/api/saju/me/personality", {
+  const response = await fetch(SAJU_PERSONALITY_ENDPOINT_PATH, {
     method: "GET",
     cache: "force-cache",
   });

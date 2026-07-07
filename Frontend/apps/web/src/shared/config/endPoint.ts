@@ -1,7 +1,14 @@
 export const KAKAO_LOGIN_URL = "/api/auth/kakao";
+export const KAKAO_LOGIN_CALLBACK_PATH = "/api/auth/kakao/callback";
 export const KAKAO_LOGIN_URL_TOKEN = "/api/auth/kakao/token";
 export const SAJU_AUTH_LOGOUT_PATH = "/api/auth/logout";
+export const SAJU_AUTH_RESTORE_PATH = "/api/auth/restore";
+export const SAJU_AUTH_RESTORE_DECLINE_PATH = "/api/auth/restore/decline";
+export const SAJU_AUTH_TURNSTILE_VERIFY_PATH = "/api/auth/turnstile-verify";
 export const SAJU_ENDPOINT_PATH = "/api/saju";
+export const SAJU_DRAFT_ENDPOINT_PATH = "/api/saju/draft";
+export const SAJU_RESULT_ENDPOINT_PATH = "/api/saju/result";
+export const SAJU_ME_ENDPOINT_PATH = "/api/saju/me";
 export const SAJU_DAILY_ENDPOINT_PATH = "/api/saju/me/daily";
 export const SAJU_YEAR_FORTUNE_ENDPOINT_PATH = "/api/saju/me/year";
 export const SAJU_PERSONALITY_ENDPOINT_PATH = "/api/saju/me/personality";
@@ -11,6 +18,11 @@ export const SAJU_TRADITIONAL_FORTUNE_ENDPOINT_PATH =
 export const SAJU_ZODIAC_COMPATIBILITY_ENDPOINT_PATH =
   "/api/saju/me/zodiac-compatibility";
 export const SAJU_COMPATIBILITY_ENDPOINT_PATH = "/api/saju/me/compatibility";
+export const SAJU_TRADITIONAL_BFF_PATH = "/api/saju/traditional";
+export const SAJU_TRADITIONAL_FORTUNE_BFF_PATH =
+  "/api/saju/traditional-fortune";
+export const SAJU_ZODIAC_COMPATIBILITY_BFF_PATH =
+  "/api/saju/zodiac-compatibility";
 export const SAJU_PLACE_RECOMMEND_ENDPOINT_PATH = "/api/place/recommend";
 export const FOOD_RECOMMEND_ENDPOINT_PATH = "/api/food/recommend";
 export const KAKAO_LOCAL_KEYWORD_SEARCH_URL =
@@ -22,6 +34,7 @@ export const SAJU_PARTNERS_PATH = "/api/partners";
 export const LOCATION_KEYWORDS_ENDPOINT_PATH = "/api/location";
 export const LOCATION_SEARCH_ENDPOINT_PATH = "/api/location/search";
 export const COMMUNITY_COHORTS_ENDPOINT_PATH = "/api/admin/community/cohorts";
+export const COMMUNITY_COHORTS_BFF_PATH = "/api/community/cohorts";
 export const COMMUNITY_JOIN_ENDPOINT_PATH = "/api/community/join";
 export const COMMUNITY_INTERESTS_ENDPOINT_PATH = "/api/community/interests";
 export const INQUIRIES_ENDPOINT_PATH = "/api/inquiries";
@@ -29,3 +42,15 @@ export const NOTIFICATIONS_ENDPOINT_PATH = "/api/notifications";
 export const NOTIFICATIONS_UNREAD_COUNT_ENDPOINT_PATH =
   "/api/notifications/unread-count";
 export const NOTIFICATIONS_READ_ENDPOINT_PATH = "/api/notifications";
+
+export function getSajuCompatibilityPath(partnerId: number | string) {
+  return `${SAJU_COMPATIBILITY_ENDPOINT_PATH}/${partnerId}`;
+}
+
+export function getPartnerPath(partnerId: number | string) {
+  return `${SAJU_PARTNERS_PATH}/${partnerId}`;
+}
+
+export function getNotificationReadPath(notificationId: number | string) {
+  return `${NOTIFICATIONS_READ_ENDPOINT_PATH}/${notificationId}/read`;
+}

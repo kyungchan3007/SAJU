@@ -32,11 +32,7 @@ export function SajuHubCard({
             {copy.title}
           </h1>
           <p className="pt-2 text-sm font-medium leading-relaxed text-content-secondary">
-            {copy.yongshinDescription.split(",").map((line) => (
-              <span key={line} className="text-gray block">
-                {line}
-              </span>
-            ))}
+            {copy.strongestElementDescription}
           </p>
         </div>
 

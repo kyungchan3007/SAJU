@@ -11,15 +11,15 @@ export type SajuHubCopy = {
   elementBackground: string;
   elementEmoji: string;
   title: string;
-  yongshinDescription: string;
+  strongestElementDescription: string;
   description: string;
   compatibilityDescription: string;
   companionPrompt: string;
 };
 
 const DEFAULT_ELEMENT: FiveElementKey = "수";
-const YONGSHIN_DESCRIPTION =
-  "용신은 내 사주의 균형을 잡아주고, 나에게 도움이 되는 핵심 기운을 뜻해요.";
+const STRONGEST_ELEMENT_DESCRIPTION =
+  "가장 강한 오행은 내 사주에서 중심이 되는 기운을 뜻해요.";
 
 const ELEMENT_COMPANION_ELEMENTS: Record<FiveElementKey, FiveElementKey[]> = {
   금: ["수", "토"],
@@ -41,7 +41,7 @@ function isFiveElementKey(value: string): value is FiveElementKey {
   return value in FIVE_ELEMENT_CONFIG;
 }
 
-function normalizeYongshinElement(element?: string | null): FiveElementKey {
+function normalizeStrongestElement(element?: string | null): FiveElementKey {
   if (!element) {
     return DEFAULT_ELEMENT;
   }
@@ -57,8 +57,8 @@ function formatCompanionElements(elements: FiveElementKey[]) {
     .join(", ");
 }
 
-export function getSajuHubCopy(yongshin?: string | null): SajuHubCopy {
-  const element = normalizeYongshinElement(yongshin);
+export function getSajuHubCopy(strongestElement?: string | null): SajuHubCopy {
+  const element = normalizeStrongestElement(strongestElement);
   const config = FIVE_ELEMENT_CONFIG[element];
   const companionElements = formatCompanionElements(
     ELEMENT_COMPANION_ELEMENTS[element],
@@ -70,8 +70,8 @@ export function getSajuHubCopy(yongshin?: string | null): SajuHubCopy {
     elementColor: config.color,
     elementBackground: config.bg,
     elementEmoji: config.emoji,
-    title: `나의 용신 오행은 ${config.label}예요`,
-    yongshinDescription: YONGSHIN_DESCRIPTION,
+    title: `나의 가장 강한 오행은 ${config.label}예요`,
+    strongestElementDescription: STRONGEST_ELEMENT_DESCRIPTION,
     description: `${config.label} 기운을 가진 사람은 ${ELEMENT_TRAITS[element]}`,
     compatibilityDescription: `${config.label} 기운은 ${companionElements} 기운과 잘 어울려요.`,
     companionPrompt: "나와 잘 맞는 기운의 친구나 연인을 만나러 가볼까요?",

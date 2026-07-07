@@ -1,4 +1,5 @@
 import { GET } from "@/app/api/saju/me/year/route";
+import { SAJU_YEAR_FORTUNE_ENDPOINT_PATH } from "@/shared/config/endPoint";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mockedCookies = vi.hoisted(() => vi.fn());
@@ -25,7 +26,9 @@ function createCookieStore(values: Record<string, string>) {
   };
 }
 
-const mockRequest = new Request("http://localhost/api/saju/me/year");
+const mockRequest = new Request(
+  new URL(SAJU_YEAR_FORTUNE_ENDPOINT_PATH, "http://localhost"),
+);
 
 describe("/api/saju/me/year GET", () => {
   beforeEach(() => {

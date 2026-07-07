@@ -322,6 +322,75 @@ test.describe("saju input flow", () => {
     );
   });
 
+  test("redirects guests who directly open the hub to login", async ({
+    page,
+  }) => {
+    await page.goto("/saju?step=hub&next=%2Fcompatibility");
+
+    await expect(page).toHaveURL(
+      /\/login\?next=%2Fsaju%3Fstep%3Dhub%26next%3D%252Fcompatibility$/,
+    );
+  });
+
+  test("moves logged-in users without saved analysis from hub to saju input", async ({
+    context,
+    page,
+    baseURL,
+  }) => {
+    await addAuthCookies(context, baseURL);
+
+    await page.route("**/api/saju/me", async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({
+          success: true,
+          data: {
+            birthDate: "1992-03-14",
+            consentGiven: true,
+            sajuAnalysis: null,
+          },
+          error: null,
+        }),
+      });
+    });
+    await page.route("**/api/saju", async (route) => {
+      await route.fulfill({
+        status: 404,
+        contentType: "application/json",
+        body: JSON.stringify({
+          success: false,
+          data: null,
+          error: {
+            code: "PENDING_FORM_NOT_FOUND",
+            message: "사주 정보를 입력해주세요.",
+          },
+        }),
+      });
+    });
+    await page.route("**/api/users/me", async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({
+          success: true,
+          data: {
+            email: "e2e@example.com",
+            nickname: "이투이",
+            strongestElement: "water",
+          },
+          error: null,
+        }),
+      });
+    });
+
+    await page.goto("/saju?step=hub&next=%2Fcompatibility");
+
+    await expect(page).toHaveURL(
+      /\/saju\?next=%2Fcompatibility&forceInput=1$/,
+    );
+  });
+
   test("moves users to the hub after a successful submit and preserves next path", async ({
     context,
     page,
@@ -363,6 +432,21 @@ test.describe("saju input flow", () => {
         }),
       });
     });
+    await page.route("**/api/users/me", async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({
+          success: true,
+          data: {
+            email: "e2e@example.com",
+            nickname: "이투이",
+            strongestElement: "water",
+          },
+          error: null,
+        }),
+      });
+    });
 
     await page.goto("/saju?next=%2Fcompatibility&forceInput=1");
     await fillRequiredSajuFields(page);
@@ -371,7 +455,7 @@ test.describe("saju input flow", () => {
 
     await expect(page).toHaveURL(/\/saju\?step=hub&next=%2Fcompatibility$/);
     await expect(
-      page.getByRole("heading", { name: "나의 용신 오행은 수(水)예요" }),
+      page.getByRole("heading", { name: "나의 가장 강한 오행은 수(水)예요" }),
     ).toBeVisible();
     expect(savePayload).toMatchObject({
       agreedToTerms: true,

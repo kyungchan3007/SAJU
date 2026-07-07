@@ -6,8 +6,7 @@ import {
   type AuthenticatedBackendFetchOptions,
 } from "@/shared/api/auth/authenticatedBackendFetch";
 import { parseBackendApiResponse } from "@/shared/api/backend/parseBackendApiResponse";
-
-const SAJU_ME_PATH = "/api/saju/me";
+import { SAJU_ME_ENDPOINT_PATH } from "@/shared/config/endPoint";
 
 type GetSajuProfileSuccess = {
   success: true;
@@ -28,7 +27,7 @@ export async function getSajuProfileOnServer(
   authOptions?: AuthenticatedBackendFetchOptions,
 ): Promise<GetSajuProfileResult> {
   const result = await authenticatedBackendFetch(
-    SAJU_ME_PATH,
+    SAJU_ME_ENDPOINT_PATH,
     {
       method: "GET",
     },

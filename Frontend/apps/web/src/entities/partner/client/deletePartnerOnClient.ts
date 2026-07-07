@@ -1,9 +1,10 @@
 import type { ApiEnvelope } from "@/shared/api";
+import { getPartnerPath } from "@/shared/config/endPoint";
 
 export async function deletePartnerOnClient(
   partnerId: number,
 ): Promise<ApiEnvelope<{ deleted: boolean } | undefined>> {
-  const response = await fetch(`/api/partners/${partnerId}`, {
+  const response = await fetch(getPartnerPath(partnerId), {
     method: "DELETE",
   });
 

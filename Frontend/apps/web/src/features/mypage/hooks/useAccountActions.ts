@@ -1,6 +1,10 @@
 "use client";
 
 import type { ApiEnvelope } from "@/shared/api";
+import {
+  SAJU_AUTH_LOGOUT_PATH,
+  SAJU_USERS_ME_PATH,
+} from "@/shared/config/endPoint";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -31,7 +35,7 @@ export function useAccountActions() {
     setErrorMessage(null);
 
     const isLogout = modalType === "logout";
-    const endpoint = isLogout ? "/api/auth/logout" : "/api/users/me";
+    const endpoint = isLogout ? SAJU_AUTH_LOGOUT_PATH : SAJU_USERS_ME_PATH;
     const method = isLogout ? "POST" : "DELETE";
 
     try {

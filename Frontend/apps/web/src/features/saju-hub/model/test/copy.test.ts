@@ -3,13 +3,13 @@ import { describe, expect, it } from "vitest";
 import { getSajuHubCopy } from "@/features/saju-hub/model/copy";
 
 describe("getSajuHubCopy", () => {
-  it("uses yongshin for personalized hub copy", () => {
+  it("uses strongest element for personalized hub copy", () => {
     const copy = getSajuHubCopy("water");
 
     expect(copy.element).toBe("수");
-    expect(copy.title).toBe("나의 용신 오행은 수(水)예요");
-    expect(copy.yongshinDescription).toBe(
-      "용신은 내 사주의 균형을 잡아주고, 나에게 도움이 되는 핵심 기운을 뜻해요.",
+    expect(copy.title).toBe("나의 가장 강한 오행은 수(水)예요");
+    expect(copy.strongestElementDescription).toBe(
+      "가장 강한 오행은 내 사주에서 중심이 되는 기운을 뜻해요.",
     );
     expect(copy.description).toContain("재능이 많고 참을성이 좋으며");
     expect(copy.compatibilityDescription).toBe(
@@ -17,14 +17,14 @@ describe("getSajuHubCopy", () => {
     );
   });
 
-  it("normalizes korean yongshin keys", () => {
+  it("normalizes korean strongest element keys", () => {
     const copy = getSajuHubCopy("화");
 
     expect(copy.element).toBe("화");
-    expect(copy.title).toBe("나의 용신 오행은 화(火)예요");
+    expect(copy.title).toBe("나의 가장 강한 오행은 화(火)예요");
   });
 
-  it("falls back to water copy without yongshin", () => {
+  it("falls back to water copy without strongest element", () => {
     const copy = getSajuHubCopy(null);
 
     expect(copy.element).toBe("수");

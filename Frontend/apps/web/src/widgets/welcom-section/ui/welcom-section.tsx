@@ -1,4 +1,5 @@
 import type { Route } from "next";
+import { KAKAO_LOGIN_URL } from "@/shared/config/endPoint";
 import { HomeMarketingSections } from "@/features/home/ui/home-marketing-sections";
 import { HomeHeroSection } from "@/widgets/home-hero/ui/home-hero-section";
 import { KakaoLoginSubmitButton } from "@/features/auth/ui/kakao-login-submit-button.client";
@@ -119,7 +120,7 @@ function GuestFortuneCard() {
           color: "rgba(0,0,0,0.85)",
           boxShadow: "0 2px 8px rgba(0,0,0,0.12)",
         }}
-        kakaoLoginUrl="/api/auth/kakao"
+        kakaoLoginUrl={KAKAO_LOGIN_URL}
       />
 
       {/*<p className="text-center text-[10px] text-gray-400">*/}

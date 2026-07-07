@@ -3,7 +3,7 @@
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useRef } from "react";
 
 import {
   fetchSajuProfileOnClient,
@@ -11,7 +11,9 @@ import {
   SajuProfileClientError,
   SajuSaveClientError,
 } from "@/entities/saju";
+import { fetchMyProfileOnClient } from "@/entities/user/client/fetchMyProfileOnClient";
 import { getSajuHubCopy } from "@/features/saju-hub/model/copy";
+import { MY_PROFILE_QUERY_KEY } from "@/features/mypage/hooks/useMyProfile";
 import { SAJU_PROFILE_QUERY_KEY } from "@/features/saju-profile/model/query";
 import {
   buildLoginPath,
@@ -39,11 +41,22 @@ export function useSajuHub({ nextPath }: UseSajuHubParams = {}) {
     staleTime: 60 * 60 * 1000,
     gcTime: 60 * 60 * 1000,
   });
+  const myProfileQuery = useQuery({
+    queryKey: MY_PROFILE_QUERY_KEY,
+    queryFn: fetchMyProfileOnClient,
+    staleTime: 60 * 60 * 1000,
+    gcTime: 60 * 60 * 1000,
+    enabled: profileQuery.isSuccess,
+  });
   const pendingSaveMutation = useMutation({
     mutationFn: () => saveSajuOnClient(),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: SAJU_PROFILE_QUERY_KEY,
+        exact: false,
+      });
+      queryClient.invalidateQueries({
+        queryKey: MY_PROFILE_QUERY_KEY,
         exact: false,
       });
     },
@@ -52,10 +65,10 @@ export function useSajuHub({ nextPath }: UseSajuHubParams = {}) {
     ? (profileQuery.data.data ?? null)
     : null;
   const sajuAnalysis = profile?.sajuAnalysis ?? null;
-  const copy = useMemo(
-    () => getSajuHubCopy(sajuAnalysis?.yongshin),
-    [sajuAnalysis?.yongshin],
-  );
+  const strongestElement = myProfileQuery.data?.success
+    ? (myProfileQuery.data.data?.strongestElement ?? null)
+    : null;
+  const copy = getSajuHubCopy(strongestElement);
   const isProfileLoginRequired =
     profileQuery.error instanceof SajuProfileClientError &&
     profileQuery.error.code === "LOGIN_REQUIRED";
@@ -81,7 +94,8 @@ export function useSajuHub({ nextPath }: UseSajuHubParams = {}) {
     pendingSaveMutation.mutate();
   }, [hasSajuAnalysis, pendingSaveMutation, profileQuery.isSuccess]);
 
-  const blockingError = profileQuery.error ?? pendingSaveMutation.error;
+  const blockingError =
+    profileQuery.error ?? myProfileQuery.error ?? pendingSaveMutation.error;
   const hasRedirectableError = Boolean(
     blockingError && !isLoginRequired && !isPendingFormRequired,
   );
@@ -91,6 +105,14 @@ export function useSajuHub({ nextPath }: UseSajuHubParams = {}) {
     !isPendingFormRequired &&
     !isLoginRequired &&
     !hasRedirectableError;
+
+  useEffect(() => {
+    if (!isPendingFormRequired) {
+      return;
+    }
+
+    router.replace(inputPath);
+  }, [inputPath, isPendingFormRequired, router]);
 
   useEffect(() => {
     if (!hasRedirectableError) {
@@ -104,13 +126,14 @@ export function useSajuHub({ nextPath }: UseSajuHubParams = {}) {
 
   return {
     copy,
-    error: blockingError,
     inputPath,
     isLoginRequired,
     isPending:
       profileQuery.isPending ||
+      myProfileQuery.isPending ||
       pendingSaveMutation.isPending ||
-      isRecoveringPendingForm,
+      isRecoveringPendingForm ||
+      isPendingFormRequired,
     isPendingFormRequired,
     isSuccess: profileQuery.isSuccess && hasSajuAnalysis,
     loginPath,

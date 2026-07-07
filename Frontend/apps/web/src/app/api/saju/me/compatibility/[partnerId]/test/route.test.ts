@@ -1,5 +1,8 @@
 import { GET } from "@/app/api/saju/me/compatibility/[partnerId]/route";
+import { getSajuCompatibilityPath } from "@/shared/config/endPoint";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+
+const LOCAL_BASE_URL = "http://localhost";
 
 const mockedGetCompatibilityOnServer = vi.hoisted(() => vi.fn());
 
@@ -22,7 +25,7 @@ describe("/api/saju/me/compatibility/[partnerId] GET", () => {
 
   it("returns 400 when partnerId is invalid", async () => {
     const response = await GET(
-      new Request("http://localhost/api/saju/me/compatibility/nope"),
+      new Request(new URL(getSajuCompatibilityPath("nope"), LOCAL_BASE_URL)),
       createContext("nope"),
     );
     const body = await response.json();
@@ -39,7 +42,7 @@ describe("/api/saju/me/compatibility/[partnerId] GET", () => {
     });
 
     const response = await GET(
-      new Request("http://localhost/api/saju/me/compatibility/1"),
+      new Request(new URL(getSajuCompatibilityPath(1), LOCAL_BASE_URL)),
       createContext("1"),
     );
     const body = await response.json();

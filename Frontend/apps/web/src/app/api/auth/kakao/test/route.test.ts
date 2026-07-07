@@ -1,5 +1,8 @@
 import { GET } from "@/app/api/auth/kakao/route";
+import { KAKAO_LOGIN_URL } from "@/shared/config/endPoint";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+
+const LOCAL_BASE_URL = "http://localhost";
 
 const mockedGetServerEnv = vi.hoisted(() => vi.fn());
 
@@ -14,6 +17,10 @@ function createRequest(url: string) {
   } as never;
 }
 
+function createKakaoRequest(search = "") {
+  return createRequest(`${new URL(KAKAO_LOGIN_URL, LOCAL_BASE_URL)}${search}`);
+}
+
 describe("/api/auth/kakao GET", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -26,7 +33,7 @@ describe("/api/auth/kakao GET", () => {
   it("returns 500 when backend base url is missing", async () => {
     mockedGetServerEnv.mockReturnValue({ BACKEND_API_BASE_URL: "" });
 
-    const response = await GET(createRequest("http://localhost/api/auth/kakao"));
+    const response = await GET(createKakaoRequest());
     const body = await response.json();
 
     expect(response.status).toBe(500);
@@ -46,7 +53,7 @@ describe("/api/auth/kakao GET", () => {
     });
     vi.spyOn(globalThis, "fetch").mockRejectedValue(new Error("network"));
 
-    const response = await GET(createRequest("http://localhost/api/auth/kakao"));
+    const response = await GET(createKakaoRequest());
     const body = await response.json();
 
     expect(response.status).toBe(502);
@@ -73,7 +80,7 @@ describe("/api/auth/kakao GET", () => {
       }),
     );
 
-    const response = await GET(createRequest("http://localhost/api/auth/kakao"));
+    const response = await GET(createKakaoRequest());
     const location = new URL(response.headers.get("location") ?? "");
     const oauthState = location.searchParams.get("state");
     const setCookie = response.headers.get("set-cookie") ?? "";
@@ -99,9 +106,7 @@ describe("/api/auth/kakao GET", () => {
       }),
     );
 
-    const response = await GET(
-      createRequest("http://localhost/api/auth/kakao?next=%2Fcommunity"),
-    );
+    const response = await GET(createKakaoRequest("?next=%2Fcommunity"));
 
     expect(response.status).toBe(307);
     expect(response.headers.get("set-cookie")).toContain(
@@ -117,7 +122,7 @@ describe("/api/auth/kakao GET", () => {
       new Response(null, { status: 302 }),
     );
 
-    const response = await GET(createRequest("http://localhost/api/auth/kakao"));
+    const response = await GET(createKakaoRequest());
     const body = await response.json();
 
     expect(response.status).toBe(502);
@@ -139,7 +144,7 @@ describe("/api/auth/kakao GET", () => {
       new Response(null, { status: 401 }),
     );
 
-    const response = await GET(createRequest("http://localhost/api/auth/kakao"));
+    const response = await GET(createKakaoRequest());
     const body = await response.json();
 
     expect(response.status).toBe(401);

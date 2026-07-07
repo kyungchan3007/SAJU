@@ -1,11 +1,12 @@
 import type { ApiEnvelope } from "@/shared/api";
 import type { DailyEnergyResponse } from "@/generated/api";
 import { SajuResultClientError } from "@/entities/saju/client/sajuResultClientError";
+import { SAJU_RESULT_ENDPOINT_PATH } from "@/shared/config/endPoint";
 
 export async function fetchSajuResultOnClient(): Promise<
   ApiEnvelope<DailyEnergyResponse | undefined>
 > {
-  const response = await fetch("/api/saju/result", {
+  const response = await fetch(SAJU_RESULT_ENDPOINT_PATH, {
     method: "POST",
     cache: "no-store",
     credentials: "include",

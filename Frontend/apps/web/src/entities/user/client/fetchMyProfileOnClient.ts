@@ -1,10 +1,11 @@
 import type { UserResponse } from "@/generated/api";
 import type { ApiEnvelope } from "@/shared/api";
+import { SAJU_USERS_ME_PATH } from "@/shared/config/endPoint";
 
 export async function fetchMyProfileOnClient(): Promise<
   ApiEnvelope<UserResponse | undefined>
 > {
-  const response = await fetch("/api/users/me", {
+  const response = await fetch(SAJU_USERS_ME_PATH, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

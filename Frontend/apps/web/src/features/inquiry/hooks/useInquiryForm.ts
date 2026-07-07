@@ -2,6 +2,7 @@
 
 import { useCallback, useState } from "react";
 import { API_ERROR_MESSAGES } from "@/shared/api/messages";
+import { INQUIRIES_ENDPOINT_PATH } from "@/shared/config/endPoint";
 import { validateInquiryForm } from "../model/validation";
 import { INQUIRY_FORM_LIMITS, type InquiryFormData, type InquiryFormState, type InquiryErrorCode } from "../types";
 
@@ -49,7 +50,7 @@ export function useInquiryForm() {
     setFieldErrors({});
 
     try {
-      const response = await fetch("/api/inquiries", {
+      const response = await fetch(INQUIRIES_ENDPOINT_PATH, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

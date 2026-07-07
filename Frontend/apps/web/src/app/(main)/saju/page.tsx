@@ -3,9 +3,12 @@ import { SajuHub } from "@/widgets/saju-hub";
 import { Metadata } from "next";
 import type { Route } from "next";
 import { redirect } from "next/navigation";
+import { getProtectedPageAuthStateOnServer } from "@/entities/auth/server/getProtectedPageAuthStateOnServer";
 import { createPageMetadata } from "@/shared/lib/seo";
 import { getSajuEntryRouteOnServer } from "@/entities/saju/server/getSajuEntryRouteOnServer";
+import { AuthRefreshRetry } from "@/features/saju-result/ui/auth-refresh-retry.client";
 import {
+  buildSajuHubPath,
   buildSajuResultPath,
   normalizeInternalRedirectPath,
 } from "@/shared/lib/internalRedirect";
@@ -32,6 +35,21 @@ export default async function SajuPage({ searchParams }: SajuPageProps) {
   const step = params.step === "hub" ? "hub" : "input";
 
   if (step === "hub") {
+    const hubPath = buildSajuHubPath(nextPath);
+    const authState = await getProtectedPageAuthStateOnServer(hubPath);
+
+    if (authState.kind === "refresh") {
+      return (
+        <main className="page-shell">
+          <AuthRefreshRetry loginPath={authState.loginPath} />
+        </main>
+      );
+    }
+
+    if (authState.kind === "redirect") {
+      redirect(authState.loginPath);
+    }
+
     return (
       <main className="page-shell">
         <SajuHub nextPath={nextPath} />

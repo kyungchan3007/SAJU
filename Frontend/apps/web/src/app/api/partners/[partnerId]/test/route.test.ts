@@ -3,7 +3,10 @@ import {
   GET,
   PATCH,
 } from "@/app/api/partners/[partnerId]/route";
+import { getPartnerPath } from "@/shared/config/endPoint";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+
+const LOCAL_BASE_URL = "http://localhost";
 
 const mockedGetPartnerOnServer = vi.hoisted(() => vi.fn());
 const mockedUpdatePartnerOnServer = vi.hoisted(() => vi.fn());
@@ -36,7 +39,7 @@ describe("/api/partners/[partnerId] route handlers", () => {
 
   it("returns 400 when partnerId is invalid", async () => {
     const response = await GET(
-      new Request("http://localhost/api/partners/abc"),
+      new Request(new URL(getPartnerPath("abc"), LOCAL_BASE_URL)),
       createContext("abc"),
     );
     const body = await response.json();
@@ -52,7 +55,7 @@ describe("/api/partners/[partnerId] route handlers", () => {
     });
 
     const response = await GET(
-      new Request("http://localhost/api/partners/1"),
+      new Request(new URL(getPartnerPath(1), LOCAL_BASE_URL)),
       createContext("1"),
     );
     const body = await response.json();
@@ -72,7 +75,7 @@ describe("/api/partners/[partnerId] route handlers", () => {
     });
 
     const response = await PATCH(
-      new Request("http://localhost/api/partners/1", {
+      new Request(new URL(getPartnerPath(1), LOCAL_BASE_URL), {
         method: "PATCH",
         body: JSON.stringify({
           name: "Updated",
@@ -102,7 +105,7 @@ describe("/api/partners/[partnerId] route handlers", () => {
     });
 
     const response = await DELETE(
-      new Request("http://localhost/api/partners/1", {
+      new Request(new URL(getPartnerPath(1), LOCAL_BASE_URL), {
         method: "DELETE",
         headers: { Origin: "http://localhost" },
       }),

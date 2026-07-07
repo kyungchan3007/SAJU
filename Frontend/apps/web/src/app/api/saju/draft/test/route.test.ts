@@ -1,16 +1,22 @@
 import { POST } from "@/app/api/saju/draft/route";
+import { SAJU_DRAFT_ENDPOINT_PATH } from "@/shared/config/endPoint";
 import { describe, expect, it } from "vitest";
+
+const LOCAL_BASE_URL = "http://localhost";
 
 describe("/api/saju/draft POST", () => {
   it("returns 400 when request body is invalid json", async () => {
-    const request = new Request("http://localhost/api/saju/draft", {
-      method: "POST",
-      body: "{invalid-json",
-      headers: {
-        "Content-Type": "application/json",
-        Origin: "http://localhost",
+    const request = new Request(
+      new URL(SAJU_DRAFT_ENDPOINT_PATH, LOCAL_BASE_URL),
+      {
+        method: "POST",
+        body: "{invalid-json",
+        headers: {
+          "Content-Type": "application/json",
+          Origin: "http://localhost",
+        },
       },
-    });
+    );
 
     const response = await POST(request as never);
     const body = await response.json();
@@ -36,14 +42,17 @@ describe("/api/saju/draft POST", () => {
       gender: "MALE",
       timeUnknown: "",
     };
-    const request = new Request("http://localhost/api/saju/draft", {
-      method: "POST",
-      body: JSON.stringify(formValues),
-      headers: {
-        "Content-Type": "application/json",
-        Origin: "http://localhost",
+    const request = new Request(
+      new URL(SAJU_DRAFT_ENDPOINT_PATH, LOCAL_BASE_URL),
+      {
+        method: "POST",
+        body: JSON.stringify(formValues),
+        headers: {
+          "Content-Type": "application/json",
+          Origin: "http://localhost",
+        },
       },
-    });
+    );
 
     const response = await POST(request as never);
     const body = await response.json();

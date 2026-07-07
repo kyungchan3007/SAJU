@@ -1,13 +1,19 @@
 import { POST } from "@/app/api/auth/restore/decline/route";
+import { SAJU_AUTH_RESTORE_DECLINE_PATH } from "@/shared/config/endPoint";
 import { describe, expect, it } from "vitest";
 
+const SAME_ORIGIN_BASE_URL = "https://www.saju-me.com";
+
 function createSameOriginRequest() {
-  return new Request("https://www.saju-me.com/api/auth/restore/decline", {
-    method: "POST",
-    headers: {
-      Origin: "https://www.saju-me.com",
+  return new Request(
+    new URL(SAJU_AUTH_RESTORE_DECLINE_PATH, SAME_ORIGIN_BASE_URL),
+    {
+      method: "POST",
+      headers: {
+        Origin: SAME_ORIGIN_BASE_URL,
+      },
     },
-  });
+  );
 }
 
 describe("/api/auth/restore/decline POST", () => {
@@ -28,9 +34,12 @@ describe("/api/auth/restore/decline POST", () => {
 
   it("rejects requests without an origin header", async () => {
     const response = await POST(
-      new Request("https://www.saju-me.com/api/auth/restore/decline", {
-        method: "POST",
-      }),
+      new Request(
+        new URL(SAJU_AUTH_RESTORE_DECLINE_PATH, SAME_ORIGIN_BASE_URL),
+        {
+          method: "POST",
+        },
+      ),
     );
     const body = await response.json();
 
@@ -40,7 +49,7 @@ describe("/api/auth/restore/decline POST", () => {
       data: null,
       error: {
         code: "CSRF_ORIGIN_REQUIRED",
-        message: "Origin header is required for state-changing requests.",
+        message: "요청을 확인할 수 없습니다. 다시 시도해주세요.",
       },
     });
   });

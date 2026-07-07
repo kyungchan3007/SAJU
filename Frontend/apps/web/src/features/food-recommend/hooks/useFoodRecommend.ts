@@ -12,6 +12,7 @@ import {
   toDisplayFood,
   type DisplayFood,
 } from "@/features/food-recommend/model/food-recommend";
+import { SAJU_AUTH_REFRESH_PATH } from "@/shared/config/endPoint";
 import { useTurnstileErrorRedirect } from "@/shared/hooks/useTurnstileErrorRedirect";
 
 const AUTH_RECOVERY_ERROR_CODES = new Set([
@@ -62,7 +63,7 @@ export function useFoodRecommend(): UseFoodRecommendResult {
     setIsRetryingWithRefresh(true);
 
     try {
-      const response = await fetch("/api/auth/refresh", {
+      const response = await fetch(SAJU_AUTH_REFRESH_PATH, {
         method: "POST",
         cache: "no-store",
       });

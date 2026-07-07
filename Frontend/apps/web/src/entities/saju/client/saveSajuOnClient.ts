@@ -1,11 +1,12 @@
 import type { SajuFormValues } from "@/features/saju-input/type/type";
 import type { ApiEnvelope } from "@/shared/api";
 import { SajuSaveClientError } from "@/entities/saju/client/sajuSaveClientError";
+import { SAJU_ENDPOINT_PATH } from "@/shared/config/endPoint";
 
 export async function saveSajuOnClient(
   formValues?: SajuFormValues,
 ): Promise<ApiEnvelope<unknown>> {
-  const response = await fetch("/api/saju", {
+  const response = await fetch(SAJU_ENDPOINT_PATH, {
     method: "POST",
     cache: "no-store",
     credentials: "include",

@@ -1,5 +1,8 @@
 import { POST } from "@/app/api/auth/logout/route";
+import { SAJU_AUTH_LOGOUT_PATH } from "@/shared/config/endPoint";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+
+const SAME_ORIGIN_BASE_URL = "https://www.saju-me.com";
 
 const mockedLogoutOnServer = vi.hoisted(() => vi.fn());
 
@@ -8,10 +11,10 @@ vi.mock("@/entities/auth/server/logoutOnServer", () => ({
 }));
 
 function createSameOriginRequest() {
-  return new Request("https://www.saju-me.com/api/auth/logout", {
+  return new Request(new URL(SAJU_AUTH_LOGOUT_PATH, SAME_ORIGIN_BASE_URL), {
     method: "POST",
     headers: {
-      Origin: "https://www.saju-me.com",
+      Origin: SAME_ORIGIN_BASE_URL,
     },
   });
 }
@@ -70,7 +73,7 @@ describe("/api/auth/logout POST", () => {
 
   it("rejects requests without an origin header", async () => {
     const response = await POST(
-      new Request("https://www.saju-me.com/api/auth/logout", {
+      new Request(new URL(SAJU_AUTH_LOGOUT_PATH, SAME_ORIGIN_BASE_URL), {
         method: "POST",
       }),
     );

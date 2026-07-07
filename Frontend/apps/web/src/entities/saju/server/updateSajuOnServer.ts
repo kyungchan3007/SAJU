@@ -3,8 +3,7 @@ import "server-only";
 import type { SajuRequest, SajuResponse } from "@/generated/api";
 import { authenticatedBackendFetch } from "@/shared/api/auth/authenticatedBackendFetch";
 import { parseBackendApiResponse } from "@/shared/api/backend/parseBackendApiResponse";
-
-const SAJU_ME_PATH = "/api/saju/me";
+import { SAJU_ME_ENDPOINT_PATH } from "@/shared/config/endPoint";
 
 type UpdateSajuSuccess = {
   success: true;
@@ -22,7 +21,7 @@ export type UpdateSajuResult = UpdateSajuSuccess | UpdateSajuFailure;
 export async function updateSajuOnServer(
   payload: SajuRequest,
 ): Promise<UpdateSajuResult> {
-  const result = await authenticatedBackendFetch(SAJU_ME_PATH, {
+  const result = await authenticatedBackendFetch(SAJU_ME_ENDPOINT_PATH, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),

@@ -1,5 +1,8 @@
 import { GET } from "@/app/api/auth/kakao/callback/route";
+import { KAKAO_LOGIN_CALLBACK_PATH } from "@/shared/config/endPoint";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+
+const LOCAL_BASE_URL = "http://localhost";
 
 const mockedExchangeOAuthCodeOnServer = vi.hoisted(() => vi.fn());
 const mockedGetServerEnv = vi.hoisted(() => vi.fn());
@@ -36,6 +39,13 @@ function createRequest(
   } as never;
 }
 
+function createCallbackRequest(search: string, redirectCookie?: string) {
+  return createRequest(
+    `${new URL(KAKAO_LOGIN_CALLBACK_PATH, LOCAL_BASE_URL)}${search}`,
+    redirectCookie,
+  );
+}
+
 describe("/api/auth/kakao/callback GET", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -47,9 +57,7 @@ describe("/api/auth/kakao/callback GET", () => {
   });
 
   it("redirects to missing_code when code query is absent", async () => {
-    const response = await GET(
-      createRequest("http://localhost/api/auth/kakao/callback?state=state-1"),
-    );
+    const response = await GET(createCallbackRequest("?state=state-1"));
 
     expect(response.status).toBe(307);
     expect(response.headers.get("location")).toBe(
@@ -59,9 +67,7 @@ describe("/api/auth/kakao/callback GET", () => {
   });
 
   it("rejects callback when oauth state is missing", async () => {
-    const response = await GET(
-      createRequest("http://localhost/api/auth/kakao/callback?code=abc"),
-    );
+    const response = await GET(createCallbackRequest("?code=abc"));
     const setCookie = response.headers.get("set-cookie") ?? "";
 
     expect(response.status).toBe(307);
@@ -75,9 +81,7 @@ describe("/api/auth/kakao/callback GET", () => {
 
   it("rejects callback when oauth state does not match cookie", async () => {
     const response = await GET(
-      createRequest(
-        "http://localhost/api/auth/kakao/callback?code=abc&state=other-state",
-      ),
+      createCallbackRequest("?code=abc&state=other-state"),
     );
 
     expect(response.status).toBe(307);
@@ -91,9 +95,7 @@ describe("/api/auth/kakao/callback GET", () => {
     mockedExchangeOAuthCodeOnServer.mockResolvedValue({ success: false });
 
     const response = await GET(
-      createRequest(
-        "http://localhost/api/auth/kakao/callback?code=abc&state=state-1",
-      ),
+      createCallbackRequest("?code=abc&state=state-1"),
     );
 
     expect(response.status).toBe(307);
@@ -114,9 +116,7 @@ describe("/api/auth/kakao/callback GET", () => {
     });
 
     const response = await GET(
-      createRequest(
-        "http://localhost/api/auth/kakao/callback?code=abc&state=state-1",
-      ),
+      createCallbackRequest("?code=abc&state=state-1"),
     );
     const setCookie = response.headers.get("set-cookie") ?? "";
 
@@ -139,9 +139,7 @@ describe("/api/auth/kakao/callback GET", () => {
     });
 
     const response = await GET(
-      createRequest(
-        "http://localhost/api/auth/kakao/callback?code=abc&state=state-1",
-      ),
+      createCallbackRequest("?code=abc&state=state-1"),
     );
 
     expect(response.status).toBe(307);
@@ -159,10 +157,7 @@ describe("/api/auth/kakao/callback GET", () => {
     });
 
     const response = await GET(
-      createRequest(
-        "http://localhost/api/auth/kakao/callback?code=abc&state=state-1",
-        "/community",
-      ),
+      createCallbackRequest("?code=abc&state=state-1", "/community"),
     );
     const setCookie = response.headers.get("set-cookie") ?? "";
 
@@ -184,9 +179,7 @@ describe("/api/auth/kakao/callback GET", () => {
     });
 
     const response = await GET(
-      createRequest(
-        "http://localhost/api/auth/kakao/callback?code=abc&state=state-1",
-      ),
+      createCallbackRequest("?code=abc&state=state-1"),
     );
 
     expect(response.status).toBe(307);
@@ -199,9 +192,7 @@ describe("/api/auth/kakao/callback GET", () => {
     mockedExchangeOAuthCodeOnServer.mockRejectedValue(new Error("boom"));
 
     const response = await GET(
-      createRequest(
-        "http://localhost/api/auth/kakao/callback?code=abc&state=state-1",
-      ),
+      createCallbackRequest("?code=abc&state=state-1"),
     );
 
     expect(response.status).toBe(307);

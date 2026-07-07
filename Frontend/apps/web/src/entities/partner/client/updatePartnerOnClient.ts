@@ -1,11 +1,12 @@
 import type { PartnerRequest, PartnerResponse } from "@/generated/api";
 import type { ApiEnvelope } from "@/shared/api";
+import { getPartnerPath } from "@/shared/config/endPoint";
 
 export async function updatePartnerOnClient(
   partnerId: number,
   payload: PartnerRequest,
 ): Promise<ApiEnvelope<PartnerResponse | undefined>> {
-  const response = await fetch(`/api/partners/${partnerId}`, {
+  const response = await fetch(getPartnerPath(partnerId), {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),

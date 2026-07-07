@@ -1,6 +1,10 @@
 import { useState } from "react";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
+import {
+  SAJU_AUTH_RESTORE_DECLINE_PATH,
+  SAJU_AUTH_RESTORE_PATH,
+} from "@/shared/config/endPoint";
 
 export function useRestoreAccount() {
   const router = useRouter();
@@ -11,7 +15,7 @@ export function useRestoreAccount() {
     setIsPending(true);
     setError(null);
     try {
-      const res = await fetch("/api/auth/restore", { method: "POST" });
+      const res = await fetch(SAJU_AUTH_RESTORE_PATH, { method: "POST" });
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
         setError(
@@ -30,7 +34,7 @@ export function useRestoreAccount() {
   function handleSkip() {
     setIsPending(true);
     setError(null);
-    fetch("/api/auth/restore/decline", { method: "POST" })
+    fetch(SAJU_AUTH_RESTORE_DECLINE_PATH, { method: "POST" })
       .catch(() => {
         // Ignore decline errors and move user out of restore flow.
       })

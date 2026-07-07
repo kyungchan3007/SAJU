@@ -1,5 +1,8 @@
 import { POST } from "@/app/api/saju/route";
+import { SAJU_ENDPOINT_PATH } from "@/shared/config/endPoint";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+
+const LOCAL_BASE_URL = "http://localhost";
 
 const mockedCookies = vi.hoisted(() => vi.fn());
 const mockedOnSajuPostOnServer = vi.hoisted(() => vi.fn());
@@ -26,7 +29,7 @@ function encodeCookiePayload(payload: unknown): string {
 }
 
 function createJsonRequest(body: unknown) {
-  return new Request("http://localhost/api/saju", {
+  return new Request(new URL(SAJU_ENDPOINT_PATH, LOCAL_BASE_URL), {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -37,7 +40,7 @@ function createJsonRequest(body: unknown) {
 }
 
 function createEmptyRequest() {
-  return new Request("http://localhost/api/saju", {
+  return new Request(new URL(SAJU_ENDPOINT_PATH, LOCAL_BASE_URL), {
     method: "POST",
     headers: { Origin: "http://localhost" },
   });

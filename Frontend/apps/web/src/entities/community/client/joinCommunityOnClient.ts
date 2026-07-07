@@ -1,11 +1,12 @@
 import type { CommunityJoinRequest, CommunityJoinResponse } from "@/generated/api";
 import type { ApiEnvelope } from "@/shared/api";
 import { ApiRequestError } from "@/shared/api/requestError";
+import { COMMUNITY_JOIN_ENDPOINT_PATH } from "@/shared/config/endPoint";
 
 export async function joinCommunityOnClient(
   payload: CommunityJoinRequest,
 ): Promise<ApiEnvelope<CommunityJoinResponse | undefined>> {
-  const response = await fetch("/api/community/join", {
+  const response = await fetch(COMMUNITY_JOIN_ENDPOINT_PATH, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),

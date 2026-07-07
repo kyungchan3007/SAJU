@@ -1,10 +1,11 @@
 import type { SajuRequest, SajuResponse } from "@/generated/api";
 import type { ApiEnvelope } from "@/shared/api";
+import { SAJU_ME_ENDPOINT_PATH } from "@/shared/config/endPoint";
 
 export async function updateSajuProfileOnClient(
   payload: SajuRequest,
 ): Promise<ApiEnvelope<SajuResponse | undefined>> {
-  const response = await fetch("/api/saju/me", {
+  const response = await fetch(SAJU_ME_ENDPOINT_PATH, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),

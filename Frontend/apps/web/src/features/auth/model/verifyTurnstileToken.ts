@@ -1,3 +1,5 @@
+import { SAJU_AUTH_TURNSTILE_VERIFY_PATH } from "@/shared/config/endPoint";
+
 type TurnstileVerifyResult =
   | { success: true }
   | {
@@ -32,7 +34,7 @@ export async function verifyTurnstileToken(
   }, TURNSTILE_VERIFY_TIMEOUT_MS);
 
   try {
-    const response = await fetch("/api/auth/turnstile-verify", {
+    const response = await fetch(SAJU_AUTH_TURNSTILE_VERIFY_PATH, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ token }),

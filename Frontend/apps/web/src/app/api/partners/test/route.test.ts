@@ -1,5 +1,8 @@
 import { GET, POST } from "@/app/api/partners/route";
+import { SAJU_PARTNERS_PATH } from "@/shared/config/endPoint";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+
+const LOCAL_BASE_URL = "http://localhost";
 
 const mockedGetPartnersOnServer = vi.hoisted(() => vi.fn());
 const mockedRegisterPartnerOnServer = vi.hoisted(() => vi.fn());
@@ -60,7 +63,7 @@ describe("/api/partners route handlers", () => {
   });
 
   it("POST returns mapped error on invalid body", async () => {
-    const request = new Request("http://localhost/api/partners", {
+    const request = new Request(new URL(SAJU_PARTNERS_PATH, LOCAL_BASE_URL), {
       method: "POST",
       body: "{invalid",
       headers: {
@@ -89,7 +92,7 @@ describe("/api/partners route handlers", () => {
       data: { id: 2, name: "B" },
     });
 
-    const request = new Request("http://localhost/api/partners", {
+    const request = new Request(new URL(SAJU_PARTNERS_PATH, LOCAL_BASE_URL), {
       method: "POST",
       body: JSON.stringify({
         name: "B",

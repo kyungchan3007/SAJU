@@ -41,7 +41,7 @@ test.describe("public preview pages", () => {
       page.getByRole("heading", { name: "오행 분포도" }),
     ).toBeVisible();
     await expect(
-      page.getByRole("link", { name: "정통사주 보러가기" }),
+      page.getByRole("link", { name: "정통사주 풀이 보러가기" }),
     ).toHaveAttribute("href", "/mypage/traditional-fortune");
     await expectNoHorizontalOverflow(page);
   });

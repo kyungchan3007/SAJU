@@ -1,10 +1,11 @@
 import type { TraditionalFortuneResponse } from "@/generated/api";
 import type { ApiEnvelope } from "@/shared/api";
+import { SAJU_TRADITIONAL_FORTUNE_BFF_PATH } from "@/shared/config/endPoint";
 
 export async function fetchTraditionalFortuneOnClient(): Promise<
   ApiEnvelope<TraditionalFortuneResponse | undefined>
 > {
-  const response = await fetch("/api/saju/traditional-fortune", {
+  const response = await fetch(SAJU_TRADITIONAL_FORTUNE_BFF_PATH, {
     method: "GET",
   });
 

@@ -1,4 +1,5 @@
 import { GET } from "@/app/api/saju/traditional/route";
+import { SAJU_TRADITIONAL_BFF_PATH } from "@/shared/config/endPoint";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mockedCookies = vi.hoisted(() => vi.fn());
@@ -25,7 +26,9 @@ function createCookieStore(values: Record<string, string>) {
   };
 }
 
-const mockRequest = new Request("http://localhost/api/saju/traditional");
+const mockRequest = new Request(
+  new URL(SAJU_TRADITIONAL_BFF_PATH, "http://localhost"),
+);
 
 describe("/api/saju/traditional GET", () => {
   beforeEach(() => {
