@@ -8,6 +8,8 @@ export const API_ERROR_MESSAGES = {
   INVALID_REQUEST_BODY: "요청 정보를 다시 확인해주세요.",
   INVALID_PARTNER_ID: "대상 정보를 다시 확인해주세요.",
   INVALID_NOTIFICATION_ID: "알림 정보를 다시 확인해주세요.",
+  INVALID_COHORT_ID: "대상 정보를 다시 확인해주세요.",
+  INVALID_NICKNAME: "닉네임을 다시 확인해주세요.",
   INVALID_LOCATION_SEARCH_QUERY: "위치 검색 조건을 다시 확인해주세요.",
   CSRF_ORIGIN_REQUIRED: "요청을 확인할 수 없습니다. 다시 시도해주세요.",
   CSRF_ORIGIN_MISMATCH: "허용되지 않은 요청입니다.",
@@ -44,12 +46,18 @@ export const API_ERROR_MESSAGES = {
     "궁합 결과를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.",
   COMPATIBILITY_GET_FAILED:
     "궁합 결과를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.",
-  COMMUNITY_COHORTS_GET_FAILED:
-    "커뮤니티 정보를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.",
+  COMMUNITY_CURRENT_COHORT_GET_FAILED:
+    "현재 모집 중인 기수를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.",
   COMMUNITY_INTERESTS_GET_FAILED:
     "관심사 정보를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.",
+  COMMUNITY_MEMBERSHIPS_GET_FAILED:
+    "커뮤니티 신청 내역을 불러오지 못했습니다. 잠시 후 다시 시도해주세요.",
+  COMMUNITY_NICKNAME_CHECK_FAILED:
+    "닉네임 중복 여부를 확인하지 못했습니다. 잠시 후 다시 시도해주세요.",
   COMMUNITY_JOIN_FAILED:
     "커뮤니티 신청을 처리하지 못했습니다. 잠시 후 다시 시도해주세요.",
+  COMMUNITY_CANCEL_FAILED:
+    "커뮤니티 신청 취소를 처리하지 못했습니다. 잠시 후 다시 시도해주세요.",
   FOOD_RECOMMEND_GET_FAILED:
     "음식 추천을 불러오지 못했습니다. 잠시 후 다시 시도해주세요.",
   PLACE_RECOMMEND_GET_FAILED:

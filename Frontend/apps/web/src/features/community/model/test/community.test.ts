@@ -1,68 +1,31 @@
 import {
-  buildCommunityJoinPayload,
   canSelectCommunityTopic,
-  getCommunityJoinedCount,
   isCommunityInterestSelectionValid,
-  isCommunityContactFormValid,
-  normalizeCommunityPhoneNumber,
-  shouldShowCommunityJoinedCount,
 } from "@/features/community/model/community";
+import {
+  buildCommunityJoinRequest,
+  formatCommunityFee,
+  getActiveCommunityMembership,
+  isCommunityApplicationFormValid,
+  isCommunityNicknameValid,
+  normalizeCommunityAccountNumber,
+  resolveCommunityDepositAccount,
+  resolveCommunityJoinCohortId,
+  resolveCommunityMeetingInfo,
+  type CommunityApplicationForm,
+} from "@/features/community/model/community-application";
 import { describe, expect, it } from "vitest";
 
-describe("community join form helpers", () => {
-  it("normalizes phone numbers for the join API", () => {
-    expect(normalizeCommunityPhoneNumber("010-1234-5678")).toBe("01012345678");
-    expect(normalizeCommunityPhoneNumber("010 9876 5432")).toBe("01098765432");
-  });
+const VALID_APPLICATION_FORM: CommunityApplicationForm = {
+  depositorName: " 홍길동 ",
+  refundBankName: " ○○은행 ",
+  refundAccountNumber: "000-000-000000",
+  refundAccountHolder: " 홍길동 ",
+  agreed: true,
+  privacyConsent: true,
+};
 
-  it("builds join payload with the active cohort id", () => {
-    expect(
-      buildCommunityJoinPayload({
-        nickname: " 햇살 ",
-        ageGroup: "20대",
-        phone: "010-1234-5678",
-        agreedToPrivacy: true,
-      }, "friend", ["한강 산책", "카페가기"]),
-    ).toEqual({
-      cohortId: 1,
-      nickname: "햇살",
-      ageGroup: "20대",
-      phoneNumber: "01012345678",
-      privacyConsent: true,
-      interestType: "친구모임",
-      interestOptions: ["한강 산책", "카페가기"],
-    });
-  });
-
-  it("validates required contact fields", () => {
-    expect(
-      isCommunityContactFormValid({
-        nickname: "햇살",
-        ageGroup: "20대",
-        phone: "010-1234-5678",
-        agreedToPrivacy: true,
-      }),
-    ).toBe(true);
-
-    expect(
-      isCommunityContactFormValid({
-        nickname: "",
-        ageGroup: "20대",
-        phone: "010-1234-5678",
-        agreedToPrivacy: true,
-      }),
-    ).toBe(false);
-
-    expect(
-      isCommunityContactFormValid({
-        nickname: "햇살",
-        ageGroup: "20대",
-        phone: "010-1234-5678",
-        agreedToPrivacy: false,
-      }),
-    ).toBe(false);
-  });
-
+describe("community topic helpers", () => {
   it("validates interest selection count", () => {
     expect(isCommunityInterestSelectionValid("friend", ["한강 산책"])).toBe(true);
     expect(isCommunityInterestSelectionValid("friend", [])).toBe(false);
@@ -86,22 +49,114 @@ describe("community join form helpers", () => {
   });
 });
 
-describe("community cohort count helpers", () => {
-  it("uses the joined cohort count when available", () => {
-    const count = getCommunityJoinedCount(
-      [
-        { cohortId: 1, name: "1기", capacity: 30, currentCount: 18 },
-        { cohortId: 2, name: "2기", capacity: 30, currentCount: 23 },
-      ],
-      { cohortId: 2 },
-    );
-
-    expect(count).toBe(23);
+describe("community rotation application helpers", () => {
+  it("validates the nickname", () => {
+    expect(isCommunityNicknameValid("햇살")).toBe(true);
+    expect(isCommunityNicknameValid("   ")).toBe(false);
+    expect(isCommunityNicknameValid("")).toBe(false);
   });
 
-  it("shows public count only after threshold", () => {
-    expect(shouldShowCommunityJoinedCount(19)).toBe(false);
-    expect(shouldShowCommunityJoinedCount(20)).toBe(true);
-    expect(shouldShowCommunityJoinedCount(null)).toBe(false);
+  it("normalizes refund account numbers to digits", () => {
+    expect(normalizeCommunityAccountNumber("000-000-000000")).toBe("000000000000");
+    expect(normalizeCommunityAccountNumber("우리 1002 123 456")).toBe("1002123456");
+  });
+
+  it("validates the deposit/refund application form", () => {
+    expect(isCommunityApplicationFormValid(VALID_APPLICATION_FORM)).toBe(true);
+    expect(
+      isCommunityApplicationFormValid({
+        ...VALID_APPLICATION_FORM,
+        agreed: false,
+      }),
+    ).toBe(false);
+    expect(
+      isCommunityApplicationFormValid({
+        ...VALID_APPLICATION_FORM,
+        privacyConsent: false,
+      }),
+    ).toBe(false);
+    expect(
+      isCommunityApplicationFormValid({
+        ...VALID_APPLICATION_FORM,
+        refundAccountNumber: "123",
+      }),
+    ).toBe(false);
+    expect(
+      isCommunityApplicationFormValid({
+        ...VALID_APPLICATION_FORM,
+        depositorName: "  ",
+      }),
+    ).toBe(false);
+  });
+
+  it("builds the new join request with trimmed/normalized fields", () => {
+    expect(
+      buildCommunityJoinRequest(" 햇살 ", VALID_APPLICATION_FORM, 3),
+    ).toEqual({
+      cohortId: 3,
+      nickname: "햇살",
+      depositorName: "홍길동",
+      refundBankName: "○○은행",
+      refundAccountNumber: "000000000000",
+      refundAccountHolder: "홍길동",
+      refundPolicyAgreed: true,
+      privacyAgreed: true,
+    });
+  });
+
+  it("picks the active membership by status", () => {
+    expect(
+      getActiveCommunityMembership([
+        { memberId: 1, status: "CANCELLED" },
+        { memberId: 2, status: "APPLIED" },
+      ])?.memberId,
+    ).toBe(2);
+    expect(
+      getActiveCommunityMembership([{ memberId: 1, status: "REFUNDED" }]),
+    ).toBeNull();
+    expect(getActiveCommunityMembership([])).toBeNull();
+    expect(getActiveCommunityMembership(undefined)).toBeNull();
+  });
+
+  it("resolves the join cohort id, preferring the active cohort", () => {
+    expect(resolveCommunityJoinCohortId({ cohortId: 1, name: "1기" })).toBe(1);
+    expect(resolveCommunityJoinCohortId({ cohortId: 7, name: "7기" })).toBe(7);
+    expect(resolveCommunityJoinCohortId(undefined)).toBeNull();
+  });
+
+  it("formats the fee amount with a fallback", () => {
+    expect(formatCommunityFee(50000)).toBe("50,000원");
+    expect(formatCommunityFee(undefined)).toBe("50,000원~");
+  });
+
+  it("maps current cohort data to meeting info", () => {
+    expect(
+      resolveCommunityMeetingInfo({
+        cohortId: 3,
+        name: "3기",
+        feeAmount: 45000,
+        location: "성수",
+      }),
+    ).toMatchObject({
+      title: "3기",
+      stateLabel: "모집중",
+      placeLabel: "성수",
+      feeLabel: "45,000원",
+    });
+  });
+
+  it("maps current cohort data to deposit account info", () => {
+    expect(
+      resolveCommunityDepositAccount({
+        bankName: "카카오뱅크",
+        bankAccountNumber: "3333-12-1234567",
+        bankAccountHolder: "홍길동",
+        feeAmount: 45000,
+      }),
+    ).toEqual({
+      bankLabel: "카카오뱅크 3333-12-1234567",
+      holderLabel: "예금주 : 홍길동",
+      amountLabel: "금액 45,000원",
+    });
   });
 });

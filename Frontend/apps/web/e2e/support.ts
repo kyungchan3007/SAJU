@@ -36,6 +36,32 @@ type ApiMockOptions = {
   communityInterests?: CommunityInterestMock[];
   communityInterestsStatus?: number;
   communityInterestsErrorMessage?: string;
+  communityCurrentCohort?: {
+    cohortId?: number;
+    name?: string;
+    location?: string;
+    feeAmount?: number;
+    expiredAt?: string;
+    bankName?: string;
+    bankAccountNumber?: string;
+    bankAccountHolder?: string;
+  } | null;
+  communityCurrentCohortStatus?: number;
+  communityCurrentCohortErrorMessage?: string;
+  communityMemberships?: Array<{
+    memberId: number;
+    cohortId?: number;
+    status?: string;
+    feeAmount?: number;
+    bankName?: string;
+    bankAccountNumber?: string;
+    bankAccountHolder?: string;
+  }>;
+  communityMembershipsStatus?: number;
+  communityMembershipsErrorMessage?: string;
+  communityNicknameCheckAvailable?: boolean;
+  communityNicknameCheckStatus?: number;
+  communityNicknameCheckErrorMessage?: string;
   personalityProfileResponse?: {
     status?: number;
     body: unknown;
@@ -141,6 +167,17 @@ export const defaultCommunityInterests: CommunityInterestMock[] = [
   },
 ];
 
+export const defaultCommunityCurrentCohort = {
+  cohortId: 1,
+  name: "1회차 로테이션 소개팅",
+  location: "강남",
+  feeAmount: 50000,
+  expiredAt: "2026-08-07T10:00:00.000Z",
+  bankName: "카카오뱅크",
+  bankAccountNumber: "3333-12-1234567",
+  bankAccountHolder: "사주미모임",
+};
+
 export const defaultDailyResult: DailyResultMock = {
   todayScore: 82,
   mood: "차분한 집중",
@@ -224,6 +261,11 @@ export async function mockCurrentProjectApis(
   let notifications = options.notifications ?? [...defaultNotifications];
   const communityInterests =
     options.communityInterests ?? defaultCommunityInterests;
+  const communityCurrentCohort =
+    options.communityCurrentCohort === undefined
+      ? defaultCommunityCurrentCohort
+      : options.communityCurrentCohort;
+  const communityMemberships = options.communityMemberships ?? [];
   const personalityResponse = options.personalityProfileResponse ?? {
     status: 200,
     headers: {
@@ -383,7 +425,13 @@ export async function mockCurrentProjectApis(
         data: {
           memberId: 55,
           cohortId: 1,
-          joinDate: "2026년 05월 30일",
+          feeAmount: communityCurrentCohort?.feeAmount ?? 50000,
+          bankName: communityCurrentCohort?.bankName ?? "카카오뱅크",
+          bankAccountNumber:
+            communityCurrentCohort?.bankAccountNumber ?? "3333-12-1234567",
+          bankAccountHolder:
+            communityCurrentCohort?.bankAccountHolder ?? "사주미모임",
+          joinDate: "2026년 07월 08일",
           message: "커뮤니티에 참가 신청이 완료되었습니다.",
         },
         error: null,
@@ -391,13 +439,99 @@ export async function mockCurrentProjectApis(
     });
   });
 
-  await page.route("**/api/community/cohorts", async (route) => {
+  await page.route("**/api/community/cohorts/current", async (route) => {
+    const status = options.communityCurrentCohortStatus ?? 200;
+
+    if (status >= 400) {
+      await route.fulfill({
+        status,
+        contentType: "application/json",
+        body: JSON.stringify({
+          success: false,
+          data: null,
+          error: {
+            code: "COMMUNITY_CURRENT_COHORT_GET_FAILED",
+            message:
+              options.communityCurrentCohortErrorMessage ??
+              "현재 모집 중인 기수를 불러오지 못했어요.",
+          },
+        }),
+      });
+      return;
+    }
+
     await route.fulfill({
-      status: 200,
+      status,
       contentType: "application/json",
       body: JSON.stringify({
         success: true,
-        data: [{ cohortId: 1, name: "1기", capacity: 30, currentCount: 23 }],
+        data: communityCurrentCohort,
+        error: null,
+      }),
+    });
+  });
+
+  await page.route("**/api/community/members/me", async (route) => {
+    const status = options.communityMembershipsStatus ?? 200;
+
+    if (status >= 400) {
+      await route.fulfill({
+        status,
+        contentType: "application/json",
+        body: JSON.stringify({
+          success: false,
+          data: null,
+          error: {
+            code: "COMMUNITY_MEMBERSHIPS_GET_FAILED",
+            message:
+              options.communityMembershipsErrorMessage ??
+              "신청 상태를 불러오지 못했어요.",
+          },
+        }),
+      });
+      return;
+    }
+
+    await route.fulfill({
+      status,
+      contentType: "application/json",
+      body: JSON.stringify({
+        success: true,
+        data: communityMemberships,
+        error: null,
+      }),
+    });
+  });
+
+  await page.route("**/api/community/cohorts/*/nickname-check*", async (route) => {
+    const status = options.communityNicknameCheckStatus ?? 200;
+
+    if (status >= 400) {
+      await route.fulfill({
+        status,
+        contentType: "application/json",
+        body: JSON.stringify({
+          success: false,
+          data: null,
+          error: {
+            code: "COMMUNITY_NICKNAME_CHECK_FAILED",
+            message:
+              options.communityNicknameCheckErrorMessage ??
+              "닉네임 중복 확인에 실패했어요.",
+          },
+        }),
+      });
+      return;
+    }
+
+    await route.fulfill({
+      status,
+      contentType: "application/json",
+      body: JSON.stringify({
+        success: true,
+        data: {
+          available: options.communityNicknameCheckAvailable ?? true,
+        },
         error: null,
       }),
     });

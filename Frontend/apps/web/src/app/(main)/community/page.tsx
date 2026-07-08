@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { redirect } from "next/navigation";
 import { getProtectedPageAuthStateOnServer } from "@/entities/auth/server/getProtectedPageAuthStateOnServer";
 import { ProtectedSajuServiceGate } from "@/features/saju-profile/ui/protected-saju-service-gate";
@@ -31,7 +32,9 @@ export default async function CommunityPage() {
       <div className="mx-auto max-w-[1152px] px-4 py-8 md:px-8">
         <div className="min-w-0">
           <ProtectedSajuServiceGate servicePath="/community">
-            <CommunitySection />
+            <Suspense fallback={null}>
+              <CommunitySection />
+            </Suspense>
           </ProtectedSajuServiceGate>
         </div>
       </div>

@@ -1,43 +1,33 @@
 "use client";
 
-import { CommunityBottomBar } from "@/features/community/ui/community-bottom-bar";
+import { Button } from "@/shared/ui";
+import { CommunityApplicationDone } from "@/features/community/ui/community-application-done";
+import { CommunityApplicationView } from "@/features/community/ui/community-application-view";
 import { CommunityHero } from "@/features/community/ui/community-hero";
 import { SajuRecommendation } from "@/features/community/ui/saju-recommendation";
 import { StepContactForm } from "@/features/community/ui/step-contact-form";
-import { StepMeetingType } from "@/features/community/ui/step-meeting-type";
-import { StepProgress } from "@/features/community/ui/step-progress";
-import { StepTopics } from "@/features/community/ui/step-topics";
 import { useCommunityFlow } from "@/features/community/hooks/use-community-flow";
-
-const STEP_LABELS = ["만남 유형", "신청 정보", "관심 주제"];
 
 export function CommunitySection() {
   const flow = useCommunityFlow();
 
-  if (flow.submitted) {
+  if (flow.view === "done") {
+    return <CommunityApplicationDone completion={flow.completionView} />;
+  }
+
+  if (flow.view === "form") {
     return (
-      <div className="flex flex-col items-center justify-center gap-4 py-24 text-center">
-        <span className="text-[64px]">🎉</span>
-        <h2 className="text-[24px] font-black text-gray-900">
-          관심 신청 완료!
-        </h2>
-        {flow.shouldShowJoinedCount && flow.joinedCount !== null ? (
-          <div className="rounded-3xl bg-[#F0EEFF] px-6 py-4">
-            <p className="text-[15px] font-black text-[#5956E9]">
-              현재 {flow.joinedCount}명이 관심 신청했어요
-            </p>
-            <p className="mt-1 text-[12px] font-semibold text-[#6B7280]">
-              인원이 모이면 모임 오픈 안내를 보내드릴게요.
-            </p>
-          </div>
-        ) : (
-          <p className="text-[14px] leading-relaxed text-gray-500">
-            모임이 열리면 가장 먼저 알려드릴게요.
-            <br />
-            조금만 기다려주세요!
-          </p>
-        )}
-      </div>
+      <CommunityApplicationView
+        meeting={flow.meeting}
+        depositAccount={flow.depositAccount}
+        form={flow.form}
+        disabled={flow.hasActiveMembership || flow.isApplicationUnavailable}
+        isSubmitting={flow.isSubmitting}
+        errorMessage={flow.errorMessage}
+        onChange={flow.updateForm}
+        onSubmit={flow.submitApplication}
+        onPrev={flow.goBackToNickname}
+      />
     );
   }
 
@@ -47,50 +37,47 @@ export function CommunitySection() {
 
       <SajuRecommendation />
 
-      <section>
-        <StepProgress
-          currentStep={flow.step}
-          totalSteps={flow.totalSteps}
-          labels={STEP_LABELS}
-        />
-
-        <div
-          key={flow.step}
-          className="duration-300 animate-in fade-in-0 slide-in-from-bottom-2"
-        >
-          {flow.step === 1 && (
-            <StepMeetingType
-              selectedType={flow.selectedType}
-              onSelect={flow.setSelectedType}
-            />
-          )}
-          {flow.step === 2 && (
-            <StepContactForm form={flow.form} onChange={flow.updateForm} />
-          )}
-          {flow.step === 3 && (
-            <StepTopics
-              selectedType={flow.selectedType}
-              selectedTopics={flow.selectedTopics}
-              friendTopics={flow.friendTopics}
-              meetingTopics={flow.meetingTopics}
-              isLoadingTopics={flow.isLoadingTopics}
-              topicsError={flow.topicsError}
-              onToggle={flow.toggleTopic}
-            />
-          )}
-        </div>
-      </section>
-
-      <CommunityBottomBar
-        step={flow.step}
-        totalSteps={flow.totalSteps}
-        stepNote={flow.stepNote}
-        errorMessage={flow.errorMessage}
-        isSubmitting={flow.isSubmitting}
-        isCommunityJoined={flow.isCommunityJoined}
-        onNext={flow.goNext}
-        onPrev={flow.goPrev}
+      <StepContactForm
+        nickname={flow.nickname}
+        onChange={flow.updateNickname}
+        disabled={flow.hasActiveMembership || flow.isApplicationUnavailable}
+        checkStatus={flow.nicknameCheckStatus}
+        isChecking={flow.isCheckingNickname}
+        onCheck={flow.checkNickname}
       />
+
+      <div className="px-6">
+        <Button
+          type="button"
+          onClick={flow.goToForm}
+          disabled={
+            flow.hasActiveMembership ||
+            flow.isApplicationUnavailable ||
+            !flow.isNicknameAvailable
+          }
+          className="mx-auto flex h-[52px] w-full max-w-[400px] items-center justify-center rounded-2xl text-[15px] font-extrabold shadow-[0_4px_20px_rgba(89,86,233,0.30)] hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          {flow.hasActiveMembership
+            ? "이미 신청 완료"
+            : flow.isApplicationUnavailable
+              ? "신청기간이 아니에요!"
+              : "신청하기"}
+        </Button>
+        <p
+          className={`mt-1.5 text-center text-[11px] ${
+            flow.errorMessage ? "font-bold text-red-500" : "text-gray-400"
+          }`}
+        >
+          {flow.errorMessage ??
+            (flow.hasActiveMembership
+              ? "이미 신청이 접수되어 있어요. 상태는 마이페이지에서 확인해요."
+              : flow.isApplicationUnavailable
+                ? "아직 신청 가능한 회차가 열리지 않았어요."
+                : !flow.isNicknameAvailable
+                  ? "닉네임 중복 확인을 완료하면 신청할 수 있어요."
+                  : "신청하기를 눌러 다음 단계로 이동해요.")}
+        </p>
+      </div>
     </div>
   );
 }

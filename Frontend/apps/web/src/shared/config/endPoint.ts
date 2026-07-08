@@ -33,9 +33,15 @@ export const SAJU_USERS_ME_RESTORE_PATH = "/api/users/me/restore";
 export const SAJU_PARTNERS_PATH = "/api/partners";
 export const LOCATION_KEYWORDS_ENDPOINT_PATH = "/api/location";
 export const LOCATION_SEARCH_ENDPOINT_PATH = "/api/location/search";
-export const COMMUNITY_COHORTS_ENDPOINT_PATH = "/api/admin/community/cohorts";
-export const COMMUNITY_COHORTS_BFF_PATH = "/api/community/cohorts";
+export const COMMUNITY_CURRENT_COHORT_ENDPOINT_PATH =
+  "/api/community/cohorts/current";
+export const COMMUNITY_CURRENT_COHORT_BFF_PATH =
+  "/api/community/cohorts/current";
+export const COMMUNITY_MEMBERS_ME_ENDPOINT_PATH = "/api/community/members/me";
+export const COMMUNITY_MEMBERS_ME_BFF_PATH = "/api/community/members/me";
 export const COMMUNITY_JOIN_ENDPOINT_PATH = "/api/community/join";
+export const COMMUNITY_CANCEL_ENDPOINT_PATH = "/api/community/cancel";
+export const COMMUNITY_CANCEL_BFF_PATH = "/api/community/cancel";
 export const COMMUNITY_INTERESTS_ENDPOINT_PATH = "/api/community/interests";
 export const INQUIRIES_ENDPOINT_PATH = "/api/inquiries";
 export const NOTIFICATIONS_ENDPOINT_PATH = "/api/notifications";
@@ -53,4 +59,18 @@ export function getPartnerPath(partnerId: number | string) {
 
 export function getNotificationReadPath(notificationId: number | string) {
   return `${NOTIFICATIONS_READ_ENDPOINT_PATH}/${notificationId}/read`;
+}
+
+export function getCommunityNicknameCheckEndpointPath(
+  cohortId: number | string,
+  nickname: string,
+) {
+  return `/api/community/cohorts/${cohortId}/nickname-check?nickname=${encodeURIComponent(nickname)}`;
+}
+
+export function getCommunityNicknameCheckBffPath(
+  cohortId: number | string,
+  nickname: string,
+) {
+  return getCommunityNicknameCheckEndpointPath(cohortId, nickname);
 }

@@ -49,7 +49,7 @@ export function CommunityBottomBar({
               ? "요청 중.."
               : isLast
                 ? "커뮤니티 열리고 알림 받기"
-                : "다음으로"}
+                : "로테이션 신청하기"}
         </Button>
       </div>
       <p

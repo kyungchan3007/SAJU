@@ -28,7 +28,7 @@ description: BFF 경계 규칙, 서버 호출 구조, 현재 API 엔드포인트
 - 사주 기본/결과: `GET/POST /api/saju`, `POST /api/saju/draft`, `POST /api/saju/result`, `GET /api/saju/me`
 - 사주 보호 서비스: `GET /api/saju/traditional`, `GET /api/saju/traditional-fortune`, `GET /api/saju/me/year`, `GET /api/saju/me/personality`, `GET /api/saju/me/compatibility/[partnerId]`, `GET /api/saju/zodiac-compatibility`
 - 파트너/궁합: `GET/POST /api/partners`, `GET/PUT/DELETE /api/partners/[partnerId]`, `GET/POST /api/compatibility`
-- 커뮤니티: `GET /api/community/interests`, `GET /api/community/cohorts`, `POST /api/community/join`
+- 커뮤니티: `GET /api/community/interests`, `GET /api/community/cohorts/current`, `GET /api/community/cohorts/[cohortId]/nickname-check`, `GET /api/community/members/me`, `POST /api/community/join`, `POST /api/community/cancel`
 - 음식/위치: `GET /api/food/recommend`, `GET /api/location`, `POST /api/location`, `GET /api/location/search`
 - 기타: `POST /api/payment/verify`, `POST /api/inquiries`
 

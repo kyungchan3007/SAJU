@@ -1,16 +1,16 @@
 import { NextResponse } from "next/server";
 
-import { getCommunityCohortsOnServer } from "@/entities/community/server/getCommunityCohortsOnServer";
+import { getMyMembershipsOnServer } from "@/entities/community/server/getMyMembershipsOnServer";
 import { createErrorResponse, createSuccessResponse } from "@/shared/api";
 
 export const revalidate = 0;
 
 export async function GET() {
-  const result = await getCommunityCohortsOnServer();
+  const result = await getMyMembershipsOnServer();
 
   if (!result.success) {
     return NextResponse.json(
-      createErrorResponse("COMMUNITY_COHORTS_GET_FAILED", result.message),
+      createErrorResponse("COMMUNITY_MEMBERSHIPS_GET_FAILED", result.message),
       { status: result.status },
     );
   }

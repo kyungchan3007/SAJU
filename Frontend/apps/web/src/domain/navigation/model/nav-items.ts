@@ -36,7 +36,7 @@ export const NAV_ITEMS: NavItem[] = [
   { href: "/compatibility", label: "궁합", icon: Heart },
   { href: "/taro", label: "타로", icon: Wand2 },
   { href: "/food", label: "오늘의 메뉴", icon: UtensilsCrossed },
-  { href: "/community", label: "커뮤니티", icon: Users },
+  { href: "/community", label: "소개팅", icon: Users },
   { href: "/mypage", label: "마이", icon: User },
 ];
 

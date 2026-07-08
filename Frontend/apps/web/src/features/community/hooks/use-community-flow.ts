@@ -1,90 +1,166 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useEffect, useMemo, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { useAuthScope } from "@/shared/app-infra/query-provider/auth-scope-context";
-import { fetchCommunityCohortsOnClient } from "@/entities/community/client/fetchCommunityCohortsOnClient";
-import { fetchCommunityInterestsOnClient } from "@/entities/community/client/fetchCommunityInterestsOnClient";
+import { checkCommunityNicknameOnClient } from "@/entities/community/client/checkCommunityNicknameOnClient";
+import { fetchCurrentOpenCohortOnClient } from "@/entities/community/client/fetchCurrentOpenCohortOnClient";
+import { fetchMyMembershipsOnClient } from "@/entities/community/client/fetchMyMembershipsOnClient";
 import { joinCommunityOnClient } from "@/entities/community/client/joinCommunityOnClient";
-import { fetchSajuProfileOnClient } from "@/entities/saju/client/fetchSajuProfileOnClient";
+import { ApiRequestError } from "@/shared/api/requestError";
+import { resolveApiErrorMessage } from "@/shared/api/messages";
 import {
-  buildCommunityJoinPayload,
-  canSelectCommunityTopic,
-  getCommunityJoinedCount,
-  isCommunityContactFormValid,
-  isCommunityInterestSelectionValid,
-  mapCommunityTopicsByMeetingType,
-  resolveCommunityInterestType,
-  shouldShowCommunityJoinedCount,
-  type ContactForm,
-  type MeetingType,
-} from "@/features/community/model/community";
+  buildCommunityJoinRequest,
+  COMMUNITY_DEPOSIT_ACCOUNT,
+  formatCommunityFee,
+  getActiveCommunityMembership,
+  isCommunityApplicationFormValid,
+  isCommunityNicknameValid,
+  resolveCommunityDepositAccount,
+  resolveCommunityCompletionInfo,
+  resolveCommunityJoinCohortId,
+  resolveCommunityMeetingInfo,
+  type CommunityApplicationForm,
+  type CommunityNicknameCheckStatus,
+} from "@/features/community/model/community-application";
 import { useTurnstileErrorRedirect } from "@/shared/hooks/useTurnstileErrorRedirect";
 
-export type { ContactForm, MeetingType };
+export type { CommunityApplicationForm, CommunityNicknameCheckStatus };
 
-const TOTAL_STEPS = 3;
-const COMMUNITY_COHORTS_QUERY_KEY = ["community-cohorts"] as const;
-const COMMUNITY_INTERESTS_QUERY_KEY = ["community-interests"] as const;
-const SAJU_PROFILE_QUERY_KEY = ["saju-profile", "community-joined"] as const;
+export type CommunityFlowView = "nickname" | "form" | "done";
+
+const COMMUNITY_PATH = "/community";
+const COMMUNITY_CURRENT_COHORT_QUERY_KEY = ["community-current-cohort"] as const;
+const COMMUNITY_MEMBERSHIPS_QUERY_KEY = ["community-memberships"] as const;
+
+const EMPTY_APPLICATION_FORM: CommunityApplicationForm = {
+  depositorName: "",
+  refundBankName: "",
+  refundAccountNumber: "",
+  refundAccountHolder: "",
+  agreed: false,
+  privacyConsent: false,
+};
 
 export function useCommunityFlow() {
   const authScope = useAuthScope();
-  const redirectIfTurnstileRequired = useTurnstileErrorRedirect("/community");
-  const [step, setStep] = useState(1);
-  const [selectedType, setSelectedType] = useState<MeetingType>(null);
-  const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
-  const [form, setForm] = useState<ContactForm>({
-    nickname: "",
-    ageGroup: "",
-    phone: "",
-    agreedToPrivacy: false,
-  });
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const queryClient = useQueryClient();
+  const redirectIfTurnstileRequired = useTurnstileErrorRedirect(COMMUNITY_PATH);
+
+  const applyParam = searchParams.get("apply");
+
+  const [nickname, setNickname] = useState("");
+  const [form, setForm] = useState<CommunityApplicationForm>(
+    EMPTY_APPLICATION_FORM,
+  );
   const [submitted, setSubmitted] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [nicknameCheckStatus, setNicknameCheckStatus] =
+    useState<CommunityNicknameCheckStatus>("idle");
 
-  const sajuProfileQuery = useQuery({
-    queryKey: [...SAJU_PROFILE_QUERY_KEY, authScope],
-    queryFn: fetchSajuProfileOnClient,
-    staleTime: 5 * 60 * 1000,
-    gcTime: 30 * 60 * 1000,
-    retry: false,
-  });
-  const isCommunityJoined = Boolean(
-    sajuProfileQuery.data?.success && sajuProfileQuery.data.data?.communityJoined,
-  );
-  const shouldDisableCommunityAction =
-    sajuProfileQuery.isLoading ||
-    sajuProfileQuery.isError ||
-    !sajuProfileQuery.data?.success ||
-    isCommunityJoined;
-
-  const interestsQuery = useQuery({
-    queryKey: COMMUNITY_INTERESTS_QUERY_KEY,
-    queryFn: fetchCommunityInterestsOnClient,
-    staleTime: 5 * 60 * 1000,
-    gcTime: 30 * 60 * 1000,
+  const membershipsQuery = useQuery({
+    queryKey: [...COMMUNITY_MEMBERSHIPS_QUERY_KEY, authScope],
+    queryFn: fetchMyMembershipsOnClient,
+    staleTime: 60 * 1000,
+    gcTime: 5 * 60 * 1000,
     retry: 1,
+  });
+
+  const currentCohortQuery = useQuery({
+    queryKey: COMMUNITY_CURRENT_COHORT_QUERY_KEY,
+    queryFn: fetchCurrentOpenCohortOnClient,
+    staleTime: 30 * 1000,
+    gcTime: 5 * 60 * 1000,
+    retry: 1,
+  });
+
+  const activeMembership = useMemo(
+    () =>
+      getActiveCommunityMembership(
+        membershipsQuery.data?.success ? membershipsQuery.data.data : undefined,
+      ),
+    [membershipsQuery.data],
+  );
+  const hasActiveMembership = Boolean(activeMembership);
+  const currentCohort = useMemo(
+    () =>
+      currentCohortQuery.data?.success ? currentCohortQuery.data.data : undefined,
+    [currentCohortQuery.data],
+  );
+  const joinCohortId = useMemo(
+    () => resolveCommunityJoinCohortId(currentCohort),
+    [currentCohort],
+  );
+  const hasCurrentCohortLookupError =
+    currentCohortQuery.isError || !currentCohortQuery.data?.success;
+  const isApplicationUnavailable = joinCohortId === null;
+  const hasMembershipLookupError =
+    membershipsQuery.isError || !membershipsQuery.data?.success;
+  const defaultBlockedMessage = hasMembershipLookupError
+    ? "신청 상태를 확인하지 못했어요. 잠시 후 다시 시도해주세요."
+    : hasCurrentCohortLookupError
+      ? "현재 모집 중인 기수를 확인하지 못했어요. 잠시 후 다시 시도해주세요."
+    : isApplicationUnavailable
+      ? "아직 신청 가능한 회차가 열리지 않았어요."
+      : null;
+  const isNicknameAvailable = nicknameCheckStatus === "available";
+
+  const nicknameCheckMutation = useMutation({
+    mutationFn: async () => {
+      if (joinCohortId === null) {
+        throw new ApiRequestError(
+          "아직 신청 가능한 회차가 열리지 않았어요.",
+          "COMMUNITY_JOIN_FAILED",
+          400,
+        );
+      }
+
+      return checkCommunityNicknameOnClient(joinCohortId, nickname.trim());
+    },
+    onMutate: () => {
+      setNicknameCheckStatus("checking");
+      setErrorMessage(null);
+    },
+    onSuccess: (result) => {
+      if (result.success && result.data?.available) {
+        setNicknameCheckStatus("available");
+        setErrorMessage(null);
+        return;
+      }
+
+      setNicknameCheckStatus("duplicate");
+      setErrorMessage("이미 사용 중인 닉네임이에요. 다른 닉네임을 입력해주세요.");
+    },
+    onError: (error) => {
+      setNicknameCheckStatus("error");
+      setErrorMessage(
+        error instanceof ApiRequestError
+          ? resolveApiErrorMessage(error.code, error.message)
+          : resolveApiErrorMessage("COMMUNITY_NICKNAME_CHECK_FAILED"),
+      );
+    },
   });
 
   const joinMutation = useMutation({
     mutationFn: () =>
       joinCommunityOnClient(
-        buildCommunityJoinPayload(
+        buildCommunityJoinRequest(
+          nickname,
           form,
-          selectedType,
-          selectedTopics,
-          undefined,
-          resolveCommunityInterestType(
-            interestsQuery.data?.success ? interestsQuery.data.data : undefined,
-            selectedType,
-          ),
+          joinCohortId as number,
         ),
       ),
-    onSuccess: () => {
+    onSuccess: async () => {
       setSubmitted(true);
       setErrorMessage(null);
+      await queryClient.invalidateQueries({
+        queryKey: [...COMMUNITY_MEMBERSHIPS_QUERY_KEY, authScope],
+      });
+      router.replace(`${COMMUNITY_PATH}?apply=done`);
     },
     onError: (error) => {
       if (redirectIfTurnstileRequired(error)) {
@@ -92,135 +168,202 @@ export function useCommunityFlow() {
       }
 
       setErrorMessage(
-        error instanceof Error ? error.message : "커뮤니티 요청에 실패했어요.",
+        error instanceof ApiRequestError
+          ? resolveApiErrorMessage(error.code, error.message)
+          : resolveApiErrorMessage("COMMUNITY_JOIN_FAILED"),
       );
     },
   });
 
-  const cohortsQuery = useQuery({
-    queryKey: COMMUNITY_COHORTS_QUERY_KEY,
-    queryFn: fetchCommunityCohortsOnClient,
-    enabled: submitted,
-    staleTime: 30 * 1000,
-    gcTime: 5 * 60 * 1000,
-    retry: 1,
-  });
+  // 뷰 결정: 완료 > 신청폼 > 닉네임. 완료의 진실은 in-session 제출 or members/me.
+  const view: CommunityFlowView =
+    submitted || (applyParam === "done" && hasActiveMembership)
+      ? "done"
+      : applyParam === "form"
+        ? "form"
+        : "nickname";
 
-  const { friendTopics, meetingTopics } = useMemo(
-    () =>
-      mapCommunityTopicsByMeetingType(
-        interestsQuery.data?.success ? interestsQuery.data.data : undefined,
-      ),
-    [interestsQuery.data],
-  );
+  // 완료(입금대기) 화면에 바로 뿌릴 수 있는 표시 문자열로 가공.
+  const completionView = useMemo(() => {
+    const info = resolveCommunityCompletionInfo(
+      joinMutation.data?.success ? joinMutation.data.data : null,
+      activeMembership,
+    );
 
-  const joinedCount = useMemo(
-    () =>
-      getCommunityJoinedCount(
-        cohortsQuery.data?.success ? cohortsQuery.data.data : undefined,
-        joinMutation.data?.success ? joinMutation.data.data : null,
-      ),
-    [cohortsQuery.data, joinMutation.data],
-  );
-  const shouldShowJoinedCount = shouldShowCommunityJoinedCount(joinedCount);
+    return {
+      depositorName: form.depositorName,
+      feeLabel: formatCommunityFee(info.feeAmount),
+      bankLabel:
+        info.bankName && info.bankAccountNumber
+          ? `${info.bankName} ${info.bankAccountNumber}`
+          : COMMUNITY_DEPOSIT_ACCOUNT.bankLabel,
+      holderLabel: info.bankAccountHolder
+        ? `예금주 : ${info.bankAccountHolder}`
+        : COMMUNITY_DEPOSIT_ACCOUNT.holderLabel,
+    };
+  }, [joinMutation.data, activeMembership, form.depositorName]);
 
-  function goNext() {
+  // 신청폼을 직접/새로고침으로 진입했는데 닉네임이 없으면 닉네임 입력으로 되돌림
+  useEffect(() => {
+    if (applyParam === "form" && !submitted && !isCommunityNicknameValid(nickname)) {
+      router.replace(COMMUNITY_PATH);
+    }
+  }, [applyParam, submitted, nickname, router]);
+
+  function goToForm() {
     setErrorMessage(null);
 
-    if (sajuProfileQuery.isLoading) {
-      setErrorMessage("참가 상태를 확인 중이에요.");
+    if (membershipsQuery.isLoading) {
+      setErrorMessage("신청 상태를 확인 중이에요.");
       return;
     }
 
-    if (sajuProfileQuery.isError || !sajuProfileQuery.data?.success) {
-      setErrorMessage("참가 상태를 확인하지 못했어요. 잠시 후 다시 시도해주세요.");
+    if (hasMembershipLookupError) {
+      setErrorMessage("신청 상태를 확인하지 못했어요. 잠시 후 다시 시도해주세요.");
       return;
     }
 
-    if (isCommunityJoined) {
-      setErrorMessage("이미 커뮤니티 참가가 완료되었어요.");
+    if (hasActiveMembership) {
+      setErrorMessage("이미 신청이 접수되었어요.");
       return;
     }
 
-    if (step === 1 && !selectedType) {
-      setErrorMessage("참여할 만남 유형을 선택해주세요.");
+    if (hasCurrentCohortLookupError) {
+      setErrorMessage("현재 모집 중인 기수를 확인하지 못했어요. 잠시 후 다시 시도해주세요.");
       return;
     }
 
-    if (step === 2 && !isCommunityContactFormValid(form)) {
-      setErrorMessage("닉네임/연령대/연락처/개인정보 동의를 확인해주세요.");
+    if (isApplicationUnavailable) {
+      setErrorMessage("아직 신청 가능한 회차가 열리지 않았어요.");
       return;
     }
 
-    if (step < TOTAL_STEPS) {
-      setStep((s) => s + 1);
+    if (!isCommunityNicknameValid(nickname)) {
+      setErrorMessage("사용할 닉네임을 입력해주세요.");
       return;
     }
 
-    if (!isCommunityInterestSelectionValid(selectedType, selectedTopics)) {
-      setErrorMessage("관심 주제를 1~2개 선택해주세요.");
+    if (!isNicknameAvailable) {
+      setErrorMessage("닉네임 중복 확인을 완료해주세요.");
+      return;
+    }
+
+    router.push(`${COMMUNITY_PATH}?apply=form`);
+  }
+
+  function goBackToNickname() {
+    setErrorMessage(null);
+    router.push(COMMUNITY_PATH);
+  }
+
+  function updateNickname(value: string) {
+    setErrorMessage(null);
+    setNicknameCheckStatus((prev) =>
+      value.trim() === nickname.trim() ? prev : "idle",
+    );
+    setNickname(value);
+  }
+
+  function checkNickname() {
+    setErrorMessage(null);
+
+    if (hasMembershipLookupError) {
+      setErrorMessage("신청 상태를 확인하지 못했어요. 잠시 후 다시 시도해주세요.");
+      return;
+    }
+
+    if (hasActiveMembership) {
+      setErrorMessage("이미 신청이 접수되었어요.");
+      return;
+    }
+
+    if (hasCurrentCohortLookupError) {
+      setErrorMessage("현재 모집 중인 기수를 확인하지 못했어요. 잠시 후 다시 시도해주세요.");
+      return;
+    }
+
+    if (isApplicationUnavailable || joinCohortId === null) {
+      setErrorMessage("아직 신청 가능한 회차가 열리지 않았어요.");
+      return;
+    }
+
+    if (!isCommunityNicknameValid(nickname)) {
+      setErrorMessage("사용할 닉네임을 입력해주세요.");
+      return;
+    }
+
+    nicknameCheckMutation.mutate();
+  }
+
+  function updateForm(
+    field: keyof CommunityApplicationForm,
+    value: string | boolean,
+  ) {
+    setErrorMessage(null);
+    setForm((prev) => ({ ...prev, [field]: value }));
+  }
+
+  function submitApplication() {
+    setErrorMessage(null);
+
+    if (hasMembershipLookupError) {
+      setErrorMessage("신청 상태를 확인하지 못했어요. 잠시 후 다시 시도해주세요.");
+      return;
+    }
+
+    if (hasActiveMembership) {
+      setErrorMessage("이미 신청이 접수되었어요.");
+      return;
+    }
+
+    if (hasCurrentCohortLookupError) {
+      setErrorMessage("현재 모집 중인 기수를 확인하지 못했어요. 잠시 후 다시 시도해주세요.");
+      return;
+    }
+
+    if (isApplicationUnavailable || joinCohortId === null) {
+      setErrorMessage("아직 신청 가능한 회차가 열리지 않았어요.");
+      return;
+    }
+
+    if (!isCommunityNicknameValid(nickname)) {
+      setErrorMessage("사용할 닉네임을 입력해주세요.");
+      return;
+    }
+
+    if (!isNicknameAvailable) {
+      setErrorMessage("닉네임 중복 확인을 완료해주세요.");
+      return;
+    }
+
+    if (!isCommunityApplicationFormValid(form)) {
+      setErrorMessage("입금자명·환불계좌·동의 여부를 확인해주세요.");
       return;
     }
 
     joinMutation.mutate();
   }
 
-  function goPrev() {
-    setErrorMessage(null);
-    if (step > 1) setStep((s) => s - 1);
-  }
-
-  function toggleTopic(topic: string) {
-    if (!canSelectCommunityTopic(selectedTopics, topic)) {
-      setErrorMessage("관심 주제는 최대 2개까지 선택할 수 있어요.");
-      return;
-    }
-
-    setErrorMessage(null);
-    setSelectedTopics((prev) =>
-      prev.includes(topic)
-        ? prev.filter((t) => t !== topic)
-        : [...prev, topic],
-    );
-  }
-
-  function updateForm(field: keyof ContactForm, value: string | boolean) {
-    setForm((prev) => ({ ...prev, [field]: value }));
-  }
-
-  const stepNotes = [
-    "만남 유형을 고르면 다음 단계로 넘어가요.",
-    "기본 정보를 입력하면 다음 단계로 넘어가요.",
-    "관심 주제를 고르고 신청해주세요.",
-  ];
-
   return {
-    step,
-    totalSteps: TOTAL_STEPS,
-    selectedType,
-    setSelectedType,
-    selectedTopics,
-    friendTopics,
-    meetingTopics,
-    isLoadingTopics: interestsQuery.isLoading,
-    topicsError:
-      interestsQuery.isError || !interestsQuery.data?.success
-        ? "관심 주제 목록을 불러오지 못했어요."
-        : null,
-    toggleTopic,
+    view,
+    meeting: resolveCommunityMeetingInfo(currentCohort),
+    depositAccount: resolveCommunityDepositAccount(currentCohort),
+    nickname,
+    nicknameCheckStatus,
+    isCheckingNickname: nicknameCheckMutation.isPending,
+    isNicknameAvailable,
+    checkNickname,
+    updateNickname,
     form,
     updateForm,
-    submitted,
-    joinedCount,
-    shouldShowJoinedCount,
-    isLoadingJoinedCount: cohortsQuery.isLoading,
+    completionView,
+    hasActiveMembership,
+    isApplicationUnavailable,
+    isCheckingMembership: membershipsQuery.isLoading,
     isSubmitting: joinMutation.isPending,
-    isCommunityJoined: shouldDisableCommunityAction,
-    errorMessage,
-    goNext,
-    goPrev,
-    stepNote: isCommunityJoined
-      ? "이미 커뮤니티에 참가한 상태예요."
-      : stepNotes[step - 1],
+    errorMessage: errorMessage ?? defaultBlockedMessage,
+    goToForm,
+    goBackToNickname,
+    submitApplication,
   };
 }
