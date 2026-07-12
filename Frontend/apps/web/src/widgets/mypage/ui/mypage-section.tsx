@@ -1,6 +1,7 @@
 import {
   MypageBanner,
   MypageAllMenu,
+  MyApplicationSection,
   MypageManagement,
   MypageInfo,
   MYPAGE_MANAGEMENT_ITEMS,
@@ -15,6 +16,9 @@ export function MypageSection() {
 
       {/* 전체 메뉴 */}
       <MypageAllMenu />
+
+      {/* 커뮤니티 신청 내역 */}
+      <MyApplicationSection />
 
       {/* 관리 + 안내 (md: 2열) */}
       <div className="grid grid-cols-1 gap-8 md:grid-cols-2">

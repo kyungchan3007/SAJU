@@ -27,7 +27,12 @@ description: /community 참여 플로우, 관련 BFF, 상태 관리 규칙
 - 현재 열린 기수 조회, 내 신청 상태 조회, 닉네임 중복 확인, 참가 요청은 `entities/community/client/*`를 통해 각 BFF를 호출한다.
 - 참가 가능 여부 판단은 `fetchMyMembershipsOnClient`의 활성 membership과 `fetchCurrentOpenCohortOnClient` 결과를 함께 기준으로 처리한다.
 - join payload 생성, fee/deposit fallback, 현재 기수 표시 가공은 `features/community/model/community-application.ts`에 둔다.
+- `community-memberships`, `community-current-cohort` query key는 `/community`와 `/mypage`가 함께 쓰므로 `entities/community/model/query.ts`에서 공용 관리한다.
 - Turnstile 오류 재진입은 `useTurnstileErrorRedirect("/community")` 규칙을 유지한다.
+- 신청 취소/환불 요청 비즈니스 로직은 `features/community/hooks/use-community-membership-cancel.ts`에 둔다.
+- 해당 훅은 UI 상태(모달 open/close, CTA 문구)를 가지지 않고 취소 가능 여부, 취소 실행, Turnstile 재진입, 캐시 무효화만 담당한다.
+- 취소 훅의 Turnstile 복귀 경로는 훅 내부에 하드코딩하지 않고 호출부에서 `returnTo`로 주입한다.
+- 취소 가능 상태는 `APPLIED`, `DEPOSIT_CONFIRMED`만 허용하고, 성공 시 `community-memberships` 캐시를 무효화한다.
 
 ## 관계 규칙
 

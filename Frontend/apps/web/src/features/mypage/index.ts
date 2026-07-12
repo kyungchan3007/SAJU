@@ -3,6 +3,7 @@ export { MypageSajuSummary } from "./ui/mypage/mypage-saju-summary";
 export { MypageSidebar } from "./ui/mypage/mypage-sidebar";
 export { MypageBanner } from "./ui/mypage/mypage-banner";
 export { MypageAllMenu } from "./ui/mypage/mypage-all-menu";
+export { MyApplicationSection } from "./ui/community-application/my-application-section";
 export { MypageManagement } from "./ui/mypage/mypage-management";
 export { MypageInfo } from "./ui/mypage/mypage-info";
 export { AccountLoginInfo } from "./ui/account/account-login-info";

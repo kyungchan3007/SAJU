@@ -59,6 +59,8 @@ type ApiMockOptions = {
   }>;
   communityMembershipsStatus?: number;
   communityMembershipsErrorMessage?: string;
+  communityCancelStatus?: number;
+  communityCancelErrorMessage?: string;
   communityNicknameCheckAvailable?: boolean;
   communityNicknameCheckStatus?: number;
   communityNicknameCheckErrorMessage?: string;
@@ -73,6 +75,7 @@ type ApiMockOptions = {
   onPartnerDelete?: (partnerId: number) => void;
   onNotificationRead?: (notificationId: number) => void;
   onCommunityJoin?: (payload: unknown) => void;
+  onCommunityCancel?: (payload: unknown) => void;
 };
 
 type DailyResultMock = {
@@ -265,7 +268,7 @@ export async function mockCurrentProjectApis(
     options.communityCurrentCohort === undefined
       ? defaultCommunityCurrentCohort
       : options.communityCurrentCohort;
-  const communityMemberships = options.communityMemberships ?? [];
+  let communityMemberships = [...(options.communityMemberships ?? [])];
   const personalityResponse = options.personalityProfileResponse ?? {
     status: 200,
     headers: {
@@ -498,6 +501,70 @@ export async function mockCurrentProjectApis(
       body: JSON.stringify({
         success: true,
         data: communityMemberships,
+        error: null,
+      }),
+    });
+  });
+
+  await page.route("**/api/community/cancel", async (route) => {
+    const payload = route.request().postDataJSON();
+    options.onCommunityCancel?.(payload);
+
+    const status = options.communityCancelStatus ?? 200;
+
+    if (status >= 400) {
+      await route.fulfill({
+        status,
+        contentType: "application/json",
+        body: JSON.stringify({
+          success: false,
+          data: null,
+          error: {
+            code:
+              status === 403
+                ? "TURNSTILE_REQUIRED"
+                : "COMMUNITY_CANCEL_FAILED",
+            message:
+              options.communityCancelErrorMessage ??
+              (status === 403
+                ? "보안 인증이 필요합니다."
+                : "커뮤니티 신청 취소를 처리하지 못했습니다."),
+          },
+        }),
+      });
+      return;
+    }
+
+    const memberId =
+      payload &&
+      typeof payload === "object" &&
+      "memberId" in payload &&
+      typeof payload.memberId === "number"
+        ? payload.memberId
+        : null;
+
+    communityMemberships = communityMemberships.map((membership) => {
+      if (membership.memberId !== memberId) {
+        return membership;
+      }
+
+      if (membership.status === "APPLIED") {
+        return { ...membership, status: "CANCELLED" };
+      }
+
+      if (membership.status === "DEPOSIT_CONFIRMED") {
+        return { ...membership, status: "REFUND_PENDING" };
+      }
+
+      return membership;
+    });
+
+    await route.fulfill({
+      status,
+      contentType: "application/json",
+      body: JSON.stringify({
+        success: true,
+        data: null,
         error: null,
       }),
     });

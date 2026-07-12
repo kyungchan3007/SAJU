@@ -9,6 +9,10 @@ import { checkCommunityNicknameOnClient } from "@/entities/community/client/chec
 import { fetchCurrentOpenCohortOnClient } from "@/entities/community/client/fetchCurrentOpenCohortOnClient";
 import { fetchMyMembershipsOnClient } from "@/entities/community/client/fetchMyMembershipsOnClient";
 import { joinCommunityOnClient } from "@/entities/community/client/joinCommunityOnClient";
+import {
+  COMMUNITY_CURRENT_COHORT_QUERY_KEY,
+  COMMUNITY_MEMBERSHIPS_QUERY_KEY,
+} from "@/entities/community/model/query";
 import { ApiRequestError } from "@/shared/api/requestError";
 import { resolveApiErrorMessage } from "@/shared/api/messages";
 import {
@@ -32,8 +36,6 @@ export type { CommunityApplicationForm, CommunityNicknameCheckStatus };
 export type CommunityFlowView = "nickname" | "form" | "done";
 
 const COMMUNITY_PATH = "/community";
-const COMMUNITY_CURRENT_COHORT_QUERY_KEY = ["community-current-cohort"] as const;
-const COMMUNITY_MEMBERSHIPS_QUERY_KEY = ["community-memberships"] as const;
 
 const EMPTY_APPLICATION_FORM: CommunityApplicationForm = {
   depositorName: "",

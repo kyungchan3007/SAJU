@@ -43,6 +43,11 @@ export const COMMUNITY_ACTIVE_MEMBERSHIP_STATUSES = [
   "REFUND_PENDING",
 ] as const satisfies ReadonlyArray<NonNullable<MyMembershipResponse["status"]>>;
 
+export const COMMUNITY_CANCELABLE_MEMBERSHIP_STATUSES = [
+  "APPLIED",
+  "DEPOSIT_CONFIRMED",
+] as const satisfies ReadonlyArray<NonNullable<MyMembershipResponse["status"]>>;
+
 export const COMMUNITY_MEETING_INFO: CommunityMeetingInfo = {
   title: "1회차 로테이션 소개팅",
   stateLabel: "모집중",
@@ -129,6 +134,24 @@ export function getActiveCommunityMembership(
           membership.status,
         ),
     ) ?? null
+  );
+}
+
+export function getLatestCommunityMembership(
+  memberships: MyMembershipResponse[] | undefined,
+): MyMembershipResponse | null {
+  return memberships?.[0] ?? null;
+}
+
+export function isCommunityMembershipCancelable(
+  membership: MyMembershipResponse | null | undefined,
+): boolean {
+  if (!membership?.status) {
+    return false;
+  }
+
+  return (COMMUNITY_CANCELABLE_MEMBERSHIP_STATUSES as readonly string[]).includes(
+    membership.status,
   );
 }
 

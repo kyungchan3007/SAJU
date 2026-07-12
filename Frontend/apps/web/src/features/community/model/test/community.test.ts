@@ -6,6 +6,8 @@ import {
   buildCommunityJoinRequest,
   formatCommunityFee,
   getActiveCommunityMembership,
+  getLatestCommunityMembership,
+  isCommunityMembershipCancelable,
   isCommunityApplicationFormValid,
   isCommunityNicknameValid,
   normalizeCommunityAccountNumber,
@@ -116,6 +118,33 @@ describe("community rotation application helpers", () => {
     ).toBeNull();
     expect(getActiveCommunityMembership([])).toBeNull();
     expect(getActiveCommunityMembership(undefined)).toBeNull();
+  });
+
+  it("allows cancellation only for applied and deposit confirmed memberships", () => {
+    expect(
+      isCommunityMembershipCancelable({ memberId: 1, status: "APPLIED" }),
+    ).toBe(true);
+    expect(
+      isCommunityMembershipCancelable({
+        memberId: 2,
+        status: "DEPOSIT_CONFIRMED",
+      }),
+    ).toBe(true);
+    expect(
+      isCommunityMembershipCancelable({ memberId: 3, status: "CONFIRMED" }),
+    ).toBe(false);
+    expect(isCommunityMembershipCancelable(null)).toBe(false);
+  });
+
+  it("returns the latest membership from the latest-first response", () => {
+    expect(
+      getLatestCommunityMembership([
+        { memberId: 10, status: "CANCELLED" },
+        { memberId: 9, status: "APPLIED" },
+      ])?.memberId,
+    ).toBe(10);
+    expect(getLatestCommunityMembership([])).toBeNull();
+    expect(getLatestCommunityMembership(undefined)).toBeNull();
   });
 
   it("resolves the join cohort id, preferring the active cohort", () => {
