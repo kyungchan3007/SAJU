@@ -134,7 +134,7 @@ test.describe("year fortune flow", () => {
     await expect(page.getByRole("progressbar")).toBeVisible();
     await expect.poll(() => requestCount, { timeout: 12_000 }).toBeGreaterThan(1);
 
-    const revealButton = page.getByRole("button").filter({ hasText: "보기" });
+    const revealButton = page.getByRole("button", { name: "사주결과 보기" });
     await expect(revealButton).toBeVisible();
     await revealButton.click();
 

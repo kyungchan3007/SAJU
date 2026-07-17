@@ -31,15 +31,15 @@ export const PREVIEW_REGISTRY: Record<PreviewSlug, PreviewEntry> = {
   "traditional-saju": {
     slug: "traditional-saju",
     metadata: createPageMetadata({
-      title: "정통사주 풀이  | 명식·오행·대운 예시 화면",
+      title: "정통사주 풀이 구성 안내 | 명식·오행·대운 공개 예시",
       description:
-        "정통사주 풀이에서 확인하는 명식 요약, 4기둥, 오행 밸런스, 12운성, 대운 흐름을 공개 예시 화면으로 먼저 살펴보세요.",
+        "정통사주 풀이에서 어떤 항목을 읽게 되는지 공개 예시로 확인해보세요. 명식, 오행 밸런스, 12운성, 대운 흐름을 설명과 함께 정리했습니다.",
       path: "/preview/traditional-saju",
     }),
-    badge: "정통사주 미리보기",
+    badge: "정통사주 공개 예시",
     title: "정통사주 풀이",
     description:
-      "정통사주 풀이에서 확인하는 명식 요약, 4기둥, 오행 밸런스, 12운성, 대운 흐름을 공개 예시 화면으로 먼저 살펴보세요.",
+      "정통사주 풀이가 어떤 순서로 구성되는지, 명식 요약과 오행 균형을 어떤 관점으로 읽는지 공개 예시 화면으로 정리했습니다.",
     cta: {
       title: "정통사주 전체 풀이가 궁금하다면",
       description:
@@ -59,15 +59,15 @@ export const PREVIEW_REGISTRY: Record<PreviewSlug, PreviewEntry> = {
   "year-fortune": {
     slug: "year-fortune",
     metadata: createPageMetadata({
-      title: "2026년 신년운세 | 올해 운세 예시 화면",
+      title: "2026년 신년운세 구성 안내 | 월별 흐름 공개 예시",
       description:
-        "2026년 신년운세에서 확인하는 연도 헤더, 영역별 운세, 월별 운세 구성을 공개 예시 화면으로 먼저 살펴보세요.",
+        "2026년 신년운세에서 어떤 정보를 읽게 되는지 공개 예시로 확인해보세요. 연간 요약, 분야별 포인트, 월별 흐름까지 한 화면에서 볼 수 있습니다.",
       path: "/preview/year-fortune",
     }),
-    badge: "신년운세 미리보기",
+    badge: "신년운세 공개 예시",
     title: "2026년 신년운세",
     description:
-      "2026년 신년운세에서 확인하는 연도 헤더, 영역별 운세, 월별 운세 구성을 공개 예시 화면으로 먼저 살펴보세요.",
+      "연간 운세 화면이 어떤 구조로 읽히는지, 영역별 해석과 월별 흐름이 어떻게 이어지는지 공개 예시로 정리했습니다.",
     cta: {
       title: "내 신년운세 전체 풀이가 궁금하다면",
       description:
@@ -87,15 +87,15 @@ export const PREVIEW_REGISTRY: Record<PreviewSlug, PreviewEntry> = {
   compatibility: {
     slug: "compatibility",
     metadata: createPageMetadata({
-      title: "사주 궁합 | 무료 궁합 보기 예시 화면",
+      title: "사주 궁합 구성 안내 | 두 사람 비교 공개 예시",
       description:
-        "사주 궁합에서 확인하는 두 사람 비교, 종합 점수, 분야별 풀이, 총평 구성을 공개 예시 화면으로 먼저 살펴보세요.",
+        "사주 궁합 결과가 어떤 구조로 제공되는지 공개 예시로 확인해보세요. 두 사람 비교, 종합 점수, 분야별 해석, 총평까지 한 번에 살펴볼 수 있습니다.",
       path: "/preview/compatibility",
     }),
-    badge: "궁합 미리보기",
+    badge: "궁합 공개 예시",
     title: "사주 궁합",
     description:
-      "사주 궁합에서 확인하는 두 사람 비교, 종합 점수, 분야별 풀이, 총평 구성을 공개 예시 화면으로 먼저 살펴보세요.",
+      "두 사람의 사주를 어떤 기준으로 비교하고 결과를 어떻게 읽는지 공개 예시 화면과 함께 설명합니다.",
     cta: {
       title: "내 궁합 결과를 직접 확인하고 싶다면",
       description:

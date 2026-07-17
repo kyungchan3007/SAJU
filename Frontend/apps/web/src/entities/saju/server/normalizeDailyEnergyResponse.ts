@@ -95,11 +95,6 @@ export function normalizeDailyEnergyResponse(
     goodActions: pickStringArray(source, "goodActions", "good_actions"),
     avoidActions: pickStringArray(source, "avoidActions", "avoid_actions"),
     avoidFlows: pickStringArray(source, "avoidFlows", "avoid_flows"),
-    recommendPlaces: pickStringArray(
-      source,
-      "recommendPlaces",
-      "recommend_places",
-    ),
     weakElement: pickString(source, "weakElement", "weak_element"),
     fiveElements: pickNumberRecord(source, "fiveElements", "five_elements"),
   });

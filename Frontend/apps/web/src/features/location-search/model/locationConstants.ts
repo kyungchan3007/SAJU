@@ -1,1 +1,0 @@
-export const LOCATION_PLACES_PER_PAGE = 4;

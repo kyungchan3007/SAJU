@@ -30,7 +30,7 @@ export function ContactInquiryFormPageContent() {
             </span>
             <span>
               <strong>제목:</strong> 문제를 간단하게 요약해 주세요. 예:
-              "계정 로그인 오류", "결과 조회 불가"
+              “계정 로그인 오류”, “결과 조회 불가”
             </span>
           </li>
           <li className="flex gap-3">

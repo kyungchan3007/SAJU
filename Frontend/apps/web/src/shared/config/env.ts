@@ -18,12 +18,13 @@ const publicEnvSchema = z.object({
     .string()
     .trim()
     .default(
-      "사주궁합 무료로 확인하고, 오늘의 방향까지 한번에 잡으세요. 내 사주에 맞는 오늘 가볼 곳을 AI가 추천해드립니다. 운세·궁합·장소 추천까지, 지금 시작해보세요",
+      "사주궁합 무료로 확인하고, 오늘의 흐름과 관계 방향을 함께 살펴보세요. 운세·궁합·사주 해석 가이드까지, 지금 시작해보세요",
     ),
   NEXT_PUBLIC_KAKAO_MAP_KEY: z.string().trim().default(""),
   NEXT_PUBLIC_PORTONE_STORE_ID: z.string().trim().default(""),
   NEXT_PUBLIC_TOSS_CLIENT_KEY: z.string().trim().default(""),
   NEXT_PUBLIC_ADSENSE_CLIENT_ID: z.string().trim().default(""),
+  NEXT_PUBLIC_ADSENSE_BLOG_SLOT: z.string().trim().default(""),
   NEXT_PUBLIC_ADSENSE_SAJU_LOADING_SLOT: z.string().trim().default(""),
 });
 
@@ -42,6 +43,7 @@ export const env = publicEnvSchema.parse({
   NEXT_PUBLIC_PORTONE_STORE_ID: process.env.NEXT_PUBLIC_PORTONE_STORE_ID,
   NEXT_PUBLIC_TOSS_CLIENT_KEY: process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY,
   NEXT_PUBLIC_ADSENSE_CLIENT_ID: process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID,
+  NEXT_PUBLIC_ADSENSE_BLOG_SLOT: process.env.NEXT_PUBLIC_ADSENSE_BLOG_SLOT,
   NEXT_PUBLIC_ADSENSE_SAJU_LOADING_SLOT:
     process.env.NEXT_PUBLIC_ADSENSE_SAJU_LOADING_SLOT,
 });

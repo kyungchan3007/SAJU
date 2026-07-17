@@ -6,7 +6,7 @@
 
 - `ui`: 페이지 섹션 또는 화면 블록 컴포넌트.
 - `model`: 해당 widget에서만 쓰는 정적 콘텐츠나 표시 모델.
-- 도메인 폴더: `home-hero`, `saju-result`, `mypage`, `location-map`처럼 화면 섹션 언어로 나눈다.
+- 도메인 폴더: `home-hero`, `saju-result`, `mypage`처럼 화면 섹션 언어로 나눈다.
 
 ## Allowed
 

@@ -25,6 +25,6 @@
   "vars": {
     "NEXT_PUBLIC_APP_URL": "https://saju-me.com",
     "NEXT_PUBLIC_APP_NAME": "SAJU:ME",
-    "NEXT_PUBLIC_APP_DES": "무료 사주 풀이, 궁합, 정통사주, 오늘의 운세와 위치 추천까지 한 번에 확인하는 사주 서비스"
+    "NEXT_PUBLIC_APP_DES": "무료 사주 풀이, 궁합, 정통사주, 오늘의 운세와 사주 해석 가이드를 한 번에 확인하는 사주 서비스"
   }
 }

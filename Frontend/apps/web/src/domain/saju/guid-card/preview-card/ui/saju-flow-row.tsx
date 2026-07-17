@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-type FlowType = "good" | "bad" | "caution" | "place";
+type FlowType = "good" | "bad" | "caution";
 
 type FlowRowProps = {
   type: FlowType;
@@ -50,15 +50,6 @@ const FLOW_ROW_CONFIG: Record<
         <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
         <line x1="12" y1="9" x2="12" y2="13" />
         <line x1="12" y1="17" x2="12.01" y2="17" />
-      </svg>
-    ),
-  },
-  place: {
-    bg: "#EFF6FF",
-    color: "#2563EB",
-    icon: (
-      <svg width="16" height="16" fill="#2563EB" viewBox="0 0 24 24">
-        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
       </svg>
     ),
   },

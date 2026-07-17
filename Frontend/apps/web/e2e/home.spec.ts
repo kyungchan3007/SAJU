@@ -68,7 +68,6 @@ test.describe("home and auth entry smoke", () => {
     await page.goto("/home");
 
     await expect(page.getByRole("link", { name: "마이페이지" })).toBeVisible();
-    await expect(page.locator('header a[href="/mypage"]').first()).toBeVisible();
   });
 
   test("falls back to root when refresh-only recovery fails on home", async ({

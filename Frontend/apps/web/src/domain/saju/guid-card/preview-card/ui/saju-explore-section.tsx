@@ -72,34 +72,13 @@ const EXPLORE_CARDS: {
       </svg>
     ),
   },
-  {
-    pathname: "/location",
-    iconBg: "bg-saju-light",
-    title: "추천 장소",
-    desc: "오늘 나에게 맞는 장소를 찾아보세요.",
-    icon: (
-      <svg
-        width="20"
-        height="20"
-        fill="none"
-        stroke="#5956E9"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        viewBox="0 0 24 24"
-      >
-        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-        <circle cx="12" cy="10" r="3" />
-      </svg>
-    ),
-  },
 ];
 
 export function SajuExploreSection() {
   return (
     <div>
       <h3 className="mb-3 text-[14px] font-bold text-gray-900">탐색하기</h3>
-      <div className="grid grid-cols-1 gap-3 md:grid-cols-4">
+      <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
         {EXPLORE_CARDS.map((card) => (
           <Link
             key={card.title}

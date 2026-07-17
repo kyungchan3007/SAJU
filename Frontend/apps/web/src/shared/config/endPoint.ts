@@ -31,8 +31,6 @@ export const SAJU_AUTH_REFRESH_PATH = "/api/auth/refresh";
 export const SAJU_USERS_ME_PATH = "/api/users/me";
 export const SAJU_USERS_ME_RESTORE_PATH = "/api/users/me/restore";
 export const SAJU_PARTNERS_PATH = "/api/partners";
-export const LOCATION_KEYWORDS_ENDPOINT_PATH = "/api/location";
-export const LOCATION_SEARCH_ENDPOINT_PATH = "/api/location/search";
 export const COMMUNITY_CURRENT_COHORT_ENDPOINT_PATH =
   "/api/community/cohorts/current";
 export const COMMUNITY_CURRENT_COHORT_BFF_PATH =

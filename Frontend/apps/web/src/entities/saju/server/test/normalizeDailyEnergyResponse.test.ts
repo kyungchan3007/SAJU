@@ -13,7 +13,6 @@ describe("normalizeDailyEnergyResponse", () => {
         goodActions: ["정리"],
         avoidActions: ["무리"],
         avoidFlows: ["충동"],
-        recommendPlaces: ["공원"],
         weakElement: "water",
         fiveElements: { 목: 20, water: 10 },
       }),
@@ -26,7 +25,6 @@ describe("normalizeDailyEnergyResponse", () => {
       goodActions: ["정리"],
       avoidActions: ["무리"],
       avoidFlows: ["충동"],
-      recommendPlaces: ["공원"],
       weakElement: "water",
       fiveElements: { 목: 20, water: 10 },
     });
@@ -45,7 +43,6 @@ describe("normalizeDailyEnergyResponse", () => {
           good_actions: ["산책"],
           avoid_actions: ["과로"],
           avoid_flows: ["급한 결정"],
-          recommend_places: ["카페"],
           weak_element: "fire",
           five_elements: { wood: 30, fire: 40, ignored: "nope" },
         },
@@ -59,7 +56,6 @@ describe("normalizeDailyEnergyResponse", () => {
       goodActions: ["산책"],
       avoidActions: ["과로"],
       avoidFlows: ["급한 결정"],
-      recommendPlaces: ["카페"],
       weakElement: "fire",
       fiveElements: { wood: 30, fire: 40 },
     });

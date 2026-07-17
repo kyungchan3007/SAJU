@@ -35,7 +35,12 @@ test.describe("public preview pages", () => {
   }) => {
     await page.goto("/preview/traditional-saju");
 
-    await expect(page.getByText("정통사주 미리보기", { exact: true })).toBeVisible();
+    await expect(
+      page.getByText("정통사주 공개 예시", { exact: true }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "정통사주 풀이" }),
+    ).toBeVisible();
     await expect(page.getByText("명식 리포트")).toBeVisible();
     await expect(
       page.getByRole("heading", { name: "오행 분포도" }),
@@ -51,7 +56,12 @@ test.describe("public preview pages", () => {
   }) => {
     await page.goto("/preview/year-fortune");
 
-    await expect(page.getByText("신년운세 미리보기", { exact: true })).toBeVisible();
+    await expect(
+      page.getByText("신년운세 공개 예시", { exact: true }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "2026년 신년운세" }),
+    ).toBeVisible();
     await expect(page.getByText("2026년 병오년", { exact: true })).toBeVisible();
     await expect(page.getByText("영역별 운세", { exact: true })).toBeVisible();
 
@@ -75,7 +85,8 @@ test.describe("public preview pages", () => {
   }) => {
     await page.goto("/preview/compatibility");
 
-    await expect(page.getByText("궁합 미리보기", { exact: true })).toBeVisible();
+    await expect(page.getByText("궁합 공개 예시", { exact: true })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "사주 궁합" })).toBeVisible();
     await expect(page.getByText("궁합 대상")).toBeVisible();
     await expect(page.getByText("종합 궁합 점수")).toBeVisible();
 
@@ -90,7 +101,7 @@ test.describe("public preview pages", () => {
     ).toBeVisible();
 
     await expect(
-      page.getByRole("link", { name: "궁합 보러가기" }),
+      page.getByRole("link", { name: "무료 궁합 보러가기" }),
     ).toHaveAttribute("href", "/compatibility");
     await expectNoHorizontalOverflow(page);
   });

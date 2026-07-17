@@ -4,7 +4,6 @@ import { CheckCircle, Loader2, Sparkles } from "lucide-react";
 
 import { useAdProgressGate } from "@/shared/hooks/use-ad-progress-gate";
 import { AdProgressNote } from "@/shared/ui/ad-progress-note";
-import { AdSlot } from "@/shared/ui/ad-slot.client";
 import { SajuQuizGame } from "@/shared/ui/saju-quiz-game.client";
 
 type AdProgressGateProps = {
@@ -23,7 +22,7 @@ export function AdProgressGate({
   onRevealResult,
   onRewardedRevealResult,
   revealButtonLabel = "사주결과 보기",
-  rewardedRevealButtonLabel = "짧은 광고를 보고 사주결과 열기",
+  rewardedRevealButtonLabel = "사주결과 열기",
   isRewardedReady = false,
 }: AdProgressGateProps) {
   const { canRevealResult, label, noteStates, roundedProgress } =
@@ -105,8 +104,6 @@ export function AdProgressGate({
       </div>
 
       <SajuQuizGame />
-
-      <AdSlot />
 
       <div className="flex flex-col gap-2.5">
         <AdProgressNote state="done">사주 정보를 확인했어요</AdProgressNote>

@@ -1,4 +1,5 @@
 import type { Route } from "next";
+import Link from "next/link";
 import { KAKAO_LOGIN_URL } from "@/shared/config/endPoint";
 import { HomeMarketingSections } from "@/features/home/ui/home-marketing-sections";
 import { HomeHeroSection } from "@/widgets/home-hero/ui/home-hero-section";
@@ -19,9 +20,58 @@ export function WelcomSection({ primaryCtaHref }: WelcomSectionProps) {
         primaryCtaHref={primaryCtaHref}
         rightSlot={<GuestFortuneCard />}
       />
+      <PublicContentHighlights />
       {/* 히어로 아래 공통 마케팅/서비스 소개 영역. */}
       <HomeMarketingSections />
     </div>
+  );
+}
+
+function PublicContentHighlights() {
+  return (
+    <section className="bg-white py-10">
+      <div className="mx-auto flex w-full max-w-saju-content flex-col gap-6 px-4 md:px-8">
+        <div className="flex flex-col gap-2">
+          <div className="max-w-3xl text-sm leading-7 text-gray-600">
+            <p>SAJU:ME는 결과 화면만 잠깐 보여주는 서비스가 아닙니다.</p>
+            <p>아래 페이지에서 사주 기초 설명과 예시 화면 구성을 먼저 확인해보세요.</p>
+          </div>
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-3">
+          <Link
+            href="/blog/how-to-read-saju"
+            className="rounded-3xl border border-gray-100 bg-white px-5 py-5 shadow-sm transition-shadow hover:shadow-md"
+          >
+            <p className="text-xs font-bold text-[#5956E9]">사주 기초</p>
+            <h3 className="mt-2 text-base font-black text-gray-900">사주 보는 법 입문</h3>
+            <p className="mt-2 text-sm leading-6 text-gray-600">
+              사주를 처음 읽는 사람이 무엇부터 확인해야 하는지 6단계 순서로 정리한 공개 가이드입니다.
+            </p>
+          </Link>
+          <Link
+            href="/blog/2026-zodiac-fortune"
+            className="rounded-3xl border border-gray-100 bg-white px-5 py-5 shadow-sm transition-shadow hover:shadow-md"
+          >
+            <p className="text-xs font-bold text-[#5956E9]">2026년 운세</p>
+            <h3 className="mt-2 text-base font-black text-gray-900">12띠 흐름 통합 가이드</h3>
+            <p className="mt-2 text-sm leading-6 text-gray-600">
+              쥐띠부터 돼지띠까지 재물, 관계, 건강, 일의 흐름을 한 페이지에서 비교할 수 있습니다.
+            </p>
+          </Link>
+          <Link
+            href="/preview/traditional-saju"
+            className="rounded-3xl border border-gray-100 bg-white px-5 py-5 shadow-sm transition-shadow hover:shadow-md"
+          >
+            <p className="text-xs font-bold text-[#5956E9]">공개 예시</p>
+            <h3 className="mt-2 text-base font-black text-gray-900">정통사주 결과 화면 안내</h3>
+            <p className="mt-2 text-sm leading-6 text-gray-600">
+              명식, 오행, 대운이 어떤 순서로 읽히는지 예시 화면을 통해 미리 확인할 수 있습니다.
+            </p>
+          </Link>
+        </div>
+      </div>
+    </section>
   );
 }
 

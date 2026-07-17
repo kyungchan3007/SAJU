@@ -30,6 +30,21 @@ export function CompatibilitySection() {
     ? "max-w-[720px]"
     : "max-w-[1152px]";
 
+  // 광고 게이트는 다른 풀이 화면과 동일하게 전체 높이 중앙 정렬로 단독 표시한다.
+  // 게이트가 뜨는 조건(gateEnabled = 결과 화면 && 에러 없음)에서는 hero·에러·결과·선택이
+  // 모두 표시되지 않으므로, 아래 본문 레이아웃(block div) 밖으로 빼내 flex 사슬을 유지한다.
+  if (adGate.shouldShowGate) {
+    return (
+      <FortuneGateLayout>
+        <AdProgressGate
+          progress={isResultReady ? 100 : 80}
+          isComplete={isResultReady}
+          onRevealResult={adGate.unlock}
+        />
+      </FortuneGateLayout>
+    );
+  }
+
   return (
     <div>
       {/* Hero — 선택 화면에서만 표시 */}
@@ -41,7 +56,7 @@ export function CompatibilitySection() {
 
       {/* 본문 */}
       <div className="bg-white">
-        <div className={`mx-auto ${contentMaxWidthClass} ${adGate.shouldShowGate ? "" : "px-4 py-8 md:px-8"}`}>
+        <div className={`mx-auto ${contentMaxWidthClass} px-4 py-8 md:px-8`}>
 
           {/* 에러 */}
           {compat.resultError && compat.isInResultView && (
@@ -57,17 +72,6 @@ export function CompatibilitySection() {
                 다시 시도
               </button>
             </div>
-          )}
-
-          {/* 광고 게이트 */}
-          {adGate.shouldShowGate && (
-            <FortuneGateLayout>
-              <AdProgressGate
-                progress={isResultReady ? 100 : 80}
-                isComplete={isResultReady}
-                onRevealResult={adGate.unlock}
-              />
-            </FortuneGateLayout>
           )}
 
           {/* 결과 화면 */}

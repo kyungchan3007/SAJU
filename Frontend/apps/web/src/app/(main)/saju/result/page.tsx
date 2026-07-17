@@ -55,10 +55,8 @@ export default async function SajuResultPage({
   }
 
   return (
-    <main>
-      <Suspense fallback={<AnalysisPendingGate />}>
-        <SajuResult nextPath={nextPath} />
-      </Suspense>
-    </main>
+    <Suspense fallback={<AnalysisPendingGate />}>
+      <SajuResult nextPath={nextPath} />
+    </Suspense>
   );
 }

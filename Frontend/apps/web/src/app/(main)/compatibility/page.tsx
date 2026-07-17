@@ -16,11 +16,7 @@ export default async function CompatibilityPage() {
     await getProtectedPageAuthStateOnServer("/compatibility");
 
   if (authState.kind === "refresh") {
-    return (
-      <main>
-        <AuthRefreshRetry loginPath={authState.loginPath} />
-      </main>
-    );
+    return <AuthRefreshRetry loginPath={authState.loginPath} />;
   }
 
   if (authState.kind === "redirect") {
@@ -28,10 +24,8 @@ export default async function CompatibilityPage() {
   }
 
   return (
-    <main>
-      <ProtectedSajuServiceGate servicePath="/compatibility">
-        <CompatibilitySection />
-      </ProtectedSajuServiceGate>
-    </main>
+    <ProtectedSajuServiceGate servicePath="/compatibility">
+      <CompatibilitySection />
+    </ProtectedSajuServiceGate>
   );
 }

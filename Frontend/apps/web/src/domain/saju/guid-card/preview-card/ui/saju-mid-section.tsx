@@ -146,11 +146,6 @@ export function SajuMidSection({ dailyResult }: SajuPreviewSectionProps) {
             type="caution"
             title="주의할 흐름"
             items={dailyResult?.avoidFlows ?? []}
-          />
-          <SajuFlowRow
-            type="place"
-            title="추천 장소"
-            items={dailyResult?.recommendPlaces ?? []}
             isLast
           />
         </div>

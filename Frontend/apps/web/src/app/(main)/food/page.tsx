@@ -14,11 +14,7 @@ export default async function FoodPage() {
   const authState = await getProtectedPageAuthStateOnServer("/food");
 
   if (authState.kind === "refresh") {
-    return (
-      <main>
-        <AuthRefreshRetry loginPath={authState.loginPath} />
-      </main>
-    );
+    return <AuthRefreshRetry loginPath={authState.loginPath} />;
   }
 
   if (authState.kind === "redirect") {
