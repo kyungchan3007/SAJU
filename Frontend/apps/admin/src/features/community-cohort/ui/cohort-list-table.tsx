@@ -15,13 +15,14 @@ export function CohortListTable({ cohorts }: CohortListTableProps) {
             <th className="px-4 py-3 text-left font-semibold text-content-secondary">기수명</th>
             <th className="px-4 py-3 text-center font-semibold text-content-secondary">정원</th>
             <th className="px-4 py-3 text-center font-semibold text-content-secondary">현재 인원</th>
-            <th className="px-4 py-3 text-center font-semibold text-content-secondary">만료일</th>
+            <th className="px-4 py-3 text-center font-semibold text-content-secondary">장소</th>
+            <th className="px-4 py-3 text-center font-semibold text-content-secondary">소개팅 날짜</th>
             <th className="px-4 py-3 text-center font-semibold text-content-secondary">상태</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-surface-border bg-white">
           {cohorts.map((cohort) => (
-            <CohortRow key={cohort.cohortId} cohort={cohort} />
+            <CohortRow key={cohort.cohortId ?? cohort.name} cohort={cohort} />
           ))}
         </tbody>
       </table>
@@ -35,26 +36,40 @@ function CohortRow({ cohort }: { cohort: CommunityCohortStatus }) {
 
   return (
     <tr className="transition-colors hover:bg-surface-soft">
-      <td className="px-4 py-3 font-medium text-content-primary">{cohort.name}</td>
-      <td className="px-4 py-3 text-center text-content-secondary">{cohort.capacity}</td>
+      <td className="px-4 py-3 font-medium text-content-primary">{cohort.name ?? "-"}</td>
+      <td className="px-4 py-3 text-center text-content-secondary">
+        {cohort.capacity ?? "-"}
+      </td>
       <td className="px-4 py-3 text-center text-content-secondary">
         <span className={full ? "font-bold text-status-danger" : ""}>
-          {cohort.currentCount}
+          {cohort.currentCount ?? "-"}
         </span>
       </td>
+      <td className="px-4 py-3 text-center text-content-muted">{cohort.location ?? "-"}</td>
       <td className="px-4 py-3 text-center text-content-muted">
         {cohort.expiredAt
           ? new Date(cohort.expiredAt).toLocaleDateString("ko-KR")
-          : "—"}
+          : "-"}
       </td>
       <td className="px-4 py-3 text-center">
-        <CohortStatusBadge full={full} expired={expired} />
+        <CohortStatusBadge status={cohort.cohortStatus} full={full} expired={expired} />
       </td>
     </tr>
   );
 }
 
-function CohortStatusBadge({ full, expired }: { full: boolean; expired: boolean }) {
+function CohortStatusBadge({
+  status,
+  full,
+  expired,
+}: {
+  status: CommunityCohortStatus["cohortStatus"];
+  full: boolean;
+  expired: boolean;
+}) {
+  if (status === "CLOSED") return <Badge variant="neutral">종료</Badge>;
+  if (status === "FINALIZED") return <Badge variant="warning">확정</Badge>;
+  if (status === "OPEN") return <Badge variant="success">모집중</Badge>;
   if (expired) return <Badge variant="neutral">만료</Badge>;
   if (full) return <Badge variant="danger">마감</Badge>;
   return <Badge variant="success">모집중</Badge>;

@@ -1,6 +1,10 @@
 import type { CommunityCohortStatus } from "../type/types";
 
 export function isCohortFull(cohort: CommunityCohortStatus): boolean {
+  if (typeof cohort.currentCount !== "number" || typeof cohort.capacity !== "number") {
+    return false;
+  }
+
   return cohort.currentCount >= cohort.capacity;
 }
 

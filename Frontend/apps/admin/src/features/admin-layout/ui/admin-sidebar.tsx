@@ -1,14 +1,23 @@
 "use client";
 
 import Link from "next/link";
+import type { Route } from "next";
 import { usePathname } from "next/navigation";
-import { Activity, Bell, ExternalLink, LayoutDashboard, Users } from "lucide-react";
+import {
+  Activity,
+  Bell,
+  CreditCard,
+  ExternalLink,
+  LayoutDashboard,
+  Users,
+} from "lucide-react";
 import { clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
 const NAV_ITEMS = [
   { label: "대시보드", href: "/dashboard", icon: LayoutDashboard },
   { label: "커뮤니티 기수", href: "/community", icon: Users },
+  { label: "결제 관리", href: "/payments", icon: CreditCard },
   { label: "알림 관리", href: "/notifications", icon: Bell },
   { label: "모니터링", href: "/monitoring", icon: Activity },
 ] as const;
@@ -43,7 +52,7 @@ export function AdminSidebar() {
           return (
             <Link
               key={item.href}
-              href={item.href}
+              href={item.href as Route}
               className={cn(
                 "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-150",
                 isActive

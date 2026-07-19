@@ -4,7 +4,13 @@ export type CohortCreateFormValues = {
   name: string;
   capacity: string;
   expiredAt: string;
-  openChatUrl: string;
+  location: string;
+  maleFeeAmount: string;
+  femaleFeeAmount: string;
+  bankName: string;
+  bankAccountNumber: string;
+  bankAccountHolder: string;
+  finalizationDate: string;
 };
 
 type CohortCreateFormProps = {
@@ -54,23 +60,104 @@ export function CohortCreateForm({
         </div>
 
         <div className="flex flex-col gap-1.5">
-          <label className="text-sm font-semibold text-content-primary">만료일</label>
+          <label className="text-sm font-semibold text-content-primary">
+            소개팅 날짜 <span className="text-status-danger">*</span>
+          </label>
           <Input
             type="datetime-local"
             value={values.expiredAt}
             onChange={(e) => onChange("expiredAt", e.target.value)}
             disabled={isPending}
+            required
           />
         </div>
 
         <div className="flex flex-col gap-1.5">
-          <label className="text-sm font-semibold text-content-primary">오픈채팅 URL</label>
+          <label className="text-sm font-semibold text-content-primary">참가인원 확정일</label>
           <Input
-            type="url"
-            placeholder="https://open.kakao.com/..."
-            value={values.openChatUrl}
-            onChange={(e) => onChange("openChatUrl", e.target.value)}
+            type="datetime-local"
+            value={values.finalizationDate}
+            onChange={(e) => onChange("finalizationDate", e.target.value)}
             disabled={isPending}
+          />
+        </div>
+
+        <div className="flex flex-col gap-1.5">
+          <label className="text-sm font-semibold text-content-primary">소개팅 장소</label>
+          <Input
+            placeholder="예) 강남"
+            value={values.location}
+            onChange={(e) => onChange("location", e.target.value)}
+            disabled={isPending}
+          />
+        </div>
+
+        <div className="flex flex-col gap-1.5">
+          <label className="text-sm font-semibold text-content-primary">
+            남성 참가비 <span className="text-status-danger">*</span>
+          </label>
+          <Input
+            type="number"
+            min={0}
+            placeholder="예) 50000"
+            value={values.maleFeeAmount}
+            onChange={(e) => onChange("maleFeeAmount", e.target.value)}
+            disabled={isPending}
+            required
+          />
+        </div>
+
+        <div className="flex flex-col gap-1.5">
+          <label className="text-sm font-semibold text-content-primary">
+            여성 참가비 <span className="text-status-danger">*</span>
+          </label>
+          <Input
+            type="number"
+            min={0}
+            placeholder="예) 30000"
+            value={values.femaleFeeAmount}
+            onChange={(e) => onChange("femaleFeeAmount", e.target.value)}
+            disabled={isPending}
+            required
+          />
+        </div>
+
+        <div className="flex flex-col gap-1.5">
+          <label className="text-sm font-semibold text-content-primary">
+            입금 은행명 <span className="text-status-danger">*</span>
+          </label>
+          <Input
+            placeholder="예) 카카오뱅크"
+            value={values.bankName}
+            onChange={(e) => onChange("bankName", e.target.value)}
+            disabled={isPending}
+            required
+          />
+        </div>
+
+        <div className="flex flex-col gap-1.5">
+          <label className="text-sm font-semibold text-content-primary">
+            입금 계좌번호 <span className="text-status-danger">*</span>
+          </label>
+          <Input
+            placeholder="예) 3333-00-0000000"
+            value={values.bankAccountNumber}
+            onChange={(e) => onChange("bankAccountNumber", e.target.value)}
+            disabled={isPending}
+            required
+          />
+        </div>
+
+        <div className="flex flex-col gap-1.5">
+          <label className="text-sm font-semibold text-content-primary">
+            입금 예금주 <span className="text-status-danger">*</span>
+          </label>
+          <Input
+            placeholder="예) 사주"
+            value={values.bankAccountHolder}
+            onChange={(e) => onChange("bankAccountHolder", e.target.value)}
+            disabled={isPending}
+            required
           />
         </div>
       </div>
