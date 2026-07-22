@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { Monitor } from "lucide-react";
+import Script from "next/script";
 import { env } from "@/shared/config/env";
 
 declare global {
@@ -34,13 +35,22 @@ export function AdSlot() {
         Advertisements
       </p>
       {canRenderAdsense ? (
-        <ins
-          className="adsbygoogle block min-h-[250px] w-full"
-          data-ad-client={clientId}
-          data-ad-slot={slotId}
-          data-ad-format="auto"
-          data-full-width-responsive="true"
-        />
+        <>
+          <Script
+            id="adsense-script"
+            async
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${clientId}`}
+            crossOrigin="anonymous"
+            strategy="lazyOnload"
+          />
+          <ins
+            className="adsbygoogle block min-h-[250px] w-full"
+            data-ad-client={clientId}
+            data-ad-slot={slotId}
+            data-ad-format="auto"
+            data-full-width-responsive="true"
+          />
+        </>
       ) : (
         <div
           className="flex min-h-[260px] flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50"

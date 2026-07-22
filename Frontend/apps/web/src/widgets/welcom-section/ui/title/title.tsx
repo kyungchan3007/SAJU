@@ -19,7 +19,7 @@ export const Title = () => {
       >
         별이 말하는
         <br />
-        <span className="sketch-highlight mt-1 inline-block">
+        <span className="mt-1 inline-block rounded-[4px] bg-[#5956E9] px-[0.3em] pb-[0.05em] text-white">
           당신의 사주 이야기
         </span>
       </h1>

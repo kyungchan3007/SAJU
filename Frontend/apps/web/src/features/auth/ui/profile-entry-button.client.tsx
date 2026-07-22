@@ -1,5 +1,6 @@
 "use client";
 
+import { useId } from "react";
 import { UserCircle } from "lucide-react";
 import Link from "next/link";
 
@@ -15,6 +16,7 @@ const iconButtonClass =
 
 export function ProfileEntryButton({ isLoggedIn }: ProfileEntryButtonProps) {
   const { containerRef, open, close, toggle } = useProfileEntryPopover();
+  const dialogId = useId();
 
   if (isLoggedIn) {
     return (
@@ -23,7 +25,7 @@ export function ProfileEntryButton({ isLoggedIn }: ProfileEntryButtonProps) {
         aria-label="마이페이지"
         className={iconButtonClass}
       >
-        <UserCircle size={20} />
+        <UserCircle size={20} aria-hidden="true" />
       </Link>
     );
   }
@@ -35,21 +37,31 @@ export function ProfileEntryButton({ isLoggedIn }: ProfileEntryButtonProps) {
         onClick={toggle}
         aria-label="프로필"
         aria-expanded={open}
+        aria-haspopup="dialog"
+        aria-controls={open ? dialogId : undefined}
         className={iconButtonClass}
       >
-        <UserCircle size={20} />
+        <UserCircle size={20} aria-hidden="true" />
       </button>
 
-      {open ? <LoginPrompt onClose={close} /> : null}
+      {open ? <LoginPrompt dialogId={dialogId} onClose={close} /> : null}
     </div>
   );
 }
 
-function LoginPrompt({ onClose }: { onClose: () => void }) {
+function LoginPrompt({
+  dialogId,
+  onClose,
+}: {
+  dialogId: string;
+  onClose: () => void;
+}) {
   return (
     <div
+      id={dialogId}
       role="dialog"
       aria-label="로그인 안내"
+      aria-modal="false"
       className="absolute right-0 top-11 z-50 w-64 border-2 border-black bg-white p-5 text-center shadow-[4px_4px_0_#000]"
     >
       <p className="text-sm font-bold leading-snug text-black">
@@ -58,7 +70,7 @@ function LoginPrompt({ onClose }: { onClose: () => void }) {
       <p className="mt-2 text-xs leading-relaxed text-black/50">
         사주와 궁합 결과를 다시 확인할 수 있어요.
       </p>
-      <a
+      <Link
         href="/login"
         onClick={onClose}
         className="mt-4 flex h-10 w-full items-center justify-center gap-2 border-2 border-black bg-[#FEE500] text-sm font-bold text-[rgba(0,0,0,0.85)] transition hover:brightness-95"
@@ -66,7 +78,7 @@ function LoginPrompt({ onClose }: { onClose: () => void }) {
       >
         <KakaoIcon />
         간편 로그인하기
-      </a>
+      </Link>
     </div>
   );
 }

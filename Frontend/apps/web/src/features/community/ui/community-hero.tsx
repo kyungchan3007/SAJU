@@ -5,7 +5,7 @@ export function CommunityHero() {
     <div className="relative overflow-hidden rounded-[32px] shadow-[0_4px_24px_rgba(0,0,0,0.10)]">
       <div className="relative w-full xs:h-[300px] sm:h-[368px]">
         <Image
-          src="/image/community/group.png"
+          src="/image/community/group.webp"
           alt="커뮤니티 히어로"
           fill
           sizes="(max-width: 768px) 100vw, 860px"

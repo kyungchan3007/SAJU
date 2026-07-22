@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useId, useState } from "react";
 import { Heart, Users } from "lucide-react";
 
 type Props = {
@@ -10,9 +10,11 @@ type Props = {
 
 function ExpandableText({ text, color }: { text: string; color: string }) {
   const [expanded, setExpanded] = useState(false);
+  const contentId = useId();
   return (
     <div>
       <p
+        id={contentId}
         className={`text-[13px] leading-[1.75] text-gray-600 ${!expanded ? "line-clamp-4" : ""}`}
       >
         {text}
@@ -20,10 +22,12 @@ function ExpandableText({ text, color }: { text: string; color: string }) {
       <button
         type="button"
         onClick={() => setExpanded((p) => !p)}
+        aria-expanded={expanded}
+        aria-controls={contentId}
         className="mt-1 text-[12px] font-bold"
         style={{ color }}
       >
-        {expanded ? "접기" : "더보기 ···"}
+        {expanded ? "접기" : "더보기…"}
       </button>
     </div>
   );

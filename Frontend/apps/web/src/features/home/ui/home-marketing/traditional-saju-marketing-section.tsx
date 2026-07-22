@@ -63,7 +63,7 @@ export function TraditionalSajuMarketingSection() {
               style={{ width: "360px", height: "440px" }}
             >
               <Image
-                src="/image/hero/marketingjueongtong.png"
+                src="/image/hero/marketingjueongtong.webp"
                 alt="정통사주 분석"
                 fill
                 loading="eager"

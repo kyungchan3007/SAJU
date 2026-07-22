@@ -13,7 +13,7 @@ export function SajuInputForm({ nextPath }: SajuInputFormProps) {
       {/* ── 히어로 ── */}
       <section className="relative h-[220px] overflow-hidden rounded-3xl shadow-lg sm:h-[368px]">
         <Image
-          src="/image/hero/hero.png"
+          src="/image/hero/hero.webp"
           alt="사주 입력"
           fill
           priority

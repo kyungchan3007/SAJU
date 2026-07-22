@@ -6,5 +6,5 @@ export function getSajuHeroImageSrc(
 ): string | null {
   if (!elementImageKey) return null;
 
-  return `/image/fortune-hero/saju-profile-${elementImageKey}-${gender}_hero.png`;
+  return `/image/fortune-hero/saju-profile-${elementImageKey}-${gender}_hero.webp`;
 }

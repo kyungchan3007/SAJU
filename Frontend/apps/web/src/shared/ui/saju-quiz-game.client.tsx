@@ -71,7 +71,7 @@ export function SajuQuizGame() {
         {quiz.questions.map((question, questionIndex) => (
           <div
             key={question.id}
-            className="h-1 flex-1 rounded-full transition-all duration-300"
+            className="h-1 flex-1 rounded-full transition-colors duration-300"
             style={{
               background:
                 questionIndex < quiz.index
@@ -114,7 +114,8 @@ export function SajuQuizGame() {
               type="button"
               onClick={() => quiz.selectOption(option)}
               disabled={quiz.selected !== null}
-              className="flex w-full items-center gap-3 rounded-2xl border px-4 py-3.5 text-left text-sm font-semibold transition-all duration-200"
+              aria-pressed={quiz.selected === option}
+              className="flex w-full items-center gap-3 rounded-2xl border px-4 py-3.5 text-left text-sm font-semibold transition-colors duration-200"
               style={optionStyle}
             >
               <span

@@ -24,6 +24,7 @@ export function SegmentedButtonGroup<T extends string>({
 }: Props<T>) {
   return (
     <div
+      role="group"
       className={`flex overflow-hidden rounded-xl border border-[#E5E7EB] ${className}`.trim()}
     >
       {options.map((option) => (
@@ -31,7 +32,8 @@ export function SegmentedButtonGroup<T extends string>({
           key={option.value}
           type="button"
           onClick={() => onChange(option.value)}
-          className={`flex-1 border-r border-[#E5E7EB] py-2.5 text-[13px] font-bold transition-all last:border-r-0 ${
+          aria-pressed={value === option.value}
+          className={`flex-1 border-r border-[#E5E7EB] py-2.5 text-[13px] font-bold transition-colors last:border-r-0 ${
             value === option.value ? activeClassName : inactiveClassName
           }`}
         >

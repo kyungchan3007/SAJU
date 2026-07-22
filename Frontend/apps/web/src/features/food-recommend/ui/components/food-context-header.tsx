@@ -61,7 +61,7 @@ export function FoodContextHeader({ viewModel }: Props) {
                 style={{ background: "rgba(255,255,255,0.2)" }}
               >
                 <div
-                  className="h-full rounded-full transition-all duration-500"
+                  className="h-full rounded-full transition-[width] duration-500"
                   style={{
                     width: `${entry.barWidth}%`,
                     background: entry.isDominant

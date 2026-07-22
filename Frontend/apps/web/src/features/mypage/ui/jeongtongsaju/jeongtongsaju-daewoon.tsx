@@ -72,7 +72,8 @@ export function JeongtongsajuDaewoon({ bigLuck, description }: Props) {
               <button
                 type="button"
                 onClick={() => setSelectedIndex(i)}
-                className="flex w-full items-center gap-4 rounded-2xl px-4 py-4 text-left transition-all"
+                aria-pressed={isSelected}
+                className="flex w-full items-center gap-4 rounded-2xl px-4 py-4 text-left transition-shadow"
                 style={{
                   background: isCurrent ? CARD_BG_ACTIVE : "#fff",
                   boxShadow: isCurrent
@@ -152,7 +153,8 @@ export function JeongtongsajuDaewoon({ bigLuck, description }: Props) {
                 key={i}
                 type="button"
                 onClick={() => setSelectedIndex(i)}
-                className="flex min-w-[100px] flex-1 flex-col text-left transition-all"
+                aria-pressed={isSelected}
+                className="flex min-w-[100px] flex-1 flex-col text-left transition-shadow"
               >
                 {/* segment */}
                 <div

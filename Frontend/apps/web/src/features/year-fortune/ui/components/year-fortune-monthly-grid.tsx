@@ -20,7 +20,8 @@ export function YearFortuneMonthlyGrid({
             key={m.month}
             type="button"
             onClick={() => onSelectMonth(m.month)}
-            className="cursor-pointer rounded-sm border-2 border-[#0d0d0d] px-1 py-2 text-center transition-all"
+            aria-pressed={isActive}
+            className="cursor-pointer rounded-sm border-2 border-[#0d0d0d] px-1 py-2 text-center transition-transform transition-shadow"
             style={
               isActive
                 ? {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useId, useState } from "react";
 import { AlertTriangle, BookOpen, CheckCircle2 } from "lucide-react";
 import type { TraditionalFortuneResponse } from "@/generated/api";
 
@@ -10,6 +10,7 @@ type Props = {
 
 export function TraditionalFortuneOverallCard({ data }: Props) {
   const [expanded, setExpanded] = useState(false);
+  const contentId = useId();
 
   return (
     <div className="rounded-2xl border border-slate-100 bg-white p-4 shadow-sm">
@@ -54,6 +55,7 @@ export function TraditionalFortuneOverallCard({ data }: Props) {
       {data.overallFortune && (
         <>
           <p
+            id={contentId}
             className={`text-[13px] leading-[1.75] text-gray-600 ${
               !expanded ? "line-clamp-3" : ""
             }`}
@@ -63,9 +65,11 @@ export function TraditionalFortuneOverallCard({ data }: Props) {
           <button
             type="button"
             onClick={() => setExpanded((prev) => !prev)}
+            aria-expanded={expanded}
+            aria-controls={contentId}
             className="mt-1.5 text-[12px] font-bold text-[#5956E9]"
           >
-            {expanded ? "접기" : "더보기..."}
+            {expanded ? "접기" : "더보기…"}
           </button>
         </>
       )}

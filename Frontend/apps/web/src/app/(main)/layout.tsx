@@ -21,8 +21,11 @@ export default async function MainLayout({ children }: { children: ReactNode }) 
   return (
     <Providers key={authScope} authScope={authScope}>
       <AppChromeOffset>
+        <a href="#main-content" className="skip-link">
+          본문으로 바로가기
+        </a>
         <GlobalNav isLoggedIn={isLoggedIn} />
-        <main className="flex flex-1 flex-col bg-white">
+        <main id="main-content" className="flex flex-1 flex-col bg-white">
           {children}
         </main>
         <Footer />

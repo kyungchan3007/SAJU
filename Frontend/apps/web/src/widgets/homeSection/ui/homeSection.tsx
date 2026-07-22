@@ -1,5 +1,5 @@
 import type { Route } from "next";
-import { HomeTodaySajuCard } from "@/features/home/ui/home-today-saju-card.client";
+import { HomeTodaySajuCardSlot } from "@/widgets/homeSection/ui/home-today-saju-card-slot.client";
 import { HomeMarketingSections } from "@/features/home/ui/home-marketing-sections";
 import { HomeHeroSection } from "@/widgets/home-hero/ui/home-hero-section";
 
@@ -21,7 +21,7 @@ export function HomeSection({ primaryCtaHref }: HomeSectionProps) {
             className="w-full rounded-2xl [&_.hero-panel]:p-5"
             style={{ boxShadow: "0 8px 32px rgba(0,0,0,0.18)" }}
           >
-            <HomeTodaySajuCard />
+            <HomeTodaySajuCardSlot />
           </div>
         }
       />

@@ -42,7 +42,7 @@ export function RestoreAccountPanel() {
             onClick={handleRestore}
             disabled={isPending}
           >
-            {isPending ? "복구 중..." : "계정 복구"}
+            {isPending ? "복구 중…" : "계정 복구"}
           </Button>
           <Button
             type="button"

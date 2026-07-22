@@ -93,8 +93,11 @@ export function BirthTimeFields({
             style={{ background: isTimeUnknown ? "#5956E9" : "#E5E7EB" }}
           >
             <span
-              className="absolute top-[3px] h-4 w-4 rounded-full bg-white shadow transition-all duration-200"
-              style={{ left: isTimeUnknown ? "21px" : "3px" }}
+              className="absolute top-[3px] h-4 w-4 rounded-full bg-white shadow transition-transform duration-200"
+              style={{
+                left: "3px",
+                transform: isTimeUnknown ? "translateX(18px)" : "translateX(0)",
+              }}
             />
           </button>
           <span

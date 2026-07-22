@@ -56,17 +56,11 @@ export function InquiryForm({
           >
             새로운 문의 작성
           </Button>
-          <Link
-            href="/contact"
-            className="flex items-center justify-center"
-          >
-            <Button
-              variant="outline"
-              className="w-full"
-            >
+          <Button asChild variant="outline" className="w-full">
+            <Link href="/contact" className="flex items-center justify-center">
               문의하기 페이지로 돌아가기
-            </Button>
-          </Link>
+            </Link>
+          </Button>
         </div>
       </div>
     );
@@ -93,18 +87,26 @@ export function InquiryForm({
         </label>
         <input
           id="title"
+          name="title"
           type="text"
           value={formData.title}
           onChange={(e) => onTitleChange(e.target.value)}
-          placeholder="문의 제목을 입력해주세요 (예: 계정 로그인 문제)"
+          placeholder="문의 제목을 입력해주세요… 예: 계정 로그인 문제"
           maxLength={INQUIRY_FORM_LIMITS.title.max}
           disabled={isSubmitting}
+          autoComplete="off"
+          aria-invalid={Boolean(fieldErrors.title)}
+          aria-describedby={
+            fieldErrors.title ? "title-error title-count" : "title-count"
+          }
           className="h-12 rounded-2xl border border-gray-200 px-4 text-sm placeholder:text-gray-400 focus:border-saju-primary focus:outline-none focus:ring-2 focus:ring-saju-primary/20 disabled:bg-gray-50 disabled:text-gray-400 transition-colors"
         />
         {fieldErrors.title && (
-          <p className="text-xs text-red-500">{fieldErrors.title}</p>
+          <p id="title-error" className="text-xs text-red-500">
+            {fieldErrors.title}
+          </p>
         )}
-        <p className="text-xs text-gray-500">
+        <p id="title-count" className="text-xs text-gray-500">
           {formData.title.length} / {INQUIRY_FORM_LIMITS.title.max}자
         </p>
       </div>
@@ -120,15 +122,23 @@ export function InquiryForm({
         </label>
         <input
           id="email"
+          name="email"
           type="email"
           value={formData.contactEmail}
           onChange={(e) => onEmailChange(e.target.value)}
-          placeholder="your.email@example.com"
+          placeholder="your.email@example.com…"
           disabled={isSubmitting}
+          autoComplete="email"
+          inputMode="email"
+          spellCheck={false}
+          aria-invalid={Boolean(fieldErrors.contactEmail)}
+          aria-describedby={fieldErrors.contactEmail ? "email-error" : undefined}
           className="h-12 rounded-2xl border border-gray-200 px-4 text-sm placeholder:text-gray-400 focus:border-saju-primary focus:outline-none focus:ring-2 focus:ring-saju-primary/20 disabled:bg-gray-50 disabled:text-gray-400 transition-colors"
         />
         {fieldErrors.contactEmail && (
-          <p className="text-xs text-red-500">{fieldErrors.contactEmail}</p>
+          <p id="email-error" className="text-xs text-red-500">
+            {fieldErrors.contactEmail}
+          </p>
         )}
       </div>
 
@@ -143,18 +153,26 @@ export function InquiryForm({
         </label>
         <textarea
           id="content"
+          name="content"
           value={formData.content}
           onChange={(e) => onContentChange(e.target.value)}
-          placeholder={`상세한 문의 내용을 입력해주세요.\n\n예시:\n- 어떤 메뉴에서 문제가 발생했나요?\n- 언제 발생했나요?\n- 오류 메시지나 스크린샷을 첨부해주세요.`}
+          placeholder={`상세한 문의 내용을 입력해주세요…\n\n예시:\n- 어떤 메뉴에서 문제가 발생했나요?\n- 언제 발생했나요?\n- 오류 메시지나 스크린샷을 첨부해주세요.`}
           maxLength={INQUIRY_FORM_LIMITS.content.max}
           disabled={isSubmitting}
           rows={8}
+          autoComplete="off"
+          aria-invalid={Boolean(fieldErrors.content)}
+          aria-describedby={
+            fieldErrors.content ? "content-error content-count" : "content-count"
+          }
           className="rounded-2xl border border-gray-200 px-4 py-3 text-sm placeholder:text-gray-400 focus:border-saju-primary focus:outline-none focus:ring-2 focus:ring-saju-primary/20 disabled:bg-gray-50 disabled:text-gray-400 resize-none transition-colors"
         />
         {fieldErrors.content && (
-          <p className="text-xs text-red-500">{fieldErrors.content}</p>
+          <p id="content-error" className="text-xs text-red-500">
+            {fieldErrors.content}
+          </p>
         )}
-        <p className="text-xs text-gray-500">
+        <p id="content-count" className="text-xs text-gray-500">
           {formData.content.length} / {INQUIRY_FORM_LIMITS.content.max}자
         </p>
       </div>
@@ -165,7 +183,7 @@ export function InquiryForm({
         disabled={!isFormValid || isSubmitting}
         className="w-full h-12 mt-2"
       >
-        {isSubmitting ? "문의 제출 중..." : "문의 제출"}
+        {isSubmitting ? "문의 제출 중…" : "문의 제출"}
       </Button>
     </form>
   );

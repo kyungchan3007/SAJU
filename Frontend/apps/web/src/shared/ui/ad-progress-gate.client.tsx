@@ -120,7 +120,7 @@ export function AdProgressGate({
         <button
           type="button"
           onClick={handleRevealResult}
-          className="flex h-[54px] w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[#5956E9] to-[#7C3AED] text-base font-black text-white shadow-[0_4px_20px_rgba(89,86,233,0.32)] transition-all duration-300"
+          className="flex h-[54px] w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[#5956E9] to-[#7C3AED] text-base font-black text-white shadow-[0_4px_20px_rgba(89,86,233,0.32)] transition-opacity duration-300"
         >
           <Sparkles size={18} />
           {buttonLabel}

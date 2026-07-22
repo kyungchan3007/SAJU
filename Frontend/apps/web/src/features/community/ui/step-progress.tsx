@@ -18,7 +18,7 @@ export function StepProgress({ currentStep, totalSteps, labels }: Props) {
               <div className="absolute left-1/2 top-[14px] h-0.5 w-full bg-gray-200" />
             )}
             <div
-              className={`relative z-10 flex h-7 w-7 items-center justify-center rounded-full text-[12px] font-extrabold transition-all duration-300 ${
+              className={`relative z-10 flex h-7 w-7 items-center justify-center rounded-full text-[12px] font-extrabold transition-colors duration-300 ${
                 isDone || isActive
                   ? "bg-[#5956E9] text-white"
                   : "bg-gray-200 text-gray-400"

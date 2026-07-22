@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 import { COMPATIBILITY_FEATURE_CARDS } from "@/features/home/model/model";
@@ -58,16 +59,12 @@ export function CompatibilityMarketingSection() {
               className="relative overflow-hidden rounded-3xl shadow-2xl"
               style={{ width: "360px", height: "440px" }}
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/image/hero/cupple.png"
+              <Image
+                src="/image/hero/cupple.webp"
                 alt="궁합 커플"
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                  objectPosition: "center top",
-                }}
+                fill
+                sizes="360px"
+                className="object-cover object-top"
               />
               <div
                 className="absolute inset-0"

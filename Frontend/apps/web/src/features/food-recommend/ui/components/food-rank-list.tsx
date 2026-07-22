@@ -34,8 +34,11 @@ export function FoodRankList({ foods }: Props) {
           <div key={food.rank} className="border-b border-gray-50 last:border-b-0">
             {/* 행 */}
             <button
+              type="button"
               className="flex w-full cursor-pointer items-center gap-3.5 px-5 py-4 text-left transition-colors hover:bg-gray-50"
               onClick={() => setOpenRank(isOpen ? null : food.rank)}
+              aria-expanded={isOpen}
+              aria-controls={`food-rank-panel-${food.rank}`}
             >
               {/* 이모지 */}
               <span className="w-9 shrink-0 text-center text-[24px]">
@@ -75,12 +78,16 @@ export function FoodRankList({ foods }: Props) {
                 size={15}
                 className="shrink-0 text-gray-300 transition-transform duration-200"
                 style={{ transform: isOpen ? "rotate(180deg)" : "rotate(0deg)" }}
+                aria-hidden="true"
               />
             </button>
 
             {/* 펼쳐진 상세 */}
             {isOpen && (
-              <div className="border-t border-gray-50 bg-gray-50 px-5 py-3.5 text-[12px] leading-relaxed text-gray-500">
+              <div
+                id={`food-rank-panel-${food.rank}`}
+                className="border-t border-gray-50 bg-gray-50 px-5 py-3.5 text-[12px] leading-relaxed text-gray-500"
+              >
                 💡 {food.reason}
               </div>
             )}

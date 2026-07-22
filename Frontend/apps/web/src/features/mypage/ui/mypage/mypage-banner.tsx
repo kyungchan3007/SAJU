@@ -8,7 +8,7 @@ export function MypageBanner() {
         style={{ borderRadius: 32, boxShadow: "0 4px 24px rgba(0,0,0,0.10)" }}
       >
         <Image
-          src="/mypage/man_woman_w.png"
+          src="/mypage/man_woman_w.webp"
           alt="커뮤니티 배너"
           width={900}
           height={400}

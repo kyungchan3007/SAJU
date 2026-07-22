@@ -5,7 +5,7 @@ const SITE_URL_FALLBACK = "https://saju-me.com";
 
 export const SITE_URL = env.NEXT_PUBLIC_APP_URL || SITE_URL_FALLBACK;
 export const SITE_NAME = env.NEXT_PUBLIC_APP_NAME;
-export const DEFAULT_OG_IMAGE_URL = getAbsoluteUrl("/image/background.png");
+export const DEFAULT_OG_IMAGE_URL = getAbsoluteUrl("/image/background.webp");
 
 /**
  * 콘텐츠의 발행 주체명.

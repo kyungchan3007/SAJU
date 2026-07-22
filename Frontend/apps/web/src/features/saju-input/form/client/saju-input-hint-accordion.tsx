@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useId, useState } from "react";
 
 const HINTS = [
   "양력과 음력 중 어떤 기준인지 먼저 확인한 뒤 입력해 주세요.",
@@ -10,6 +10,7 @@ const HINTS = [
 
 export function SajuInputHintAccordion() {
   const [isOpen, setIsOpen] = useState(false);
+  const contentId = useId();
 
   return (
     <div
@@ -20,6 +21,8 @@ export function SajuInputHintAccordion() {
       <button
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
+        aria-expanded={isOpen}
+        aria-controls={contentId}
         className="flex w-full items-center justify-between px-4 py-3.5"
       >
         <div className="flex items-center gap-2">
@@ -45,7 +48,8 @@ export function SajuInputHintAccordion() {
 
       {/* 콘텐츠 */}
       <div
-        className="transition-all duration-200"
+        id={contentId}
+        className="transition-[max-height] duration-200"
         style={{
           maxHeight: isOpen ? "200px" : "0px",
           overflow: "hidden",

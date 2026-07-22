@@ -1,5 +1,6 @@
 "use client";
 
+import { useId } from "react";
 import type { FocusEvent } from "react";
 import { Bell } from "lucide-react";
 
@@ -9,6 +10,7 @@ import { cn } from "@/shared/lib/utils";
 import { useNotificationCenter } from "../hooks/useNotificationCenter";
 
 export function NotificationBell() {
+  const panelId = useId();
   const {
     isOpen,
     open,
@@ -36,20 +38,30 @@ export function NotificationBell() {
     >
       <button
         type="button"
+        onClick={isOpen ? close : open}
         className="relative flex h-8 w-8 items-center justify-center rounded-full text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-700"
         aria-label="알림"
         aria-expanded={isOpen}
+        aria-haspopup="dialog"
+        aria-controls={isOpen ? panelId : undefined}
       >
-        <Bell size={17} strokeWidth={1.8} />
+        <Bell size={17} strokeWidth={1.8} aria-hidden="true" />
         {unreadCount > 0 && (
           <span className="absolute -right-1 -top-1 flex min-w-4 items-center justify-center rounded-full bg-status-danger px-1 text-[10px] font-black leading-4 text-white">
             {unreadCount > 99 ? "99+" : unreadCount}
+            <span className="sr-only">읽지 않은 알림 {unreadCount}개</span>
           </span>
         )}
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 top-10 z-50 w-[320px] overflow-hidden rounded-xl border border-surface-border bg-surface-card shadow-saju-dropdown">
+        <div
+          id={panelId}
+          role="dialog"
+          aria-label="알림 센터"
+          aria-modal="false"
+          className="absolute right-0 top-10 z-50 w-[320px] overflow-hidden rounded-xl border border-surface-border bg-surface-card shadow-saju-dropdown"
+        >
           <div className="flex items-center justify-between border-b border-gray-100 px-4 py-3">
             <p className="text-sm font-black text-gray-900">알림</p>
             {unreadCount > 0 && (
@@ -84,15 +96,21 @@ function NotificationList({
 }) {
   if (isLoading) {
     return (
-      <div className="px-4 py-6 text-center text-sm font-semibold text-gray-500">
-        알림을 불러오는 중...
+      <div
+        aria-live="polite"
+        className="px-4 py-6 text-center text-sm font-semibold text-gray-500"
+      >
+        알림을 불러오는 중…
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="px-4 py-6 text-center text-sm font-semibold text-red-500">
+      <div
+        aria-live="polite"
+        className="px-4 py-6 text-center text-sm font-semibold text-red-500"
+      >
         알림을 불러오지 못했어요.
       </div>
     );
@@ -100,7 +118,10 @@ function NotificationList({
 
   if (notifications.length === 0) {
     return (
-      <div className="px-4 py-6 text-center text-sm font-semibold text-gray-500">
+      <div
+        aria-live="polite"
+        className="px-4 py-6 text-center text-sm font-semibold text-gray-500"
+      >
         아직 알림이 없어요.
       </div>
     );

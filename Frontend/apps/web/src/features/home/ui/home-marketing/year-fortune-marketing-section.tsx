@@ -61,7 +61,7 @@ export function YearFortuneMarketingSection() {
               style={{ width: "360px", height: "440px" }}
             >
               <Image
-                src="/image/background/sinnyun.png"
+                src="/image/background/sinnyun.webp"
                 alt="신년운세"
                 fill
                 sizes="360px"

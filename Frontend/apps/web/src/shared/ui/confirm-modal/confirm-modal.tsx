@@ -126,7 +126,7 @@ export function ConfirmModal({
                 confirmButtonClassNames[normalizedVariant],
               )}
             >
-              {pending ? (pendingLabel ?? "처리 중...") : confirmLabel}
+              {pending ? (pendingLabel ?? "처리 중…") : confirmLabel}
             </button>
           </div>
 

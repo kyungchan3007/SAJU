@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useId, useState } from "react";
 import {
   Briefcase,
   Heart,
@@ -52,11 +52,13 @@ function SectionExpandable({
   color: string;
 }) {
   const [expanded, setExpanded] = useState(false);
+  const contentId = useId();
 
   return (
     <div>
       <div className="mb-1.5 text-[11px] font-bold text-slate-400">{title}</div>
       <p
+        id={contentId}
         className={`text-[13px] leading-[1.75] text-gray-600 ${
           !expanded ? "line-clamp-3" : ""
         }`}
@@ -66,10 +68,12 @@ function SectionExpandable({
       <button
         type="button"
         onClick={() => setExpanded((p) => !p)}
+        aria-expanded={expanded}
+        aria-controls={contentId}
         className="mt-1 text-[12px] font-bold"
         style={{ color }}
       >
-        {expanded ? "접기" : "더보기 ···"}
+        {expanded ? "접기" : "더보기…"}
       </button>
     </div>
   );
@@ -95,15 +99,26 @@ export function TraditionalFortuneDomainCard({
       </div>
 
       {/* 탭 */}
-      <div className="mb-4 flex gap-2 overflow-x-auto pb-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <div
+        role="tablist"
+        aria-label="영역별 운세 탭"
+        className="mb-4 flex gap-2 overflow-x-auto pb-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      >
         {domains.map((d) => {
           const isActive = activeDomain === d.key;
+          const tabId = `traditional-domain-tab-${d.key}`;
+          const panelId = `traditional-domain-panel-${d.key}`;
           return (
             <button
               key={d.key}
+              id={tabId}
+              role="tab"
               type="button"
               onClick={() => onSelectDomain(d.key)}
-              className={`inline-flex shrink-0 items-center gap-1.5 rounded-full px-3 py-2 text-[13px] font-bold transition-all ${
+              aria-selected={isActive}
+              aria-controls={panelId}
+              tabIndex={isActive ? 0 : -1}
+              className={`inline-flex shrink-0 items-center gap-1.5 rounded-full px-3 py-2 text-[13px] font-bold transition-colors transition-shadow ${
                 isActive
                   ? "bg-[#5956E9] text-white shadow-[0_4px_12px_rgba(89,86,233,0.25)]"
                   : "border border-[1.5px] border-gray-200 bg-white text-gray-500 hover:border-[#5956E9] hover:text-[#5956E9]"
@@ -117,7 +132,12 @@ export function TraditionalFortuneDomainCard({
       </div>
 
       {activeDomainData && (
-        <div className="flex flex-col gap-3">
+        <div
+          id={`traditional-domain-panel-${activeDomainData.key}`}
+          role="tabpanel"
+          aria-labelledby={`traditional-domain-tab-${activeDomainData.key}`}
+          className="flex flex-col gap-3"
+        >
           {/* 점수 헤더 */}
           <div
             className={`flex items-center justify-between rounded-2xl p-4 ${c.header}`}

@@ -91,7 +91,7 @@ export function SajuCardList({
 
       {/* 나의 사주 카드 */}
       <section
-        className={`overflow-hidden rounded-2xl border bg-white shadow-sm transition-all ${
+        className={`overflow-hidden rounded-2xl border bg-white shadow-sm transition-shadow ${
           isMySelected ? "border-[#5956E9]" : "border-slate-100"
         }`}
         style={
@@ -122,6 +122,7 @@ export function SajuCardList({
         <button
           type="button"
           onClick={() => !isEditMode && onSelect("me")}
+          aria-pressed={isMySelected}
           className="flex w-full items-center gap-4 px-5 py-4 text-left"
         >
           <div
@@ -174,7 +175,8 @@ export function SajuCardList({
               <button
                 type="button"
                 onClick={() => setIsEditMode((prev) => !prev)}
-                className={`rounded-full border px-3 py-1 text-[12px] font-bold transition-all ${
+                aria-pressed={isEditMode}
+                className={`rounded-full border px-3 py-1 text-[12px] font-bold transition-colors ${
                   isEditMode
                     ? "border-[#5956E9] bg-[#5956E9] text-white"
                     : "border-slate-200 text-slate-400 hover:border-[#5956E9] hover:text-[#5956E9]"
@@ -206,7 +208,7 @@ export function SajuCardList({
               return (
                 <div
                   key={partner.id}
-                  className={`relative flex flex-col items-center rounded-[20px] border-2 bg-white p-4 pb-5 transition-all ${
+                  className={`relative flex flex-col items-center rounded-[20px] border-2 bg-white p-4 pb-5 transition-colors transition-shadow ${
                     isSelected
                       ? "border-[#5956E9] bg-[#F9F8FF]"
                       : "border-[#F3F4F6] hover:border-[#C7C4F8] hover:shadow-sm"
@@ -247,6 +249,7 @@ export function SajuCardList({
                     onClick={() =>
                       !isEditMode && onSelect(partner.id!)
                     }
+                    aria-pressed={isSelected}
                     className="flex w-full flex-col items-center gap-2.5 text-center"
                   >
                     <div
@@ -277,7 +280,7 @@ export function SajuCardList({
                 type="button"
                 onClick={disabled ? undefined : onAdd}
                 disabled={disabled}
-                className="flex min-h-[160px] flex-col items-center justify-center gap-2.5 rounded-[20px] border-2 border-dashed border-[#D1D5DB] bg-white transition-all hover:border-[#5956E9] hover:bg-[#F9F8FF] disabled:opacity-40"
+                className="flex min-h-[160px] flex-col items-center justify-center gap-2.5 rounded-[20px] border-2 border-dashed border-[#D1D5DB] bg-white transition-colors hover:border-[#5956E9] hover:bg-[#F9F8FF] disabled:opacity-40"
               >
                 <div
                   className="flex h-12 w-12 items-center justify-center rounded-full text-2xl"

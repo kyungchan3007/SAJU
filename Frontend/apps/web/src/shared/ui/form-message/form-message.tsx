@@ -22,8 +22,12 @@ export function FormMessage({
   variant = "info",
   ...props
 }: FormMessageProps) {
+  const role = variant === "error" ? "alert" : "status";
+
   return (
     <p
+      role={role}
+      aria-live={variant === "error" ? "assertive" : "polite"}
       className={cn(
         "rounded-xl border px-3 py-2.5 text-[12px] font-semibold leading-relaxed",
         formMessageVariantClassNames[variant],

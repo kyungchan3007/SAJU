@@ -57,14 +57,25 @@ export function CompatibilityResultDetailTabs({
       </div>
 
       {/* 탭 버튼 */}
-      <div className="grid grid-cols-3 gap-2 px-5 pb-0 pt-4 sm:grid-cols-4">
+      <div
+        role="tablist"
+        aria-label="궁합 상세 풀이 탭"
+        className="grid grid-cols-3 gap-2 px-5 pb-0 pt-4 sm:grid-cols-4"
+      >
         {sections.map((section, i) => {
           const isActive = i === activeSectionIndex;
+          const tabId = `compatibility-detail-tab-${i}`;
+          const panelId = `compatibility-detail-panel-${i}`;
           return (
             <button
               key={`${section.label}-${i}`}
+              id={tabId}
+              role="tab"
               type="button"
               onClick={() => onSelectSection(i)}
+              aria-selected={isActive}
+              aria-controls={panelId}
+              tabIndex={isActive ? 0 : -1}
               className="inline-flex w-full items-center justify-center gap-1.5 whitespace-nowrap rounded-full px-2 py-1.5 text-[11px] font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5956E9] focus-visible:ring-offset-2 sm:text-[12px]"
               style={
                 isActive
@@ -89,6 +100,9 @@ export function CompatibilityResultDetailTabs({
       <div className="p-5">
         {activeSection?.content ? (
           <div
+            id={`compatibility-detail-panel-${activeSectionIndex}`}
+            role="tabpanel"
+            aria-labelledby={`compatibility-detail-tab-${activeSectionIndex}`}
             className="rounded-2xl border p-4"
             style={{ background: "#F9F8FF", borderColor: "#E0DAFF" }}
           >

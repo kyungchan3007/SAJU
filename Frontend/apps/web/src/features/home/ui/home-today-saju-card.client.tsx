@@ -8,6 +8,14 @@ import { useHomeTodaySajuCard } from "@/features/home/hooks/useHomeTodaySajuCard
 import { Button } from "@/shared/ui";
 import { formatWeakElementLabel } from "@/shared/utils/weakElement";
 
+const HERO_PANEL_CLASS_NAME =
+  "rounded-2xl p-8 backdrop-blur-xl";
+const HERO_PANEL_STYLE = {
+  background: "rgba(15, 10, 40, 0.50)",
+  border: "1px solid rgba(255, 255, 255, 0.15)",
+  boxShadow: "0 8px 32px rgba(0, 0, 0, 0.35)",
+} as const;
+
 export function HomeTodaySajuCard() {
   const { daily, error, fiveElementRows, isLoading } = useHomeTodaySajuCard();
   const shouldShowSajuInputCta =
@@ -16,7 +24,10 @@ export function HomeTodaySajuCard() {
 
   if (isLoading) {
     return (
-      <div className="hero-panel flex flex-col gap-3">
+      <div
+        className={`${HERO_PANEL_CLASS_NAME} flex flex-col gap-3`}
+        style={HERO_PANEL_STYLE}
+      >
         <p className="text-xs font-bold text-white">나의 오행 분석</p>
         <p className="text-sm text-white/50">
           오행 데이터를 불러오는 중이에요.
@@ -27,7 +38,10 @@ export function HomeTodaySajuCard() {
 
   if (error) {
     return (
-      <div className="hero-panel flex flex-col gap-4">
+      <div
+        className={`${HERO_PANEL_CLASS_NAME} flex flex-col gap-4`}
+        style={HERO_PANEL_STYLE}
+      >
         <p className="text-xs font-bold text-white">나의 오행 분석</p>
         <p className="text-sm text-white/50">
           {error instanceof Error
@@ -44,7 +58,10 @@ export function HomeTodaySajuCard() {
   }
 
   return (
-    <div className="hero-panel flex flex-col gap-3">
+    <div
+      className={`${HERO_PANEL_CLASS_NAME} flex flex-col gap-3`}
+      style={HERO_PANEL_STYLE}
+    >
       {/* 헤더 */}
       <div className="flex items-center justify-between">
         <span className="text-xs font-bold text-white">나의 오행 분석</span>
@@ -83,7 +100,7 @@ export function HomeTodaySajuCard() {
                 style={{ background: "rgba(255,255,255,0.15)" }}
               >
                 <div
-                  className="h-full rounded-full transition-all duration-500"
+                  className="h-full rounded-full transition-[width] duration-500"
                   style={{
                     width: `${element.percentage}%`,
                     background: element.color,

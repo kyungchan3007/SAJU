@@ -23,7 +23,7 @@ export function AdProgressNote({ state, children }: Props) {
 
   return (
     <div
-      className="flex items-start gap-2.5 rounded-[14px] border px-4 py-3 text-[13px] font-semibold transition-all duration-300"
+      className="flex items-start gap-2.5 rounded-[14px] border px-4 py-3 text-[13px] font-semibold transition-colors duration-300"
       style={{
         background: style.bg,
         borderColor: style.border,

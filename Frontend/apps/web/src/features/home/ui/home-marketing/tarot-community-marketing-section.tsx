@@ -64,7 +64,7 @@ export function TarotCommunityMarketingSection() {
               style={{ width: "360px", height: "440px" }}
             >
               <Image
-                src="/image/community/home_group.png"
+                src="/image/community/home_group.webp"
                 alt="타로 & 커뮤니티"
                 fill
                 sizes="360px"

@@ -23,7 +23,7 @@ export default function InputStep({ steps }: InputStepProps) {
         return (
           <span
             key={step.label}
-            className="inline-flex items-center gap-1.5 border-2 px-3 py-1 text-xs font-bold transition-all"
+            className="inline-flex items-center gap-1.5 border-2 px-3 py-1 text-xs font-bold transition-colors transition-shadow"
             style={
               step.active
                 ? {

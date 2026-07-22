@@ -37,7 +37,8 @@ function TopicButton({
       type="button"
       onClick={() => onToggle(id)}
       disabled={disabled}
-      className={`flex flex-col items-center gap-1.5 rounded-2xl border-[1.5px] bg-white px-2 py-3 text-center transition-all duration-150 ${
+      aria-pressed={selected}
+      className={`flex flex-col items-center gap-1.5 rounded-2xl border-[1.5px] bg-white px-2 py-3 text-center transition-colors duration-150 ${
         wide ? "col-span-2" : ""
       } ${
         selected

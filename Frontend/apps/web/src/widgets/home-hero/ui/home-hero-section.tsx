@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import type { Route } from "next";
 import type { ReactNode } from "react";
@@ -25,16 +24,27 @@ export function HomeHeroSection({
       aria-labelledby={headingId}
     >
       {/* 배경 이미지 — 항상 풀 커버 */}
-      <Image
-        src="/image/hero/hero_3.png"
-        // src="/image/hero/hero_4.png"
-        alt=""
-        aria-hidden="true"
-        fill
-        priority
-        sizes="100vw"
-        className="object-cover object-center"
-      />
+      <picture className="absolute inset-0">
+        <source
+          media="(max-width: 767px)"
+          srcSet="/image/hero/hero_3-mobile.webp"
+          type="image/webp"
+        />
+        <source
+          media="(min-width: 768px)"
+          srcSet="/image/hero/hero_3-desktop.webp"
+          type="image/webp"
+        />
+        <img
+          src="/image/hero/hero_3-desktop.webp"
+          alt=""
+          aria-hidden="true"
+          fetchPriority="high"
+          loading="eager"
+          decoding="async"
+          className="h-full w-full object-cover object-center"
+        />
+      </picture>
 
       {/* 전체 어두운 오버레이 — 텍스트 가독성 기반 */}
       <div className="bg-black/05 pointer-events-none absolute inset-0" />

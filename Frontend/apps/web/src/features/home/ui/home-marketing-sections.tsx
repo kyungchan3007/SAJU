@@ -10,7 +10,12 @@ import { YearFortuneMarketingSection } from "@/features/home/ui/home-marketing/y
 /** 게스트/로그인 홈 공통 섹션 02~06 + 하단 CTA */
 export function HomeMarketingSections() {
   return (
-    <>
+    <div
+      style={{
+        contentVisibility: "auto",
+        containIntrinsicSize: "4200px",
+      }}
+    >
       <TraditionalSajuMarketingSection />
       <BigLuckMarketingSection />
       <SajuReadingGuideSection />
@@ -19,6 +24,6 @@ export function HomeMarketingSections() {
       <FeaturedContentSection />
       <TarotCommunityMarketingSection />
       <HomeMarketingCtaSection />
-    </>
+    </div>
   );
 }

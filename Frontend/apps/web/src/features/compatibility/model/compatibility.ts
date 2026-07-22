@@ -162,23 +162,23 @@ export function getPartnerSelectCtaLabel(
 // ── 이미지 매핑 ──────────────────────────────────────
 
 const PARTNER_FEMALE_IMAGES = [
-  "/image/compatibility/avatar-FEMALE-1.png",
-  "/image/compatibility/avatar-FEMALE-2.png",
-  "/image/compatibility/avatar-FEMALE-3.png",
-  "/image/compatibility/avatar-FEMALE-4.png",
+  "/image/compatibility/avatar-FEMALE-1.webp",
+  "/image/compatibility/avatar-FEMALE-2.webp",
+  "/image/compatibility/avatar-FEMALE-3.webp",
+  "/image/compatibility/avatar-FEMALE-4.webp",
 ] as const;
 
 const PARTNER_MALE_IMAGES = [
-  "/image/compatibility/avatar-MALE-1.png",
-  "/image/compatibility/avatar-MALE-2.png",
-  "/image/compatibility/avatar-MALE-3.png",
-  "/image/compatibility/avatar-MALE-4.png",
+  "/image/compatibility/avatar-MALE-1.webp",
+  "/image/compatibility/avatar-MALE-2.webp",
+  "/image/compatibility/avatar-MALE-3.webp",
+  "/image/compatibility/avatar-MALE-4.webp",
 ] as const;
 
 /** 내 프로필 아바타 이미지 (gender → me/ 폴더) */
 export function getMyAvatarSrc(gender?: string | null): string {
-  if (gender === "MALE") return "/image/compatibility/me/avatar-MALE.png";
-  return "/image/compatibility/me/avatar-FEMALE.png";
+  if (gender === "MALE") return "/image/compatibility/me/avatar-MALE.webp";
+  return "/image/compatibility/me/avatar-FEMALE.webp";
 }
 
 /** 상대방 아바타 이미지 (gender + stable index → compatibility/ 폴더) */
@@ -193,15 +193,15 @@ export function getPartnerAvatarSrc(
 /** MyProfileCard용 매칭 이미지 (gender → matching/ 폴더) */
 export function getMatchingImageSrc(gender?: string | null): string {
   return gender === "MALE"
-    ? "/image/compatibility/matching/avatar-MALE_TIN.png"
-    : "/image/compatibility/matching/avatar-FEMALE_TIN.png";
+    ? "/image/compatibility/matching/avatar-MALE_TIN.webp"
+    : "/image/compatibility/matching/avatar-FEMALE_TIN.webp";
 }
 
 /** SelectedPartnerCard용 TIN 이미지 (gender → matching/ 폴더) */
 export function getPartnerTinImageSrc(gender?: string | null): string {
   return gender === "MALE"
-    ? "/image/compatibility/matching/matching_MALE.png"
-    : "/image/compatibility/matching/matching_FEMALE.png";
+    ? "/image/compatibility/matching/matching_MALE.webp"
+    : "/image/compatibility/matching/matching_FEMALE.webp";
 }
 
 /** 이름 첫 글자 추출 */

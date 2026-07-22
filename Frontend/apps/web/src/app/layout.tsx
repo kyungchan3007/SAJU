@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Jua, Noto_Sans_KR } from "next/font/google";
-import Script from "next/script";
 import type { ReactNode } from "react";
 import { env } from "@/shared/config";
 import {
@@ -22,6 +21,7 @@ const jua = Jua({
   subsets: ["latin"],
   variable: "--font-display",
   display: "swap",
+  preload: false,
 });
 
 export const metadata: Metadata = {
@@ -65,14 +65,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body
         className={`${notoSansKr.variable} ${jua.variable} font-sans text-foreground antialiased`}
       >
-        {env.NEXT_PUBLIC_ADSENSE_CLIENT_ID ? (
-          <Script
-            async
-            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${env.NEXT_PUBLIC_ADSENSE_CLIENT_ID}`}
-            crossOrigin="anonymous"
-            strategy="afterInteractive"
-          />
-        ) : null}
         {children}
       </body>
     </html>

@@ -83,7 +83,7 @@ test.describe("community application flow", () => {
     await page.getByRole("button", { name: "중복 확인" }).click();
 
     await expect(nicknameInput).toBeDisabled();
-    await expect(page.getByText("닉네임 확인 중...")).toBeVisible();
+    await expect(page.getByText("닉네임 확인 중…")).toBeVisible();
     await expect(page.getByText("사용 가능한 닉네임이에요")).toBeVisible();
     await expect(nicknameInput).toBeEnabled();
   });

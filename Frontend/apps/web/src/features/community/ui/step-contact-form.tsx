@@ -59,7 +59,7 @@ export function StepContactForm({
             disabled={!canCheck}
             className="h-12 shrink-0 rounded-2xl border-[1.5px] border-[#E0DAFF] bg-white px-4 text-[13px] font-bold text-[#5956E9] hover:bg-[#F9F8FF] hover:text-[#5956E9] disabled:cursor-not-allowed disabled:opacity-50"
           >
-            {isChecking ? "확인 중..." : "중복 확인"}
+            {isChecking ? "확인 중…" : "중복 확인"}
           </Button>
         </div>
 
@@ -72,7 +72,7 @@ export function StepContactForm({
             이미 사용 중인 닉네임이에요. 다른 닉네임을 입력해주세요.
           </p>
         ) : checkStatus === "checking" ? (
-          <p className="mt-0.5 text-[12px] text-gray-400">닉네임 확인 중...</p>
+          <p className="mt-0.5 text-[12px] text-gray-400">닉네임 확인 중…</p>
         ) : hasNickname ? (
           <p className="mt-0.5 text-[12px] font-semibold text-[#5956E9]">
             중복 확인이 필요해요.

@@ -1,3 +1,6 @@
+import Link from "next/link";
+import type { Route } from "next";
+
 import {
   MYPAGE_ALL_MENU_ITEMS,
   type MypageAllMenuIconKey,
@@ -117,10 +120,10 @@ export function MypageAllMenu() {
 
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5">
         {MYPAGE_ALL_MENU_ITEMS.map((item) => (
-          <a
+          <Link
             key={item.label}
-            href={item.href}
-            className="group flex cursor-pointer flex-col items-center justify-center rounded-2xl border border-slate-100 bg-white p-6 shadow-sm transition-all hover:border-[#5956E9]/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5956E9]/70 focus-visible:ring-offset-2"
+            href={item.href as Route}
+            className="group flex cursor-pointer flex-col items-center justify-center rounded-2xl border border-slate-100 bg-white p-6 shadow-sm transition-colors transition-shadow hover:border-[#5956E9]/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5956E9]/70 focus-visible:ring-offset-2"
           >
             <div
               className="mb-4 transition-transform group-hover:scale-110"
@@ -132,7 +135,7 @@ export function MypageAllMenu() {
               {item.label}
             </span>
             <span className="text-[10px] text-slate-400">{item.sub}</span>
-          </a>
+          </Link>
         ))}
       </div>
     </section>

@@ -3,7 +3,6 @@ import Link from "next/link";
 import { KAKAO_LOGIN_URL } from "@/shared/config/endPoint";
 import { HomeMarketingSections } from "@/features/home/ui/home-marketing-sections";
 import { HomeHeroSection } from "@/widgets/home-hero/ui/home-hero-section";
-import { KakaoLoginSubmitButton } from "@/features/auth/ui/kakao-login-submit-button.client";
 
 type WelcomSectionProps = {
   primaryCtaHref: Route;
@@ -162,16 +161,30 @@ function GuestFortuneCard() {
         </div>
       </div>
 
-      <KakaoLoginSubmitButton
-        ariaLabel="카카오 계정으로 로그인"
+      <a
+        href={KAKAO_LOGIN_URL}
         className="flex min-h-11 items-center justify-center gap-2 rounded-xl py-3 text-sm font-bold transition hover:brightness-95 active:scale-[0.98]"
         style={{
           backgroundColor: "#FEE500",
           color: "rgba(0,0,0,0.85)",
           boxShadow: "0 2px 8px rgba(0,0,0,0.12)",
         }}
-        kakaoLoginUrl={KAKAO_LOGIN_URL}
-      />
+        aria-label="카카오 계정으로 로그인"
+      >
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+          fill="none"
+          aria-hidden="true"
+        >
+          <path
+            fill="currentColor"
+            d="M10 2.5c-4.418 0-8 2.756-8 6.156 0 2.199 1.508 4.125 3.775 5.215l-.954 3.49a.427.427 0 0 0 .638.468l4.16-2.754c.127.008.255.012.381.012 4.418 0 8-2.756 8-6.156S14.418 2.5 10 2.5Z"
+          />
+        </svg>
+        카카오로 시작하기
+      </a>
 
       {/*<p className="text-center text-[10px] text-gray-400">*/}
       {/*  무료 · 광고 없음 · 1분 완성*/}

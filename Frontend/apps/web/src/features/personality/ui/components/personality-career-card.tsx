@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useId, useState } from "react";
 import { Briefcase } from "lucide-react";
 
 type Props = {
@@ -10,6 +10,7 @@ type Props = {
 
 export function PersonalityCareerCard({ careerStyle, careerTypes }: Props) {
   const [expanded, setExpanded] = useState(false);
+  const contentId = useId();
   const validTypes = (careerTypes ?? []).filter(
     (t): t is string => typeof t === "string" && t.length > 0,
   );
@@ -49,6 +50,7 @@ export function PersonalityCareerCard({ careerStyle, careerTypes }: Props) {
             직업 스타일
           </div>
           <p
+            id={contentId}
             className={`text-[13px] leading-[1.75] text-gray-600 ${!expanded ? "line-clamp-4" : ""}`}
           >
             {careerStyle}
@@ -56,9 +58,11 @@ export function PersonalityCareerCard({ careerStyle, careerTypes }: Props) {
           <button
             type="button"
             onClick={() => setExpanded((p) => !p)}
+            aria-expanded={expanded}
+            aria-controls={contentId}
             className="mt-1 text-[12px] font-bold text-[#5956E9]"
           >
-            {expanded ? "접기" : "더보기 ···"}
+            {expanded ? "접기" : "더보기…"}
           </button>
         </div>
       )}

@@ -15,11 +15,13 @@ test.describe("global nav notifications", () => {
 
     const bell = page.getByRole("button", { name: "알림" });
     await expect(bell).toBeVisible();
-    await expect(bell.locator("span", { hasText: "1" })).toBeVisible();
+    await expect(bell.getByText("읽지 않은 알림 1개")).toBeAttached();
 
     await bell.hover();
 
-    await expect(page.getByText("알림").last()).toBeVisible();
+    await expect(
+      page.getByRole("dialog", { name: "알림 센터" }),
+    ).toBeVisible();
     await expect(page.getByText("안읽음 1")).toBeVisible();
     await expect(page.getByText("새 기능이 열렸어요")).toBeVisible();
     await expect(page.getByText("서비스 점검 안내")).toBeVisible();

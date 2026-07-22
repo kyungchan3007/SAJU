@@ -38,7 +38,7 @@ export function ZodiacCompatibilityContent({
           }}
         />
         <Image
-          src="/image/animals/dog_cat.png"
+          src="/image/animals/dog_cat.webp"
           alt="띠별궁합 배너"
           width={1152}
           height={320}

@@ -16,7 +16,10 @@ export async function LoginPanel({ nextPath }: LoginPanelProps) {
   const isPreVerified = cookieStore.get(TURNSTILE_VERIFIED_COOKIE_KEY)?.value === "1";
 
   return (
-    <div className="card-saju-primary relative overflow-hidden p-7">
+    <div
+      className="relative overflow-hidden rounded-2xl border border-slate-100 bg-white p-7"
+      style={{ boxShadow: "0 2px 8px rgba(0, 0, 0, 0.06)" }}
+    >
       <LoginPanelContent kakaoLoginUrl={kakaoLoginUrl} isPreVerified={isPreVerified} />
     </div>
   );

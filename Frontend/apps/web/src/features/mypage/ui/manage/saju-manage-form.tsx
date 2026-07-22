@@ -123,7 +123,7 @@ export function SajuManageForm({
             disabled={isPending || !isSubmittable}
             className="h-[50px] w-full text-[15px] font-black disabled:opacity-40"
           >
-            {isPending ? "수정 중..." : "저장하기"}
+            {isPending ? "수정 중…" : "저장하기"}
           </Button>
         </div>
       </div>

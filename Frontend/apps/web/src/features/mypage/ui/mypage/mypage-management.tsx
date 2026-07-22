@@ -77,7 +77,7 @@ export function MypageManagement({ items }: Props) {
           <Link
             key={item.label}
             href={item.href}
-            className="group flex cursor-pointer items-center justify-between rounded-2xl border border-transparent p-4 transition-all hover:border-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5956E9] focus-visible:ring-offset-2"
+            className="group flex cursor-pointer items-center justify-between rounded-2xl border border-transparent p-4 transition-colors hover:border-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5956E9] focus-visible:ring-offset-2"
             style={{ background: "rgba(248,250,252,0.5)" }}
           >
             <div className="flex items-center gap-4">

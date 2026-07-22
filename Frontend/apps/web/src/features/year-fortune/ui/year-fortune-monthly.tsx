@@ -88,6 +88,7 @@ export function YearFortuneMonthly({ months }: Props) {
                 </div>
 
                 <p
+                  id={`year-fortune-month-${m.month}`}
                   className={`text-[13px] leading-[1.75] text-[#4B5563] ${
                     !isExpanded ? "line-clamp-3" : ""
                   }`}
@@ -99,6 +100,8 @@ export function YearFortuneMonthly({ months }: Props) {
                   <button
                     type="button"
                     onClick={() => toggle(m.month)}
+                    aria-expanded={isExpanded}
+                    aria-controls={`year-fortune-month-${m.month}`}
                     className="mt-1.5 inline-flex cursor-pointer items-center gap-1 text-[11px] font-bold text-[#5956E9] hover:opacity-75"
                   >
                     {isExpanded ? "접기 ↑" : "더보기 ↓"}

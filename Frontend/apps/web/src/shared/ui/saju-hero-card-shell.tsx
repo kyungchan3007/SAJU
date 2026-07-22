@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 // [DS] 역할: 사주/운세 계열 히어로에서 공통으로 쓰는 이미지 배경 카드 shell.
 // [DS] 현재 사용처: 사주 미리보기 히어로, 궁합 히어로, 정통사주 히어로.
 type SajuHeroCardShellProps = {
@@ -28,11 +30,12 @@ export function SajuHeroCardShell({
         />
 
         {imageSrc && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
+          <Image
             src={imageSrc}
             alt={imageAlt}
-            className="absolute inset-0 h-full w-full object-cover object-center md:object-[60%_10%]"
+            fill
+            sizes="(max-width: 768px) 100vw, 1200px"
+            className="object-cover object-center md:object-[60%_10%]"
           />
         )}
 
