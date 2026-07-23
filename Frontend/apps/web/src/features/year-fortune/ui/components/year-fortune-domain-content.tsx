@@ -2,11 +2,24 @@ import type { DomainDisplay } from "@/features/year-fortune/model/yearFortune";
 
 type Props = {
   active: DomainDisplay;
+  id: string;
+  labelledBy: string;
+  hidden?: boolean;
 };
 
-export function YearFortuneDomainContent({ active }: Props) {
+export function YearFortuneDomainContent({
+  active,
+  id,
+  labelledBy,
+  hidden = false,
+}: Props) {
   return (
-    <div>
+    <div
+      id={id}
+      role="tabpanel"
+      aria-labelledby={labelledBy}
+      hidden={hidden}
+    >
       {/* 도메인 헤더 */}
       <div className="mb-4 flex items-center gap-2">
         <div
@@ -24,7 +37,7 @@ export function YearFortuneDomainContent({ active }: Props) {
           {active.content}
         </p>
       ) : (
-        <p className="text-[13px] text-slate-400">내용이 없습니다.</p>
+        <p className="text-[13px] text-slate-500">내용이 없습니다.</p>
       )}
     </div>
   );

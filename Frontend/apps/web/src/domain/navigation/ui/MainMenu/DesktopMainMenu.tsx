@@ -9,7 +9,7 @@ export function DesktopMainMenu({ items }: { items: ResolvedNavItem[] }) {
         <Link
           key={item.href}
           href={item.href as Route}
-          className={`px-4 py-1.5 text-sm font-semibold transition-colors ${
+          className={`px-4 py-1.5 text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-saju-primary focus-visible:ring-offset-2 ${
             item.active
               ? "border-b-2 border-[#5956E9] text-[#5956E9]"
               : "text-gray-500 hover:text-gray-700"

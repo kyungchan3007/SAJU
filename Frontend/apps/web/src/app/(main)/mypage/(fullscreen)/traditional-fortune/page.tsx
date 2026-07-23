@@ -25,8 +25,11 @@ export default async function TraditionalFortunePage() {
   }
 
   return (
-    <ProtectedSajuServiceGate servicePath="/mypage/traditional-fortune">
-      <JeongtongsajuAndFortuneSection />
-    </ProtectedSajuServiceGate>
+    <>
+      <h1 className="sr-only">정통사주</h1>
+      <ProtectedSajuServiceGate servicePath="/mypage/traditional-fortune">
+        <JeongtongsajuAndFortuneSection />
+      </ProtectedSajuServiceGate>
+    </>
   );
 }

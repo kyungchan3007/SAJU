@@ -73,7 +73,7 @@ export function MyApplicationSection() {
           <p className="text-sm font-bold text-slate-500">
             아직 신청한 모임이 없어요
           </p>
-          <p className="mt-1.5 text-xs text-slate-400">
+          <p className="mt-1.5 text-xs text-slate-500">
             소개팅 모임에 참여하면 신청 내역과 상태를 여기에서 확인할 수 있어요.
           </p>
         </div>

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import type { MeetingType } from "@/features/community/model/community";
+import styles from "@/features/community/ui/community.module.css";
 
 type Props = {
   selectedType: MeetingType;
@@ -25,13 +26,13 @@ export function StepMeetingType({ selectedType, onSelect }: Props) {
   return (
     <div>
       <div className="mb-1 flex items-center gap-3">
-        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#5956E9] text-[13px] font-extrabold text-white">
+        <div className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full font-extrabold text-white ${styles.stepBadge}`}>
           03
         </div>
-        <h2 className="text-[20px] font-black text-gray-900">관심 있는 만남 유형 선택</h2>
-        <span className="ml-auto text-[11px] font-bold text-gray-400">1 / 3</span>
+        <h2 className={`font-black text-gray-900 ${styles.sectionTitle}`}>관심 있는 만남 유형 선택</h2>
+        <span className={`ml-auto font-bold text-gray-400 ${styles.bottomBarHint}`}>1 / 3</span>
       </div>
-      <p className="mb-5 ml-10 text-[13px] text-gray-400">참여하고 싶은 만남 유형을 선택해주세요.</p>
+      <p className={`mb-5 text-gray-400 ${styles.sectionHint}`}>참여하고 싶은 만남 유형을 선택해주세요.</p>
 
       <div
         role="radiogroup"
@@ -47,20 +48,14 @@ export function StepMeetingType({ selectedType, onSelect }: Props) {
               type="button"
               onClick={() => onSelect(id)}
               aria-checked={selected}
-              className={`relative cursor-pointer overflow-hidden rounded-[20px] border-2 bg-white text-left transition-colors transition-shadow duration-200 ${
-                selected
-                  ? "border-[#5956E9] shadow-[0_4px_20px_rgba(89,86,233,0.18)]"
-                  : "border-gray-100 hover:border-[#C7C4F8] hover:shadow-[0_4px_20px_rgba(89,86,233,0.10)]"
-              }`}
+              className={`relative cursor-pointer overflow-hidden border-2 bg-white text-left transition-colors transition-shadow duration-200 ${styles.selectionCard} ${selected ? styles.selectionCardActive : `border-gray-100 ${styles.selectionCardIdle}`}`}
             >
               <div
-                className={`absolute right-3 top-3 flex h-6 w-6 items-center justify-center rounded-full border-2 transition-colors duration-200 ${
-                  selected ? "border-[#5956E9] bg-[#5956E9]" : "border-gray-200 bg-white"
-                }`}
+                className={`absolute right-3 top-3 flex h-6 w-6 items-center justify-center rounded-full border-2 transition-colors duration-200 ${selected ? styles.selectionRadioActive : "border-gray-200 bg-white"}`}
               >
                 {selected && <div className="h-2.5 w-2.5 rounded-full bg-white" />}
               </div>
-              <div className="relative h-[180px] w-full">
+              <div className={`relative w-full ${styles.selectionImage}`}>
                 <Image
                   src={image}
                   alt={title}
@@ -70,17 +65,17 @@ export function StepMeetingType({ selectedType, onSelect }: Props) {
                 />
               </div>
               <div className="p-4 pb-5">
-                <div className="mb-1.5 text-[15px] font-extrabold text-gray-900">{title}</div>
-                <div className="text-[12px] leading-relaxed text-gray-500">{desc}</div>
+                <div className={`mb-1.5 font-extrabold text-gray-900 ${styles.selectionTitle}`}>{title}</div>
+                <div className={`leading-relaxed text-gray-500 ${styles.selectionDesc}`}>{desc}</div>
               </div>
             </button>
           );
         })}
       </div>
 
-      <div className="mt-4 flex items-start gap-2 rounded-2xl bg-[#F0EEFF] px-4 py-3">
+      <div className={`mt-4 flex items-start gap-2 rounded-2xl px-4 py-3 ${styles.tipBox}`}>
         <span className="mt-0.5 shrink-0 text-[14px]">💡</span>
-        <p className="text-[11px] font-semibold leading-relaxed text-[#5956E9]">
+        <p className={`font-semibold leading-relaxed ${styles.tipText}`}>
           지금 바로 매칭되거나 연결되는 서비스가 아니에요.
           <br />
           관심이 모이면 로테이션 친구 모임 또는 소개팅 회차가 열릴 수 있어요.

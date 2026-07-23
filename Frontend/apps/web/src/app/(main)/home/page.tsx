@@ -19,9 +19,5 @@ export default async function HomePage() {
 
   const primaryCtaHref = resolveCommunityEntryHref(isLoggedIn);
 
-  return (
-    <main>
-      <HomeSection primaryCtaHref={primaryCtaHref} />
-    </main>
-  );
+  return <HomeSection primaryCtaHref={primaryCtaHref} />;
 }

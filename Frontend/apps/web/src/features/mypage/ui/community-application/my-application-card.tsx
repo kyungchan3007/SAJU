@@ -26,7 +26,7 @@ export function MyApplicationCard({
   return (
     <div className="rounded-2xl border border-slate-100 p-6">
       <div className="mb-4 flex items-start justify-between gap-3">
-        <h4 className="text-base font-bold text-slate-800">{view.title}</h4>
+        <div className="text-base font-bold text-slate-800">{view.title}</div>
         <span
           className={`shrink-0 rounded-full border px-3 py-1 text-xs font-bold ${
             BADGE_CLASS[view.statusTone]
@@ -63,7 +63,7 @@ export function MyApplicationCard({
           >
             {isCancelling ? "취소 요청 중..." : "참가 취소 요청"}
           </button>
-          <ul className="mt-3 space-y-1 text-[11px] leading-relaxed text-slate-400">
+          <ul className="mt-3 space-y-1 text-[11px] leading-relaxed text-slate-500">
             <li>
               · 입금 후 취소는 여기서 요청 → 운영자 확인 후{" "}
               <b className="text-slate-500">수기 환불</b>됩니다.

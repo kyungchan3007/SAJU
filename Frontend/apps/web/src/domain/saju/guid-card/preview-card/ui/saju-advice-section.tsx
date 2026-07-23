@@ -1,4 +1,5 @@
 import type { SajuPreviewSectionProps } from "@/domain/saju/guid-card/preview-card/type/saju-preview-card.types";
+import styles from "@/domain/saju/guid-card/preview-card/ui/preview-card.module.css";
 
 export function SajuAdviceSection({ dailyResult }: SajuPreviewSectionProps) {
   const avoidJoined =
@@ -8,14 +9,10 @@ export function SajuAdviceSection({ dailyResult }: SajuPreviewSectionProps) {
 
   return (
     <div
-      className="rounded-[14px] bg-white p-5"
-      style={{
-        boxShadow: "0 1px 8px rgba(0,0,0,0.05)",
-        border: "1px solid #F3F4F6",
-      }}
+      className={`bg-white p-5 ${styles.panel} ${styles.adviceCard}`}
     >
-      <div className="mb-5 flex flex-col items-start gap-[18px] md:flex-row md:items-center">
-        <div className="flex h-[60px] w-[60px] shrink-0 items-center justify-center rounded-full bg-saju-tint">
+      <div className={`mb-5 flex flex-col items-start md:flex-row md:items-center ${styles.adviceHero}`}>
+        <div className={`flex shrink-0 items-center justify-center rounded-full bg-saju-tint ${styles.adviceIconWrap}`}>
           <svg
             width="28"
             height="28"
@@ -35,7 +32,7 @@ export function SajuAdviceSection({ dailyResult }: SajuPreviewSectionProps) {
           <h3 className="mb-1.5 text-base font-extrabold text-gray-900">
             오늘의 조언
           </h3>
-          <p className="text-[13px] leading-[1.75] text-gray-500">
+          <p className={`text-gray-500 ${styles.adviceBody}`}>
             오늘은 조화와 균형이 중요한 날이에요. 좋은 흐름을 잘 활용하고,
             무리한 흐름은 피하면 더 편안하고 안정적인 하루를 보낼 수 있어요.
           </p>
@@ -59,7 +56,7 @@ export function SajuAdviceSection({ dailyResult }: SajuPreviewSectionProps) {
         ].map((box) => (
           <div
             key={box.label}
-            className="rounded-[12px] border border-saju-border/30 p-4"
+            className={`border border-saju-border/30 p-4 ${styles.adviceBox}`}
           >
             <div className="mb-2.5 flex items-center gap-1.5">
               <svg
@@ -75,11 +72,11 @@ export function SajuAdviceSection({ dailyResult }: SajuPreviewSectionProps) {
               >
                 <polyline points="20 6 9 17 4 12" />
               </svg>
-              <span className="text-[10px] font-bold tracking-[0.04em] text-saju-primary xs:text-xs">
+              <span className={`font-bold text-saju-primary xs:text-xs ${styles.adviceLabel}`}>
                 {box.label}
               </span>
             </div>
-            <p className="text-[14px] font-bold leading-[1.5] text-gray-900 xs:text-xs">
+            <p className={`font-bold text-gray-900 xs:text-xs ${styles.adviceValue}`}>
               {box.value}
             </p>
           </div>

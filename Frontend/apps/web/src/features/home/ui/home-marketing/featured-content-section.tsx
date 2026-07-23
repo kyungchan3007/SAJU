@@ -52,7 +52,7 @@ export function FeaturedContentSection() {
       <PageContainer width="content">
         <div className="flex flex-col gap-8">
           <div className="flex flex-col gap-3 text-center md:text-left">
-            <div className="text-xs text-gray-400">먼저 읽어보면 좋은 공개 콘텐츠</div>
+            <div className="text-xs text-gray-500">먼저 읽어보면 좋은 공개 콘텐츠</div>
             <h2 className="text-3xl font-black leading-snug text-gray-900">
               사주 이야기와 운영 안내
             </h2>
@@ -66,7 +66,7 @@ export function FeaturedContentSection() {
               <Link
                 key={item.href}
                 href={item.href}
-                className="rounded-3xl border border-gray-100 bg-white px-5 py-5 shadow-sm transition-shadow hover:shadow-md"
+                className="rounded-3xl border border-gray-100 bg-white px-5 py-5 shadow-sm transition-shadow hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-saju-primary focus-visible:ring-offset-2"
               >
                 <div className="mb-2 text-xs font-bold uppercase tracking-[0.16em] text-[#5956E9]">
                   {item.eyebrow}

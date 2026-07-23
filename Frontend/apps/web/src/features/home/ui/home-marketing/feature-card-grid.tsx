@@ -28,7 +28,7 @@ function FeatureCard({ card }: { card: HomeMarketingFeatureCard }) {
       </div>
       <div>
         <div className="mb-1 text-xs font-bold text-gray-900">{card.title}</div>
-        <div className="text-xs leading-relaxed text-gray-400">{card.desc}</div>
+        <div className="text-xs leading-relaxed text-gray-600">{card.desc}</div>
       </div>
     </div>
   );

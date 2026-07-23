@@ -6,7 +6,6 @@ import {
   GUEST_NAV_ITEMS,
   MOBILE_TAB_ITEMS,
   NAV_ITEMS,
-  isGlobalNavHiddenPath,
   resolveNavItemHref,
   type ResolvedNavItem,
 } from "@/domain/navigation/model/nav-items";
@@ -20,7 +19,6 @@ function isActive(href: string, pathname: string): boolean {
 
 export function useGlobalNavItems(isLoggedIn: boolean) {
   const pathname = usePathname();
-  const hidden = isGlobalNavHiddenPath(pathname);
   const desktopSourceItems = isLoggedIn ? NAV_ITEMS.slice(0, -1) : GUEST_NAV_ITEMS.slice(0, -1);
   const mobileSourceItems = isLoggedIn ? MOBILE_TAB_ITEMS : GUEST_NAV_ITEMS;
 
@@ -48,5 +46,5 @@ export function useGlobalNavItems(isLoggedIn: boolean) {
     active: isActive("/mypage", pathname),
   };
 
-  return { hidden, desktopItems, mobileItems, profileItem };
+  return { desktopItems, mobileItems, profileItem };
 }

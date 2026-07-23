@@ -16,6 +16,11 @@ export function CompatibilityHero({ myProfile }: Props) {
   return (
     <SajuHeroCardShell
       imageSrc="/image/compatibility/hero/compatibilityHero.webp"
+      imageWidth={1280}
+      imageHeight={720}
+      mobileImageSrc="/image/mobile/cupple-mobile.webp"
+      mobileImageWidth={941}
+      mobileImageHeight={1672}
       imageAlt="궁합 히어로"
     >
       <div className="relative z-10 flex min-h-[420px] flex-col gap-6 px-6 py-8 md:h-full md:flex-row md:items-center md:justify-between md:px-10 md:py-12">

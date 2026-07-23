@@ -25,9 +25,11 @@ export default async function YearFortunePage() {
   }
 
   return (
-    <ProtectedSajuServiceGate servicePath="/mypage/year-fortune">
-      <YearFortuneSection />
-    </ProtectedSajuServiceGate>
+    <>
+      <h1 className="sr-only">신년운세</h1>
+      <ProtectedSajuServiceGate servicePath="/mypage/year-fortune">
+        <YearFortuneSection />
+      </ProtectedSajuServiceGate>
+    </>
   );
 }
-

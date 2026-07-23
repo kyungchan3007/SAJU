@@ -51,7 +51,7 @@ const MANAGEMENT_ICON_MAP: Record<ManagementIconKey, ReactNode> = {
 
 const ChevronRight = () => (
   <svg
-    className="text-slate-300 transition-colors group-hover:text-[#5956E9]"
+    className="text-slate-400 transition-colors group-hover:text-[#5956E9]"
     fill="none"
     height="16"
     stroke="currentColor"
@@ -88,9 +88,9 @@ export function MypageManagement({ items }: Props) {
                 {MANAGEMENT_ICON_MAP[item.icon]}
               </div>
               <div>
-                <h4 className="text-sm font-bold text-slate-800">{item.label}</h4>
+                <div className="text-sm font-bold text-slate-800">{item.label}</div>
                 {item.desc && (
-                  <p className="mt-0.5 text-[11px] text-slate-400">{item.desc}</p>
+                  <p className="mt-0.5 text-[11px] text-slate-500">{item.desc}</p>
                 )}
               </div>
             </div>

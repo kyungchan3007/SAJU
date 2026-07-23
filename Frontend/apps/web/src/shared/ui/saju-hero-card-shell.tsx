@@ -1,18 +1,58 @@
-import Image from "next/image";
+import Image, { getImageProps } from "next/image";
 
 // [DS] 역할: 사주/운세 계열 히어로에서 공통으로 쓰는 이미지 배경 카드 shell.
 // [DS] 현재 사용처: 사주 미리보기 히어로, 궁합 히어로, 정통사주 히어로.
 type SajuHeroCardShellProps = {
   imageSrc?: string | null;
+  imageWidth?: number;
+  imageHeight?: number;
+  mobileImageSrc?: string | null;
+  mobileImageWidth?: number;
+  mobileImageHeight?: number;
   imageAlt: string;
   children: React.ReactNode;
 };
 
 export function SajuHeroCardShell({
   imageSrc,
+  imageWidth,
+  imageHeight,
+  mobileImageSrc,
+  mobileImageWidth,
+  mobileImageHeight,
   imageAlt,
   children,
 }: SajuHeroCardShellProps) {
+  const useResponsiveSources =
+    !!imageSrc &&
+    !!mobileImageSrc &&
+    !!imageWidth &&
+    !!imageHeight &&
+    !!mobileImageWidth &&
+    !!mobileImageHeight;
+
+  const desktopImageProps = useResponsiveSources
+    ? getImageProps({
+        src: imageSrc,
+        alt: imageAlt,
+        width: imageWidth,
+        height: imageHeight,
+        sizes: "(max-width: 768px) 100vw, 1200px",
+        quality: 75,
+      }).props
+    : null;
+
+  const mobileImageProps = useResponsiveSources
+    ? getImageProps({
+        src: mobileImageSrc,
+        alt: imageAlt,
+        width: mobileImageWidth,
+        height: mobileImageHeight,
+        sizes: "100vw",
+        quality: 70,
+      }).props
+    : null;
+
   return (
     <section className="pt-6">
       <div
@@ -29,7 +69,27 @@ export function SajuHeroCardShell({
           }}
         />
 
-        {imageSrc && (
+        {useResponsiveSources && desktopImageProps && mobileImageProps ? (
+          <picture className="absolute inset-0">
+            <source
+              media="(max-width: 767px)"
+              srcSet={mobileImageProps.srcSet}
+              sizes={mobileImageProps.sizes}
+              type="image/webp"
+            />
+            <source
+              media="(min-width: 768px)"
+              srcSet={desktopImageProps.srcSet}
+              sizes={desktopImageProps.sizes}
+              type="image/webp"
+            />
+            <img
+              {...desktopImageProps}
+              className="h-full w-full object-cover object-center md:object-[60%_10%]"
+            />
+          </picture>
+        ) : (
+          imageSrc && (
           <Image
             src={imageSrc}
             alt={imageAlt}
@@ -37,6 +97,7 @@ export function SajuHeroCardShell({
             sizes="(max-width: 768px) 100vw, 1200px"
             className="object-cover object-center md:object-[60%_10%]"
           />
+          )
         )}
 
         <div

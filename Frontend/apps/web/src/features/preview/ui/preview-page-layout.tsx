@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { PageContentLayout } from "@/shared/ui/page-content-layout";
+import styles from "@/features/preview/ui/preview-page.module.css";
 
 type PreviewPageLayoutProps = {
   badge: string;
@@ -16,9 +17,9 @@ export function PreviewPageLayout({
 }: PreviewPageLayoutProps) {
   return (
     <PageContentLayout>
-      <div className="flex flex-col md:py-7">
+      <div className={`flex flex-col md:py-7 ${styles.layoutRoot}`}>
         <header className="flex flex-col gap-2">
-          <span className="w-fit rounded-full bg-[#F0EEFF] px-3 py-1 text-xs font-bold text-[#5956E9]">
+          <span className={`w-fit rounded-full px-3 py-1 text-xs font-bold ${styles.badge}`}>
             {badge}
           </span>
           <div className="flex flex-col">

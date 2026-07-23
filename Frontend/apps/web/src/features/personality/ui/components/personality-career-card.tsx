@@ -28,7 +28,7 @@ export function PersonalityCareerCard({ careerStyle, careerTypes }: Props) {
 
       {validTypes.length > 0 && (
         <div className="mb-4">
-          <div className="mb-2 text-[11px] font-bold text-slate-400">
+          <div className="mb-2 text-[11px] font-bold text-slate-500">
             추천 직무
           </div>
           <div className="flex flex-wrap gap-1.5">

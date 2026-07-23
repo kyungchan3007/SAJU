@@ -25,7 +25,7 @@ export function SajuReadingGuideSection() {
       <PageContainer width="content">
         <div className="flex flex-col gap-8">
           <div className="flex flex-col gap-3 text-center md:text-left">
-            <div className="text-xs text-gray-400">공개 예시로 먼저 이해해보세요</div>
+            <div className="text-xs text-gray-500">공개 예시로 먼저 이해해보세요</div>
             <h2 className="text-3xl font-black leading-snug text-gray-900">
               사주 해석은 이렇게 읽습니다
             </h2>

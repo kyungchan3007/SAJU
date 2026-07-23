@@ -1,6 +1,5 @@
 import Link from "next/link";
-
-import { Button } from "@/shared/ui";
+import { Button } from "@saju/ui";
 
 export const CtaButton = () => {
   return (

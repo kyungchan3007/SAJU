@@ -84,14 +84,17 @@ function FunLabelBox({ section }: { section: CompatibilitySectionDisplay }) {
     >
       <span className="flex-shrink-0 text-[26px] leading-none">{funLabel.emoji}</span>
       <div className="flex flex-1 flex-col gap-0.5">
-        <span className="text-[13px] font-black leading-snug tracking-tight" style={{ color }}>
+        <span
+          className="text-[13px] font-black leading-snug tracking-tight"
+          style={{ color: "#374151" }}
+        >
           {funLabel.text}
         </span>
-        <span className="text-[10px] font-medium text-gray-400">{section.scoreLabel}</span>
+        <span className="text-[10px] font-medium text-gray-600">{section.scoreLabel}</span>
       </div>
       <span
         className="flex-shrink-0 rounded-full px-2 py-1 text-[9px] font-extrabold tracking-wide"
-        style={{ background: `${color}18`, color }}
+        style={{ background: `${color}18`, color: "#374151" }}
       >
         {funLabel.badge}
       </span>
@@ -126,7 +129,7 @@ export function CompatibilityResultSections({ sections }: Props) {
               {section.keyword && (
                 <Badge
                   className="hidden max-w-[160px] truncate px-2 py-0.5 text-[10px] sm:inline-flex"
-                  style={{ background: `${section.color}18`, color: section.color }}
+                  style={{ background: `${section.color}18`, color: "#374151" }}
                 >
                   {section.keyword}
                 </Badge>

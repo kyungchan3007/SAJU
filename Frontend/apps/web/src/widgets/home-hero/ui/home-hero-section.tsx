@@ -1,6 +1,8 @@
 import Link from "next/link";
+import { getImageProps } from "next/image";
 import type { Route } from "next";
 import type { ReactNode } from "react";
+import styles from "@/widgets/home-hero/ui/home-hero-section.module.css";
 
 type HomeHeroSectionProps = {
   headingId: string;
@@ -17,31 +19,47 @@ export function HomeHeroSection({
   primaryCtaHref,
   rightSlot,
 }: HomeHeroSectionProps) {
+  const { props: mobileImageProps } = getImageProps({
+    src: "/image/hero/hero_3-mobile.webp",
+    alt: "",
+    width: 941,
+    height: 1672,
+    sizes: "100vw",
+    quality: 70,
+    preload: true,
+  });
+  const { props: desktopImageProps } = getImageProps({
+    src: "/image/hero/hero_3-desktop.webp",
+    alt: "",
+    width: 1440,
+    height: 768,
+    sizes: "100vw",
+    quality: 75,
+    preload: true,
+  });
+
   return (
     <section
-      className="relative overflow-hidden"
-      style={{ minHeight: 560 }}
+      className={`relative overflow-hidden ${styles.heroSection}`}
       aria-labelledby={headingId}
     >
       {/* 배경 이미지 — 항상 풀 커버 */}
       <picture className="absolute inset-0">
         <source
           media="(max-width: 767px)"
-          srcSet="/image/hero/hero_3-mobile.webp"
+          srcSet={mobileImageProps.srcSet}
+          sizes={mobileImageProps.sizes}
           type="image/webp"
         />
         <source
           media="(min-width: 768px)"
-          srcSet="/image/hero/hero_3-desktop.webp"
+          srcSet={desktopImageProps.srcSet}
+          sizes={desktopImageProps.sizes}
           type="image/webp"
         />
         <img
-          src="/image/hero/hero_3-desktop.webp"
-          alt=""
+          {...desktopImageProps}
           aria-hidden="true"
-          fetchPriority="high"
-          loading="eager"
-          decoding="async"
           className="h-full w-full object-cover object-center"
         />
       </picture>
@@ -50,13 +68,19 @@ export function HomeHeroSection({
       <div className="bg-black/05 pointer-events-none absolute inset-0" />
 
       {/* 좌측 카피 영역 페이드 — 텍스트가 더 선명하게 */}
-      <div className="pointer-events-none absolute inset-y-0 left-0 w-[65%] bg-[linear-gradient(to_right,rgba(0,0,0,0.55)_0%,rgba(0,0,0,0.25)_60%,rgba(0,0,0,0)_100%)]" />
+      <div
+        className={`pointer-events-none absolute inset-y-0 left-0 ${styles.leftFade}`}
+      />
 
       {/* 우측 카드 페이드 — 데스크탑에서만 */}
-      <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-[35%] bg-[linear-gradient(to_left,rgba(0,0,0,0.30)_0%,rgba(0,0,0,0)_100%)] lg:block" />
+      <div
+        className={`pointer-events-none absolute inset-y-0 right-0 hidden lg:block ${styles.rightFade}`}
+      />
 
       {/* 컨텐츠 그리드 */}
-      <div className="relative z-20 mx-auto grid min-h-[560px] max-w-6xl grid-cols-1 gap-8 px-6 py-12 md:py-16 lg:grid-cols-[300px_minmax(0,1fr)_220px] lg:items-center lg:gap-x-6 lg:py-0">
+      <div
+        className={`relative z-20 mx-auto grid max-w-6xl grid-cols-1 gap-8 px-6 py-12 md:py-16 lg:grid-cols-[300px_minmax(0,1fr)_220px] lg:items-center lg:gap-x-6 lg:py-0 ${styles.contentGrid}`}
+      >
         {/* 좌측 카피 영역 */}
         <div className="flex flex-col gap-5">
           {/* 뱃지 */}
@@ -90,11 +114,7 @@ export function HomeHeroSection({
             <Link
               href={primaryCtaHref}
               prefetch={false}
-              className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-white backdrop-blur-md transition hover:bg-white/25 active:scale-[0.98]"
-              style={{
-                background: "rgba(255,255,255,0.15)",
-                border: "1px solid rgba(255,255,255,0.35)",
-              }}
+              className={`inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-white backdrop-blur-md transition hover:bg-white/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black/30 active:scale-[0.98] ${styles.ctaLink}`}
             >
               {primaryCtaLabel}
             </Link>
@@ -107,7 +127,7 @@ export function HomeHeroSection({
             {/*  <div className="h-7 w-7 overflow-hidden rounded-full border-2 border-white/60 bg-indigo-300" />*/}
             {/*  <div className="h-7 w-7 overflow-hidden rounded-full border-2 border-white/60 bg-pink-300" />*/}
             {/*</div>*/}
-            <p className="text-[11px] leading-relaxed text-white/65">
+            <p className="text-[11px] leading-relaxed text-white/80">
               203,000명 이상이 선택한 정통 사주
               <br />
               지금까지 <strong className="text-white/90">124,563건</strong>의

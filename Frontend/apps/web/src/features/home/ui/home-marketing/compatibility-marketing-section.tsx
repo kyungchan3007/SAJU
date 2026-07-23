@@ -15,7 +15,7 @@ export function CompatibilityMarketingSection() {
         <div className="grid grid-cols-1 items-center gap-16 md:grid-cols-[1fr_420px]">
           <div className="flex flex-col gap-8">
             <div className="flex flex-col gap-3">
-              <div className="text-xs text-gray-400">
+              <div className="text-xs text-gray-500">
                 우리의 인연을 더 깊이 이해하는
               </div>
               <h2 className="text-3xl font-black leading-snug text-gray-900">

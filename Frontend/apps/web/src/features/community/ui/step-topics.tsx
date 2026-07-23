@@ -2,6 +2,7 @@
   CommunityTopicOption,
   MeetingType,
 } from "@/features/community/model/community";
+import styles from "@/features/community/ui/community.module.css";
 
 type Props = {
   selectedType: MeetingType;
@@ -38,18 +39,18 @@ function TopicButton({
       onClick={() => onToggle(id)}
       disabled={disabled}
       aria-pressed={selected}
-      className={`flex flex-col items-center gap-1.5 rounded-2xl border-[1.5px] bg-white px-2 py-3 text-center transition-colors duration-150 ${
+      className={`flex flex-col items-center gap-1.5 rounded-2xl bg-white px-2 py-3 text-center transition-colors duration-150 ${styles.topicButton} ${
         wide ? "col-span-2" : ""
       } ${
         selected
-          ? "border-[#5956E9] bg-[#F0EEFF]"
-          : "border-gray-100 hover:border-[#C7C4F8] hover:bg-[#F9F8FF]"
+          ? styles.topicButtonSelected
+          : `border-gray-100 ${styles.topicButtonIdle}`
       } disabled:pointer-events-none disabled:opacity-70`}
     >
-      <span className="text-[22px]">{icon}</span>
+      <span className={styles.topicEmoji}>{icon}</span>
       <span
-        className={`whitespace-pre-line text-[11px] font-bold leading-snug ${
-          selected ? "text-[#5956E9]" : "text-gray-700"
+        className={`whitespace-pre-line font-bold leading-snug ${styles.topicLabel} ${
+          selected ? styles.topicLabelSelected : "text-gray-700"
         }`}
         style={!selected && elementColor ? { color: elementColor } : undefined}
       >
@@ -75,22 +76,22 @@ export function StepTopics({
   return (
     <div>
       <div className="mb-1 flex items-center gap-3">
-        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#5956E9] text-[13px] font-extrabold text-white">
+        <div className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full font-extrabold text-white ${styles.stepBadge}`}>
           05
         </div>
-        <h2 className="text-[20px] font-black text-gray-900">관심 주제 선택</h2>
-        <span className="ml-auto text-[11px] font-bold text-gray-400">
+        <h2 className={`font-black text-gray-900 ${styles.sectionTitle}`}>관심 주제 선택</h2>
+        <span className={`ml-auto font-bold text-gray-400 ${styles.bottomBarHint}`}>
           3 / 3
         </span>
       </div>
-      <p className="mb-5 ml-10 text-[13px] text-gray-400">
+      <p className={`mb-5 text-gray-400 ${styles.sectionHint}`}>
         관심 있는 주제를 선택해 주세요. 복수 선택은 최대 2개까지 가능합니다.
       </p>
 
-      <div className="mb-5 ml-10 rounded-2xl border border-[#E5E7EB] bg-white px-4 py-3">
+      <div className={`mb-5 rounded-2xl border bg-white px-4 py-3 ${styles.sectionHint} ${styles.summaryBox}`}>
         <div className="flex items-center justify-between gap-3">
-          <p className="text-[12px] font-bold text-slate-500">선택한 주제</p>
-          <span className="text-[12px] font-black text-[#5956E9]">
+          <p className={`font-bold text-slate-500 ${styles.summaryLabel}`}>선택한 주제</p>
+          <span className={`font-black ${styles.summaryCount}`}>
             {selectedCount}/2 선택
           </span>
         </div>
@@ -99,13 +100,13 @@ export function StepTopics({
             selectedTopics.map((topic) => (
               <span
                 key={topic}
-                className="rounded-full bg-[#F0EEFF] px-3 py-1 text-[12px] font-bold text-[#5956E9]"
+                className={`rounded-full px-3 py-1 font-bold ${styles.summaryChip}`}
               >
                 {topic}
               </span>
             ))
           ) : (
-            <span className="text-[12px] text-slate-400">
+            <span className={`text-slate-400 ${styles.summaryEmpty}`}>
               아직 선택한 주제가 없습니다.
             </span>
           )}
@@ -113,17 +114,17 @@ export function StepTopics({
       </div>
 
       {isLoadingTopics ? (
-        <p className="rounded-2xl bg-[#F8F9FF] px-4 py-3 text-[12px] font-semibold text-[#5956E9]">
+        <p className={`rounded-2xl px-4 py-3 font-semibold ${styles.loadingBox}`}>
           관심 주제 목록을 불러오는 중이에요.
         </p>
       ) : topicsError ? (
-        <p className="rounded-2xl bg-[#FFF1F2] px-4 py-3 text-[12px] font-semibold text-[#E11D48]">
+        <p className={`rounded-2xl px-4 py-3 font-semibold ${styles.errorBox}`}>
           {topicsError}
         </p>
       ) : (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <div className="relative overflow-hidden rounded-[20px] border-[1.5px] border-[#E0DAFF] bg-[#F9F8FF] p-5">
-            <div className="mb-4 border-b border-gray-100 pb-3 text-center text-[13px] font-extrabold text-[#5956E9]">
+          <div className={`relative overflow-hidden rounded-[20px] p-5 ${styles.topicPanelFriend}`}>
+            <div className={`mb-4 border-b border-gray-100 pb-3 text-center font-extrabold ${styles.topicPanelTitleFriend}`}>
               친구 만들기 선택 주제
             </div>
             <div className="grid grid-cols-3 gap-2">
@@ -146,8 +147,8 @@ export function StepTopics({
             )}
           </div>
 
-          <div className="relative overflow-hidden rounded-[20px] border-[1.5px] border-[#FECDD3] bg-[#FFF5F7] p-5">
-            <div className="mb-4 border-b border-gray-100 pb-3 text-center text-[13px] font-extrabold text-[#E8718D]">
+          <div className={`relative overflow-hidden rounded-[20px] p-5 ${styles.topicPanelMeeting}`}>
+            <div className={`mb-4 border-b border-gray-100 pb-3 text-center font-extrabold ${styles.topicPanelTitleMeeting}`}>
               소개팅 선택 주제
             </div>
             <div className="grid grid-cols-3 gap-2">
@@ -178,7 +179,7 @@ export function StepTopics({
 function LockedOverlay({ label }: { label: string }) {
   return (
     <div className="absolute inset-0 z-10 flex items-center justify-center bg-gradient-to-b from-black/55 via-black/45 to-black/60 px-5 text-center">
-      <div className="rounded-2xl bg-black/35 px-4 py-3 text-[13px] font-extrabold text-white shadow-[0_8px_24px_rgba(0,0,0,0.24)]">
+      <div className={`rounded-2xl px-4 py-3 font-extrabold text-white ${styles.lockedLabel}`}>
         {label}
       </div>
     </div>

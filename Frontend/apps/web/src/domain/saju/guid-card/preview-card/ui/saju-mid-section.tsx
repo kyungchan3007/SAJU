@@ -5,6 +5,7 @@ import {
   DAILY_FIVE_ELEMENT_ORDER,
 } from "@/shared/model/five-elements/model";
 import { getWeakElementDisplayInfo } from "@/shared/utils/weakElement";
+import styles from "@/domain/saju/guid-card/preview-card/ui/preview-card.module.css";
 
 const CIRCUMFERENCE = 2 * Math.PI * 40;
 
@@ -36,8 +37,7 @@ export function SajuMidSection({ dailyResult }: SajuPreviewSectionProps) {
     <div className="grid grid-cols-1 gap-3.5 md:grid-cols-2">
       {/* 오늘의 오행 흐름 */}
       <div
-        className="rounded-[14px] border border-gray-100 bg-white p-5"
-        style={{ boxShadow: "0 1px 8px rgba(0,0,0,0.05)" }}
+        className={`border border-gray-100 bg-white p-5 ${styles.panel}`}
       >
         <div className="mb-3.5 flex items-center gap-1.5">
           <span className="text-[13px] font-bold text-gray-900">
@@ -45,7 +45,7 @@ export function SajuMidSection({ dailyResult }: SajuPreviewSectionProps) {
           </span>
         </div>
         <div className="mb-3.5 flex items-center gap-5">
-          <div className="relative h-[120px] w-[120px] shrink-0">
+          <div className={`relative shrink-0 ${styles.donutWrap}`}>
             <svg viewBox="0 0 100 100" className="h-full w-full -rotate-90">
               <circle
                 cx="50"
@@ -73,14 +73,14 @@ export function SajuMidSection({ dailyResult }: SajuPreviewSectionProps) {
               )}
             </svg>
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="h-[68px] w-[68px] rounded-full bg-white" />
+              <div className={`rounded-full bg-white ${styles.donutCenter}`} />
             </div>
           </div>
           <div className="flex flex-1 flex-col gap-2.5">
             {segments.map((seg) => (
               <div key={seg.key} className="flex items-center gap-2">
                 <span
-                  className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[10px] font-semibold text-white"
+                  className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full font-semibold text-white ${styles.legendKey}`}
                   style={{ background: seg.color }}
                 >
                   {seg.key}
@@ -91,7 +91,7 @@ export function SajuMidSection({ dailyResult }: SajuPreviewSectionProps) {
                     style={{ width: `${seg.pct}%`, background: seg.color }}
                   />
                 </div>
-                <span className="w-9 text-right text-[11px] text-gray-400">
+                <span className={`text-right text-gray-600 ${styles.legendValue}`}>
                   {seg.pct > 0 ? `${seg.pct}%` : "-"}
                 </span>
               </div>
@@ -99,19 +99,19 @@ export function SajuMidSection({ dailyResult }: SajuPreviewSectionProps) {
           </div>
         </div>
         {weakElementInfo && (
-          <div className="flex flex-col gap-0.5 rounded-[10px] bg-saju-soft px-3.5 py-3">
-            <p className="text-[12px] text-gray-700">
+          <div className={`flex flex-col gap-0.5 bg-saju-soft px-3.5 py-3 ${styles.softNote}`}>
+            <p className={`text-gray-700 ${styles.softNoteText}`}>
               오늘은{" "}
               <span className="font-semibold text-blue-500">
                 &apos;{weakElementInfo.ko}&apos;
               </span>{" "}
               기운이 약해요.
             </p>
-            <p className="text-[12px] text-gray-400">
+            <p className={`text-gray-600 ${styles.softNoteText}`}>
               {weakElementInfo.ko} 기운을 보완하면 더 안정적인 하루를 보낼 수
               있어요.
             </p>
-            <p className="mt-0.5 text-[12px] text-gray-700">
+            <p className={`mt-0.5 text-gray-700 ${styles.softNoteText}`}>
               약한 기운:{" "}
               <span className="font-semibold text-blue-500">
                 {weakElementInfo.ko} ({weakElementInfo.hanja})
@@ -123,8 +123,7 @@ export function SajuMidSection({ dailyResult }: SajuPreviewSectionProps) {
 
       {/* 오늘의 흐름 한눈에 보기 */}
       <div
-        className="rounded-[14px] border border-gray-100 bg-white p-5"
-        style={{ boxShadow: "0 1px 8px rgba(0,0,0,0.05)" }}
+        className={`border border-gray-100 bg-white p-5 ${styles.panel}`}
       >
         <div className="mb-3.5 flex items-center gap-1.5">
           <span className="text-[13px] font-bold text-gray-900">

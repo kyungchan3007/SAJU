@@ -30,7 +30,7 @@ export function CompatibilityResultSummary({ description, tags }: Props) {
             <span
               key={i}
               className="rounded-full px-2.5 py-0.5 text-[11px] font-bold"
-              style={{ background: "#F0EEFF", color: "#5956E9" }}
+              style={{ background: "#F0EEFF", color: "#4338CA" }}
             >
               {tag}
             </span>

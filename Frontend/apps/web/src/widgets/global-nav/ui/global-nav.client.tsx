@@ -1,20 +1,26 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { GlobalNavView } from "@/domain/navigation";
 import { useGlobalNavItems } from "@/features/navigation/hooks/useGlobalNavItems";
-import { NotificationBell } from "@/features/notification/ui/notification-bell";
 
 type GlobalNavClientProps = {
   isLoggedIn: boolean;
 };
 
-export function GlobalNavClient({ isLoggedIn }: GlobalNavClientProps) {
-  const { hidden, desktopItems, mobileItems, profileItem } =
-    useGlobalNavItems(isLoggedIn);
+const NotificationBell = dynamic(
+  () =>
+    import("@/features/notification/ui/notification-bell-with-providers.client").then((module) => ({
+      default: module.NotificationBellWithProviders,
+    })),
+  {
+    ssr: false,
+    loading: () => <NotificationBellPlaceholder />,
+  },
+);
 
-  if (hidden) {
-    return null;
-  }
+export function GlobalNavClient({ isLoggedIn }: GlobalNavClientProps) {
+  const { desktopItems, mobileItems, profileItem } = useGlobalNavItems(isLoggedIn);
 
   return (
     <GlobalNavView
@@ -25,4 +31,8 @@ export function GlobalNavClient({ isLoggedIn }: GlobalNavClientProps) {
       notificationSlot={isLoggedIn ? <NotificationBell /> : null}
     />
   );
+}
+
+function NotificationBellPlaceholder() {
+  return <div className="h-8 w-8 shrink-0" aria-hidden="true" />;
 }

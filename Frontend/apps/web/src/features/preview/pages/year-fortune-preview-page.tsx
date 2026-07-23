@@ -7,6 +7,7 @@ import { YearFortuneDomainTabs } from "@/features/year-fortune/ui/year-fortune-d
 import { YearFortuneHero } from "@/features/year-fortune/ui/year-fortune-hero";
 import { YearFortuneMonthly } from "@/features/year-fortune/ui/year-fortune-monthly";
 import { ArticleTrustNote } from "@/shared/ui/article-trust-note";
+import styles from "@/features/preview/ui/preview-page.module.css";
 
 const preview = getPreviewConfig("year-fortune");
 const yearFortuneCase = [
@@ -32,8 +33,8 @@ export function YearFortunePreviewPage() {
       title={preview.title}
       description={preview.description}
     >
-      <div className="mx-auto flex w-full max-w-[720px] flex-col gap-8 pt-7">
-        <section className="rounded-3xl border border-[#EDE9FF] bg-[#FAFAFF] px-5 py-5 text-sm leading-7 text-gray-600">
+      <div className={`mx-auto flex w-full flex-col gap-8 ${styles.narrowBody}`}>
+        <section className={`rounded-3xl px-5 py-5 text-sm leading-7 text-gray-600 ${styles.introCard}`}>
           <p>
             이 페이지는 신년운세 결과가 어떤 정보 순서로 제공되는지 보여주는 공개 예시입니다.
             한 해의 전체 흐름, 분야별 포인트, 월별 변화가 어떻게 이어지는지 먼저 읽어두면
@@ -50,7 +51,7 @@ export function YearFortunePreviewPage() {
           months={YEAR_FORTUNE_PREVIEW_DATA.months}
           targetYear={YEAR_FORTUNE_PREVIEW_DATA.targetYear}
         />
-        <section className="rounded-3xl border border-gray-100 bg-white px-5 py-6 shadow-sm">
+        <section className={`rounded-3xl border border-gray-100 bg-white px-5 py-6 ${styles.sectionCard}`}>
           <h2 className="text-base font-black text-gray-900">신년운세 예시를 보는 방법</h2>
           <div className="mt-3 flex flex-col gap-3 text-sm leading-7 text-gray-600">
             <p>첫 화면에서는 올해 전체 키워드와 가장 힘이 실리는 영역을 먼저 확인합니다.</p>
@@ -58,7 +59,7 @@ export function YearFortunePreviewPage() {
             <p>월별 흐름은 중요한 시기와 쉬어가야 할 시기를 비교하는 용도로 보는 편이 실용적입니다.</p>
           </div>
         </section>
-        <section className="rounded-3xl border border-gray-100 bg-white px-5 py-6 shadow-sm">
+        <section className={`rounded-3xl border border-gray-100 bg-white px-5 py-6 ${styles.sectionCard}`}>
           <h2 className="text-base font-black text-gray-900">실제 선택 연결 예시</h2>
           <div className="mt-3 flex flex-col gap-3 text-sm leading-7 text-gray-600">
             {yearFortuneCase.map((item) => (
@@ -66,7 +67,7 @@ export function YearFortunePreviewPage() {
             ))}
           </div>
         </section>
-        <section className="rounded-3xl border border-gray-100 bg-white px-5 py-6 shadow-sm">
+        <section className={`rounded-3xl border border-gray-100 bg-white px-5 py-6 ${styles.sectionCard}`}>
           <h2 className="text-base font-black text-gray-900">공통 운세와 개인 체감이 갈리는 이유</h2>
           <div className="mt-3 flex flex-col gap-3 text-sm leading-7 text-gray-600">
             {yearFortuneBoundaries.map((item) => (

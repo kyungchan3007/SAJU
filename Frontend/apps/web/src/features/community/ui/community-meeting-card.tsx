@@ -1,4 +1,5 @@
 import { Button } from "@/shared/ui";
+import styles from "@/features/community/ui/community.module.css";
 
 type MeetingInfo = {
   title: string;
@@ -31,52 +32,52 @@ export function CommunityMeetingCard({ meeting, disabled = false, onApply }: Pro
   return (
     <section>
       <div className="mb-1 flex items-center gap-3">
-        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#5956E9] text-[13px] font-extrabold text-white">
+        <div className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full font-extrabold text-white ${styles.stepBadge}`}>
           01
         </div>
-        <h2 className="text-[20px] font-black text-gray-900">
+        <h2 className={`font-black text-gray-900 ${styles.sectionTitle}`}>
           관심 있는 모임 신청해보기
         </h2>
       </div>
-      <p className="mb-5 ml-10 text-[13px] text-gray-400">
+      <p className={`mb-5 text-gray-400 ${styles.sectionHint}`}>
         사주 궁합으로 자리를 배치하는 로테이션 소개팅이에요.
       </p>
 
-      <div className="grid grid-cols-1 gap-4 rounded-[20px] border-[1.5px] border-gray-100 p-5 md:grid-cols-[1.5fr_1fr]">
+      <div className={`grid grid-cols-1 gap-4 border-gray-100 p-5 md:grid-cols-[1.5fr_1fr] ${styles.meetingCard} ${styles.meetingGrid}`}>
         <div className="flex flex-col gap-3">
           <div className="flex items-center gap-2">
             <h3 className="text-[16px] font-black text-gray-900">
               {meeting.title}
             </h3>
-            <span className="rounded-full border border-[#BFE6CF] bg-[#E9F7EF] px-2.5 py-1 text-[11px] font-bold text-[#2FA36B]">
+            <span className={`rounded-full border px-2.5 py-1 font-bold ${styles.statusChip}`}>
               ● {meeting.stateLabel}
             </span>
           </div>
 
-          <div className="flex h-[140px] items-center justify-center rounded-2xl border-[1.5px] border-gray-100 bg-gradient-to-br from-[#EEF0FE] to-[#E9F0FF] text-[13px] text-gray-400">
+          <div className={`flex items-center justify-center rounded-2xl border-gray-100 text-gray-400 ${styles.meetingPoster}`}>
             🖼️ 사진
           </div>
 
           <div className="flex flex-wrap gap-2">
-            <span className="rounded-full bg-[#F5F5F8] px-3 py-1.5 text-[12px] text-gray-600">
+            <span className={`rounded-full px-3 py-1.5 text-gray-600 ${styles.metaChip}`}>
               📅 {meeting.dateLabel}
             </span>
-            <span className="rounded-full bg-[#F5F5F8] px-3 py-1.5 text-[12px] text-gray-600">
+            <span className={`rounded-full px-3 py-1.5 text-gray-600 ${styles.metaChip}`}>
               📍 {meeting.placeLabel}
             </span>
           </div>
 
-          <div className="rounded-2xl border-[1.5px] border-gray-100 p-4">
-            <p className="mb-1.5 text-[12.5px] font-bold text-gray-800">안전 규칙</p>
-            <ul className="space-y-1 text-[12px] leading-relaxed text-gray-500">
+          <div className={`rounded-2xl border-gray-100 p-4 ${styles.policyCard}`}>
+            <p className={`mb-1.5 font-bold text-gray-800 ${styles.policyHeading}`}>안전 규칙</p>
+            <ul className={`space-y-1 text-gray-500 ${styles.policyBody}`}>
               {SAFETY_RULES.map((rule) => (
                 <li key={rule}>· {rule}</li>
               ))}
             </ul>
-            <p className="mb-1.5 mt-3 text-[12.5px] font-bold text-gray-800">
+            <p className={`mb-1.5 mt-3 font-bold text-gray-800 ${styles.policyHeading}`}>
               환불 정책
             </p>
-            <ul className="space-y-1 text-[12px] leading-relaxed text-gray-500">
+            <ul className={`space-y-1 text-gray-500 ${styles.policyBody}`}>
               {REFUND_RULES.map((rule) => (
                 <li key={rule}>· {rule}</li>
               ))}
@@ -84,17 +85,17 @@ export function CommunityMeetingCard({ meeting, disabled = false, onApply }: Pro
           </div>
         </div>
 
-        <div className="flex flex-col gap-3 self-start rounded-2xl border-[1.5px] border-[#E0DAFF] bg-[#F9F8FF] p-4">
-          <span className="text-[12px] text-gray-400">참가비</span>
+        <div className={`flex flex-col gap-3 self-start rounded-2xl p-4 ${styles.feeCard}`}>
+          <span className={`text-gray-400 ${styles.feeLabel}`}>참가비</span>
           <span className="text-[24px] font-black text-gray-900">
             {meeting.feeLabel}
           </span>
-          <span className="text-[11px] text-gray-400">{meeting.feeNote}</span>
+          <span className={`text-gray-400 ${styles.feeNote}`}>{meeting.feeNote}</span>
           <Button
             type="button"
             onClick={onApply}
             disabled={disabled}
-            className="mt-1 h-12 rounded-2xl text-[15px] font-extrabold shadow-[0_4px_20px_rgba(89,86,233,0.30)] hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+            className={`mt-1 h-12 rounded-2xl font-extrabold hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60 ${styles.primaryButton}`}
           >
             {disabled ? "이미 신청 완료" : "신청하기"}
           </Button>

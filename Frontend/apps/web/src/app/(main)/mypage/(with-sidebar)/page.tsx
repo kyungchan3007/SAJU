@@ -9,6 +9,10 @@ export const metadata: Metadata = {
 };
 
 export default async function MypagePage() {
-  return <MypageSection />;
+  return (
+    <>
+      <h1 className="sr-only">마이페이지</h1>
+      <MypageSection />
+    </>
+  );
 }
-

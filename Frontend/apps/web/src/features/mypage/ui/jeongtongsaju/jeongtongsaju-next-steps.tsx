@@ -27,7 +27,7 @@ function StepCard({
         <h3 className="mb-0.5 text-[13px] font-bold text-gray-900 transition group-hover:text-[#5956E9]">
           {title}
         </h3>
-        <p className="whitespace-pre-line text-[11px] text-gray-400">{desc}</p>
+        <p className="whitespace-pre-line text-[11px] text-gray-600">{desc}</p>
       </div>
       <div
         className={`absolute bottom-3 right-3 flex h-9 w-9 items-center justify-center rounded-full ${iconBg}`}

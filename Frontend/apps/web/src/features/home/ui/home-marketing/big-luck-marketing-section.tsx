@@ -10,7 +10,7 @@ export function BigLuckMarketingSection() {
       <div className="mx-auto max-w-6xl px-6">
         <div className="grid grid-cols-1 items-center gap-12 md:grid-cols-[1fr_2fr]">
           <div className="flex flex-col gap-4">
-            <div className="text-xs text-gray-400">
+            <div className="text-xs text-gray-500">
               흐름을 알면 기회가 보입니다
             </div>
             <h2 className="text-3xl font-black leading-snug text-gray-900">

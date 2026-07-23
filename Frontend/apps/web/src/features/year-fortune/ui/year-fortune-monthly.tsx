@@ -21,9 +21,9 @@ const MONTH_TAG_STYLE: Record<
   MonthType,
   { background: string; color: string }
 > = {
-  good: { background: "#F0EEFF", color: "#5956E9" },
-  normal: { background: "#F3F4F6", color: "#6B7280" },
-  caution: { background: "#FFF1F2", color: "#EF4444" },
+  good: { background: "#F0EEFF", color: "#4338CA" },
+  normal: { background: "#F3F4F6", color: "#4B5563" },
+  caution: { background: "#FFF1F2", color: "#B91C1C" },
 };
 
 const MONTH_TAG_LABEL: Record<MonthType, string> = {
@@ -56,7 +56,7 @@ export function YearFortuneMonthly({ months }: Props) {
           <span className="text-[15px]">📅</span>
         </div>
         <span className="text-base font-black">월별 운세</span>
-        <span className="ml-auto text-[12px] text-slate-400">
+        <span className="ml-auto text-[12px] text-slate-500">
           항목을 눌러 전체 내용을 확인하세요
         </span>
       </div>

@@ -80,7 +80,7 @@ const INFO_ICON_MAP: Record<InfoIconKey, ReactNode> = {
 
 const ChevronRight = () => (
   <svg
-    className="text-slate-300 transition-colors group-hover:text-[#5956E9]"
+    className="text-slate-400 transition-colors group-hover:text-[#5956E9]"
     fill="none"
     height="14"
     stroke="currentColor"
@@ -105,8 +105,8 @@ function InfoRow({ item }: { item: InfoItem }) {
           {INFO_ICON_MAP[item.icon]}
         </div>
         <div>
-          <h4 className="text-xs font-bold text-slate-800">{item.label}</h4>
-          {item.desc && <p className="text-[10px] text-slate-400">{item.desc}</p>}
+          <div className="text-xs font-bold text-slate-800">{item.label}</div>
+          {item.desc && <p className="text-[10px] text-slate-500">{item.desc}</p>}
         </div>
       </div>
       <ChevronRight />

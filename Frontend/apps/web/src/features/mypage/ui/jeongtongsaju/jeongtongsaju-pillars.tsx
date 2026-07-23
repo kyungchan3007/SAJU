@@ -22,7 +22,7 @@ export function JeongtongsajuPillars({ pillars }: Props) {
     <div className="rounded-3xl bg-white p-6 sm:border sm:border-gray-100 sm:shadow-[0_2px_16px_rgba(0,0,0,0.08)]">
       <div className="mb-5 flex items-baseline gap-2">
         <h2 className="text-[18px] font-bold text-gray-900">나의 사주팔자</h2>
-        <span className="text-[13px] text-gray-400">4기둥 상세</span>
+        <span className="text-[13px] text-gray-500">4기둥 상세</span>
       </div>
 
       {/* 카드 그리드 — 모바일 2×2 / 데스크톱 4열 */}
@@ -91,7 +91,7 @@ export function JeongtongsajuPillars({ pillars }: Props) {
               <span
                 className={`inline-flex w-fit items-center justify-center rounded-full px-3 py-1 text-[11px] font-bold ${
                   isDay
-                    ? "bg-[#EAE7FF] text-[#5956E9]"
+                    ? "bg-[#EAE7FF] text-[#4338CA]"
                     : "bg-gray-200 text-gray-600"
                 }`}
               >

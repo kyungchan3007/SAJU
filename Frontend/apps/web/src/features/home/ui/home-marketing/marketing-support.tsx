@@ -11,8 +11,13 @@ export function MarketingExampleCard({
   description,
 }: MarketingExampleCardProps) {
   return (
-    <div className="rounded-2xl border border-[#E9E7FF] bg-[#FAFAFF] px-4 py-4">
-      <div className="mb-1 text-xs font-bold text-[#5956E9]">{title}</div>
+    <div
+      className="rounded-2xl px-4 py-4"
+      style={{ border: "1px solid #E9E7FF", background: "#FAFAFF" }}
+    >
+      <div className="mb-1 text-xs font-bold" style={{ color: "#5956E9" }}>
+        {title}
+      </div>
       <p className="text-sm leading-6 text-gray-600">{description}</p>
     </div>
   );
@@ -34,7 +39,10 @@ export function MarketingSupportLinks({
 }: MarketingSupportLinksProps) {
   return (
     <div className="flex flex-col gap-3">
-      <div className="text-xs font-bold uppercase tracking-[0.16em] text-gray-400">
+      <div
+        className="text-xs font-bold uppercase text-gray-500"
+        style={{ letterSpacing: "0.16em" }}
+      >
         {heading}
       </div>
       <div className="flex flex-wrap gap-2">
@@ -42,7 +50,7 @@ export function MarketingSupportLinks({
           <Link
             key={link.href}
             href={link.href}
-            className="rounded-full border border-gray-200 bg-white px-3 py-1.5 text-xs font-semibold text-gray-600 transition-colors hover:border-[#5956E9] hover:text-[#5956E9]"
+            className="rounded-full border border-gray-200 bg-white px-3 py-1.5 text-xs font-semibold text-gray-600 transition-colors hover:border-saju-primary hover:text-saju-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-saju-primary focus-visible:ring-offset-2"
           >
             {link.label}
           </Link>

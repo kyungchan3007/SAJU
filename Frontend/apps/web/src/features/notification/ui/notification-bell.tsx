@@ -39,7 +39,7 @@ export function NotificationBell() {
       <button
         type="button"
         onClick={isOpen ? close : open}
-        className="relative flex h-8 w-8 items-center justify-center rounded-full text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-700"
+        className="relative flex h-8 w-8 items-center justify-center rounded-full text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-saju-primary focus-visible:ring-offset-2"
         aria-label="알림"
         aria-expanded={isOpen}
         aria-haspopup="dialog"
@@ -155,7 +155,7 @@ function NotificationListItem({
       disabled={isRead || !notification.id}
       onClick={() => onReadNotification(notification)}
       className={cn(
-        "block w-full border-b border-gray-50 px-4 py-3 text-left transition last:border-b-0",
+        "block w-full border-b border-gray-50 px-4 py-3 text-left transition last:border-b-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-saju-primary",
         isRead ? "bg-white" : "bg-saju-soft",
         !isRead && notification.id && "hover:bg-saju-tint",
         (isRead || !notification.id) && "cursor-default",

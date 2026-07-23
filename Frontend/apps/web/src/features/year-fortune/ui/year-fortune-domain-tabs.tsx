@@ -3,7 +3,6 @@
 import { useState } from "react";
 import type { DomainDisplay } from "@/features/year-fortune/model/yearFortune";
 import { YearFortuneDomainContent } from "@/features/year-fortune/ui/components/year-fortune-domain-content";
-import { YearFortuneDomainPills } from "@/features/year-fortune/ui/components/year-fortune-domain-pills";
 
 type Props = {
   domains: DomainDisplay[];
@@ -28,14 +27,53 @@ export function YearFortuneDomainTabs({ domains }: Props) {
       </div>
 
       {/* 탭 필 */}
-      <YearFortuneDomainPills
-        domains={domains}
-        activeIdx={safeActiveIdx}
-        onSelect={setActiveIdx}
-      />
+      <div
+        role="tablist"
+        aria-label="신년운세 영역 탭"
+        className="mb-6 flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      >
+        {domains.map((domain, index) => {
+          const isActive = index === safeActiveIdx;
+          const panelId = `year-fortune-domain-panel-${index}`;
+          const tabId = `year-fortune-domain-tab-${index}`;
 
-      {/* 내용 */}
-      <YearFortuneDomainContent active={active} />
+          return (
+            <button
+              key={domain.key}
+              id={tabId}
+              role="tab"
+              type="button"
+              onClick={() => setActiveIdx(index)}
+              aria-selected={isActive}
+              aria-controls={panelId}
+              tabIndex={isActive ? 0 : -1}
+              className={`inline-flex shrink-0 cursor-pointer items-center gap-1.5 whitespace-nowrap rounded-full px-5 py-[9px] text-[13px] font-bold transition-colors transition-shadow ${
+                isActive
+                  ? "bg-[#5956E9] text-white shadow-[0_4px_12px_rgba(89,86,233,0.25)]"
+                  : "border-[1.5px] border-[#E5E7EB] bg-white text-[#4B5563] hover:border-[#5956E9] hover:text-[#5956E9]"
+              }`}
+            >
+              {domain.icon} {domain.label}
+            </button>
+          );
+        })}
+      </div>
+
+      {domains.map((domain, index) => {
+        const isActive = index === safeActiveIdx;
+        const panelId = `year-fortune-domain-panel-${index}`;
+        const tabId = `year-fortune-domain-tab-${index}`;
+
+        return (
+          <YearFortuneDomainContent
+            key={domain.key}
+            active={domain}
+            id={panelId}
+            labelledBy={tabId}
+            hidden={!isActive}
+          />
+        );
+      })}
     </div>
   );
 }

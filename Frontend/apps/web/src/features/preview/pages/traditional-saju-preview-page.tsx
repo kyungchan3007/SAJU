@@ -9,6 +9,7 @@ import { JeongtongsajuHero } from "@/features/mypage/ui/jeongtongsaju/jeongtongs
 import { JeongtongsajuPillars } from "@/features/mypage/ui/jeongtongsaju/jeongtongsaju-pillars";
 import { JeongtongsajuTwelveGrowth } from "@/features/mypage/ui/jeongtongsaju/jeongtongsaju-twelve-growth";
 import { ArticleTrustNote } from "@/shared/ui/article-trust-note";
+import styles from "@/features/preview/ui/preview-page.module.css";
 
 const preview = getPreviewConfig("traditional-saju");
 const exampleReadingCase = [
@@ -35,7 +36,7 @@ export function TraditionalSajuPreviewPage() {
       description={preview.description}
     >
       <div className="flex flex-col gap-8">
-        <section className="rounded-3xl border border-[#EDE9FF] bg-[#FAFAFF] px-5 py-5 text-sm leading-7 text-gray-600 md:px-7">
+        <section className={`rounded-3xl px-5 py-5 text-sm leading-7 text-gray-600 md:px-7 ${styles.introCard}`}>
           <p>
             이 페이지는 정통사주 결과 화면의 구성과 각 항목을 읽는 순서를 함께
             정리한 예시입니다. 실제 결과를 보기 전에 화면에 어떤 정보가 나오고,
@@ -64,7 +65,7 @@ export function TraditionalSajuPreviewPage() {
             TRADITIONAL_SAJU_PREVIEW_DATA.sectionDescriptions.bigLuck
           }
         />
-        <section className="rounded-3xl border border-gray-100 bg-white px-5 py-6 shadow-sm md:px-7">
+        <section className={`rounded-3xl border border-gray-100 bg-white px-5 py-6 md:px-7 ${styles.sectionCard}`}>
           <h2 className="text-base font-black text-gray-900">이 예시에서 먼저 봐야 할 포인트</h2>
           <div className="mt-3 flex flex-col gap-3 text-sm leading-7 text-gray-600">
             <p>첫 화면에서는 오행 비율과 핵심 성향이 어떻게 요약되는지 확인합니다.</p>
@@ -72,7 +73,7 @@ export function TraditionalSajuPreviewPage() {
             <p>마지막 대운 흐름은 타고난 구조 위에 어떤 시기 변화가 겹치는지 보는 용도입니다.</p>
           </div>
         </section>
-        <section className="rounded-3xl border border-gray-100 bg-white px-5 py-6 shadow-sm md:px-7">
+        <section className={`rounded-3xl border border-gray-100 bg-white px-5 py-6 md:px-7 ${styles.sectionCard}`}>
           <h2 className="text-base font-black text-gray-900">이 화면을 실제로 해석할 때의 예시</h2>
           <div className="mt-3 flex flex-col gap-3 text-sm leading-7 text-gray-600">
             {exampleReadingCase.map((item) => (
@@ -80,7 +81,7 @@ export function TraditionalSajuPreviewPage() {
             ))}
           </div>
         </section>
-        <section className="rounded-3xl border border-gray-100 bg-white px-5 py-6 shadow-sm md:px-7">
+        <section className={`rounded-3xl border border-gray-100 bg-white px-5 py-6 md:px-7 ${styles.sectionCard}`}>
           <h2 className="text-base font-black text-gray-900">같은 화면도 다르게 읽히는 경우</h2>
           <div className="mt-3 flex flex-col gap-3 text-sm leading-7 text-gray-600">
             {interpretationBoundaries.map((item) => (

@@ -40,7 +40,7 @@ export function JeongtongsajuDaewoon({ bigLuck, description }: Props) {
       <div className="mb-5">
         <div className="flex items-baseline gap-2">
           <h2 className="text-[18px] font-bold text-gray-900">대운 흐름</h2>
-          <span className="text-[13px] text-gray-400">
+          <span className="text-[13px] text-gray-500">
             10년 단위로 변화하는 운의 흐름
           </span>
         </div>
@@ -86,7 +86,7 @@ export function JeongtongsajuDaewoon({ bigLuck, description }: Props) {
                 <div className="flex min-w-[48px] flex-col items-center gap-0.5">
                   <span
                     className="text-[22px] font-bold"
-                    style={{ color: isCurrent ? "#fff" : isSelected ? "#5B5CF0" : "#9CA3AF" }}
+                    style={{ color: isCurrent ? "#fff" : isSelected ? "#5B5CF0" : "#4B5563" }}
                   >
                     {item.pillar}
                   </span>
@@ -98,7 +98,7 @@ export function JeongtongsajuDaewoon({ bigLuck, description }: Props) {
                           ? "rgba(255,255,255,0.75)"
                           : isSelected
                             ? "#7C7CF0"
-                            : "#9CA3AF",
+                            : "#5B6270",
                       }}
                     >
                       {summary}
@@ -123,7 +123,7 @@ export function JeongtongsajuDaewoon({ bigLuck, description }: Props) {
                     style={{
                       color: isCurrent
                         ? "rgba(255,255,255,0.5)"
-                        : "#D1D5DB",
+                        : "#6B7280",
                     }}
                   >
                     {item.year_range}
@@ -183,7 +183,7 @@ export function JeongtongsajuDaewoon({ bigLuck, description }: Props) {
                         ? "rgba(255,255,255,0.75)"
                         : isSelected
                           ? "#5B5CF0"
-                          : "#9CA3AF",
+                          : "#4B5563",
                     }}
                   >
                     {item.age_range}
@@ -191,7 +191,7 @@ export function JeongtongsajuDaewoon({ bigLuck, description }: Props) {
                   <div
                     className="mb-1 text-[24px] font-bold"
                     style={{
-                      color: isCurrent ? "#fff" : isSelected ? "#5B5CF0" : "#9CA3AF",
+                      color: isCurrent ? "#fff" : isSelected ? "#5B5CF0" : "#4B5563",
                     }}
                   >
                     {item.pillar}
@@ -204,7 +204,7 @@ export function JeongtongsajuDaewoon({ bigLuck, description }: Props) {
                           ? "rgba(255,255,255,0.8)"
                           : isSelected
                             ? "#7C7CF0"
-                            : "#9CA3AF",
+                            : "#5B6270",
                       }}
                     >
                       {summary}
@@ -215,7 +215,7 @@ export function JeongtongsajuDaewoon({ bigLuck, description }: Props) {
                     style={{
                       color: isCurrent
                         ? "rgba(255,255,255,0.5)"
-                        : "#D1D5DB",
+                        : "#6B7280",
                     }}
                   >
                     {item.year_range}

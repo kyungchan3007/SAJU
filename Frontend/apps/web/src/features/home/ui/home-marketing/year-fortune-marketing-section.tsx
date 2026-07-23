@@ -16,7 +16,7 @@ export function YearFortuneMarketingSection() {
           {/* 좌: 텍스트 + 기능 카드 */}
           <div className="flex flex-col gap-8">
             <div className="flex flex-col gap-4">
-              <div className="text-xs text-gray-400">
+              <div className="text-xs text-gray-500">
                 새해를 준비하는 가장 현명한 방법
               </div>
               <h2 className="text-3xl font-black leading-snug text-gray-900">

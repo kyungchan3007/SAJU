@@ -134,7 +134,7 @@ export function MypageAllMenu() {
             <span className="mb-1 text-xs font-bold text-slate-800">
               {item.label}
             </span>
-            <span className="text-[10px] text-slate-400">{item.sub}</span>
+            <span className="text-[10px] text-slate-500">{item.sub}</span>
           </Link>
         ))}
       </div>

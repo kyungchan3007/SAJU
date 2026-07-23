@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
+import styles from "@/domain/saju/guid-card/preview-card/ui/preview-card.module.css";
 
 const EXPLORE_CARDS: {
   pathname: string;
@@ -77,14 +78,13 @@ const EXPLORE_CARDS: {
 export function SajuExploreSection() {
   return (
     <div>
-      <h3 className="mb-3 text-[14px] font-bold text-gray-900">탐색하기</h3>
+      <h3 className={`mb-3 font-bold text-gray-900 ${styles.exploreTitle}`}>탐색하기</h3>
       <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
         {EXPLORE_CARDS.map((card) => (
           <Link
             key={card.title}
             href={{ pathname: card.pathname }}
-            className="flex flex-col gap-2.5 rounded-[14px] border border-gray-100 bg-white p-4 transition-all duration-150 hover:-translate-y-0.5 hover:border-saju-border hover:shadow-md"
-            style={{ boxShadow: "0 1px 6px rgba(0,0,0,0.06)" }}
+            className={`flex flex-col gap-2.5 border border-gray-100 bg-white p-4 transition-all duration-150 hover:-translate-y-0.5 hover:border-saju-border hover:shadow-md ${styles.exploreCard}`}
           >
             <div
               className={`flex h-10 w-10 items-center justify-center rounded-full ${card.iconBg}`}
@@ -92,10 +92,10 @@ export function SajuExploreSection() {
               {card.icon}
             </div>
             <div>
-              <p className="text-[12.5px] font-bold text-gray-900">
+              <p className={`font-bold text-gray-900 ${styles.exploreHeading}`}>
                 {card.title}
               </p>
-              <p className="mt-0.5 text-[11px] leading-[1.5] text-gray-400">
+              <p className={`mt-0.5 text-gray-600 ${styles.exploreBody}`}>
                 {card.desc}
               </p>
             </div>

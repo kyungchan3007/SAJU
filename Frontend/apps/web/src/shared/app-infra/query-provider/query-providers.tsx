@@ -5,18 +5,13 @@ import type { PropsWithChildren } from "react";
 import { useState } from "react";
 
 import { getQueryClient } from "@/shared/lib/react-query";
-import { AuthScopeProvider } from "@/shared/app-infra/query-provider/auth-scope-context";
 
-type ProvidersProps = PropsWithChildren<{
-  authScope: string;
-}>;
-
-export function Providers({ children, authScope }: ProvidersProps) {
+export function QueryProviders({ children }: PropsWithChildren) {
   const [queryClient] = useState(() => getQueryClient());
 
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthScopeProvider value={authScope}>{children}</AuthScopeProvider>
+      {children}
     </QueryClientProvider>
   );
 }

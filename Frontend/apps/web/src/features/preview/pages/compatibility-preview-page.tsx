@@ -13,6 +13,7 @@ import { PreviewPageCta } from "@/features/preview/ui/preview-page-cta";
 import { PreviewPageLayout } from "@/features/preview/ui/preview-page-layout";
 import { PreviewRelatedLinks } from "@/features/preview/ui/preview-related-links";
 import { ArticleTrustNote } from "@/shared/ui/article-trust-note";
+import styles from "@/features/preview/ui/preview-page.module.css";
 
 const preview = getPreviewConfig("compatibility");
 const compatibilityCase = [
@@ -38,8 +39,8 @@ export function CompatibilityPreviewPage() {
       title={preview.title}
       description={preview.description}
     >
-      <div className="mx-auto flex w-full max-w-[720px] flex-col gap-5 pt-7">
-        <section className="rounded-3xl border border-[#EDE9FF] bg-[#FAFAFF] px-5 py-5 text-sm leading-7 text-gray-600">
+      <div className={`mx-auto flex w-full flex-col gap-5 ${styles.narrowBody}`}>
+        <section className={`rounded-3xl px-5 py-5 text-sm leading-7 text-gray-600 ${styles.introCard}`}>
           <p>
             이 공개 예시는 궁합 결과가 점수만 보여주는 화면이 아니라는 점을
             설명하기 위한 페이지입니다. 두 사람의 조합을 종합 점수, 세부 영역,
@@ -67,7 +68,7 @@ export function CompatibilityPreviewPage() {
           description={COMPATIBILITY_PREVIEW_RESULT.description}
           tags={COMPATIBILITY_PREVIEW_RESULT.tags}
         />
-        <section className="rounded-3xl border border-gray-100 bg-white px-5 py-6 shadow-sm">
+        <section className={`rounded-3xl border border-gray-100 bg-white px-5 py-6 ${styles.sectionCard}`}>
           <h2 className="text-base font-black text-gray-900">
             궁합 화면을 읽는 순서
           </h2>
@@ -85,7 +86,7 @@ export function CompatibilityPreviewPage() {
             </p>
           </div>
         </section>
-        <section className="rounded-3xl border border-gray-100 bg-white px-5 py-6 shadow-sm">
+        <section className={`rounded-3xl border border-gray-100 bg-white px-5 py-6 ${styles.sectionCard}`}>
           <h2 className="text-base font-black text-gray-900">
             세부 탭이 필요한 이유를 보여주는 예시
           </h2>
@@ -95,7 +96,7 @@ export function CompatibilityPreviewPage() {
             ))}
           </div>
         </section>
-        <section className="rounded-3xl border border-gray-100 bg-white px-5 py-6 shadow-sm">
+        <section className={`rounded-3xl border border-gray-100 bg-white px-5 py-6 ${styles.sectionCard}`}>
           <h2 className="text-base font-black text-gray-900">
             점수만으로 판단하면 놓치기 쉬운 부분
           </h2>

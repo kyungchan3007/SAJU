@@ -25,7 +25,7 @@ export function MypageProfileCardView({
       </div>
 
       <h2 className="mb-1 text-xl font-bold text-slate-800">{nickname}</h2>
-      <p className="text-sm text-slate-400">{email}</p>
+      <p className="text-sm text-slate-500">{email}</p>
       {isCommunityJoined && (
         <span className="mt-2 inline-flex items-center rounded-full bg-[#F0EEFF] px-3 py-1 text-[11px] font-bold text-[#5956E9]">
           커뮤니티 참가 중

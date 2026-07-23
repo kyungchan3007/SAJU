@@ -43,7 +43,7 @@ export function JeongtongsajuTwelveGrowth({
       <div className="mb-5">
         <div className="flex items-baseline gap-2">
           <h2 className="text-[18px] font-bold text-gray-900">12운성 분석</h2>
-          <span className="text-[13px] text-gray-400">
+          <span className="text-[13px] text-gray-500">
             각 기둥의 12운성 의미
           </span>
         </div>

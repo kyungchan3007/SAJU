@@ -55,6 +55,7 @@
     "zustand": "^5.0.12"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.12.1",
     "@hey-api/openapi-ts": "0.96.1",
     "@playwright/test": "^1.60.0",
     "@storybook/addon-a11y": "^10.4.2",

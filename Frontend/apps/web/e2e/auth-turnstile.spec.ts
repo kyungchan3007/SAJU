@@ -1,4 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
+import { mockCurrentProjectApis } from "./support";
 
 const APP_URL = process.env.E2E_BASE_URL ?? "http://localhost:3100";
 
@@ -15,6 +16,10 @@ async function completeTurnstileChallenge(page: Page) {
 }
 
 test.describe("turnstile UI flow", () => {
+  test.beforeEach(async ({ page }) => {
+    await mockCurrentProjectApis(page);
+  });
+
   test("redirects from verify page after real turnstile validation", async ({
     context,
     page,
@@ -30,6 +35,32 @@ test.describe("turnstile UI flow", () => {
           ?.value;
       })
       .toBe("1");
+  });
+
+  test("keeps authenticated header after verify redirect returns home", async ({
+    context,
+    page,
+    baseURL,
+  }) => {
+    const url = baseURL ?? APP_URL;
+
+    await context.addCookies([
+      { name: "saju_access_token", value: "e2e-access-token", url },
+      { name: "saju_user_email", value: "e2e@example.com", url },
+    ]);
+
+    await page.goto("/home");
+    await expect(
+      page.getByRole("link", { name: "마이페이지" }).first(),
+    ).toBeVisible();
+
+    await page.goto("/verify?returnTo=%2Fhome");
+    await completeTurnstileChallenge(page);
+
+    await expect(page).toHaveURL(/\/home$/, { timeout: 15_000 });
+    await expect(
+      page.getByRole("link", { name: "마이페이지" }).first(),
+    ).toBeVisible();
   });
 
   test("verifies turnstile before moving to kakao login", async ({

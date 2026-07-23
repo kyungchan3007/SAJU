@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/shared/ui";
+import styles from "@/features/community/ui/community.module.css";
 import { CommunityApplicationDone } from "@/features/community/ui/community-application-done";
 import { CommunityApplicationView } from "@/features/community/ui/community-application-view";
 import { CommunityHero } from "@/features/community/ui/community-hero";
@@ -55,7 +56,7 @@ export function CommunitySection() {
             flow.isApplicationUnavailable ||
             !flow.isNicknameAvailable
           }
-          className="mx-auto flex h-[52px] w-full max-w-[400px] items-center justify-center rounded-2xl text-[15px] font-extrabold shadow-[0_4px_20px_rgba(89,86,233,0.30)] hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+          className={`mx-auto flex h-[52px] w-full items-center justify-center rounded-2xl font-extrabold hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60 ${styles.primaryButton} ${styles.bottomBarPrimary}`}
         >
           {flow.hasActiveMembership
             ? "이미 신청 완료"
@@ -64,7 +65,7 @@ export function CommunitySection() {
               : "신청하기"}
         </Button>
         <p
-          className={`mt-1.5 text-center text-[11px] ${
+          className={`mt-1.5 text-center ${styles.bottomBarHint} ${
             flow.errorMessage ? "font-bold text-red-500" : "text-gray-400"
           }`}
         >

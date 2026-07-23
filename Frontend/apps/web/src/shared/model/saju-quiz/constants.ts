@@ -9,9 +9,9 @@ export const SAJU_QUIZ_CATEGORY_STYLE: Record<
   QuizCategory,
   { bg: string; color: string }
 > = {
-  오행: { bg: "#ECFDF5", color: "#059669" },
-  궁합: { bg: "#FDF4FF", color: "#9333EA" },
-  "사주 상식": { bg: "#EFF6FF", color: "#2563EB" },
+  오행: { bg: "#ECFDF5", color: "#166534" },
+  궁합: { bg: "#FDF4FF", color: "#7E22CE" },
+  "사주 상식": { bg: "#EFF6FF", color: "#1D4ED8" },
 };
 
 export const SAJU_QUIZ_SCORE_MESSAGE: Record<number, string> = {

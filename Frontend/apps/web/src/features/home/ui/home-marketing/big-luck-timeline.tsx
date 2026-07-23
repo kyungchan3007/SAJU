@@ -27,10 +27,7 @@ function BigLuckCard({ step }: { step: HomeBigLuckStep }) {
   const isActive = !!step.active;
 
   return (
-    <div
-      className="flex flex-1 flex-col sm:min-w-[80px]"
-      style={{ opacity: !isActive && step.opacity ? step.opacity / 100 : 1 }}
-    >
+    <div className="flex flex-1 flex-col sm:min-w-[80px]">
       {/* Progress segment */}
       <div
         className="mb-2 w-full rounded-full"
@@ -56,25 +53,25 @@ function BigLuckCard({ step }: { step: HomeBigLuckStep }) {
       >
         <div
           className="mb-2 text-[10px]"
-          style={{ color: isActive ? "rgba(255,255,255,0.7)" : "#9CA3AF" }}
+          style={{ color: isActive ? "rgba(255,255,255,0.78)" : "#6B7280" }}
         >
           {step.age}
         </div>
         <div
           className="mb-1 font-serif text-xl font-black"
-          style={{ color: isActive ? "#fff" : "#6B7280" }}
+          style={{ color: isActive ? "#fff" : "#4B5563" }}
         >
           {step.hanja}
         </div>
         <div
           className="text-[10px]"
-          style={{ color: isActive ? "rgba(255,255,255,0.8)" : "#9CA3AF" }}
+          style={{ color: isActive ? "rgba(255,255,255,0.85)" : "#6B7280" }}
         >
           {step.kor}
         </div>
         <div
           className="mt-1 text-[10px]"
-          style={{ color: isActive ? "rgba(255,255,255,0.5)" : "#D1D5DB" }}
+          style={{ color: isActive ? "rgba(255,255,255,0.72)" : "#6B7280" }}
         >
           {step.year}
         </div>
@@ -99,7 +96,7 @@ function BigLuckMoreCard() {
           minHeight: 80,
         }}
       >
-        <span className="text-lg font-bold text-gray-200">···</span>
+        <span className="text-lg font-bold text-gray-500">···</span>
       </div>
     </div>
   );

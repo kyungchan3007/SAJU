@@ -26,8 +26,11 @@ export default async function PersonalityPage() {
   }
 
   return (
-    <ProtectedSajuServiceGate servicePath="/mypage/personality">
-      <PersonalitySection />
-    </ProtectedSajuServiceGate>
+    <>
+      <h1 className="sr-only">상세 성향 리포트</h1>
+      <ProtectedSajuServiceGate servicePath="/mypage/personality">
+        <PersonalitySection />
+      </ProtectedSajuServiceGate>
+    </>
   );
 }

@@ -18,7 +18,7 @@ export function JeongtongsajuFiveElements({ fiveElements }: Props) {
     <div className="rounded-3xl bg-white p-6 sm:border sm:border-gray-100 sm:shadow-[0_2px_16px_rgba(0,0,0,0.08)]">
       <div className="mb-5 flex items-baseline gap-2">
         <h2 className="text-[18px] font-bold text-gray-900">오행 분포도</h2>
-        <span className="text-[13px] text-gray-400">나의 오행 에너지 균형</span>
+        <span className="text-[13px] text-gray-500">나의 오행 에너지 균형</span>
       </div>
 
       <div className="flex flex-col gap-3">
@@ -50,16 +50,16 @@ export function JeongtongsajuFiveElements({ fiveElements }: Props) {
 
       {(yongshinPrimary || yongshinSecondary) && (
         <div className="mt-5 rounded-2xl border border-[#E0DAFF] bg-[#F9F8FF] p-4">
-          <h4 className="mb-1.5 text-[13px] font-bold text-[#5956E9]">
+          <div className="mb-1.5 text-[13px] font-bold text-[#5956E9]">
             오행 해석
-          </h4>
+          </div>
           <p className="mb-3 text-[13px] text-gray-700">
             균형을 위해 보완이 필요한 기운이에요
           </p>
           <div className="flex gap-2">
             {yongshinPrimary && (
               <div className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-[#C4BAFF] bg-white px-3 py-2">
-                <span className="text-[12px] text-gray-400">용신</span>
+                <span className="text-[12px] text-gray-500">용신</span>
                 <span className="text-[14px] font-bold text-gray-900">
                   {formatYongshinDisplayLabel(yongshinPrimary)}
                 </span>
@@ -67,7 +67,7 @@ export function JeongtongsajuFiveElements({ fiveElements }: Props) {
             )}
             {yongshinSecondary && (
               <div className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-[#C4BAFF] bg-white px-3 py-2">
-                <span className="text-[12px] text-gray-400">보조 용신</span>
+                <span className="text-[12px] text-gray-500">보조 용신</span>
                 <span className="text-[14px] font-bold text-gray-900">
                   {formatYongshinDisplayLabel(yongshinSecondary)}
                 </span>

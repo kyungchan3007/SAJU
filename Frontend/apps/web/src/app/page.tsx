@@ -8,7 +8,7 @@ import {
 } from "@/shared/lib/seo";
 import { resolveCommunityEntryHref } from "@/features/home/model/community-entry";
 import { WelcomSection } from "@/widgets/welcom-section/ui/welcom-section";
-import { Footer } from "@/shared/ui";
+import { Footer } from "@/shared/ui/footer/footer";
 
 const homeTitle = "무료 사주 풀이와 궁합 확인";
 const homeDescription =

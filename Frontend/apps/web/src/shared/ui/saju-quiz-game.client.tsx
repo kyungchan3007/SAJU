@@ -62,7 +62,7 @@ export function SajuQuizGame() {
             </span>
           )}
         </div>
-        <span className="text-xs font-semibold" style={{ color: "#9CA3AF" }}>
+        <span className="text-xs font-semibold" style={{ color: "#6B7280" }}>
           {quiz.index + 1} / {SAJU_QUIZ_QUESTIONS_PER_ROUND}
         </span>
       </div>

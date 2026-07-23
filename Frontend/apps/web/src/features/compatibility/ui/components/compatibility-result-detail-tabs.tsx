@@ -85,7 +85,7 @@ export function CompatibilityResultDetailTabs({
                     }
                   : {
                       background: "#F3F4F6",
-                      color: "#6B7280",
+                      color: "#4B5563",
                     }
               }
             >
@@ -109,7 +109,7 @@ export function CompatibilityResultDetailTabs({
             {activeSection.keyword && (
               <span
                 className="mb-2 inline-block rounded-full px-2.5 py-0.5 text-[11px] font-bold"
-                style={{ background: "#E0DAFF", color: "#5956E9" }}
+                style={{ background: "#E0DAFF", color: "#4338CA" }}
               >
                 {activeSection.keyword}
               </span>
@@ -119,7 +119,7 @@ export function CompatibilityResultDetailTabs({
             </p>
           </div>
         ) : (
-          <p className="text-[13px] text-slate-400">아직 상세 풀이가 없어요.</p>
+          <p className="text-[13px] text-slate-500">아직 상세 풀이가 없어요.</p>
         )}
       </div>
     </div>

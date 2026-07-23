@@ -1,6 +1,5 @@
 "use client";
 
-import type { Route } from "next";
 import { normalizePostLoginRedirect } from "@/shared/api/auth/postLoginRedirect";
 import { KAKAO_LOGIN_URL } from "@/shared/config/endPoint";
 import { getTurnstileDialogCopy } from "@/features/auth/model/turnstile-dialog-copy";
@@ -27,7 +26,9 @@ function VerifyContent() {
         return;
       }
 
-      router.replace(returnTo as Route);
+      // Force a fresh document request so cookie-based auth chrome is recomputed
+      // instead of reusing a guest-prefetched RSC payload after verification.
+      window.location.href = returnTo;
     },
   });
   const {

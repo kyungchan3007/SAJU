@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { AuthRefreshRetry } from "@/features/saju-result/ui/auth-refresh-retry.client";
 import { MypageLayoutShell } from "@/features/mypage/ui/mypage-layout-shell.client";
+import { QueryProviders } from "@/shared/app-infra/query-provider/query-providers";
 import {
   ACCESS_TOKEN_COOKIE_KEY,
   REFRESH_TOKEN_COOKIE_KEY,
@@ -31,6 +32,8 @@ export default async function MypageSidebarLayout({
   };
 
   return (
-    <MypageLayoutShell initialProfile={initialProfile}>{children}</MypageLayoutShell>
+    <QueryProviders>
+      <MypageLayoutShell initialProfile={initialProfile}>{children}</MypageLayoutShell>
+    </QueryProviders>
   );
 }

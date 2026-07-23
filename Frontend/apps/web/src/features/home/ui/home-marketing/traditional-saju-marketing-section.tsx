@@ -17,7 +17,7 @@ export function TraditionalSajuMarketingSection() {
           <div className="flex flex-col gap-8">
             <div className="flex flex-col gap-4">
               {/*<div className="text-sm font-bold" style={{ color: "#5956E9" }}>01</div>*/}
-              <div className="text-xs text-gray-400">
+              <div className="text-xs text-gray-500">
                 가장 깊이 있는 나를 만나는 시간
               </div>
               <h2 className="text-3xl font-black leading-snug text-gray-900">

@@ -36,7 +36,7 @@ export function MypageSajuSummary({ items }: Props) {
               i > 0 ? "border-t border-slate-50 pt-4 flex justify-between" : "flex justify-between"
             }
           >
-            <span className="text-slate-400">{item.label}</span>
+            <span className="text-slate-500">{item.label}</span>
             <span className="font-bold text-slate-800">{item.value}</span>
           </li>
         ))}

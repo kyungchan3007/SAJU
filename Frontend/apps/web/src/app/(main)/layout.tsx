@@ -1,13 +1,14 @@
 import { cookies } from "next/headers";
 import type { ReactNode } from "react";
-import { Providers } from "@/shared/app-infra/query-provider/query-providers";
+import { AuthScopeProvider } from "@/shared/app-infra/query-provider/auth-scope-context";
 import {
   ACCESS_TOKEN_COOKIE_KEY,
   REFRESH_TOKEN_COOKIE_KEY,
   USER_EMAIL_COOKIE_KEY,
 } from "@/shared/config/authToken";
-import { AppChromeOffset, Footer } from "@/shared/ui";
-import { Toaster } from "@saju/ui";
+import { AppChromeOffset } from "@/shared/ui/app-chrome-offset.client";
+import { Footer } from "@/shared/ui/footer/footer";
+import { AppToaster } from "@/shared/ui/toaster.client";
 import { GlobalNav } from "@/widgets/global-nav";
 
 export default async function MainLayout({ children }: { children: ReactNode }) {
@@ -19,7 +20,7 @@ export default async function MainLayout({ children }: { children: ReactNode }) 
   const authScope = isLoggedIn ? userEmail || "authenticated" : "guest";
 
   return (
-    <Providers key={authScope} authScope={authScope}>
+    <AuthScopeProvider value={authScope}>
       <AppChromeOffset>
         <a href="#main-content" className="skip-link">
           본문으로 바로가기
@@ -30,7 +31,7 @@ export default async function MainLayout({ children }: { children: ReactNode }) 
         </main>
         <Footer />
       </AppChromeOffset>
-      <Toaster />
-    </Providers>
+      <AppToaster />
+    </AuthScopeProvider>
   );
 }

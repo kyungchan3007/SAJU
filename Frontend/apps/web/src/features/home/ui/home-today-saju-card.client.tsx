@@ -2,10 +2,10 @@
 
 import Link from "next/link";
 import type { Route } from "next";
+import { Button } from "@saju/ui";
 
 import { SajuResultClientError } from "@/entities/saju";
 import { useHomeTodaySajuCard } from "@/features/home/hooks/useHomeTodaySajuCard";
-import { Button } from "@/shared/ui";
 import { formatWeakElementLabel } from "@/shared/utils/weakElement";
 
 const HERO_PANEL_CLASS_NAME =

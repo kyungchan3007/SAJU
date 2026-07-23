@@ -91,6 +91,7 @@ export function AdProgressGate({
             className="h-[10px] w-full overflow-hidden rounded-full"
             style={{ background: "rgba(255,255,255,0.25)" }}
             role="progressbar"
+            aria-label="사주 결과 생성 진행률"
             aria-valuemin={0}
             aria-valuemax={100}
             aria-valuenow={roundedProgress}

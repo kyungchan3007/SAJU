@@ -1,0 +1,37 @@
+.layoutRoot {
+  padding-top: 1.75rem;
+  padding-bottom: 1.75rem;
+}
+
+.badge {
+  background: #f0eeff;
+  color: #5956e9;
+}
+
+.narrowBody {
+  max-width: 720px;
+  padding-top: 1.75rem;
+}
+
+.introCard {
+  border: 1px solid #ede9ff;
+  background: #fafaff;
+}
+
+.ctaCard {
+  border: 1px solid #e8e6ff;
+  background: #fafaff;
+}
+
+.sectionCard {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.eyebrow {
+  letter-spacing: 0.16em;
+}
+
+.linkHover:hover {
+  border-color: #5956e9;
+  color: #5956e9;
+}

@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import styles from "@/domain/saju/guid-card/preview-card/ui/preview-card.module.css";
 
 type FlowType = "good" | "bad" | "caution";
 
@@ -65,7 +66,7 @@ export function SajuFlowRow({
 
   return (
     <div
-      className={`flex flex-col gap-1.5 py-[11px] ${!isLast ? "border-b border-gray-100" : ""}`}
+      className={`flex flex-col gap-1.5 ${styles.flowRow} ${!isLast ? "border-b border-gray-100" : ""}`}
     >
       {/* 아이콘 + 타이틀 */}
       <div className="flex items-center gap-2">
@@ -75,7 +76,7 @@ export function SajuFlowRow({
         >
           {icon}
         </div>
-        <p className="text-[12px] font-semibold text-gray-900">{title}</p>
+        <p className={`font-semibold text-gray-900 ${styles.flowTitle}`}>{title}</p>
       </div>
 
       {/* 항목 리스트 */}
@@ -84,14 +85,13 @@ export function SajuFlowRow({
           items.map((item, index) => (
             <li
               key={index}
-              className="text-[11.5px] leading-[1.55] text-gray-400"
-              style={{ wordBreak: "keep-all" }}
+              className={`text-gray-600 ${styles.flowItem}`}
             >
               {item}
             </li>
           ))
         ) : (
-          <li className="text-[11.5px] text-gray-300">-</li>
+          <li className={`text-gray-500 ${styles.flowItem}`}>-</li>
         )}
       </ul>
     </div>

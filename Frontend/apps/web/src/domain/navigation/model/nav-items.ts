@@ -1,20 +1,18 @@
-import {
-  BookOpen,
-  CircleHelp,
-  Heart,
-  Sparkles,
-  User,
-  Users,
-  UtensilsCrossed,
-  Wand2,
-  Mail,
-} from "lucide-react";
-import type { LucideIcon } from "lucide-react";
+export type NavIconKey =
+  | "sparkles"
+  | "book-open"
+  | "heart"
+  | "wand"
+  | "utensils"
+  | "users"
+  | "user"
+  | "help"
+  | "mail";
 
 export type NavItem = {
   href: string;
   label: string;
-  icon: LucideIcon;
+  icon: NavIconKey;
 };
 
 export type ResolvedNavItem = NavItem & {
@@ -31,33 +29,33 @@ const PROTECTED_NAV_PATHS = new Set([
 
 /** 전체 메뉴 — 순서: 오늘의 운세 / 정통사주 / 궁합 / 타로 / 오늘의 메뉴 / 커뮤니티 / 마이 */
 export const NAV_ITEMS: NavItem[] = [
-  { href: "/saju", label: "오늘의 운세", icon: Sparkles },
-  { href: "/mypage/traditional-fortune", label: "정통사주", icon: BookOpen },
-  { href: "/compatibility", label: "궁합", icon: Heart },
-  { href: "/taro", label: "타로", icon: Wand2 },
-  { href: "/food", label: "오늘의 메뉴", icon: UtensilsCrossed },
-  { href: "/community", label: "소개팅", icon: Users },
-  { href: "/mypage", label: "마이", icon: User },
+  { href: "/saju", label: "오늘의 운세", icon: "sparkles" },
+  { href: "/mypage/traditional-fortune", label: "정통사주", icon: "book-open" },
+  { href: "/compatibility", label: "궁합", icon: "heart" },
+  { href: "/taro", label: "타로", icon: "wand" },
+  { href: "/food", label: "오늘의 메뉴", icon: "utensils" },
+  { href: "/community", label: "소개팅", icon: "users" },
+  { href: "/mypage", label: "마이", icon: "user" },
 ];
 
 /** 심사 단계 비로그인 사용자용 공개 메뉴 */
 export const GUEST_NAV_ITEMS: NavItem[] = [
-  { href: "/saju", label: "오늘의 운세", icon: Sparkles },
-  { href: "/blog", label: "사주 이야기", icon: BookOpen },
-  { href: "/faq", label: "FAQ", icon: CircleHelp },
-  { href: "/contact", label: "문의", icon: Mail },
-  { href: "/mypage", label: "마이", icon: User },
+  { href: "/saju", label: "오늘의 운세", icon: "sparkles" },
+  { href: "/blog", label: "사주 이야기", icon: "book-open" },
+  { href: "/faq", label: "FAQ", icon: "help" },
+  { href: "/contact", label: "문의", icon: "mail" },
+  { href: "/mypage", label: "마이", icon: "user" },
 ];
 
 /** 모바일 하단 탭바 */
 export const MOBILE_TAB_ITEMS: NavItem[] = [
-  { href: "/saju", label: "오늘의 운세", icon: Sparkles },
-  { href: "/mypage/traditional-fortune", label: "정통사주", icon: BookOpen },
-  { href: "/compatibility", label: "궁합", icon: Heart },
-  { href: "/taro", label: "타로", icon: Wand2 },
-  { href: "/food", label: "오늘의 메뉴", icon: UtensilsCrossed },
-  { href: "/community", label: "커뮤니티", icon: Users },
-  { href: "/mypage", label: "마이", icon: User },
+  { href: "/saju", label: "오늘의 운세", icon: "sparkles" },
+  { href: "/mypage/traditional-fortune", label: "정통사주", icon: "book-open" },
+  { href: "/compatibility", label: "궁합", icon: "heart" },
+  { href: "/taro", label: "타로", icon: "wand" },
+  { href: "/food", label: "오늘의 메뉴", icon: "utensils" },
+  { href: "/community", label: "커뮤니티", icon: "users" },
+  { href: "/mypage", label: "마이", icon: "user" },
 ];
 
 export const GLOBAL_NAV_HIDDEN_PATHS = ["/login", "/auth/restore"];

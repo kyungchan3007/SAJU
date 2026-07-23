@@ -20,6 +20,10 @@ const config: Config = {
     "./src/entities/**/*.{ts,tsx}",
     "./src/shared/**/*.{ts,tsx}",
     "../../packages/ui/src/**/*.{ts,tsx}",
+    "!./src/**/*.test.{ts,tsx}",
+    "!./src/**/test/**/*.{ts,tsx}",
+    "!../../packages/ui/src/**/*.stories.{ts,tsx}",
+    "!../../packages/ui/src/**/*.test.{ts,tsx}",
   ],
   theme: {
     screens: {

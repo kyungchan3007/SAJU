@@ -1,0 +1,204 @@
+.panel {
+  border-radius: 14px;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.05);
+}
+
+.statsCard {
+  border-radius: 14px;
+  box-shadow: 0 2px 14px rgba(0, 0, 0, 0.07);
+}
+
+.heroInner {
+  min-height: 420px;
+}
+
+.heroSide {
+  width: 240px;
+  flex-shrink: 0;
+}
+
+.heroOverline {
+  font-size: 17px;
+  line-height: 1.2;
+}
+
+.heroTitle {
+  margin-top: 0.25rem;
+  font-size: 36px;
+  line-height: 1.05;
+}
+
+.heroBody {
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.heroLabel {
+  font-size: 12px;
+  letter-spacing: 0.06em;
+}
+
+.chip {
+  border-radius: 10px;
+}
+
+.chipText {
+  font-size: 12.5px;
+}
+
+.messageEyebrow {
+  font-size: 12px;
+}
+
+.messageBody {
+  font-size: 13.5px;
+  line-height: 1.9;
+}
+
+.messageQuote {
+  font-size: 12px;
+  line-height: 1.75;
+}
+
+.weakCard {
+  border-radius: 10px;
+}
+
+.weakLabel {
+  font-size: 11px;
+  letter-spacing: 0.06em;
+}
+
+.weakBody {
+  font-size: 12px;
+  line-height: 1.65;
+}
+
+.donutWrap {
+  width: 120px;
+  height: 120px;
+}
+
+.donutCenter {
+  width: 68px;
+  height: 68px;
+}
+
+.legendKey {
+  font-size: 10px;
+}
+
+.legendValue {
+  width: 36px;
+  font-size: 11px;
+}
+
+.softNote {
+  border-radius: 10px;
+}
+
+.softNoteText {
+  font-size: 12px;
+}
+
+.metricLabel {
+  font-size: 13px;
+}
+
+.metricScore {
+  font-size: 36px;
+  line-height: 1;
+}
+
+.metricUnit {
+  margin-left: 0.125rem;
+  font-size: 13px;
+}
+
+.metaLabel {
+  font-size: 10px;
+  letter-spacing: 0.06em;
+}
+
+.metaValue {
+  font-size: 14px;
+}
+
+.dangerBadge {
+  background: #fff1f2;
+}
+
+.adviceCard {
+  border: 1px solid #f3f4f6;
+}
+
+.adviceHero {
+  gap: 18px;
+}
+
+.adviceIconWrap {
+  width: 60px;
+  height: 60px;
+}
+
+.adviceBody {
+  font-size: 13px;
+  line-height: 1.75;
+}
+
+.adviceBox {
+  border-radius: 12px;
+}
+
+.adviceLabel {
+  font-size: 10px;
+  letter-spacing: 0.04em;
+}
+
+.adviceValue {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.exploreTitle {
+  font-size: 14px;
+}
+
+.exploreCard {
+  border-radius: 14px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
+}
+
+.exploreHeading {
+  font-size: 12.5px;
+}
+
+.exploreBody {
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.flowRow {
+  padding-top: 11px;
+  padding-bottom: 11px;
+}
+
+.flowTitle {
+  font-size: 12px;
+}
+
+.flowItem {
+  font-size: 11.5px;
+  line-height: 1.55;
+  word-break: keep-all;
+}
+
+@media (min-width: 768px) {
+  .heroInner {
+    height: 100%;
+  }
+
+  .heroTitle {
+    font-size: 40px;
+  }
+}

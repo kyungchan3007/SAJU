@@ -16,7 +16,7 @@ export function TarotCommunityMarketingSection() {
           {/* 좌: 텍스트 */}
           <div className="flex flex-col gap-8">
             <div className="flex flex-col gap-4">
-              <div className="text-xs text-gray-400">
+              <div className="text-xs text-gray-500">
                 다양한 콘텐츠로 더 풍성하게
               </div>
               <h2 className="text-3xl font-black leading-snug text-gray-900">
