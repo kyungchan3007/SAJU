@@ -168,58 +168,17 @@ flowchart LR
 
 ## 🗺️ 아키텍처 다이어그램
 
-```mermaid
-flowchart TB
-    User([👤 사용자 브라우저])
-    Crawler([🤖 검색 크롤러])
+<p align="center">
+  <img src="./Docs/images/architecture.svg" alt="SAJU:ME 전체 아키텍처" width="100%" />
+</p>
 
-    subgraph CF["☁️ Cloudflare"]
-        direction TB
-        subgraph WEB["saju-me.com · Next.js Worker"]
-            Pages["Pages<br/>SSR: 사주 결과 · 마이페이지<br/>SSG: 블로그 · 프리뷰"]
-            BFF["BFF API Routes<br/>app/api/**/route.ts<br/>HttpOnly Cookie · CSRF · Turnstile"]
-        end
-        ADMIN["admin · Next.js Worker"]
-        CFA[(Cloudflare Analytics)]
-    end
-
-    subgraph AWS["🟧 AWS"]
-        NGINX["Nginx<br/>api.saju-me.com · HTTPS 종단"]
-        subgraph SPRING["Spring Boot API Server"]
-            direction LR
-            AUTH[auth / user]
-            SAJU[saju / partner]
-            REC[place / food]
-            COMM[community / notification / inquiry]
-            ADM[admin]
-        end
-        DB[(MySQL 8.0)]
-        CACHE[[Caffeine Cache]]
-        S3[(S3)]
-    end
-
-    subgraph EXT["🔌 External APIs"]
-        ABLE[Ablecity<br/>사주 8자 · 운세 분석]
-        OPENAI[OpenAI<br/>gpt-4o-mini]
-        KAKAO[Kakao<br/>OAuth · Local API]
-    end
-
-    User --> Pages
-    Crawler --> Pages
-    Pages --> BFF
-    BFF -->|REST| NGINX
-    ADMIN -->|REST| NGINX
-    ADMIN --> CFA
-    NGINX --> SPRING
-    SPRING --> DB
-    SPRING --> CACHE
-    SPRING --> S3
-    SAJU -->|요청 202 / 결과 콜백| ABLE
-    SAJU --> OPENAI
-    REC --> OPENAI
-    AUTH --> KAKAO
-    User -.->|지도 SDK · 장소 검색<br/>GPS 좌표 서버 미전송| KAKAO
-```
+| 구간 | 흐름 |
+|------|------|
+| **① 사용자 → Web** | 브라우저·크롤러는 Cloudflare Worker의 Next.js로 접속 (결과는 SSR, 블로그·프리뷰는 SSG) |
+| **② Web → API** | 브라우저는 백엔드를 직접 호출하지 않고 **BFF Route**가 쿠키 인증·CSRF·Turnstile을 처리한 뒤 REST로 호출 |
+| **③ API → Data** | Spring Boot가 도메인별 모듈로 요청을 처리하고 MySQL · Caffeine · S3에 저장 |
+| **④ API → External** | 사주 분석은 Ablecity 비동기 콜백, 풀이는 OpenAI, 로그인은 Kakao OAuth |
+| **⑤ 위치 검색** | 지도·장소 검색은 브라우저가 Kakao를 직접 호출해 **GPS 좌표를 서버에 남기지 않음** |
 
 ---
 
